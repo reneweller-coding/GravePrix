@@ -16,7 +16,8 @@ GAMES = ("kipkepler.exe", "spaceopera.exe", "darkconcordance.exe", "darkconcorda
 
 
 def games_running():
-    out = subprocess.run(["tasklist"], capture_output=True, text=True, errors="replace").stdout.lower()
+    out = subprocess.run(["tasklist"], capture_output=True, text=True, errors="replace",
+                         creationflags=0x08000000 if os.name == "nt" else 0).stdout.lower()   # CREATE_NO_WINDOW
     return any(g in out for g in GAMES)
 
 
@@ -42,7 +43,7 @@ def main():
         f.write("Grave Prix: %s, started %s\n" % (" ".join(os.path.basename(c) for c in cmd[:3]), time.strftime("%H:%M")))
     print("GPU free, starting", flush=True)
     try:
-        flags = 0x00004000 if os.name == "nt" else 0   # BELOW_NORMAL_PRIORITY_CLASS
+        flags = 0x08004000 if os.name == "nt" else 0   # BELOW_NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW
         r = subprocess.run(cmd, creationflags=flags)
         sys.exit(r.returncode)
     finally:

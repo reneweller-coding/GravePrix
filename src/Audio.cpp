@@ -3432,6 +3432,33 @@ struct Audio::Impl : Mixer
     float       mgain[2] = {};
     int         cur = 0;
     std::string musicName;
+    std::vector<std::string> takes;   ///< the playing piece's takes (<name>, <name>_2, ...)
+    int                      take = 0;
+
+    /** @brief Starts takes[take] in the free slot; the update crossfades to it. */
+    void playTake()
+    {
+        int slot = 1 - cur;
+        if ( has[slot] )
+        {
+            StopMusicStream( music[slot] );
+            UnloadMusicStream( music[slot] );
+            has[slot] = false;
+        }
+        if ( !takes.empty() )
+        {
+            music[slot] = LoadMusicStream( takes[(size_t)take].c_str() );
+            if ( IsMusicValid( music[slot] ) )
+            {
+                has[slot] = true;
+                music[slot].looping = takes.size() == 1;   // several takes follow one another instead
+                mgain[slot] = 0.0f;
+                SetMusicVolume( music[slot], 0.0f );
+                PlayMusicStream( music[slot] );
+            }
+        }
+        cur = slot;
+    }
 
     ~Impl()
     {
@@ -3604,17 +3631,10 @@ void Audio::music( const std::string &name )
     Impl &m = *m_impl;
     if ( name == m.musicName ) return;
     m.musicName = name;
-    int next = 1 - m.cur;
-    if ( m.has[next] )
-    {
-        StopMusicStream( m.music[next] );
-        UnloadMusicStream( m.music[next] );
-        m.has[next] = false;
-    }
+    m.takes.clear();
     if ( !name.empty() )
     {
-        // a piece may come in several takes (<name>, <name>_2, ...): one of them, by chance
-        std::vector<std::string> files;
+        // a piece may come in several takes (<name>, <name>_2, ...): one of them by chance, then the others in turn
         for ( int k = 1; k <= 9; ++k )
         {
             std::string base = m.assets + "/music/" + name + ( k == 1 ? "" : "_" + std::to_string( k ) );
@@ -3623,26 +3643,14 @@ void Audio::music( const std::string &name )
                 std::error_code ec;
                 if ( std::filesystem::exists( base + ext, ec ) )
                 {
-                    files.push_back( base + ext );
+                    m.takes.push_back( base + ext );
                     break;
                 }
             }
         }
-        if ( !files.empty() )
-        {
-            const std::string &path = files[GetRandomValue( 0, (int)files.size() - 1 )];
-            m.music[next] = LoadMusicStream( path.c_str() );
-            if ( IsMusicValid( m.music[next] ) )
-            {
-                m.has[next] = true;
-                m.music[next].looping = true;
-                m.mgain[next] = 0.0f;
-                SetMusicVolume( m.music[next], 0.0f );
-                PlayMusicStream( m.music[next] );
-            }
-        }
     }
-    m.cur = next;
+    m.take = m.takes.empty() ? 0 : GetRandomValue( 0, (int)m.takes.size() - 1 );
+    m.playTake();
 }
 
 void Audio::update( float dt )
@@ -3674,6 +3682,14 @@ void Audio::update( float dt )
                     } );
                 break;
             }
+    }
+
+    // several takes: the next one crossfades in as the playing one runs out
+    if ( m.takes.size() > 1 && m.has[m.cur] &&
+         GetMusicTimeLength( m.music[m.cur] ) - GetMusicTimePlayed( m.music[m.cur] ) < 1.5f )
+    {
+        m.take = ( m.take + 1 ) % (int)m.takes.size();
+        m.playTake();
     }
 
     // the music, crossfaded over 1.5 s

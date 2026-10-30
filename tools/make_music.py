@@ -78,7 +78,7 @@ def encode(data, fs, path, quality):
     try:
         sf.write(tmp, data.astype(np.float32), fs, subtype="FLOAT")
         subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", tmp, "-c:a", "libvorbis", "-q:a", str(quality),
-                        path], check=True)
+                        path], check=True, creationflags=0x08000000 if os.name == "nt" else 0)
     finally:
         os.remove(tmp)
 
@@ -86,11 +86,33 @@ def encode(data, fs, path, quality):
 def nice_run(cmd, cwd, log):
     """Runs the generator below normal priority, its output into a log file."""
     env = dict(os.environ, PYTHONUTF8="1")
-    flags = 0x00004000 if os.name == "nt" else 0   # BELOW_NORMAL_PRIORITY_CLASS
+    flags = 0x08004000 if os.name == "nt" else 0   # BELOW_NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW
     with open(log, "w", encoding="utf-8") as out:
         r = subprocess.run(cmd, cwd=cwd, env=env, stdout=out, stderr=subprocess.STDOUT, creationflags=flags)
     if r.returncode:
         sys.exit("generator failed (%d), see %s" % (r.returncode, log))
+
+
+def trim_tail(x, fs):
+    """Cuts a take's quiet end (a fade-out or silence, 15 dB under the whole) down to 0.3 s with a short fade: the
+    game crossfades from one take into the next, a dying tail would leave a hole."""
+    win = int(0.1 * fs)
+    mono = x.mean(axis=1)
+    blocks = len(mono) // win
+    if blocks < 20:
+        return x
+    rms = np.sqrt(np.mean(mono[:blocks * win].reshape(blocks, win) ** 2, axis=1) + 1e-12)
+    floor = 20.0 * np.log10(np.sqrt(np.mean(mono ** 2)) + 1e-12) - 15.0
+    loud = np.nonzero(20.0 * np.log10(rms) > floor)[0]
+    if not len(loud):
+        return x
+    end = min(len(x), (int(loud[-1]) + 1) * win + int(0.3 * fs))
+    if end >= len(x) - win:
+        return x
+    x = x[:end].copy()
+    k = int(0.3 * fs)
+    x[-k:] *= np.linspace(1.0, 0.0, k, dtype=np.float32)[:, None]
+    return x
 
 
 def target(cue):
@@ -123,25 +145,28 @@ def main():
                      for c in json.load(open(os.path.join(work, d, "manifest.json"), encoding="utf-8"))["cues"]]:
         files = cue["levels"][0]["files"]
         shown = []
-        for n, f in enumerate(files[:2]):
-            path = os.path.join(out, "%s%s.ogg" % (cue["id"], "" if n == 0 else "_%d" % (n + 1)))
+        for t, f in enumerate(files[:2]):
+            path = os.path.join(out, "%s%s.ogg" % (cue["id"], "" if t == 0 else "_%d" % (t + 1)))
             source = os.path.join(src, f)
             if not FORCE and os.path.isfile(path) and os.path.getmtime(path) >= os.path.getmtime(source):
                 total += os.path.getsize(path)
-                shown.append("t%d =" % (n + 1))
+                shown.append("t%d =" % (t + 1))
                 continue
             x, fs = sf.read(source, dtype="float32", always_2d=True)
+            cut = len(x)
+            x = trim_tail(x, fs)
+            cut = (cut - len(x)) / fs
             # The loop's seam: where the end does not meet the start, a 3 ms dip on both sides instead of a click.
             if float(np.max(np.abs(x[-1] - x[0]))) > 0.01:
-                n = int(0.003 * fs)
-                ramp = (0.5 - 0.5 * np.cos(np.linspace(0.0, np.pi, n)))[:, None].astype(np.float32)
+                k = int(0.003 * fs)
+                ramp = (0.5 - 0.5 * np.cos(np.linspace(0.0, np.pi, k)))[:, None].astype(np.float32)
                 x = x.copy()
-                x[:n] *= ramp
-                x[-n:] *= ramp[::-1]
+                x[:k] *= ramp
+                x[-k:] *= ramp[::-1]
             gain = min(target(cue["id"]) - lufs(x, fs), PEAK_DB - peak_db(x))
             encode(x * 10.0 ** (gain / 20.0), fs, path, 4)
             total += os.path.getsize(path)
-            shown.append("t%d %+.1f dB" % (n + 1, gain))
+            shown.append("t%d %+.1f dB%s" % (t + 1, gain, " (-%.1f s)" % cut if cut > 0.05 else ""))
         print("%-10s %s" % (cue["id"], ", ".join(shown)))
     print("music: %.1f MB in %s" % (total / 1e6, out))
 
