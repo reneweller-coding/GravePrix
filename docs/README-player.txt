@@ -46,7 +46,9 @@ Options for everyone
 --------------------
 Text size, race display size, colour vision (red-green or blue-yellow: other colours for good and bad), names
 above the cars, frame rate (30, 40, 60 or unlimited; 40 saves battery on the Deck), vibration, camera height,
-screen shake, the announcer's lines. With a pad the hints show its buttons.
+screen shake, the announcer's lines. With a pad the hints and the controls screen show its buttons. With a colour
+vision setting the rivals race in colours that stay apart for red-green and blue-yellow eyes. On the Steam Deck the
+game starts in the fast graphics setting (smaller shadow map, lighter bloom, 67 % resolution); 40 frames save battery.
 
 Tips
 ----

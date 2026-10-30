@@ -178,6 +178,14 @@ private:
     float                   m_wet = 0.0f;
     float                   m_wetRace = 0.0f, m_fogRace = 0.0f;   ///< weather that came during the race
     std::vector<std::pair<std::string, Matrix>> m_turning;          ///< props whose spin group turns (wheels, carousels)
+    struct Debris
+    {
+        std::string m_model;
+        Vector3     m_pos, m_vel;
+        float       m_rot = 0, m_spin = 0, m_age = 0;
+        Color       m_paint = WHITE;
+    };
+    std::vector<Debris> m_debris;   ///< parts that came off the cars: thrown, then lying on the road
     float                   m_flash = 0.0f;      ///< lightning
     float                   m_flashTimer = 8.0f;
     View                    m_view;

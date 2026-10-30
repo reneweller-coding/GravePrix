@@ -88,6 +88,8 @@ public:
 
     /** @return whether a pad was used last (the menus show its buttons) */
     bool padUsed() const { return m_padUsed; }
+    /** @brief Makes the menus show the pad's buttons (the app test's "pad"). */
+    void forcePad( bool on ) { m_padUsed = on; }
 
     /**
      * @brief Plays a script instead of the keys (the app test): one word a frame, each followed by idle frames.

@@ -98,6 +98,21 @@ float glyph( const std::string &label, float x, float y, float size )
                         px( size * 0.8f ), px( size * 0.8f ) * 0.02f, { 250, 250, 245, 255 } );
             return h;
         }
+    // The cross's directions (D_UP, D_DOWN, D_LEFT, D_RIGHT): a triangle in a square pill.
+    if ( label.rfind( "D_", 0 ) == 0 )
+    {
+        Rectangle r = { x, y + h * 0.1f, h * 0.9f, h * 0.8f };
+        DrawRectangleRounded( r, 0.4f, 6, { 12, 10, 12, 255 } );
+        DrawRectangleRoundedLinesEx( r, 0.4f, 6, std::max( 1.0f, k() * 1.5f ), { 200, 200, 195, 255 } );
+        Vector2 c = { r.x + r.width * 0.5f, r.y + r.height * 0.5f };
+        float   s = h * 0.22f;
+        Color   w = { 240, 240, 235, 255 };
+        if ( label == "D_UP" ) DrawTriangle( { c.x, c.y - s }, { c.x - s, c.y + s }, { c.x + s, c.y + s }, w );
+        else if ( label == "D_DOWN" ) DrawTriangle( { c.x - s, c.y - s }, { c.x, c.y + s }, { c.x + s, c.y - s }, w );
+        else if ( label == "D_LEFT" ) DrawTriangle( { c.x - s, c.y }, { c.x + s, c.y + s }, { c.x + s, c.y - s }, w );
+        else DrawTriangle( { c.x + s, c.y }, { c.x - s, c.y - s }, { c.x - s, c.y + s }, w );
+        return r.width;
+    }
     static const char *pills[] = { "LB", "RB", "LT", "RT", "Start", "Select", "L3", "R3" };
     for ( const char *p : pills )
         if ( label == p )

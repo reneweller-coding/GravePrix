@@ -136,6 +136,7 @@ struct Car
     float m_lastHitTime = -100.0f;
     int   m_wreckedBy = -1;
     float m_moverHit = -100.0f;      ///< when a train last threw it
+    int   m_partsLost = 0;         ///< bumper, door, bonnet: what fell off so far
     int   m_lastSource = -1;       ///< what did the last damage: 0 guns, 1 explosions, 2 crashes, 3 walls, 4 spikes, 5 other
     int   m_wrecks = 0;            ///< cars it wrecked
     int   m_shots = 0, m_hits = 0;
@@ -207,7 +208,7 @@ enum class EvE : int
 {
     SHOT, HIT, RICOCHET, FLAME, CRASH, WALL, SCRAPE, EXPLODE, WRECK, PICKUP, MINE_DROP, MINE_ARM, ROCKET, NITRO, OIL,
     SPIKES, SMOKE, TIRE_BURST, LAP, FINAL_LAP, FINISH, OVERTAKE, BARREL, COUNTDOWN, GO, HORN, WRONG_WAY, SAY,
-    TRAIN, BRIDGE, ROCK, WEATHER, COUNT
+    TRAIN, BRIDGE, ROCK, WEATHER, PART, COUNT
 };
 
 /** @brief A rock from a rockfall. */

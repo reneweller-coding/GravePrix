@@ -56,10 +56,27 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
     m_saidTrain = m_saidBridge = false;
     m_trackReverse = reverse;
     m_field = field;
+    // Colour vision: the rivals in the Okabe-Ito colours, which stay apart for red-green and blue-yellow eyes.
+    if ( m_set.m_palette != 0 )
+    {
+        static const Color safe[] = { { 230, 159, 0, 255 },  { 86, 180, 233, 255 }, { 0, 158, 115, 255 }, { 240, 228, 66, 255 },
+                                      { 0, 114, 178, 255 },  { 213, 94, 0, 255 },   { 204, 121, 167, 255 }, { 245, 245, 245, 255 } };
+        int k = 0;
+        for ( size_t i = 0; i < m_field.size(); ++i )
+            if ( (int)i != player )
+            {
+                m_field[i].m_paint.m_c[0] = safe[k % 8];
+                m_field[i].m_paint.m_c[1] = { 20, 20, 24, 255 };
+                ++k;
+            }
+    }
     m_mode = mode;
     m_player = player;
     int difficulty = m_inCareer ? m_career.m_difficulty : m_qDiff;
-    m_world.init( m_track, field, mode, difficulty, (uint32_t)( GetTime() * 1000 ) + 13 );
+    m_world.init( m_track, m_field, mode, difficulty, (uint32_t)( GetTime() * 1000 ) + 13 );
+    m_hot = false;
+    m_closeTime = 0.0f;
+    m_lastQuip = -10.0f;
     m_view.setTrack( m_track );
     m_racing = true;
     m_paused = false;
@@ -95,6 +112,33 @@ void App::bubble( const std::string &who, const std::string &text, Color c )
     m_bubbles.push_back( { who, text, c, 3.6f } );
 }
 
+void App::goHot()
+{
+    if ( m_hot ) return;
+    if ( const VenueDef *v = g_data.venue( g_data.track( m_trackName ) ? g_data.track( m_trackName )->m_venue : "" ) )
+        if ( m_audio.hasMusic( v->m_music + "_hot" ) )
+        {
+            m_audio.music( v->m_music + "_hot" );
+            m_hot = true;
+        }
+}
+
+bool App::quip( const std::string &event )
+{
+    // A short cry of Ricky's at a rival's moment; the display keeps the line with the name.
+    if ( !m_set.m_speech || m_world.m_time - m_lastQuip < 4.0f ) return false;
+    const CharacterDef *c = g_data.character( "announcer_voice" );
+    if ( !c ) return false;
+    const Says &says = english() ? c->m_sayEn : c->m_say;
+    auto        it = says.find( "quip_" + event );
+    if ( it == says.end() || it->second.empty() ) return false;
+    size_t      n = (size_t)GetRandomValue( 0, (int)it->second.size() - 1 );
+    std::string file = m_opt.m_root + "/assets/voice/" + ( english() ? "en" : "de" ) + "/ricky_quip_" + event + "_" + std::to_string( n + 1 ) + ".ogg";
+    if ( !m_audio.voice( file ) ) return false;
+    m_lastQuip = m_world.m_time;
+    return true;
+}
+
 bool App::speak( const std::string &event )
 {
     // Ricky's recorded lines (data/characters.txt "announcer_voice", assets/voice/<language>/ricky_<event>_<n>.ogg):
@@ -122,6 +166,9 @@ void App::announce( const std::string &event, const std::string &name )
                    event == "wrong_way" || ( event == "win" && !name.empty() ) || event == "lose" ) &&
          speak( event ) )
         return;
+    if ( event == "wreck" || event == "lead_change" || event == "mine_hit" || event == "rocket_hit" || event == "lap_record" ||
+         event == "oil_slip" )
+        quip( event );
     bool important = event == "win" || event == "lose" || event == "player_wrecked" || event == "start";
     if ( m_announceTime > 1.2f && !important ) return;
     std::string s = announcerLine( event, name, (uint32_t)( m_world.m_time * 977 ) + (uint32_t)event.size() );
@@ -229,6 +276,22 @@ void App::raceStep()
     raceEvents();
     // Places and lead changes.
     const Car &me = m_world.m_cars[m_player];
+    // A close fight for a podium place (or, in a derby, three cars left): the music goes up a gear.
+    if ( !m_hot && m_world.m_phase == World::PhaseE::RACE && !me.m_wrecked )
+    {
+        bool close = false;
+        if ( m_mode == ModeE::DERBY )
+        {
+            int alive = 0;
+            for ( const Car &c : m_world.m_cars ) alive += c.m_wrecked ? 0 : 1;
+            close = alive <= 3;
+        }
+        else if ( m_mode == ModeE::RACE && me.m_place <= 3 && me.m_lap >= 1 )
+            for ( const Car &c : m_world.m_cars )
+                if ( &c != &me && !c.m_wrecked && std::fabs( c.m_dist - me.m_dist ) < 22.0f ) close = true;
+        m_closeTime = close ? m_closeTime + Dt : std::max( 0.0f, m_closeTime - Dt * 0.5f );
+        if ( m_closeTime > ( m_mode == ModeE::DERBY ? 0.1f : 6.0f ) ) goHot();
+    }
     if ( m_world.m_phase == World::PhaseE::RACE && m_mode == ModeE::RACE )
     {
         if ( me.m_place > before && before > 0 && !me.m_wrecked )
@@ -480,9 +543,7 @@ void App::raceEvents()
         case EvE::FINAL_LAP:
             if ( mine )
             {
-                // The music goes up a gear for the last lap (when the venue has a hot take).
-                if ( const VenueDef *v = g_data.venue( g_data.track( m_trackName ) ? g_data.track( m_trackName )->m_venue : "" ) )
-                    if ( m_audio.hasMusic( v->m_music + "_hot" ) ) m_audio.music( v->m_music + "_hot" );
+                goHot();   // the music goes up a gear for the last lap
                 m_audio.play( SfxE::FINAL_LAP, 0, 0.8f );
                 m_center = T( "LETZTE RUNDE" );
                 m_centerTime = 1.6f;

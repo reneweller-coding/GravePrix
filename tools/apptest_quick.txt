@@ -2,6 +2,7 @@
 expect title
 down accept
 expect quick
+pad wait 10 shot quick
 up accept wait 5
 expect race
 race wait 5
@@ -14,5 +15,15 @@ race wait 5
 expect results
 accept wait 2
 expect quick
+back
+expect title
+down accept
+expect options
+wait 10 shot options
+up up accept
+expect controls
+wait 10 shot controls
+back
+expect options
 back
 expect title

@@ -1057,6 +1057,13 @@ void World::damage( int victim, float amount, int by, Vector2 at )
     c.m_damage += amount;
     m_dmgBy[std::clamp( m_source, 0, 5 )] += amount;
     c.m_lastSource = std::clamp( m_source, 0, 5 );
+    // Below two thirds, half and a quarter of its armour a part comes off and stays on the road.
+    float share = c.m_maxHp > 0 ? c.m_hp / c.m_maxHp : 1.0f;
+    while ( c.m_partsLost < 3 && share < ( c.m_partsLost == 0 ? 0.66f : c.m_partsLost == 1 ? 0.5f : 0.25f ) )
+    {
+        event( EvE::PART, victim, c.m_pos, 1, c.m_partsLost, -1 );
+        ++c.m_partsLost;
+    }
     c.m_hitFlash = 1.0f;
     if ( by >= 0 && by != victim )
     {

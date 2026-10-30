@@ -898,6 +898,7 @@ void Renderer::clearTrack()
 
 void Renderer::setTrack( const Track &t )
 {
+    m_debris.clear();
     clearTrack();
     m_track = &t;
     m_venue = t.m_venue;
@@ -1475,6 +1476,26 @@ void Renderer::events( const World &w )
         case EvE::SCRAPE:
             puff( at, 2, 6.0f, 0.3f, { 255, 220, 140, 255 }, { 255, 90, 10, 0 }, 0.3f, T_SPARK, true );
             break;
+        case EvE::PART:
+            if ( e.m_car >= 0 && e.m_car < (int)w.m_cars.size() )
+            {
+                // A bumper, a door, a bonnet: thrown off sideways, then lying where it fell.
+                const Car &c = w.m_cars[e.m_car];
+                static const char *parts[] = { "hubcap", "car_door", "car_door" };
+                Debris d;
+                d.m_model = parts[std::clamp( e.m_kind, 0, 2 )];
+                float side = m_rng.chance( 0.5f ) ? 1.0f : -1.0f;
+                Vector2 r = c.right();
+                d.m_pos = { c.m_pos.x, 0.8f, c.m_pos.y };
+                d.m_vel = { c.m_vel.x * 0.5f + r.x * side * 5.0f, 4.0f, c.m_vel.y * 0.5f + r.y * side * 5.0f };
+                d.m_rot = m_rng.range( 0, 6.28f );
+                d.m_spin = m_rng.range( -8.0f, 8.0f );
+                d.m_paint = c.m_setup.m_paint.m_c[0];
+                if ( m_debris.size() > 60 ) m_debris.erase( m_debris.begin() );
+                m_debris.push_back( d );
+                puff( { c.m_pos.x, 0.9f, c.m_pos.y }, 6, 6.0f, 0.3f, { 255, 220, 140, 255 }, { 255, 80, 10, 0 }, 0.4f, T_SPARK, true );
+            }
+            break;
         case EvE::ROCK:
             if ( e.m_kind == 1 )
                 puff( { at.x, 0.8f, at.z }, 16, 5.0f, 2.2f, { 150, 140, 125, 230 }, { 170, 160, 145, 0 }, 2.2f, T_SMOKE, false );
@@ -1550,6 +1571,21 @@ void Renderer::events( const World &w )
 void Renderer::update( const World &w, float dt )
 {
     m_time += dt;
+    for ( Debris &d : m_debris )
+    {
+        d.m_age += dt;
+        if ( d.m_pos.y > 0.05f || d.m_vel.y > 0 )
+        {
+            d.m_vel.y -= 18.0f * dt;
+            d.m_pos = Vector3Add( d.m_pos, Vector3Scale( d.m_vel, dt ) );
+            d.m_rot += d.m_spin * dt;
+            if ( d.m_pos.y <= 0.05f )
+            {
+                d.m_pos.y = 0.05f;
+                d.m_vel = { 0, 0, 0 };
+            }
+        }
+    }
     m_wetRace = w.m_wetness;
     m_fogRace = w.m_fogAdd;
     // The bells of crossings and bridges, and where a rock is about to land: blinking lights.
@@ -1988,6 +2024,14 @@ void Renderer::drawScene( const World &w, bool shadow )
         if ( dist2( { cx, cz }, f ) > reach * reach ) continue;
         DrawMesh( c.m_mesh, lit, MatrixIdentity() );
     }
+    // Parts that came off the cars: tinted in their car's paint.
+    for ( const Debris &d : m_debris )
+    {
+        const ModelMesh &dm = modelOf( d.m_model );
+        if ( !shadow ) setVec4( g.m_lit, "tint", { d.m_paint.r / 255.0f * 1.4f, d.m_paint.g / 255.0f * 1.4f, d.m_paint.b / 255.0f * 1.4f, 0 } );
+        if ( dm.m_hasBase ) DrawMesh( dm.m_base, lit, place( { d.m_pos.x, d.m_pos.z }, d.m_rot, d.m_pos.y - 0.04f ) );
+    }
+    if ( !shadow ) setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
     // Obstacles, barrels, pickups, mines, spikes.
     for ( const ObstacleSpot &o : m_track->m_obstacles )
         if ( !o.m_model.empty() )

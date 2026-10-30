@@ -21,6 +21,8 @@
 #include <ctime>
 #include <filesystem>
 
+#include <rlgl.h>
+
 namespace grave
 {
 
@@ -74,6 +76,25 @@ std::string careerPath() { return userDir() + "career.txt"; }
 }   // namespace
 
 // ---------------------------------------------------------------------------------------------------- setup
+
+namespace
+{
+
+/** @return the frame as it is (raylib's own capture scales by the desktop's DPI and reads past a smaller framebuffer) */
+Image captureScreen()
+{
+    rlDrawRenderBatchActive();
+    Image img = {};
+    img.width = GetRenderWidth();
+    img.height = GetRenderHeight();
+    img.mipmaps = 1;
+    img.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
+    img.data = rlReadScreenPixels( img.width, img.height );
+    return img;
+}
+
+}   // namespace
+
 
 int App::quality() const
 {
@@ -209,7 +230,9 @@ void App::run()
         if ( IsKeyPressed( KEY_F12 ) )
         {
             std::string shot = photoDir() + "graveprix_" + std::to_string( (long long)std::time( nullptr ) ) + ".png";
-            TakeScreenshot( shot.c_str() );
+            Image img = captureScreen();
+            ExportImage( img, shot.c_str() );
+            UnloadImage( img );
         }
         m_in.update();
         m_audio.update( dt );
@@ -278,6 +301,34 @@ void App::testStep()
         m_career.m_money += atoi( m_testWords[m_testAt++].c_str() );
         return;
     }
+    if ( w == "shot" && m_testAt < m_testWords.size() )
+    {
+        m_testShot = m_testWords[m_testAt++];
+        return;
+    }
+    if ( w == "pad" )
+    {
+        m_in.forcePad( true );
+        return;
+    }
+    if ( w == "graves" )
+    {
+        // Three rivals of the league die, so the graveyard has stones to show.
+        int n = 0;
+        for ( RivalState &s : m_career.m_rivals )
+        {
+            const RivalDef *d = g_data.rival( s.m_key );
+            if ( n >= 3 || !s.m_active || !s.m_alive || !d || d->m_champion || s.m_key == "_player" ) continue;
+            s.m_alive = false;
+            s.m_died = m_career.m_day;
+            s.m_cause = n;
+            s.m_killer = n == 0 ? "_player" : "";
+            s.m_where = m_career.m_offers.empty() ? "" : m_career.m_offers[0].m_track;
+            s.m_words = m_career.lastWords( s.m_key );
+            ++n;
+        }
+        return;
+    }
     m_in.script( { w } );
     m_testWait = 3;
 }
@@ -317,6 +368,16 @@ void App::frame( float dt )
     case ScreenE::OPTIONS: options(); break;
     case ScreenE::CONTROLS: controls(); break;
     default: break;
+    }
+    if ( !m_testShot.empty() )
+    {
+        // The app test's picture of this frame (before the swap the frame is still there to read).
+        std::error_code ec;
+        std::filesystem::create_directories( m_opt.m_root + "/work/screens", ec );
+        Image img = captureScreen();
+        ExportImage( img, ( m_opt.m_root + "/work/screens/" + m_testShot + ".png" ).c_str() );
+        UnloadImage( img );
+        m_testShot.clear();
     }
     EndDrawing();
 }
@@ -1085,6 +1146,31 @@ void App::controls()
     }
     else
         menu( items, sel, { 96 * k, 210 * k, 1500 * k, 760 * k }, 34 );
+    // The pad's buttons drawn as on the pad, beside the list.
+    {
+        float px = GetScreenWidth() - 380 * k, py = 220 * k;
+        ui::panel( { px - 20 * k, py - 16 * k, 340 * k, ( (float)ActE::COUNT * 46 + 24 ) * k }, 0.7f );
+        for ( int a = 0; a < (int)ActE::COUNT; ++a )
+        {
+            const Bind &b = m_in.m_binds[a];
+            float       x = px;
+            for ( int btn : { b.m_pad, b.m_pad2 } )
+                if ( btn )
+                {
+                    // The cross's directions as arrows on a pill.
+                    std::string lab = btn == GAMEPAD_BUTTON_LEFT_FACE_UP      ? "D_UP"
+                                    : btn == GAMEPAD_BUTTON_LEFT_FACE_DOWN    ? "D_DOWN"
+                                    : btn == GAMEPAD_BUTTON_LEFT_FACE_LEFT    ? "D_LEFT"
+                                    : btn == GAMEPAD_BUTTON_LEFT_FACE_RIGHT   ? "D_RIGHT"
+                                                                              : Input::padLabel( btn );
+                    float       gw = ui::glyph( lab, x, py, 30 );
+                    if ( gw <= 0 ) gw = ui::text( lab, x, py, 26, ui::Ink );
+                    x += gw + 8 * k;
+                }
+            ui::text( T( names[a] ), px + 120 * k, py + 2 * k, 24, ui::Dim );
+            py += 46 * k;
+        }
+    }
     hints( m_bindAct >= 0 ? ( m_bindPad ? T( "Pad-Knopf drücken ..." ) : T( "Taste drücken ... (Esc bricht ab)" ) )
                           : ( m_bindPad ? T( "Spalte: Pad   ·   Lenkung, Gas und Bremse auch über Stick und Trigger" )
                                         : T( "Spalte: Tastatur" ) ) );

@@ -74,6 +74,10 @@ private:
     void bubble( const std::string &who, const std::string &text, Color c );
     void announce( const std::string &event, const std::string &name );
     bool speak( const std::string &event );   ///< Ricky Rattle says a line of his own (false: no recording)
+    bool quip( const std::string &event );    ///< a short cry of his at a rival's moment
+    void goHot();                             ///< the venue's hotter take (last lap, close fights)
+    bool  m_hot = false;
+    float m_closeTime = 0.0f, m_lastQuip = -10.0f;
     bool m_saidTrain = false, m_saidBridge = false;
     std::map<std::string, Texture2D> m_photos;   ///< the tabloid's pictures, loaded when first shown
     const Texture2D *photo( const std::string &event, uint32_t pick );
@@ -107,6 +111,7 @@ private:
     int                      m_testFrames = 0;
     int                      m_testFails = 0;
     bool                     m_testRace = false;
+    std::string              m_testShot;   ///< "shot NAME": this frame goes to work/screens/NAME.png
     void                     testStep();
 
     Options  m_opt;

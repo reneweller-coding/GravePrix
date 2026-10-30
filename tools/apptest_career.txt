@@ -13,10 +13,13 @@ accept
 expect offers
 accept wait 5
 expect race
+wait 240 shot race
 race wait 5
 expect results
+shot results
 accept wait 2
 expect news
+wait 10 shot news
 accept wait 2
 expect hub
 money 50000
@@ -44,8 +47,10 @@ down accept
 expect table
 back
 expect hub
+graves
 down accept
 expect graveyard
+wait 10 shot graveyard
 back
 expect hub
 down accept
