@@ -1,0 +1,292 @@
+# The docks' tracks (venue docks, league 4): Last Anchor Docks, at dusk in the rain.
+# League 4: narrower and harder; the container maze (Final Storage), the switchbacks (Keelhauled), a figure-eight
+# (Sailor's Grave) and the derby arena (Fish Food).
+
+# The quay: a long straight along the water, then out onto the wooden pier and round its steel head in a hairpin,
+# back to the quay, a fast carousel round the container yard, the warehouse road with a narrow chicane and home.
+track dock_overboard
+  title "Über Bord" title_en "Man Overboard"
+  venue docks
+  laps 3
+  width 13
+  shoulder 2.5
+  reverse 1
+  start 0 0 90
+  straight 200
+  right 90 r=35
+  straight 120 w=12 surface=wood wall=rail
+  left 180 r=15 surface=metal wall=rail
+  straight 120 w=13 surface=wood wall=rail
+  right 90 r=35
+  straight 100
+  left 180 r=70
+  straight 170
+  right 30 r=40 w=12
+  left 60 r=40
+  right 30 r=40 w=13
+  straight 150
+  left 90 r=40
+  straight 60
+  left 90 r=40
+  close
+  patch water at=120 len=30 lat=0.5 w=6
+  patch water at=330 len=25 lat=-0.3 w=7
+  patch water at=780 len=40 lat=0.6 w=6
+  patch water at=1250 len=25 lat=-0.4 w=7
+  hazard oil at=1070 lat=0.2 r=2.5
+  hazard oil at=560 lat=-0.3 r=2.5
+  hazard barrel at=605 lat=-0.85
+  hazard barrel at=609 lat=-0.9
+  hazard barrel at=1180 lat=0.85
+  obstacle forklift at=1000 lat=0.4 r=1.8 model=forklift rot=60
+  pickup nitro at=60 lat=0.3
+  pickup mystery at=150 lat=0
+  pickup ammo at=320 lat=0.4
+  pickup cash at=394 lat=-0.65
+  pickup wrench at=500 lat=-0.3
+  pickup rocket at=650 lat=0
+  pickup cash at=800 lat=-0.7
+  pickup mine at=960 lat=0
+  pickup wrench at=1200 lat=-0.3
+  pickup mystery at=1300 lat=0.3
+  pickup ammo at=1420 lat=0
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=40 side=left off=3
+  row bollard at=10 len=180 side=right off=0 every=12
+  row bollard at=258 len=110 side=both off=0 every=12
+  row bollard at=425 len=110 side=both off=0 every=12
+  lamps lamp_harbor every=50 side=both
+  row warehouse at=930 len=380 side=right off=4 every=45
+  row container_stack at=700 len=200 side=left off=3 every=25
+  prop forklift at=880 side=left off=2
+  place crane_harbor x=100 z=25 rot=90
+  place crane_harbor x=330 z=25 rot=90
+  place ship_hull x=130 z=85 rot=90
+  place ship_hull x=360 z=110 rot=0
+  place container_stack x=400 z=-70 rot=0
+  place container_stack x=370 z=-70 rot=90
+  place container_stack x=200 z=-70 rot=0
+  place container_stack x=150 z=-70 rot=0
+  place forklift x=100 z=-75 rot=30
+  place container x=50 z=-70 rot=90
+
+# The container maze: the start on a long tail, then a double spiral -- in along one lane of 12 m between container
+# walls, round the steel hairpin at the core and out along the lane beside it -- and back down the tail.
+track dock_storage
+  title "Endlager" title_en "Final Storage"
+  venue docks
+  laps 3
+  width 12
+  shoulder 2
+  reverse 1
+  start -60 0 90
+  straight 216
+  right 90 r=12
+  straight 144
+  right 90 r=12
+  straight 144
+  right 90 r=12
+  straight 88
+  right 90 r=12
+  straight 88
+  right 90 r=12
+  straight 32
+  right 180 r=14 surface=metal
+  straight 4 surface=metal
+  left 90 r=12
+  straight 32
+  left 90 r=12
+  straight 32
+  left 90 r=12
+  straight 88
+  left 90 r=12
+  straight 88
+  left 90 r=12
+  straight 208
+  right 180 r=14 surface=metal
+  straight 20
+  close
+  patch water at=300 len=30 lat=0.4 w=6
+  patch water at=470 len=25 lat=-0.4 w=6
+  patch water at=1110 len=30 lat=0.3 w=6
+  patch metal at=690 len=40 lat=0 w=12
+  hazard oil at=600 lat=0.2 r=2.5
+  hazard oil at=1000 lat=-0.2 r=2.5
+  hazard barrel at=240 lat=-0.85
+  hazard barrel at=566 lat=-0.85
+  hazard barrel at=1192 lat=0.85
+  hazard barrel at=1196 lat=0.9
+  pickup nitro at=60 lat=0
+  pickup mystery at=170 lat=-0.3
+  pickup ammo at=320 lat=0
+  pickup cash at=480 lat=0.6
+  pickup rocket at=610 lat=-0.3
+  pickup cash at=828 lat=0.6
+  pickup wrench at=890 lat=0
+  pickup mine at=1020 lat=0
+  pickup wrench at=1250 lat=0.3
+  pickup cash at=1418 lat=0.6
+  place start_gantry x=-60 z=0 rot=90
+  prop grandstand at=20 side=left off=3
+  lamps lamp_harbor every=40 side=both
+  place crane_harbor x=84 z=-35 rot=0
+  place crane_harbor x=200 z=84 rot=90
+  place crane_harbor x=-40 z=100 rot=90
+  place container_stack x=200 z=20 rot=0
+  place container_stack x=200 z=150 rot=0
+  place container_stack x=-30 z=150 rot=90
+  place container_stack x=-30 z=60 rot=90
+  place forklift x=60 z=-30 rot=10
+  place warehouse x=0 z=-50 rot=0
+
+# The switchbacks: a short climb up the west side, the top straight, then dragged back and forth under the cranes
+# through four hairpins (two on steel plates), down the last leg and round the south-west corner home.
+track dock_keelhaul
+  title "Kielholen" title_en "Keelhauled"
+  venue docks
+  laps 3
+  width 13
+  shoulder 2.5
+  reverse 1
+  start 0 0 0
+  straight 120
+  right 90 r=35
+  straight 168
+  right 90 r=30
+  straight 110
+  right 180 r=16
+  straight 90
+  left 180 r=16 surface=metal
+  straight 90
+  right 180 r=16
+  straight 90
+  left 180 r=16 surface=metal
+  straight 110
+  right 90 r=30
+  straight 40
+  right 90 r=35
+  close
+  patch water at=300 len=30 lat=0.4 w=6
+  patch water at=520 len=25
+  patch water at=800 len=25
+  patch oil at=1100 len=10 lat=0.3 w=5
+  hazard oil at=600 lat=0 r=2.5
+  hazard barrel at=555 lat=-0.85
+  hazard barrel at=836 lat=-0.85
+  hazard barrel at=1135 lat=-0.85
+  obstacle bollard at=250 lat=0 r=0.7 model=bollard
+  pickup nitro at=60 lat=0.3
+  pickup mystery at=250 lat=0.5
+  pickup ammo at=440 lat=-0.3
+  pickup cash at=525 lat=0.6
+  pickup wrench at=595 lat=0
+  pickup cash at=665 lat=-0.6
+  pickup rocket at=740 lat=0.3
+  pickup cash at=806 lat=0.6
+  pickup mine at=880 lat=0
+  pickup wrench at=1030 lat=-0.3
+  place start_gantry x=0 z=0 rot=0
+  prop grandstand at=40 side=left off=3
+  lamps lamp_harbor every=45 side=both
+  row container_stack at=180 len=150 side=left off=3 every=25
+  place crane_harbor x=185 z=-60 rot=0
+  place crane_harbor x=121 z=-60 rot=0
+  place crane_harbor x=60 z=-60 rot=90
+  place container_stack x=50 z=-100 rot=0
+  place container_stack x=50 z=-20 rot=0
+  place forklift x=75 z=-60 rot=45
+  row crate_stack at=560 len=60 side=left off=1 every=15
+  row barrel_oil at=840 len=60 side=left off=1 every=12
+  row warehouse at=1100 len=60 side=right off=4 every=30
+  place ship_hull x=-60 z=-60 rot=0
+
+# Figure-eight in the dry dock: two long diagonals crossing at a narrow 45 degrees (the second over a steel bridge),
+# a tight triangle round the crane at the top and a wide round sweep past the wreck in the dock at the bottom.
+track dock_sailorsgrave
+  title "Seemannsgrab" title_en "Sailor's Grave"
+  venue docks
+  laps 4
+  width 13
+  shoulder 2.5
+  reverse 1
+  start 0 0 22.5
+  straight 333.7
+  left 90 r=25
+  straight 30
+  left 45 r=60
+  straight 30
+  left 90 r=25
+  straight 143
+  straight 50 surface=metal wall=rail
+  straight 158.8
+  right 110 r=55
+  straight 40
+  right 115 r=55
+  straight 20
+  close
+  bridge at=662 len=50
+  patch water at=90 len=30 lat=0.4 w=6
+  patch water at=420 len=25 lat=-0.5 w=6
+  patch water at=950 len=35 lat=-0.5 w=7
+  patch oil at=780 len=8 lat=-0.2 w=5
+  hazard oil at=240 lat=0.3 r=2.5
+  hazard barrel at=530 lat=-0.85
+  hazard barrel at=1135 lat=-0.85
+  hazard barrel at=1139 lat=-0.9
+  pickup nitro at=40 lat=0
+  pickup mystery at=140 lat=0
+  pickup cash at=430 lat=-0.6
+  pickup ammo at=380 lat=0.4
+  pickup wrench at=560 lat=0
+  pickup cash at=687 lat=0
+  pickup rocket at=820 lat=-0.3
+  pickup mine at=1000 lat=0.3
+  pickup wrench at=1100 lat=0
+  place start_gantry x=0 z=0 rot=22.5
+  prop grandstand at=20 side=left off=3
+  lamps lamp_harbor every=50 side=both
+  place ship_hull x=63 z=45 rot=90
+  place crane_harbor x=64 z=-322 rot=0
+  place container_stack x=40 z=-290 rot=60
+  place container_stack x=90 z=-290 rot=120
+  row container_stack at=200 len=120 side=right off=4 every=30
+  row container_stack at=560 len=90 side=right off=4 every=30
+  row bollard at=880 len=250 side=left off=0 every=14
+  place crane_harbor x=150 z=-160 rot=90
+  place crane_harbor x=-20 z=-160 rot=90
+
+# Derby arena: a wide figure-eight between container stacks; the crossing is where most of them end.
+track dock_fishfood
+  title "Fischfutter" title_en "Fish Food"
+  venue docks
+  arena 1
+  laps 1
+  width 17
+  shoulder 3
+  start 0 0 45
+  straight 60
+  left 270 r=30
+  straight 60
+  right 270 r=30
+  close
+  bridge at=210 len=40
+  patch water at=100 len=30 lat=0.4 w=8
+  patch metal at=300 len=40 lat=-0.3 w=10
+  hazard oil at=150 lat=-0.3 r=3
+  hazard oil at=330 lat=0.3 r=3
+  hazard barrel at=120 lat=0.8
+  hazard barrel at=270 lat=-0.8
+  hazard barrel at=380 lat=0.8
+  obstacle forklift at=90 lat=-0.4 r=1.8 model=forklift rot=30
+  obstacle bollard at=290 lat=0.45 r=0.7 model=bollard
+  pickup ammo at=60 lat=0
+  pickup wrench at=170 lat=0.3
+  pickup mine at=260 lat=-0.3
+  pickup rocket at=360 lat=0
+  place container_stack x=21 z=-64 rot=0
+  place container_stack x=21 z=21 rot=90
+  row container_stack at=60 len=140 side=right off=3 every=28
+  row container_stack at=261 len=140 side=left off=3 every=28
+  place crane_harbor x=80 z=-21 rot=0
+  place crane_harbor x=-40 z=-21 rot=0
+  lamps lamp_harbor every=40 side=both

@@ -1,0 +1,96 @@
+# The five difficulties, from the gentlest (0) to the cruellest (4).
+
+difficulty 0
+  title "Schonfrist"
+  title_en "Grace Period"
+  desc "Die Gegner fahren wie bei der Trauerfeier, der Mechaniker ist gnädig und der Kredithai fast menschlich. Für alle, die noch ein bisschen leben wollen."
+  desc_en "The rivals drive like they're in a funeral procession, the mechanic is merciful and the loan shark almost human. For those who'd like to live a little longer."
+  ai_speed 0.84
+  ai_skill 0.55
+  ai_aggression 0.4
+  ai_weapons 0.35
+  damage_taken 0.5
+  damage_dealt 1.3
+  prize 1.2
+  prices 0.85
+  repair 0.5
+  rubber 0.35
+  deaths 0.15
+  growth 0.6
+  interest 0.04
+
+difficulty 1
+  title "Blechschaden"
+  title_en "Fender Bender"
+  desc "Es kracht, es qualmt, aber meistens steigen alle wieder aus. Meistens."
+  desc_en "Things crunch, things smoke, but mostly everyone climbs back out. Mostly."
+  ai_speed 0.90
+  ai_skill 0.7
+  ai_aggression 0.6
+  ai_weapons 0.55
+  damage_taken 0.75
+  damage_dealt 1.15
+  prize 1.1
+  prices 0.95
+  repair 0.75
+  rubber 0.25
+  deaths 0.3
+  growth 0.8
+  interest 0.06
+
+difficulty 2
+  title "Totalschaden"
+  title_en "Total Loss"
+  desc "Der Grave Prix, wie Mortimer Graves ihn sich vorstellt: fair, blutig und hervorragend fürs Geschäft."
+  desc_en "The Grave Prix as Mortimer Graves intended it: fair, brutal and excellent for business."
+  ai_speed 0.95
+  ai_skill 0.82
+  ai_aggression 0.75
+  ai_weapons 0.75
+  damage_taken 1.0
+  damage_dealt 1.0
+  prize 1.0
+  prices 1.0
+  repair 1.0
+  rubber 0.15
+  deaths 0.45
+  growth 1.0
+  interest 0.08
+
+difficulty 3
+  title "Sargnagel"
+  title_en "Coffin Nail"
+  desc "Die Konkurrenz rüstet schneller auf, der Mechaniker langt kräftiger zu, und der Bestatter lässt schon mal Maß nehmen."
+  desc_en "The competition upgrades faster, the mechanic charges more, and the undertaker has started taking your measurements."
+  ai_speed 1.0
+  ai_skill 0.92
+  ai_aggression 0.9
+  ai_weapons 0.9
+  damage_taken 1.25
+  damage_dealt 0.9
+  prize 0.95
+  prices 1.05
+  repair 1.2
+  rubber 0.05
+  deaths 0.6
+  growth 1.15
+  interest 0.10
+
+difficulty 4
+  title "Totentanz"
+  title_en "Danse Macabre"
+  desc "Keine Gnade, kein Gummiband, kein Mitleid. Die Blaskapelle probt bereits. Für Leute, die ihren Grabstein selbst entwerfen wollen."
+  desc_en "No mercy, no rubber band, no pity. The brass band is already rehearsing. For people who want to design their own headstone."
+  ai_speed 1.04
+  ai_skill 1.0
+  ai_aggression 1.0
+  ai_weapons 1.0
+  damage_taken 1.5
+  damage_dealt 0.8
+  prize 0.9
+  prices 1.1
+  repair 1.4
+  rubber 0
+  deaths 0.75
+  growth 1.3
+  interest 0.12

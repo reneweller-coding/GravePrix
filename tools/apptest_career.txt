@@ -1,0 +1,50 @@
+# A career from the title screen: sign, read, race a day, the garage, the black market, the shark, a sponsor, the
+# tabloid, the table, save, back to the title, continue.
+expect title
+accept
+expect newgame
+down down down accept
+expect story
+back wait 2
+expect story
+back wait 2
+expect hub
+accept
+expect offers
+accept wait 5
+expect race
+race wait 5
+expect results
+accept wait 2
+expect news
+accept wait 2
+expect hub
+money 50000
+down accept
+expect garage
+nexttab accept nexttab nexttab accept back
+expect hub
+down accept
+expect market
+accept back
+expect hub
+down accept
+expect shark
+accept back
+expect hub
+down accept
+expect sponsor
+accept back
+expect hub
+down accept
+expect news
+accept
+expect hub
+down accept
+expect table
+back
+expect hub
+down accept
+expect title
+up accept wait 3
+expect hub

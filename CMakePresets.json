@@ -1,0 +1,72 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "msvc",
+      "displayName": "Visual Studio (MSVC)",
+      "description": "build/msvc with the solution; the game lands in bin/msvc",
+      "generator": "Visual Studio 18 2026",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build/msvc",
+      "cacheVariables": {
+        "GRAVE_BIN_DIR": "${sourceDir}/bin/msvc"
+      }
+    },
+    {
+      "name": "linux",
+      "displayName": "Linux (GCC, Ninja or Makefiles, Release)",
+      "description": "build/linux, the game in bin/linux -- for WSL, CI and the Steam Deck",
+      "binaryDir": "${sourceDir}/build/linux",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "GRAVE_BIN_DIR": "${sourceDir}/bin/linux"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "msvc",
+      "configurePreset": "msvc",
+      "configuration": "Release"
+    },
+    {
+      "name": "msvc-debug",
+      "configurePreset": "msvc",
+      "configuration": "Debug"
+    },
+    {
+      "name": "linux",
+      "configurePreset": "linux"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "msvc",
+      "configurePreset": "msvc",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "msvc-debug",
+      "configurePreset": "msvc",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "linux",
+      "configurePreset": "linux",
+      "output": {
+        "outputOnFailure": true
+      }
+    }
+  ]
+}

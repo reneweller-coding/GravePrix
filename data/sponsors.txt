@@ -1,0 +1,82 @@
+# Sponsors: one contract per league. "league" is the lowest league a sponsor offers contracts in.
+# Bonus conditions: win podium wreck clean (no damage taken) lap (fastest lap) nogun (no shot fired).
+
+sponsor crate_king
+  title "Kistenkönig Sarg-Discount"
+  title_en "Crate Expectations Discount Caskets"
+  desc "Särge ab Lager, Selbstabholung, Montage nach Bildanleitung. Zahlt für jedes Auto, das du zu Kleinholz fährst – Kleinholz ist Rohstoff."
+  desc_en "Caskets straight off the pallet, self-assembly, picture instructions included. Pays for every car you turn into kindling – kindling is raw material."
+  league 5
+  bonus wreck=150 win=400
+
+sponsor wilting_lily
+  title "Blumen Welk"
+  title_en "The Wilting Lily Florists"
+  desc "Kränze, Gestecke, Trauersträuße – frisch seit gestern. Zahlt, wenn du heil ankommst: Die Kundschaft soll ja wissen, dass Blumen auch Lebenden stehen."
+  desc_en "Wreaths, sprays and sympathy bouquets – fresh since yesterday. Pays when you arrive in one piece: customers should see that flowers suit the living too."
+  league 5
+  bonus clean=250 podium=200
+
+sponsor fine_print
+  title "Kleingedruckt Lebensversicherung"
+  title_en "Fine Print Life Assurance"
+  desc "Wir zahlen. Theoretisch. Paragraph 47b schließt Motorsport, Waffen, Wetter und Wochentage aus. Belohnt Fahrer ohne Schadensmeldung."
+  desc_en "We pay out. In theory. Clause 47b excludes motorsport, weapons, weather and weekdays. Rewards drivers who never file a claim."
+  league 4
+  bonus clean=600 win=900
+
+sponsor set_in_stone
+  title "Steinmetz Felsenfest"
+  title_en "Set in Stone Monuments"
+  desc "Grabsteine mit Gravur, Inschrift nach Wahl, Rechtschreibung gegen Aufpreis. Zahlt für Podestplätze und schnelle Runden – Bestzeiten meißeln sich gut."
+  desc_en "Headstones engraved to order, spelling correct at extra cost. Pays for podiums and fast laps – a record looks lovely in granite."
+  league 4
+  bonus podium=500 lap=400
+
+sponsor cinderella
+  title "Krematorium Aschenputtel"
+  title_en "Urn Your Keep Crematorium"
+  desc "Die Guten ins Töpfchen, der Rest auch. Wer brennende Wracks hinterlässt, bekommt Provision."
+  desc_en "Every customer gets the warmest send-off in town. Leave burning wrecks behind you and earn commission."
+  league 3
+  bonus wreck=900 win=2000
+
+sponsor rosy_cheeks
+  title "Thanatokosmetik Rosig"
+  title_en "Rosy Cheeks Post-Mortem Beauty"
+  desc "Wir lassen Sie aussehen wie das blühende Leben. Spät, aber immerhin. Zahlt für Rennen ohne Kratzer und ohne Schüsse – Puder ist teuer."
+  desc_en "We make you look the picture of health. A little late, but still. Pays for races without a scratch and without a shot – powder is expensive."
+  league 3
+  bonus clean=1500 nogun=1200 podium=900
+
+sponsor pomp
+  title "Bestattungshaus Prunk & Pomp"
+  title_en "Pomp & Circumstance Funerals"
+  desc "Pferdekutschen, Fackelträger, Klageweiber auf Stundenbasis. Für uns zählen nur Siege und Pokale – zweite Plätze beerdigen wir diskret."
+  desc_en "Horse-drawn carriages, torch bearers, professional mourners by the hour. We only care about wins and trophies – second places are buried discreetly."
+  league 2
+  bonus win=5000 podium=2000
+
+sponsor forever_fresh
+  title "Einbalsamierung Ewig Frisch"
+  title_en "Forever Fresh Embalming"
+  desc "Haltbarkeit garantiert bis zum Jüngsten Tag, danach Kulanz. Zahlt für saubere, friedliche Fahrten: Wer heil bleibt, ist unsere beste Werbung."
+  desc_en "Guaranteed to keep until Judgement Day, goodwill thereafter. Pays for clean, peaceful drives: an intact driver is our best advertisement."
+  league 2
+  bonus clean=3000 nogun=2500 lap=1500
+
+sponsor elysium
+  title "Gartenfriedhof Elysium"
+  title_en "Elysian Acres Premium Cemetery"
+  desc "Seeblick, Golfrasen, Grabpflege mit Concierge. Hier liegen nur Sieger – und wer sie bezahlt. Zahlt fürstlich für Siege und Rundenrekorde."
+  desc_en "Lake view, putting-green lawns, grave care with concierge. Only winners lie here – and whoever pays for them. Pays royally for wins and lap records."
+  league 1
+  bonus win=12000 lap=3000
+
+sponsor ebony_coffins
+  title "Sargmanufaktur Ebenholz"
+  title_en "Mahogany Majesty Coffins"
+  desc "Handgefertigte Särge aus Edelhölzern, Innenfutter aus Seide, Minibar gegen Aufpreis. Zahlt für Podeste, Wracks und makellosen Lack."
+  desc_en "Hand-built caskets in rare hardwoods, silk lining, minibar optional. Pays for podiums, wrecks and flawless paintwork."
+  league 1
+  bonus podium=6000 wreck=4000 clean=5000

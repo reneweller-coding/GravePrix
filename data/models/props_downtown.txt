@@ -1,0 +1,552 @@
+# Downtown props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_town_pass.py.
+
+# a 6-storey brick block 20 x 16 x 18 m: shop with neon, fire escape, rooftop water tank
+model building_a
+  part box w=20 h=18 d=16 y=9 color=#5e3428
+  part box w=20.3 h=0.4 d=16.3 y=4.2 color=#7a6a5a
+  part box w=20.4 h=0.6 d=0.5 y=18.1 z=-7.95 color=#7a6a5a
+  part box w=20.4 h=0.6 d=0.5 y=18.1 z=7.95 color=#7a6a5a
+  part box w=0.5 h=0.6 d=16.4 x=-9.95 y=18.1 color=#7a6a5a
+  part box w=0.5 h=0.6 d=16.4 x=9.95 y=18.1 color=#7a6a5a
+  part box w=19.8 h=0.06 d=15.8 y=18.03 color=#2e2a2a   # tar roof
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=5.75 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=5.75 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=5.75 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=5.75 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=5.75 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=5.75 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=5.75 z=8.03 color=#8ab0ff emit=0.543
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=5.75 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=5.75 z=8.03 color=#ffc070 emit=0.491
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=5.75 z=8.03 color=#ffd0a0 emit=0.59
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=5.75 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=5.75 z=8.03 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=5.75 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=5.75 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=5.75 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=5.75 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=5.75 z=6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=5.75 z=-6.2 color=#ffd890 emit=0.457
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=5.75 z=-3.1 color=#ffd890 emit=0.633
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=5.75 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=5.75 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=5.75 z=6.2 color=#ffe8b0 emit=0.592
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=8.45 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=8.45 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=8.45 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=8.45 z=-8.03 color=#8ab0ff emit=0.699
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=8.45 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=8.45 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=8.45 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=8.45 z=8.03 color=#c8dcff emit=0.409
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=8.45 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=8.45 z=8.03 color=#ffd890 emit=0.654
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=8.45 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=8.45 z=8.03 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=8.45 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=8.45 z=-3.1 color=#ffe8b0 emit=0.678
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=8.45 color=#ffc070 emit=0.694
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=8.45 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=8.45 z=6.2 color=#ffd0a0 emit=0.46
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=8.45 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=8.45 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=8.45 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=8.45 z=3.1 color=#ffc070 emit=0.627
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=8.45 z=6.2 color=#ffe8b0 emit=0.612
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=11.15 z=-8.03 color=#ffc070 emit=0.639
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=11.15 z=-8.03 color=#8ab0ff emit=0.457
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=11.15 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=11.15 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=11.15 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=11.15 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=11.15 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=11.15 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=11.15 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=11.15 z=8.03 color=#8ab0ff emit=0.491
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=11.15 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=11.15 z=8.03 color=#ffc070 emit=0.699
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=11.15 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=11.15 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=11.15 color=#ffe8b0 emit=0.464
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=11.15 z=3.1 color=#8ab0ff emit=0.499
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=11.15 z=6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=11.15 z=-6.2 color=#ffd890 emit=0.463
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=11.15 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=11.15 color=#c8dcff emit=0.512
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=11.15 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=11.15 z=6.2 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=13.85 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=13.85 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=13.85 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=13.85 z=-8.03 color=#ffe8b0 emit=0.493
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=13.85 z=-8.03 color=#8ab0ff emit=0.475
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=13.85 z=-8.03 color=#ffd0a0 emit=0.589
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=13.85 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=13.85 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=13.85 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=13.85 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=13.85 z=8.03 color=#ffd890 emit=0.431
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=13.85 z=8.03 color=#c8dcff emit=0.472
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=13.85 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=13.85 z=-3.1 color=#8ab0ff emit=0.547
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=13.85 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=13.85 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=13.85 z=6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=13.85 z=-6.2 color=#ffc070 emit=0.568
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=13.85 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=13.85 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=13.85 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=13.85 z=6.2 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=16.55 z=-8.03 color=#ffd890 emit=0.421
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=16.55 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=16.55 z=-8.03 color=#ffd890 emit=0.453
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=16.55 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=16.55 z=-8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=16.55 z=-8.03 color=#c8dcff emit=0.442
+  part box w=1.3 h=1.6 d=0.06 x=-7.75 y=16.55 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-4.65 y=16.55 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=-1.55 y=16.55 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=1.55 y=16.55 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=4.65 y=16.55 z=8.03 color=#141a20
+  part box w=1.3 h=1.6 d=0.06 x=7.75 y=16.55 z=8.03 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=16.55 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=16.55 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=16.55 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=16.55 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=-10.03 y=16.55 z=6.2 color=#8ab0ff emit=0.591
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=16.55 z=-6.2 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=16.55 z=-3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=16.55 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=16.55 z=3.1 color=#141a20
+  part box w=0.06 h=1.6 d=1.3 x=10.03 y=16.55 z=6.2 color=#8ab0ff emit=0.51
+  part box w=14 h=2.8 d=0.1 x=-1.5 y=1.8 z=-8.06 color=#ffe0a8 emit=0.7   # shop window
+  part box w=1.4 h=2.6 d=0.1 x=7.4 y=1.3 z=-8.06 color=#2a1a14
+  part box w=15 h=0.1 d=1.8 x=-1.5 y=3.55 z=-8.85 color=#8a1a24 pitch=-15   # awning
+  part box w=1.5 h=0.12 d=1.8 x=-7.5 y=3.57 z=-8.85 color=#e8e0d0 pitch=-15
+  part box w=1.5 h=0.12 d=1.8 x=-4.5 y=3.57 z=-8.85 color=#e8e0d0 pitch=-15
+  part box w=1.5 h=0.12 d=1.8 x=-1.5 y=3.57 z=-8.85 color=#e8e0d0 pitch=-15
+  part box w=1.5 h=0.12 d=1.8 x=1.5 y=3.57 z=-8.85 color=#e8e0d0 pitch=-15
+  part box w=1.5 h=0.12 d=1.8 x=4.5 y=3.57 z=-8.85 color=#e8e0d0 pitch=-15
+  part box w=9 h=0.7 d=0.15 x=-1.5 y=4.2 z=-8.12 color=#ff3a9a emit=1   # neon shop sign
+  part box w=0.08 h=0.06 d=1.4 x=10.7 y=4.63 z=-3 color=#2a2a2c
+  part box w=1.4 h=0.06 d=2.6 x=10.7 y=4.63 z=-3 color=#2a2a2c   # fire escape
+  part box w=0.6 h=0.06 d=3.612 x=10.7 y=5.95 z=-3 pitch=48.37 rot=180 color=#2a2a2c
+  part box w=0.08 h=0.06 d=1.4 x=10.7 y=7.33 z=-3 color=#2a2a2c
+  part box w=1.4 h=0.06 d=2.6 x=10.7 y=7.33 z=-3 color=#2a2a2c
+  part box w=0.6 h=0.06 d=3.612 x=10.7 y=8.65 z=-3 pitch=48.37 rot=180 color=#2a2a2c
+  part box w=0.08 h=0.06 d=1.4 x=10.7 y=10.03 z=-3 color=#2a2a2c
+  part box w=1.4 h=0.06 d=2.6 x=10.7 y=10.03 z=-3 color=#2a2a2c
+  part box w=0.6 h=0.06 d=3.612 x=10.7 y=11.35 z=-3 pitch=48.37 rot=180 color=#2a2a2c
+  part box w=0.08 h=0.06 d=1.4 x=10.7 y=12.73 z=-3 color=#2a2a2c
+  part box w=1.4 h=0.06 d=2.6 x=10.7 y=12.73 z=-3 color=#2a2a2c
+  part box w=0.6 h=0.06 d=3.612 x=10.7 y=14.05 z=-3 pitch=48.37 rot=180 color=#2a2a2c
+  part box w=0.08 h=0.06 d=1.4 x=10.7 y=15.43 z=-3 color=#2a2a2c
+  part box w=1.4 h=0.06 d=2.6 x=10.7 y=15.43 z=-3 color=#2a2a2c
+  part box w=0.6 h=0.06 d=3.612 x=10.7 y=16.75 z=-3 pitch=48.37 rot=180 color=#2a2a2c
+  part box w=20 h=0.9 d=0.3 y=18.45 z=-7.85 color=#6a3a2c
+  part box w=20 h=0.9 d=0.3 y=18.45 z=7.85 color=#6a3a2c
+  part box w=0.3 h=0.9 d=16 x=-9.85 y=18.45 color=#6a3a2c
+  part box w=0.3 h=0.9 d=16 x=9.85 y=18.45 color=#6a3a2c
+  part box w=4 h=3 d=4 x=-5.5 y=19.5 z=3 color=#5a5048   # stair house
+  part box w=1.6 h=1 d=1.4 x=-4 y=18.5 z=-3 color=#8a8c8e
+  part disc r=0.5 h=0.06 x=-4 y=19.05 z=-3 color=#2a2a2a seg=8
+  part box w=1.6 h=1 d=1.4 y=18.5 z=-4 color=#8a8c8e
+  part disc r=0.5 h=0.06 x=0 y=19.05 z=-4 color=#2a2a2a seg=8
+  part box w=1.6 h=1 d=1.4 x=4.5 y=18.5 z=2.5 color=#8a8c8e
+  part disc r=0.5 h=0.06 x=4.5 y=19.05 z=2.5 color=#2a2a2a seg=8
+  part box w=0.15 h=2 d=0.15 x=5 y=19 z=-4 color=#2a2a2a
+  part box w=0.15 h=2 d=0.15 x=7 y=19 z=-4 color=#2a2a2a
+  part box w=0.15 h=2 d=0.15 x=5 y=19 z=-2.2 color=#2a2a2a
+  part box w=0.15 h=2 d=0.15 x=7 y=19 z=-2.2 color=#2a2a2a
+  part disc r=1.4 h=2.4 x=6 y=21.2 z=-3.1 seg=10 color=#6a4a30   # water tank
+  part disc r=1.5 r2=0.1 h=0.8 x=6 y=22.8 z=-3.1 seg=10 color=#3a3a3a
+  part box w=1 h=0.04 d=6 x=-1 y=18.02 z=4 color=#3a3e44
+
+# an 8-storey concrete office block 20 x 14 x 26 m: ribbon windows, a red rooftop sign
+model building_b
+  part box w=20 h=26 d=14 y=13 color=#5a5e62
+  part box w=20.4 h=4 d=14.4 y=2 color=#3a3e44
+  part box w=18 h=3.2 d=0.1 y=1.9 z=-7.25 color=#d8e8f0 emit=0.5   # lobby
+  part box w=19 h=1.4 d=0.06 y=6.1 z=-7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-2.2 y=6.1 z=-7.03 color=#8ab0ff emit=0.492
+  part box w=2.024 h=1.344 d=0.12 x=8.8 y=6.1 z=-7.03 color=#8ab0ff emit=0.537
+  part box w=19 h=1.4 d=0.06 y=6.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-8.8 y=6.1 z=7.03 color=#ffd890 emit=0.694
+  part box w=2.024 h=1.344 d=0.12 x=-4.4 y=6.1 z=7.03 color=#ffd0a0 emit=0.62
+  part box w=2.024 h=1.344 d=0.12 y=6.1 z=7.03 color=#ffd890 emit=0.577
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=6.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=6.1 z=5.5 color=#ffc070 emit=0.453
+  part box w=0.06 h=1.4 d=13 x=10.01 y=6.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=10.03 y=6.1 z=1.1 color=#ffe8b0 emit=0.56
+  part box w=19 h=1.4 d=0.06 y=9.1 z=-7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-6.6 y=9.1 z=-7.03 color=#ffc070 emit=0.412
+  part box w=19 h=1.4 d=0.06 y=9.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-2.2 y=9.1 z=7.03 color=#ffd890 emit=0.612
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=9.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=9.1 z=-3.3 color=#ffd890 emit=0.417
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=9.1 z=1.1 color=#ffe8b0 emit=0.606
+  part box w=0.06 h=1.4 d=13 x=10.01 y=9.1 color=#121820
+  part box w=19 h=1.4 d=0.06 y=12.1 z=-7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-6.6 y=12.1 z=-7.03 color=#ffd890 emit=0.479
+  part box w=2.024 h=1.344 d=0.12 x=4.4 y=12.1 z=-7.03 color=#8ab0ff emit=0.559
+  part box w=2.024 h=1.344 d=0.12 x=6.6 y=12.1 z=-7.03 color=#8ab0ff emit=0.567
+  part box w=19 h=1.4 d=0.06 y=12.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-8.8 y=12.1 z=7.03 color=#ffe8b0 emit=0.67
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=12.1 color=#121820
+  part box w=0.06 h=1.4 d=13 x=10.01 y=12.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=10.03 y=12.1 z=1.1 color=#ffd0a0 emit=0.442
+  part box w=19 h=1.4 d=0.06 y=15.1 z=-7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-6.6 y=15.1 z=-7.03 color=#ffd0a0 emit=0.424
+  part box w=19 h=1.4 d=0.06 y=15.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-8.8 y=15.1 z=7.03 color=#ffc070 emit=0.407
+  part box w=2.024 h=1.344 d=0.12 x=2.2 y=15.1 z=7.03 color=#ffd0a0 emit=0.535
+  part box w=2.024 h=1.344 d=0.12 x=6.6 y=15.1 z=7.03 color=#ffd0a0 emit=0.483
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=15.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=15.1 z=-1.1 color=#8ab0ff emit=0.489
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=15.1 z=3.3 color=#ffd890 emit=0.659
+  part box w=0.06 h=1.4 d=13 x=10.01 y=15.1 color=#121820
+  part box w=19 h=1.4 d=0.06 y=18.1 z=-7.01 color=#121820
+  part box w=19 h=1.4 d=0.06 y=18.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-6.6 y=18.1 z=7.03 color=#ffe8b0 emit=0.668
+  part box w=2.024 h=1.344 d=0.12 x=-2.2 y=18.1 z=7.03 color=#c8dcff emit=0.433
+  part box w=2.024 h=1.344 d=0.12 x=2.2 y=18.1 z=7.03 color=#8ab0ff emit=0.631
+  part box w=2.024 h=1.344 d=0.12 x=4.4 y=18.1 z=7.03 color=#ffd890 emit=0.478
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=18.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=18.1 z=-1.1 color=#ffd890 emit=0.483
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=18.1 z=3.3 color=#ffd890 emit=0.454
+  part box w=0.06 h=1.4 d=13 x=10.01 y=18.1 color=#121820
+  part box w=19 h=1.4 d=0.06 y=21.1 z=-7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-8.8 y=21.1 z=-7.03 color=#ffd890 emit=0.674
+  part box w=2.024 h=1.344 d=0.12 x=-6.6 y=21.1 z=-7.03 color=#ffd890 emit=0.441
+  part box w=2.024 h=1.344 d=0.12 x=8.8 y=21.1 z=-7.03 color=#ffd890 emit=0.581
+  part box w=19 h=1.4 d=0.06 y=21.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-4.4 y=21.1 z=7.03 color=#ffd890 emit=0.448
+  part box w=2.024 h=1.344 d=0.12 x=-2.2 y=21.1 z=7.03 color=#ffc070 emit=0.698
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=21.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=21.1 z=-3.3 color=#8ab0ff emit=0.678
+  part box w=0.06 h=1.4 d=13 x=10.01 y=21.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=10.03 y=21.1 z=-5.5 color=#ffc070 emit=0.695
+  part box w=0.12 h=1.344 d=2.024 x=10.03 y=21.1 z=5.5 color=#ffd0a0 emit=0.561
+  part box w=19 h=1.4 d=0.06 y=24.1 z=-7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-8.8 y=24.1 z=-7.03 color=#ffc070 emit=0.527
+  part box w=2.024 h=1.344 d=0.12 x=-6.6 y=24.1 z=-7.03 color=#ffd0a0 emit=0.528
+  part box w=19 h=1.4 d=0.06 y=24.1 z=7.01 color=#121820
+  part box w=2.024 h=1.344 d=0.12 x=-8.8 y=24.1 z=7.03 color=#c8dcff emit=0.573
+  part box w=0.06 h=1.4 d=13 x=-10.01 y=24.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=24.1 z=-3.3 color=#ffd890 emit=0.517
+  part box w=0.12 h=1.344 d=2.024 x=-10.03 y=24.1 z=1.1 color=#ffd890 emit=0.526
+  part box w=0.06 h=1.4 d=13 x=10.01 y=24.1 color=#121820
+  part box w=0.12 h=1.344 d=2.024 x=10.03 y=24.1 z=3.3 color=#ffd890 emit=0.625
+  part box w=16 h=4 d=10 y=28 color=#4e5256   # setback top floor
+  part box w=15 h=1.4 d=0.06 y=28.7 z=-5.01 color=#121820
+  part box w=15 h=1.4 d=0.06 y=28.7 z=5.01 color=#121820
+  part box w=2.208 h=1.344 d=0.12 x=-3.6 y=28.7 z=5.03 color=#ffd890 emit=0.625
+  part box w=2.208 h=1.344 d=0.12 x=3.6 y=28.7 z=5.03 color=#c8dcff emit=0.635
+  part box w=2.208 h=1.344 d=0.12 x=6 y=28.7 z=5.03 color=#ffd0a0 emit=0.485
+  part box w=0.06 h=1.4 d=9 x=-8.01 y=28.7 color=#121820
+  part box w=0.12 h=1.344 d=2.208 x=-8.03 y=28.7 z=3.6 color=#ffd0a0 emit=0.407
+  part box w=0.06 h=1.4 d=9 x=8.01 y=28.7 color=#121820
+  part box w=0.12 h=1.344 d=2.208 x=8.03 y=28.7 z=3.6 color=#ffd0a0 emit=0.634
+  part box w=20 h=0.7 d=0.3 y=26.35 z=-6.85 color=#6a6e72
+  part box w=20 h=0.7 d=0.3 y=26.35 z=6.85 color=#6a6e72
+  part box w=0.3 h=0.7 d=14 x=-9.85 y=26.35 color=#6a6e72
+  part box w=0.3 h=0.7 d=14 x=9.85 y=26.35 color=#6a6e72
+  part box w=19.6 h=0.06 d=13.6 y=26.03 color=#34363a   # roof
+  part box w=16.4 h=0.5 d=10.4 y=30.25 color=#3e4044
+  part gun r=0.05 r2=0.15 len=8.5 x=3 y=34.75 z=2 pitch=90 seg=5 color=#8a8a8e
+  part sphere r=0.2 x=3 y=39 z=2 color=#ff2010 emit=1 seg=5
+  part box w=1.4 h=1.8 d=0.2 x=-6 y=27.6 z=-6.4 color=#ff2a1a pitch=20 emit=0.9   # the rooftop letters
+  part box w=1.4 h=1.8 d=0.2 x=-4.3 y=27.6 z=-6.4 color=#ff2a1a pitch=20 emit=0.9
+  part box w=1.4 h=1.8 d=0.2 x=-2.6 y=27.6 z=-6.4 color=#ff2a1a pitch=20 emit=0.9
+  part box w=1.4 h=1.8 d=0.2 x=-0.9 y=27.6 z=-6.4 color=#ff2a1a pitch=20 emit=0.9
+  part box w=1.4 h=1.8 d=0.2 x=0.8 y=27.6 z=-6.4 color=#ff2a1a pitch=20 emit=0.9
+  part box w=1.4 h=1.8 d=0.2 x=2.5 y=27.6 z=-6.4 color=#ff2a1a pitch=20 emit=0.9
+  part box w=0.1 h=0.1 d=2.433 x=-7 y=27.2 z=-5.8 pitch=80.54 color=#2a2a2a
+  part box w=0.1 h=0.1 d=2.433 x=2 y=27.2 z=-5.8 pitch=80.54 color=#2a2a2a
+  part box w=2.2 h=1.2 d=1.8 x=-6 y=26.6 z=3 color=#8a8c8e
+  part box w=2.2 h=1.2 d=1.8 x=5 y=26.6 z=-3 color=#8a8c8e
+
+# a 36 m glass tower 26 x 20 m: lit floors, a crown, a helipad with an H
+model building_tall
+  part box w=26 h=32 d=20 y=16 color=#1a2834
+  part box w=26.6 h=5 d=20.6 y=2.5 color=#2a2e34
+  part box w=22 h=3.6 d=0.1 y=2.1 z=-10.35 color=#e0f0ff emit=0.55   # lobby
+  part box w=26.12 h=0.35 d=20.12 y=5.575 color=#3a4450   # floor slabs
+  part box w=26.12 h=0.35 d=20.12 y=8.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=11.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=14.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=17.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=20.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=23.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=26.575 color=#3a4450
+  part box w=26.12 h=0.35 d=20.12 y=29.575 color=#3a4450
+  part box w=0.18 h=27 d=0.1 x=-13 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-10.4 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-7.8 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-5.2 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-2.6 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=2.6 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=5.2 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=7.8 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=10.4 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=13 y=18.5 z=-10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-13 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-10.4 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-7.8 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-5.2 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=-2.6 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=2.6 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=5.2 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=7.8 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=10.4 y=18.5 z=10.05 color=#4a5866
+  part box w=0.18 h=27 d=0.1 x=13 y=18.5 z=10.05 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=-10 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=-7.143 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=-4.286 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=-1.429 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=1.429 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=4.286 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=7.143 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=-13.05 y=18.5 z=10 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=-10 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=-7.143 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=-4.286 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=-1.429 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=1.429 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=4.286 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=7.143 color=#4a5866
+  part box w=0.1 h=27 d=0.18 x=13.05 y=18.5 z=10 color=#4a5866
+  part box w=2.35 h=2.2 d=0.08 x=-9.1 y=6.9 z=-10.03 color=#8ab0ff emit=0.466
+  part box w=2.35 h=2.2 d=0.08 x=-1.3 y=6.9 z=-10.03 color=#c8dcff emit=0.409
+  part box w=2.35 h=2.2 d=0.08 x=-6.5 y=6.9 z=10.03 color=#ffd890 emit=0.323
+  part box w=2.35 h=2.2 d=0.08 x=-3.9 y=6.9 z=10.03 color=#c8dcff emit=0.532
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=6.9 color=#ffd890 emit=0.464
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=6.9 z=5.714 color=#8ab0ff emit=0.356
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=6.9 z=-2.857 color=#ffd890 emit=0.524
+  part box w=2.35 h=2.2 d=0.08 x=6.5 y=9.9 z=-10.03 color=#ffc070 emit=0.326
+  part box w=2.35 h=2.2 d=0.08 x=-6.5 y=9.9 z=10.03 color=#c8dcff emit=0.307
+  part box w=2.35 h=2.2 d=0.08 x=-1.3 y=9.9 z=10.03 color=#ffe8b0 emit=0.457
+  part box w=2.35 h=2.2 d=0.08 x=9.1 y=9.9 z=10.03 color=#ffe8b0 emit=0.436
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=9.9 z=5.714 color=#c8dcff emit=0.317
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=9.9 color=#ffd890 emit=0.542
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=9.9 z=2.857 color=#ffe8b0 emit=0.476
+  part box w=2.35 h=2.2 d=0.08 x=-3.9 y=12.9 z=-10.03 color=#8ab0ff emit=0.468
+  part box w=2.35 h=2.2 d=0.08 x=6.5 y=12.9 z=-10.03 color=#c8dcff emit=0.445
+  part box w=2.35 h=2.2 d=0.08 x=9.1 y=12.9 z=10.03 color=#c8dcff emit=0.422
+  part box w=2.35 h=2.2 d=0.08 x=11.7 y=12.9 z=10.03 color=#ffc070 emit=0.451
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=12.9 z=-5.714 color=#8ab0ff emit=0.479
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=12.9 z=5.714 color=#c8dcff emit=0.469
+  part box w=2.35 h=2.2 d=0.08 x=-11.7 y=15.9 z=-10.03 color=#ffe8b0 emit=0.538
+  part box w=2.35 h=2.2 d=0.08 x=-6.5 y=15.9 z=-10.03 color=#8ab0ff emit=0.501
+  part box w=2.35 h=2.2 d=0.08 x=1.3 y=15.9 z=-10.03 color=#ffd890 emit=0.39
+  part box w=2.35 h=2.2 d=0.08 x=3.9 y=15.9 z=-10.03 color=#ffd0a0 emit=0.339
+  part box w=2.35 h=2.2 d=0.08 x=-9.1 y=15.9 z=10.03 color=#c8dcff emit=0.357
+  part box w=2.35 h=2.2 d=0.08 x=-1.3 y=15.9 z=10.03 color=#ffc070 emit=0.501
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=15.9 z=-2.857 color=#ffc070 emit=0.414
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=15.9 z=5.714 color=#ffe8b0 emit=0.446
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=15.9 z=-2.857 color=#ffe8b0 emit=0.535
+  part box w=2.35 h=2.2 d=0.08 x=-11.7 y=18.9 z=-10.03 color=#ffd890 emit=0.43
+  part box w=2.35 h=2.2 d=0.08 x=-9.1 y=18.9 z=-10.03 color=#8ab0ff emit=0.458
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=18.9 color=#ffc070 emit=0.317
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=18.9 z=-5.714 color=#ffe8b0 emit=0.472
+  part box w=2.35 h=2.2 d=0.08 x=-1.3 y=21.9 z=-10.03 color=#c8dcff emit=0.521
+  part box w=2.35 h=2.2 d=0.08 x=6.5 y=21.9 z=-10.03 color=#c8dcff emit=0.359
+  part box w=2.35 h=2.2 d=0.08 x=-3.9 y=21.9 z=10.03 color=#8ab0ff emit=0.464
+  part box w=2.35 h=2.2 d=0.08 x=-1.3 y=21.9 z=10.03 color=#ffd0a0 emit=0.321
+  part box w=2.35 h=2.2 d=0.08 x=1.3 y=21.9 z=10.03 color=#c8dcff emit=0.416
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=21.9 z=8.571 color=#ffc070 emit=0.436
+  part box w=2.35 h=2.2 d=0.08 x=1.3 y=24.9 z=-10.03 color=#8ab0ff emit=0.46
+  part box w=2.35 h=2.2 d=0.08 x=11.7 y=24.9 z=-10.03 color=#ffe8b0 emit=0.351
+  part box w=2.35 h=2.2 d=0.08 x=11.7 y=24.9 z=10.03 color=#ffd890 emit=0.486
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=24.9 z=-2.857 color=#ffd890 emit=0.376
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=24.9 z=5.714 color=#ffe8b0 emit=0.326
+  part box w=2.35 h=2.2 d=0.08 x=1.3 y=27.9 z=-10.03 color=#ffd890 emit=0.318
+  part box w=2.35 h=2.2 d=0.08 x=6.5 y=27.9 z=-10.03 color=#c8dcff emit=0.368
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=27.9 z=-2.857 color=#ffe8b0 emit=0.482
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=27.9 z=5.714 color=#c8dcff emit=0.495
+  part box w=2.35 h=2.2 d=0.08 x=-6.5 y=30.9 z=-10.03 color=#8ab0ff emit=0.394
+  part box w=2.35 h=2.2 d=0.08 x=-3.9 y=30.9 z=-10.03 color=#ffd0a0 emit=0.518
+  part box w=2.35 h=2.2 d=0.08 x=9.1 y=30.9 z=-10.03 color=#ffd890 emit=0.317
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=30.9 z=-8.571 color=#ffd890 emit=0.415
+  part box w=0.08 h=2.2 d=2.607 x=-13.03 y=30.9 z=2.857 color=#8ab0ff emit=0.333
+  part box w=0.08 h=2.2 d=2.607 x=13.03 y=30.9 z=2.857 color=#ffc070 emit=0.38
+  part box w=20 h=3 d=14 y=33.5 color=#2a3440   # crown
+  part box w=20.4 h=0.25 d=14.4 y=35.125 color=#c8d0d8
+  part disc r=5 h=0.3 x=-2 y=35.35 seg=16 color=#3a3e44   # helipad
+  part ring r=4.3 thick=0.12 x=-2 y=35.55 color=#e8d040 seg=20
+  part box w=0.5 h=0.06 d=3.4 x=-3 y=35.53 color=#f0f0e8
+  part box w=0.5 h=0.06 d=3.4 x=-1 y=35.53 color=#f0f0e8
+  part box w=2 h=0.06 d=0.5 x=-2 y=35.53 color=#f0f0e8
+  part sphere r=0.15 x=-2 y=35.6 z=-4.6 color=#ff3020 emit=1 seg=5
+  part sphere r=0.15 x=1.984 y=35.6 z=-2.3 color=#ff3020 emit=1 seg=5
+  part sphere r=0.15 x=1.984 y=35.6 z=2.3 color=#ff3020 emit=1 seg=5
+  part sphere r=0.15 x=-2 y=35.6 z=4.6 color=#ff3020 emit=1 seg=5
+  part sphere r=0.15 x=-5.984 y=35.6 z=2.3 color=#ff3020 emit=1 seg=5
+  part sphere r=0.15 x=-5.984 y=35.6 z=-2.3 color=#ff3020 emit=1 seg=5
+  part box w=3 h=2 d=3 x=8 y=36.2 z=4 color=#4a4e54
+  part gun r=0.06 r2=0.2 len=6.8 x=8 y=40.6 z=4 pitch=90 seg=5 color=#9a9aa0
+  part sphere r=0.25 x=8 y=44 z=4 color=#ff2010 emit=1 seg=6
+
+# a pole beside the road, its 9.5 m arm over the road (-z), the light red
+model traffic_light lamp=1
+  part disc r=0.3 h=0.4 y=0.2 seg=8 color=#3a3a3c
+  part gun r=0.11 r2=0.14 len=6 y=3.4 pitch=90 seg=8 color=#2a3230
+  part box w=0.16 h=0.16 d=9.601 y=6.175 z=-4.8 pitch=0.9 color=#2a3230
+  part box w=0.08 h=0.08 d=2.89 y=5.325 z=-1.25 pitch=30.11 color=#2a3230
+  part box w=0.42 h=1.3 d=0.42 y=5.25 z=-9 color=#121214
+  part disc r=0.15 h=0.5 roll=90 y=5.65 z=-9 color=#ff2a14 emit=1 seg=8
+  part disc r=0.15 h=0.5 roll=90 y=5.25 z=-9 color=#ffb020 emit=0.12 seg=8
+  part disc r=0.15 h=0.5 roll=90 y=4.85 z=-9 color=#30ff60 emit=0.12 seg=8
+  part box w=0.45 h=0.06 d=0.45 y=5.93 z=-9 color=#ff2a14 emit=0.6
+  part box w=0.42 h=1.3 d=0.42 y=5.25 z=-4.8 color=#121214
+  part disc r=0.15 h=0.5 roll=90 y=5.65 z=-4.8 color=#ff2a14 emit=1 seg=8
+  part disc r=0.15 h=0.5 roll=90 y=5.25 z=-4.8 color=#ffb020 emit=0.12 seg=8
+  part disc r=0.15 h=0.5 roll=90 y=4.85 z=-4.8 color=#30ff60 emit=0.12 seg=8
+  part box w=0.45 h=0.06 d=0.45 y=5.93 z=-4.8 color=#ff2a14 emit=0.6
+  part box w=0.3 h=0.75 d=0.3 y=2.775 z=-0.25 color=#121214
+  part disc r=0.1 h=0.34 pitch=90 y=2.95 z=-0.25 color=#ff3a20 emit=0.8 seg=6
+  part box w=1.2 h=0.25 d=0.04 x=0.6 y=3.725 color=#2a6a3a   # street sign
+  part box w=1.1 h=0.06 d=0.05 x=0.6 y=3.72 color=#e8e8e0
+  part light r=0.05 y=4.4 z=-9 color=#ff3020
+
+# the 'Last Call' bar sign: a neon skull and a cocktail glass on a dark board, tilted back
+model neon_sign lamp=1
+  part box w=0.25 h=4.6 d=0.25 x=-2.4 y=2.3 z=0.6 color=#2a2a2e
+  part box w=0.25 h=4.6 d=0.25 x=2.4 y=2.3 z=0.6 color=#2a2a2e
+  part box w=6.6 h=4 d=0.2 y=4.5 color=#16141c pitch=15
+  part ring r=1.05 thick=0.07 x=-1.3 y=4.877 z=-0.054 color=#ff3ab0 pitch=-75 emit=1 seg=18   # the skull
+  part ring r=0.24 thick=0.06 x=-1.7 y=5.022 z=-0.015 color=#ff3ab0 pitch=-75 emit=1 seg=10
+  part ring r=0.24 thick=0.06 x=-0.9 y=5.022 z=-0.015 color=#ff3ab0 pitch=-75 emit=1 seg=10
+  part box w=0.07 h=0.07 d=0.233 x=-1.36 y=4.684 z=-0.106 pitch=55.92 rot=113.33 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=0.233 x=-1.24 y=4.684 z=-0.106 pitch=55.92 rot=-113.33 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=0.25 x=-1.8 y=4.177 z=-0.242 pitch=75 rot=180 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=0.25 x=-1.55 y=4.177 z=-0.242 pitch=75 rot=180 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=0.25 x=-1.3 y=4.177 z=-0.242 pitch=75 rot=180 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=0.25 x=-1.05 y=4.177 z=-0.242 pitch=75 rot=180 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=0.25 x=-0.8 y=4.177 z=-0.242 pitch=75 rot=180 color=#ff3ab0 emit=1
+  part box w=0.07 h=0.07 d=1.2 x=-1.3 y=4.056 z=-0.274 rot=90 color=#ff3ab0 emit=1
+  part box w=0.08 h=0.08 d=1.8 x=1.6 y=5.795 z=0.192 rot=90 color=#30e8ff emit=1   # the glass
+  part box w=0.08 h=0.08 d=1.421 x=1.15 y=5.263 z=0.049 pitch=-48.38 rot=72.45 color=#30e8ff emit=1
+  part box w=0.08 h=0.08 d=1.421 x=2.05 y=5.263 z=0.049 pitch=-48.38 rot=-72.45 color=#30e8ff emit=1
+  part box w=0.08 h=0.08 d=1.1 x=1.6 y=4.201 z=-0.235 pitch=-75 color=#30e8ff emit=1
+  part box w=0.08 h=0.08 d=1.2 x=1.6 y=3.669 z=-0.378 rot=90 color=#30e8ff emit=1
+  part sphere r=0.14 x=1.3 y=5.459 z=0.091 color=#60ff40 emit=1 seg=6
+  part box w=0.04 h=0.04 d=1.031 x=1.7 y=5.773 z=0.175 pitch=37.52 rot=101.88 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-2.65 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1   # chaser bulbs
+  part box w=0.08 h=0.08 d=0.5 x=-2.65 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-1.83 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-1.83 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-1.01 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-1.01 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-0.19 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=-0.19 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=0.63 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=0.63 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=1.45 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=1.45 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=2.27 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=2.27 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=3.09 y=2.897 z=-0.585 rot=90 color=#ffd030 emit=1
+  part box w=0.08 h=0.08 d=0.5 x=3.09 y=6.229 z=0.308 rot=90 color=#ffd030 emit=1
+  part light r=0.05 y=1.6 z=-1 color=#ff50c0
+
+# a red fire hydrant (a little larger than life)
+model hydrant scale=1.25
+  part disc r=0.26 h=0.08 y=0.04 seg=8 color=#8a1a14
+  part disc r=0.19 r2=0.17 h=0.62 y=0.39 seg=8 color=#c8201a
+  part dome r=0.19 ry=0.14 y=0.7 color=#c8201a seg=8
+  part disc r=0.05 h=0.08 y=0.87 seg=5 color=#d8b040
+  part ring r=0.19 thick=0.03 y=0.66 color=#d8b040 seg=8
+  part gun r=0.07 len=0.15 x=0.225 y=0.5 rot=90 seg=6 color=#c8201a mirror=1
+  part gun r=0.1 len=0.17 y=0.42 z=-0.235 seg=6 color=#c8201a
+  part disc r=0.08 h=0.04 pitch=90 y=0.42 z=-0.33 color=#d8b040 seg=6
+
+# a bus shelter with a glowing ad: 'Graves & Sons - we pick you up'
+model bus_stop
+  part box w=4.4 h=0.12 d=2 y=0.06 color=#5a5a5e
+  part box w=4 h=2.2 d=0.05 y=1.25 z=0.75 color=#5a7a8a emit=0.08
+  part box w=0.05 h=2.2 d=1.4 x=-2 y=1.25 z=0.1 color=#5a7a8a emit=0.08
+  part box w=0.08 h=2.45 d=0.08 x=-2 y=1.345 z=0.75 color=#2a2a2e
+  part box w=0.08 h=2.45 d=0.08 x=2 y=1.345 z=0.75 color=#2a2a2e
+  part box w=0.08 h=2.45 d=0.08 x=-2 y=1.345 z=-0.6 color=#2a2a2e
+  part box w=0.08 h=2.45 d=0.08 x=2 y=1.345 z=-0.6 color=#2a2a2e
+  part box w=4.4 h=0.12 d=1.9 y=2.56 z=0.1 color=#2a2a2e
+  part box w=3 h=0.08 d=0.4 y=0.54 z=0.45 color=#6a6e72
+  part box w=0.16 h=1.9 d=1.3 x=2.05 y=1.2 z=0.1 color=#f0ece0 emit=0.75   # the ad
+  part plate pts="-0.18,-0.4;0.18,-0.4;0.26,-0.15;0.18,0.4;-0.18,0.4;-0.26,-0.15" thick=0.04 x=2.15 y=1.25 z=0.1 color=#4a2a18 pitch=0 roll=90
+  part box w=0.04 h=0.3 d=1.1 x=2.15 y=1.85 z=0.1 color=#8a1a14
+  part gun r=0.05 len=2.7 x=-1.5 y=1.35 z=-0.95 pitch=90 seg=5 color=#6a6a6e
+  part disc r=0.3 h=0.05 pitch=90 x=-1.5 y=2.8 z=-0.95 color=#e8c020 seg=10
+  part box w=0.25 h=0.25 d=0.06 x=-1.5 y=2.805 z=-0.99 color=#1a3a6a
+
+# a parked sedan, dark red, a ticket on the windscreen
+model parked_car
+  part body len=4.4 wid=1.8 hgt=0.62 y=0.55 round=5 nose=0.22 tail=0.14 drop=0.35 color=#5a1e22
+  part cabin len=2.05 wid=1.6 hgt=0.5 y=1.1 z=0.25 front=0.4 back=0.25 top=0.86 color=#5a1e22 glass=#121a22
+  part disc r=0.33 h=0.22 roll=90 x=-0.82 y=0.33 z=-1.32 color=#18181a seg=8
+  part disc r=0.182 h=0.24 roll=90 x=-0.82 y=0.33 z=-1.32 color=#2a2a2c seg=6
+  part disc r=0.33 h=0.22 roll=90 x=-0.82 y=0.33 z=1.36 color=#18181a seg=8
+  part disc r=0.182 h=0.24 roll=90 x=-0.82 y=0.33 z=1.36 color=#2a2a2c seg=6
+  part disc r=0.33 h=0.22 roll=90 x=0.82 y=0.33 z=-1.32 color=#18181a seg=8
+  part disc r=0.182 h=0.24 roll=90 x=0.82 y=0.33 z=-1.32 color=#2a2a2c seg=6
+  part disc r=0.33 h=0.22 roll=90 x=0.82 y=0.33 z=1.36 color=#18181a seg=8
+  part disc r=0.182 h=0.24 roll=90 x=0.82 y=0.33 z=1.36 color=#2a2a2c seg=6
+  part box w=0.32 h=0.12 d=0.05 x=-0.58 y=0.63 z=-2.18 color=#d8d4c0
+  part box w=0.3 h=0.1 d=0.05 x=-0.58 y=0.65 z=2.18 color=#7a1810
+  part box w=0.32 h=0.12 d=0.05 x=0.58 y=0.63 z=-2.18 color=#d8d4c0
+  part box w=0.3 h=0.1 d=0.05 x=0.58 y=0.65 z=2.18 color=#7a1810
+  part box w=0.3 h=0.02 d=0.15 x=0.3 y=1.13 z=-0.6 color=#f0f0f0 pitch=-30
+  part box w=0.5 h=0.12 d=0.03 y=0.48 z=-2.22 color=#e8e4d0
+  part box w=0.5 h=0.12 d=0.03 y=0.48 z=2.22 color=#e8e4d0
+
+# a green kiosk: magazines, a yellow 'NEWS' band, the tabloid's headline board
+model newsstand
+  part box w=3 h=2.4 d=2 y=1.2 color=#2a4a3a
+  part box w=3.1 h=0.15 d=2.4 y=2.475 z=-0.15 color=#1e3a2c
+  part box w=2.6 h=0.45 d=0.08 y=2.175 z=-1.05 color=#ffd030 emit=0.8
+  part box w=2.4 h=1 d=0.1 y=1.3 z=-1.04 color=#fff0d0 emit=0.4
+  part greeble n=14 w=2.4 d=0.4 size=0.22 y=0.9 z=-1.25 color=#c84040 seed=3
+  part greeble n=10 w=2.4 d=0.4 size=0.22 y=0.9 z=-1.25 color=#4060c0 seed=8
+  part box w=3.2 h=0.06 d=1 y=2.35 z=-1.5 color=#8a1a24 pitch=-18
+  part box w=0.7 h=1 d=0.05 x=1.9 y=0.5 z=-1.4 color=#f0ece0 rot=-20   # headline board
+  part box w=0.55 h=0.25 d=0.06 x=1.9 y=0.775 z=-1.41 color=#141414 rot=-20
+  part box w=0.55 h=0.12 d=0.06 x=1.9 y=0.46 z=-1.41 color=#c01a14 rot=-20
+  part box w=0.6 h=0.4 d=0.4 x=-1.8 y=0.2 z=-1 color=#d8d4c8   # paper bundles
+  part box w=0.6 h=0.4 d=0.4 x=-1.75 y=0.6 z=-1 color=#d8d4c8 rot=15
+
+# an 8 m LED street lamp, cold white, a race banner on the pole
+model lamp_city lamp=1
+  part disc r=0.24 h=0.5 y=0.25 seg=8 color=#2a2a2e
+  part gun r=0.08 r2=0.12 len=7.5 y=4.25 pitch=90 seg=8 color=#3a3e44
+  part box w=0.1 h=0.1 d=2.285 y=7.8 z=-1.075 pitch=10.08 color=#3a3e44
+  part box w=0.36 h=0.1 d=1.2 y=8 z=-2.5 color=#2a2e34
+  part box w=0.28 h=0.03 d=1 y=7.935 z=-2.5 color=#e8f0ff emit=1
+  part light r=0.04 y=6.6 z=-2.5 color=#e0ecff
+  part box w=0.04 h=1.6 d=0.7 x=0.14 y=5 z=-0.4 color=#8a1a14
+  part box w=0.05 h=0.35 d=0.5 x=0.15 y=5.175 z=-0.4 color=#efe9da
+
+# extra: a green dumpster, lid up, bags piled round it, graffiti
+model dumpster
+  part box w=2 h=1.3 d=1.2 y=0.65 color=#2a4a34 taper=0.04
+  part box w=2 h=0.08 d=1.2 y=1.85 z=0.75 color=#1e3a28 pitch=-70
+  part greeble n=6 w=1.6 d=0.8 size=0.4 y=1 color=#121214 seed=4
+  part sphere r=0.4 x=1.3 y=0.32 z=-0.4 color=#141416 seg=6
+  part sphere r=0.35 x=1.5 y=0.28 z=0.3 color=#141416 seg=6
+  part sphere r=0.38 x=-1.4 y=0.304 z=-0.5 color=#141416 seg=6
+  part box w=1.2 h=0.7 d=0.03 x=-0.2 y=0.65 z=-0.62 color=#e040a0
+  part box w=0.6 h=0.3 d=0.03 x=0.5 y=0.65 z=-0.63 color=#40d0e0
+
+# extra: a black Graves & Sons removals van, a crimson stripe
+model parked_van
+  part box w=2.05 h=2 d=3.9 y=1.45 z=0.55 color=#18181c
+  part box w=2.05 h=1.25 d=1.4 y=1.075 z=-2.05 color=#18181c
+  part box w=2 h=0.85 d=0.08 y=1.95 z=-1.45 color=#141c24 pitch=-30
+  part box w=2.08 h=0.6 d=0.06 y=2.05 z=-1.32 color=#141c24
+  part box w=2.1 h=0.35 d=3.8 y=1.475 z=0.55 color=#8a1a24
+  part box w=1 h=0.25 d=0.02 y=1.475 z=2.51 color=#d8b040
+  part disc r=0.36 h=0.24 roll=90 x=0.9 y=0.36 z=-1.8 color=#141414 seg=8 mirror=1
+  part disc r=0.36 h=0.24 roll=90 x=0.9 y=0.36 z=1.6 color=#141414 seg=8 mirror=1
+  part box w=0.3 h=0.14 d=0.05 x=-0.7 y=0.92 z=-2.77 color=#d8d4c0
+  part box w=0.3 h=0.14 d=0.05 x=0.7 y=0.92 z=-2.77 color=#d8d4c0

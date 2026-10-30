@@ -1,0 +1,383 @@
+# Estate props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_fair_prv_est.py.
+
+# the Graves family mausoleum: colonnade, dome, a reaper on top, braziers burning
+model mausoleum_large lamp=1
+  part box w=19 h=0.4 d=17 y=0.2 z=-0.6 color=#3e3c3a
+  part box w=17 h=0.4 d=15.4 y=0.6 z=-0.5 color=#46443f
+  part box w=15 h=0.4 d=13.8 y=1 z=-0.4 color=#4a4844
+  part box w=12 h=7.5 d=10 y=4.95 color=#4e4c4a
+  part box w=14 h=0.9 d=12.8 y=9.15 z=-0.5 color=#5a5854
+  part disc r=0.45 h=7.5 x=-5.5 y=4.95 z=-6.2 seg=10 color=#6a6864   # colonnade
+  part disc r=0.45 h=7.5 x=-3.3 y=4.95 z=-6.2 seg=10 color=#6a6864
+  part disc r=0.45 h=7.5 x=-1.1 y=4.95 z=-6.2 seg=10 color=#6a6864
+  part disc r=0.45 h=7.5 x=1.1 y=4.95 z=-6.2 seg=10 color=#6a6864
+  part disc r=0.45 h=7.5 x=3.3 y=4.95 z=-6.2 seg=10 color=#6a6864
+  part disc r=0.45 h=7.5 x=5.5 y=4.95 z=-6.2 seg=10 color=#6a6864
+  part box w=0.9 h=7.5 d=0.9 x=6.1 y=4.95 z=-3 color=#5a5854 mirror=1
+  part box w=0.9 h=7.5 d=0.9 x=6.1 y=4.95 color=#5a5854 mirror=1
+  part box w=0.9 h=7.5 d=0.9 x=6.1 y=4.95 z=3 color=#5a5854 mirror=1
+  part plate pts="-7,0;7,0;0,2.4" thick=0.4 pitch=-90 y=9.6 z=-6.6 color=#5a5854
+  part disc r=0.8 h=0.1 pitch=90 y=10.4 z=-6.85 color=#d8b040 seg=12 emit=0.15
+  part disc r=0.45 h=0.12 pitch=90 y=10.45 z=-6.88 color=#2a2420 seg=10
+  part disc r=4.6 h=2 y=10.6 seg=16 color=#4a4844
+  part dome r=4.6 ry=3.8 y=11.6 color=#3a5a50 seg=16
+  part disc r=0.6 h=1.2 y=15.9 seg=8 color=#4a4844
+  part disc r=0.5 r2=0.25 h=1.6 y=17.3 seg=8 color=#2a2a2e   # the reaper on the dome
+  part sphere r=0.3 y=18.2 z=-0.08 color=#2a2a2e seg=6
+  part gun r=0.04 len=3.208 x=0.55 y=18 z=-0.3 pitch=86 rot=26.57 seg=4 color=#2a2a2e
+  part box w=0.06 h=0.18 d=1.334 y=19.45 z=-0.65 pitch=-12.99 rot=-67.38 color=#8a8a8e
+  part box w=2.6 h=4.4 d=0.12 y=3.4 z=-5.06 color=#5a4224
+  part box w=1 h=1.4 d=0.06 y=4.7 z=-5.14 color=#ffb050 emit=0.6
+  part disc r=0.25 h=1.4 x=-4.2 y=1.9 z=-8 seg=6 color=#2a2a2e
+  part disc r=0.7 r2=0.9 h=0.45 x=-4.2 y=2.825 z=-8 seg=8 color=#2a2a2e
+  part cone r=0.4 len=1.4 x=-4.2 y=3.7 z=-8 pitch=90 seg=5 color=#ff8a20 emit=1
+  part cone r=0.4 len=1.005 x=-3.9 y=3.5 z=-7.9 pitch=84.29 rot=90 seg=5 color=#ffc040 emit=1
+  part cone r=0.4 len=0.906 x=-4.5 y=3.45 z=-8.1 pitch=83.66 rot=-90 seg=5 color=#ff5a10 emit=1
+  part disc r=0.25 h=1.4 x=4.2 y=1.9 z=-8 seg=6 color=#2a2a2e
+  part disc r=0.7 r2=0.9 h=0.45 x=4.2 y=2.825 z=-8 seg=8 color=#2a2a2e
+  part cone r=0.4 len=1.4 x=4.2 y=3.7 z=-8 pitch=90 seg=5 color=#ff8a20 emit=1
+  part cone r=0.4 len=1.005 x=4.5 y=3.5 z=-7.9 pitch=84.29 rot=90 seg=5 color=#ffc040 emit=1
+  part cone r=0.4 len=0.906 x=3.9 y=3.45 z=-8.1 pitch=83.66 rot=-90 seg=5 color=#ff5a10 emit=1
+  part light r=0.05 y=2.6 z=-8.2 color=#ff9a40
+
+# a gargoyle crouching on a 2 m pillar, red eyes
+model gargoyle
+  part box w=1.1 h=0.25 d=1.1 y=0.125 color=#4a4846
+  part box w=0.9 h=1.6 d=0.9 y=1.05 color=#555350
+  part box w=1.1 h=0.2 d=1.1 y=1.95 color=#4a4846
+  part sphere r=0.5 y=2.55 color=#5a5a5e rx=0.42 rz=0.5 seg=8
+  part sphere r=0.3 y=3.05 z=-0.38 color=#5a5a5e seg=8
+  part box w=0.3 h=0.2 d=0.35 y=2.95 z=-0.62 color=#5a5a5e taper=0.3
+  part cone r=0.08 len=0.49 x=-0.25 y=3.45 z=-0.25 pitch=54.74 rot=-135 seg=5 color=#3a3a3e
+  part sphere r=0.06 x=-0.12 y=3.1 z=-0.65 color=#ff2010 emit=1 seg=5
+  part fin h=1.1 root=0.7 tip=0.2 sweep=0.6 thick=0.05 x=-0.3 y=2.6 z=0.2 rot=30 roll=25 color=#46464a
+  part box w=0.12 h=0.12 d=0.472 x=-0.3 y=2.25 z=-0.425 pitch=-57.99 color=#5a5a5e
+  part box w=0.16 h=0.16 d=0.336 x=-0.39 y=2.125 z=-0.05 pitch=-26.51 rot=-3.81 color=#5a5a5e
+  part cone r=0.08 len=0.49 x=0.25 y=3.45 z=-0.25 pitch=54.74 rot=135 seg=5 color=#3a3a3e
+  part sphere r=0.06 x=0.12 y=3.1 z=-0.65 color=#ff2010 emit=1 seg=5
+  part fin h=1.1 root=0.7 tip=0.2 sweep=0.6 thick=0.05 x=0.3 y=2.6 z=0.2 rot=-30 roll=-25 color=#46464a
+  part box w=0.12 h=0.12 d=0.472 x=0.3 y=2.25 z=-0.425 pitch=-57.99 color=#5a5a5e
+  part box w=0.16 h=0.16 d=0.336 x=0.39 y=2.125 z=-0.05 pitch=-26.51 rot=3.81 color=#5a5a5e
+  part gun r=0.04 r2=0.08 len=0.626 y=2.15 z=0.725 pitch=-28.61 rot=180 seg=5 color=#5a5a5e
+
+# 10 m of the manor's stone wall: buttress pillars, coping, iron spikes, ivy
+model manor_wall
+  part box w=10 h=3.2 d=0.6 y=1.6 color=#5a5650
+  part box w=10.2 h=0.25 d=0.8 y=3.325 color=#6a6660
+  part box w=0.9 h=3.8 d=0.9 x=-5 y=1.9 color=#625e58
+  part disc r=0.62 r2=0.05 h=0.6 x=-5 y=4.1 seg=4 color=#4a4846 rot=45
+  part box w=0.9 h=3.8 d=0.9 x=5 y=1.9 color=#625e58
+  part disc r=0.62 r2=0.05 h=0.6 x=5 y=4.1 seg=4 color=#4a4846 rot=45
+  part cone r=0.04 len=0.4 x=-4.25 y=3.65 pitch=90 seg=4 color=#1a1a1e   # spikes
+  part cone r=0.04 len=0.4 x=-3.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-3.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-2.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-2.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-1.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-1.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-0.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=-0.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=0.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=0.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=1.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=1.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=2.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=2.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=3.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=3.75 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part cone r=0.04 len=0.4 x=4.25 y=3.65 pitch=90 seg=4 color=#1a1a1e
+  part box w=2.2 h=2.6 d=0.08 x=-2.8 y=1.3 z=-0.32 color=#2a4a26   # ivy
+  part greeble n=5 w=2.2 d=0.15 size=0.25 x=-2.8 y=1.56 z=-0.36 color=#2e5228 seed=22
+  part box w=1.6 h=2.4 d=0.08 x=1.6 y=2 z=-0.32 color=#2a4a26
+  part greeble n=5 w=1.6 d=0.15 size=0.25 x=1.6 y=2.24 z=-0.36 color=#2e5228 seed=66
+  part box w=1 h=1.4 d=0.08 x=3.6 y=0.7 z=-0.32 color=#2a4a26
+  part greeble n=5 w=1 d=0.15 size=0.25 x=3.6 y=0.84 z=-0.36 color=#2e5228 seed=86
+  part box w=0.96 h=0.02 d=0.02 x=-4.5 y=1.11 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=-3.5 y=1.81 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=-2.5 y=2.51 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=-1.5 y=1.11 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=-0.5 y=1.81 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=0.5 y=2.51 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=1.5 y=1.11 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=2.5 y=1.81 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=3.5 y=2.51 z=-0.31 color=#4a4640
+  part box w=0.96 h=0.02 d=0.02 x=4.5 y=1.11 z=-0.31 color=#4a4640
+
+# Graves' private chapel: a 28 m spire, flying buttresses, glowing lancets and a rose window
+model chapel_gothic lamp=1
+  part box w=10 h=9 d=20 y=4.5 z=2 color=#4e4c4a
+  part wing span=5.6 root=20.4 tip=20.4 sweep=0 thick=0.35 dihedral=-5 y=14.2 z=2 color=#2e2e34
+  part plate pts="-5,0;5,0;0,5.2" thick=0.2 pitch=-90 y=9 z=12.02 color=#4e4c4a
+  part box w=5.6 h=17 d=5.6 y=8.5 z=-10.6 color=#55534f
+  part cone r=0.35 len=2.5 x=-2.5 y=18.25 z=-13.1 pitch=90 seg=4 color=#4a4846
+  part cone r=0.35 len=2.5 x=2.5 y=18.25 z=-13.1 pitch=90 seg=4 color=#4a4846
+  part cone r=0.35 len=2.5 x=-2.5 y=18.25 z=-8.1 pitch=90 seg=4 color=#4a4846
+  part cone r=0.35 len=2.5 x=2.5 y=18.25 z=-8.1 pitch=90 seg=4 color=#4a4846
+  part disc r=2.9 r2=0.05 h=12 y=23 z=-10.6 seg=8 color=#2e2e34 rot=22.5
+  part sphere r=0.25 y=29 z=-10.6 color=#c8a040 seg=6
+  part disc r=1.7 h=0.15 pitch=90 y=11.5 z=-13.45 color=#c04070 emit=0.75 seg=16   # the rose window
+  part ring r=1.7 thick=0.12 y=11.5 z=-13.5 color=#3a3836 pitch=90 seg=16
+  part ring r=0.8 thick=0.08 y=11.5 z=-13.52 color=#3a3836 pitch=90 seg=12
+  part disc r=0.5 h=0.18 pitch=90 y=11.5 z=-13.5 color=#4060d0 emit=0.85 seg=10
+  part box w=2.2 h=3.6 d=0.12 y=1.8 z=-13.45 color=#2a1a12
+  part plate pts="-1.1,0;1.1,0;0,1.6" thick=0.12 pitch=-90 y=3.6 z=-13.45 color=#2a1a12
+  part box w=0.9 h=7 d=1.4 x=7.6 y=3.5 z=-6 color=#4a4844 mirror=1   # buttress piers
+  part cone r=0.45 len=2.4 x=7.6 y=8.2 z=-6 pitch=90 seg=4 color=#4a4844 mirror=1
+  part box w=0.5 h=0.5 d=3.183 x=6.15 y=7.7 z=-6 pitch=43.73 rot=-90 color=#4a4844 mirror=1
+  part box w=0.1 h=5 d=1.2 x=5.03 y=5 z=-4 color=#c04070 emit=0.65 mirror=1
+  part cone r=0.6 len=0.8 x=5.03 y=7.9 z=-4 pitch=90 seg=4 color=#c04070 emit=0.65 mirror=1
+  part box w=0.9 h=7 d=1.4 x=7.6 y=3.5 z=-2 color=#4a4844 mirror=1
+  part cone r=0.45 len=2.4 x=7.6 y=8.2 z=-2 pitch=90 seg=4 color=#4a4844 mirror=1
+  part box w=0.5 h=0.5 d=3.183 x=6.15 y=7.7 z=-2 pitch=43.73 rot=-90 color=#4a4844 mirror=1
+  part box w=0.1 h=5 d=1.2 x=5.03 y=5 color=#4060d0 emit=0.65 mirror=1
+  part cone r=0.6 len=0.8 x=5.03 y=7.9 pitch=90 seg=4 color=#4060d0 emit=0.65 mirror=1
+  part box w=0.9 h=7 d=1.4 x=7.6 y=3.5 z=2 color=#4a4844 mirror=1
+  part cone r=0.45 len=2.4 x=7.6 y=8.2 z=2 pitch=90 seg=4 color=#4a4844 mirror=1
+  part box w=0.5 h=0.5 d=3.183 x=6.15 y=7.7 z=2 pitch=43.73 rot=-90 color=#4a4844 mirror=1
+  part box w=0.1 h=5 d=1.2 x=5.03 y=5 z=4 color=#c09030 emit=0.65 mirror=1
+  part cone r=0.6 len=0.8 x=5.03 y=7.9 z=4 pitch=90 seg=4 color=#c09030 emit=0.65 mirror=1
+  part box w=0.9 h=7 d=1.4 x=7.6 y=3.5 z=6 color=#4a4844 mirror=1
+  part cone r=0.45 len=2.4 x=7.6 y=8.2 z=6 pitch=90 seg=4 color=#4a4844 mirror=1
+  part box w=0.5 h=0.5 d=3.183 x=6.15 y=7.7 z=6 pitch=43.73 rot=-90 color=#4a4844 mirror=1
+  part box w=0.1 h=5 d=1.2 x=5.03 y=5 z=8 color=#40a070 emit=0.65 mirror=1
+  part cone r=0.6 len=0.8 x=5.03 y=7.9 z=8 pitch=90 seg=4 color=#40a070 emit=0.65 mirror=1
+  part box w=0.9 h=7 d=1.4 x=7.6 y=3.5 z=10 color=#4a4844 mirror=1
+  part cone r=0.45 len=2.4 x=7.6 y=8.2 z=10 pitch=90 seg=4 color=#4a4844 mirror=1
+  part box w=0.5 h=0.5 d=3.183 x=6.15 y=7.7 z=10 pitch=43.73 rot=-90 color=#4a4844 mirror=1
+  part box w=0.4 h=0.3 d=0.3 y=4.35 z=-13.7 color=#e0ffd0 emit=0.9
+  part light r=0.06 y=4 z=-14.2 color=#d8ffc8
+
+# a 6 m clipped hedge with a topiary ball
+model hedge_block
+  part box w=6.2 h=0.15 d=2.2 y=0.075 color=#2a2018
+  part box w=6 h=1.9 d=2 y=1.05 color=#1e3a1e taper=0.08
+  part greeble n=14 w=5.6 d=1.6 size=0.4 y=1.85 color=#24442a seed=3
+  part gun r=0.12 len=0.5 y=2.25 pitch=90 seg=5 color=#3a2a1e
+  part sphere r=0.75 y=3.15 color=#22422a seg=8
+
+# a 15 m dead oak, crows on its branches
+model tree_dead_big
+  part gun r=0.595 r2=0.85 len=6.756 x=-0.023 y=3.375 z=0.142 pitch=87.56 rot=-170.83 seg=7 color=#2e2a28
+  part gun r=0.06 r2=0.468 len=2.322 x=1.362 y=0.175 z=-0.787 pitch=-8.67 rot=59.98 seg=5 color=#2e2a28
+  part gun r=0.06 r2=0.468 len=2.322 x=0.787 y=0.175 z=1.362 pitch=-8.67 rot=149.98 seg=5 color=#2e2a28
+  part gun r=0.06 r2=0.468 len=2.322 x=-1.362 y=0.175 z=0.787 pitch=-8.67 rot=-120.02 seg=5 color=#2e2a28
+  part gun r=0.06 r2=0.468 len=2.322 x=-0.787 y=0.175 z=-1.362 pitch=-8.67 rot=-30.02 seg=5 color=#2e2a28
+  part gun r=0.306 r2=0.51 len=4.529 x=-0.604 y=7.214 z=-1.532 pitch=35.29 rot=-17.87 seg=5 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=2.889 x=-1.632 y=9.21 z=-2.84 pitch=46.13 rot=-41.38 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.063 x=-2.79 y=10.288 z=-3.525 pitch=43 rot=-72.57 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.972 x=-1.889 y=11.022 z=-3.995 pitch=58.28 rot=-8.6 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.371 x=-1.498 y=9.341 z=-3.543 pitch=56.22 rot=-38.9 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.196 x=-2.5 y=11.551 z=-4.397 pitch=58.6 rot=-47.87 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.219 x=-2.455 y=11.107 z=-4.23 pitch=59.88 rot=-70.55 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.488 x=-1.56 y=11.402 z=-4.69 pitch=46.24 rot=9.79 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=2.827 x=-0.06 y=8.658 z=-3.076 pitch=40.52 rot=47.96 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.797 x=0.313 y=9.962 z=-3.855 pitch=55.27 rot=-6.91 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.948 x=0.654 y=10.034 z=-3.622 pitch=53.96 rot=58.46 seg=4 color=#2e2a28
+  part gun r=0.306 r2=0.51 len=4.964 x=1.061 y=7.541 z=-1.239 pitch=42.47 rot=36.84 seg=5 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.58 x=1.991 y=9.746 z=-3.552 pitch=44.73 rot=18.91 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.505 x=2.915 y=11.186 z=-4.753 pitch=40.98 rot=34.56 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.142 x=2.964 y=11.416 z=-4.425 pitch=36.8 rot=69.22 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.23 x=2.238 y=10.148 z=-3.938 pitch=36.19 rot=18.5 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.283 x=2.898 y=11.476 z=-4.871 pitch=54.01 rot=31.99 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.254 x=2.935 y=11.642 z=-5.269 pitch=43.81 rot=37.67 seg=4 color=#2e2a28
+  part gun r=0.306 r2=0.51 len=4.596 x=1.229 y=7.264 z=0.884 pitch=51.66 rot=117.44 seg=5 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.166 x=2.852 y=9.144 z=1.469 pitch=46.69 rot=95 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.778 x=3.81 y=10.186 z=1.418 pitch=44.81 rot=80.41 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.014 x=4.362 y=10.453 z=1.762 pitch=56.59 rot=119.33 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.114 x=2.647 y=9.649 z=1.471 pitch=51.65 rot=86.5 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.272 x=4.07 y=11.53 z=0.914 pitch=41.57 rot=53.31 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.933 x=3.94 y=11.056 z=1.712 pitch=55.03 rot=117.7 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.791 x=3.722 y=11.236 z=1.559 pitch=65.41 rot=110.22 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=2.825 x=2.15 y=9.194 z=1.897 pitch=59.34 rot=158.04 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.926 x=2.909 y=10.835 z=2.468 pitch=48.48 rot=92.82 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.655 x=2.12 y=10.595 z=2.726 pitch=55.63 rot=-168.92 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.558 x=2.04 y=10.394 z=2.927 pitch=55 rot=-151.23 seg=4 color=#2e2a28
+  part gun r=0.306 r2=0.51 len=4.719 x=0.175 y=7.267 z=1.952 pitch=42.55 rot=173.02 seg=5 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=2.962 x=0.851 y=8.944 z=4.033 pitch=39.02 rot=155.26 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.043 x=1.411 y=10.526 z=5.001 pitch=53.34 rot=133.24 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.967 x=0.925 y=9.882 z=4.981 pitch=46.47 rot=-163.56 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.192 x=0.256 y=9.884 z=4.448 pitch=55.02 rot=177.73 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.269 x=0.838 y=11.267 z=5.151 pitch=49.18 rot=131.06 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.329 x=0.277 y=11.629 z=5.712 pitch=67.65 rot=-179.56 seg=4 color=#2e2a28
+  part gun r=0.306 r2=0.51 len=5.211 x=-1.625 y=7.884 z=1.511 pitch=38.4 rot=-128.95 seg=5 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.267 x=-2.397 y=9.959 z=3.231 pitch=48.57 rot=-173.61 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.972 x=-2.402 y=11.706 z=4.245 pitch=43.87 rot=172.31 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.437 x=-2.822 y=12.004 z=4.529 pitch=61.7 rot=-144.14 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.286 x=-3.072 y=11.49 z=4.339 pitch=59.16 rot=-104.06 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.071 x=-3.023 y=10.379 z=2.179 pitch=46.95 rot=-101.63 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.249 x=-4.342 y=12.101 z=2.373 pitch=63.59 rot=-107.18 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.767 x=-3.908 y=11.378 z=2.43 pitch=51.02 rot=-111.91 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.213 x=-4.135 y=11.779 z=2.144 pitch=50.72 rot=-71.78 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.655 x=-4.354 y=9.236 z=1.188 pitch=33.24 rot=-61.1 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.455 x=-6.07 y=10.771 z=0.733 pitch=54.02 rot=-84.63 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.072 x=-5.195 y=10.291 z=0.49 pitch=50.97 rot=-41.81 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.461 x=-5.786 y=10.13 z=0.048 pitch=29.38 rot=-56.81 seg=4 color=#2e2a28
+  part gun r=0.306 r2=0.51 len=5.34 x=-0.812 y=8.742 z=-0.813 pitch=60.93 rot=-36.72 seg=5 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.296 x=-2.038 y=11.844 z=-1.909 pitch=62.42 rot=-48.64 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.338 x=-3.005 y=13.525 z=-2.304 pitch=58.28 rot=-63.83 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=1.903 x=-2.368 y=13.193 z=-2.424 pitch=73.8 rot=-34.53 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.08 x=-2.497 y=13.479 z=-2.698 pitch=53.26 rot=-27.52 seg=4 color=#2e2a28
+  part gun r=0.184 r2=0.306 len=3.303 x=-1.84 y=12.321 z=-2.343 pitch=62.6 rot=-31.57 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.256 x=-2.602 y=14.223 z=-2.772 pitch=57.12 rot=-102.68 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.204 x=-2.396 y=14.684 z=-3.039 pitch=55.5 rot=-36.1 seg=4 color=#2e2a28
+  part gun r=0.11 r2=0.184 len=2.038 x=-1.913 y=14.203 z=-3.158 pitch=57.67 rot=5.86 seg=4 color=#2e2a28
+  part sphere r=0.22 x=4.071 y=12.251 z=1.688 color=#0e0e10 rz=0.32 seg=5   # crows
+  part sphere r=0.22 x=-1.858 y=15.264 z=-3.7 color=#0e0e10 rz=0.32 seg=5
+  part sphere r=0.22 x=-2.784 y=14.512 z=-3.25 color=#0e0e10 rz=0.32 seg=5
+  part sphere r=0.22 x=3.766 y=12.258 z=-4.73 color=#0e0e10 rz=0.32 seg=5
+  part sphere r=0.22 x=-2.307 y=12.589 z=4.949 color=#0e0e10 rz=0.32 seg=5
+
+# the estate gate: stone pillars with lanterns, a wrought-iron gate under a golden G
+model iron_gate lamp=1
+  part box w=1.5 h=4.6 d=1.5 x=-4.7 y=2.3 color=#5a5650
+  part box w=1.8 h=0.35 d=1.8 x=-4.7 y=4.775 color=#6a6660
+  part sphere r=0.5 x=-4.7 y=5.45 color=#6a6660 seg=8
+  part box w=0.4 h=0.55 d=0.4 x=-4.7 y=3.475 z=-0.95 color=#e8ffd8 emit=0.9
+  part disc r=0.32 r2=0.05 h=0.25 x=-4.7 y=3.875 z=-0.95 seg=4 color=#1a1a1e rot=45
+  part box w=1.5 h=4.6 d=1.5 x=4.7 y=2.3 color=#5a5650
+  part box w=1.8 h=0.35 d=1.8 x=4.7 y=4.775 color=#6a6660
+  part sphere r=0.5 x=4.7 y=5.45 color=#6a6660 seg=8
+  part box w=0.4 h=0.55 d=0.4 x=4.7 y=3.475 z=-0.95 color=#e8ffd8 emit=0.9
+  part disc r=0.32 r2=0.05 h=0.25 x=4.7 y=3.875 z=-0.95 seg=4 color=#1a1a1e rot=45
+  part light r=0.05 x=-4.7 y=3.4 z=-1 color=#e0ffd0
+  part box w=0.05 h=3.469 d=0.05 x=-3.75 y=1.734 color=#1a1a1e   # bars
+  part cone r=0.06 len=0.25 x=-3.75 y=3.594 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.537 d=0.05 x=-3.5 y=1.768 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-3.5 y=3.662 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.603 d=0.05 x=-3.25 y=1.802 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-3.25 y=3.728 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.668 d=0.05 x=-3 y=1.834 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-3 y=3.793 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.73 d=0.05 x=-2.75 y=1.865 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-2.75 y=3.855 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.789 d=0.05 x=-2.5 y=1.894 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-2.5 y=3.914 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.844 d=0.05 x=-2.25 y=1.922 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-2.25 y=3.969 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.895 d=0.05 x=-2 y=1.947 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-2 y=4.02 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.941 d=0.05 x=-1.75 y=1.971 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-1.75 y=4.066 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.982 d=0.05 x=-1.5 y=1.991 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-1.5 y=4.107 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.017 d=0.05 x=-1.25 y=2.009 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-1.25 y=4.142 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.047 d=0.05 x=-1 y=2.023 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-1 y=4.172 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.07 d=0.05 x=-0.75 y=2.035 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-0.75 y=4.195 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.087 d=0.05 x=-0.5 y=2.043 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-0.5 y=4.212 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.097 d=0.05 x=-0.25 y=2.048 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=-0.25 y=4.222 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.1 d=0.05 y=2.05 color=#1a1a1e
+  part cone r=0.06 len=0.25 y=4.225 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.097 d=0.05 x=0.25 y=2.048 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=0.25 y=4.222 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.087 d=0.05 x=0.5 y=2.043 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=0.5 y=4.212 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.07 d=0.05 x=0.75 y=2.035 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=0.75 y=4.195 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.047 d=0.05 x=1 y=2.023 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=1 y=4.172 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=4.017 d=0.05 x=1.25 y=2.009 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=1.25 y=4.142 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.982 d=0.05 x=1.5 y=1.991 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=1.5 y=4.107 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.941 d=0.05 x=1.75 y=1.971 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=1.75 y=4.066 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.895 d=0.05 x=2 y=1.947 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=2 y=4.02 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.844 d=0.05 x=2.25 y=1.922 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=2.25 y=3.969 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.789 d=0.05 x=2.5 y=1.894 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=2.5 y=3.914 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.73 d=0.05 x=2.75 y=1.865 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=2.75 y=3.855 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.668 d=0.05 x=3 y=1.834 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=3 y=3.793 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.603 d=0.05 x=3.25 y=1.802 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=3.25 y=3.728 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.537 d=0.05 x=3.5 y=1.768 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=3.5 y=3.662 pitch=90 seg=4 color=#1a1a1e
+  part box w=0.05 h=3.469 d=0.05 x=3.75 y=1.734 color=#1a1a1e
+  part cone r=0.06 len=0.25 x=3.75 y=3.594 pitch=90 seg=4 color=#1a1a1e
+  part box w=7.6 h=0.08 d=0.08 y=0.34 color=#1a1a1e
+  part box w=7.6 h=0.08 d=0.08 y=1.64 color=#1a1a1e
+  part box w=7.6 h=0.08 d=0.08 y=2.94 color=#1a1a1e
+  part box w=0.12 h=4.2 d=0.12 y=2.1 color=#1a1a1e
+  part ring r=0.7 thick=0.06 y=3.4 color=#1a1a1e pitch=90 seg=14
+  part ring r=0.45 thick=0.07 y=3.4 z=-0.02 color=#d8b040 pitch=90 seg=12
+  part box w=0.07 h=0.07 d=0.25 x=0.2 y=3.525 z=-0.03 pitch=-90 color=#d8b040
+  part box w=0.07 h=0.07 d=0.2 x=0.1 y=3.4 z=-0.03 rot=-90 color=#d8b040   # the G
+
+# a fountain: a great stone skull spouting into a dark, faintly glowing basin
+model fountain_skull
+  part disc r=3.2 h=0.7 y=0.35 seg=16 color=#5a5650
+  part ring r=3.15 thick=0.18 y=0.7 color=#6a6660 seg=18
+  part disc r=2.95 h=0.05 y=0.625 seg=16 color=#1a3a34 emit=0.25
+  part disc r=0.55 h=1.6 y=1.4 seg=8 color=#5a5650
+  part disc r=0.8 r2=1.2 h=0.35 y=2.275 seg=10 color=#5a5650
+  part sphere r=0.85 y=3.25 color=#8a8680 rz=0.95 seg=10
+  part box w=0.9 h=0.35 d=0.6 y=2.65 z=-0.45 color=#8a8680 taper=0.1
+  part sphere r=0.24 x=-0.32 y=3.35 z=-0.72 color=#0e0e10 seg=6
+  part sphere r=0.24 x=0.32 y=3.35 z=-0.72 color=#0e0e10 seg=6
+  part sphere r=0.12 y=3.05 z=-0.88 color=#0e0e10 seg=5
+  part box w=0.14 h=0.18 d=0.04 x=-0.24 y=2.81 z=-0.76 color=#d8d0c0
+  part box w=0.14 h=0.18 d=0.04 x=-0.08 y=2.81 z=-0.76 color=#d8d0c0
+  part box w=0.14 h=0.18 d=0.04 x=0.08 y=2.81 z=-0.76 color=#d8d0c0
+  part box w=0.14 h=0.18 d=0.04 x=0.24 y=2.81 z=-0.76 color=#d8d0c0
+  part box w=0.16 h=0.16 d=0.696 y=2.625 z=-1.175 pitch=-21.04 color=#8ad8e0 emit=0.4   # the water
+  part box w=0.16 h=0.16 d=0.86 y=2.15 z=-1.75 pitch=-54.46 color=#8ad8e0 emit=0.4
+  part box w=0.16 h=0.16 d=1.118 y=1.25 z=-2.1 pitch=-79.7 color=#8ad8e0 emit=0.4
+  part box w=0.05 h=0.05 d=0.949 x=-0.33 y=2.75 z=-0.95 pitch=-71.53 rot=-3.81 color=#8ad8e0 emit=0.4
+  part box w=0.05 h=0.05 d=0.949 x=0.33 y=2.75 z=-0.95 pitch=-71.53 rot=3.81 color=#8ad8e0 emit=0.4
+  part box w=0.8 h=0.5 d=0.05 x=1.4 y=0.35 z=-2.9 color=#3a5a30 rot=-25
+
+# a 5 m gothic gas lamp, pale green-white
+model lamp_gothic lamp=1
+  part disc r=0.38 h=0.35 y=0.175 seg=8 color=#2a2a2e
+  part disc r=0.22 r2=0.12 h=0.8 y=0.75 seg=8 color=#1a1a1e
+  part gun r=0.05 r2=0.07 len=3.3 y=2.75 pitch=90 seg=6 color=#1a1a1e
+  part ring r=0.12 thick=0.03 y=1.5 color=#1a1a1e seg=8
+  part ring r=0.12 thick=0.03 y=3 color=#1a1a1e seg=8
+  part ring r=0.25 thick=0.025 x=0.25 y=4 color=#1a1a1e pitch=90 seg=8
+  part ring r=0.25 thick=0.025 x=-0.25 y=4 color=#1a1a1e pitch=90 seg=8
+  part disc r=0.26 r2=0.32 h=0.65 y=4.725 seg=6 color=#e0ffd0 emit=0.9
+  part box w=0.03 h=0.67 d=0.03 y=4.735 z=-0.3 color=#1a1a1e
+  part box w=0.03 h=0.67 d=0.03 x=0.26 y=4.735 z=-0.15 color=#1a1a1e
+  part box w=0.03 h=0.67 d=0.03 x=0.26 y=4.735 z=0.15 color=#1a1a1e
+  part box w=0.03 h=0.67 d=0.03 x=0 y=4.735 z=0.3 color=#1a1a1e
+  part box w=0.03 h=0.67 d=0.03 x=-0.26 y=4.735 z=0.15 color=#1a1a1e
+  part box w=0.03 h=0.67 d=0.03 x=-0.26 y=4.735 z=-0.15 color=#1a1a1e
+  part disc r=0.38 r2=0.03 h=0.4 y=5.25 seg=6 color=#1a1a1e
+  part cone r=0.04 len=0.4 y=5.6 pitch=90 seg=4 color=#1a1a1e
+  part light r=0.08 y=4.7 color=#d8ffc8
+
+# extra: a 4 m hooded reaper with his scythe, on a plinth
+model statue_reaper
+  part box w=1.5 h=1.1 d=1.5 y=0.55 color=#4a4846
+  part box w=1.7 h=0.2 d=1.7 y=1.2 color=#56544f
+  part disc r=0.6 r2=0.32 h=2.1 y=2.35 seg=10 color=#3a3a3e
+  part sphere r=0.4 y=3.55 z=0.05 color=#3a3a3e ry=0.45 seg=8
+  part sphere r=0.22 y=3.5 z=-0.22 color=#08080a seg=6
+  part box w=0.18 h=0.18 d=0.524 x=0.425 y=2.85 z=-0.225 pitch=-34.9 rot=54.46 color=#3a3a3e
+  part gun r=0.05 len=3.303 x=0.6 y=2.95 z=-0.35 pitch=87.55 rot=-135 seg=5 color=#3a2a1e
+  part box w=0.05 h=0.22 d=0.485 x=0.375 y=4.675 z=-0.45 pitch=18.02 rot=-49.4 color=#9a9aa0   # the blade
+  part box w=0.05 h=0.22 d=0.667 x=-0.1 y=4.675 z=-0.725 pitch=-12.99 rot=-67.38 color=#9a9aa0
+  part box w=0.05 h=0.22 d=0.612 x=-0.65 y=4.425 z=-0.875 pitch=-34.86 rot=-84.29 color=#9a9aa0
+
+# extra: coffins stacked crosswise on pallets: the family business's stock
+model coffin_stack
+  part box w=2.6 h=0.15 d=2.4 y=0.075 color=#6a5a44
+  part plate pts="-0.258,-0.95;0.258,-0.95;0.38,-0.446;0.258,0.95;-0.258,0.95;-0.38,-0.446" thick=0.5 y=0.42 color=#4a2a18
+  part plate pts="-0.271,-0.969;0.271,-0.969;0.399,-0.455;0.271,0.969;-0.271,0.969;-0.399,-0.455" thick=0.04 y=0.68 color=#3a2014
+  part plate pts="-0.258,-0.95;0.258,-0.95;0.38,-0.446;0.258,0.95;-0.258,0.95;-0.38,-0.446" thick=0.5 y=0.94 rot=90 color=#141416
+  part plate pts="-0.271,-0.969;0.271,-0.969;0.399,-0.455;0.271,0.969;-0.271,0.969;-0.399,-0.455" thick=0.04 y=1.2 rot=90 color=#3a2014
+  part plate pts="-0.258,-0.95;0.258,-0.95;0.38,-0.446;0.258,0.95;-0.258,0.95;-0.38,-0.446" thick=0.5 y=1.46 color=#e8e2d4
+  part plate pts="-0.271,-0.969;0.271,-0.969;0.399,-0.455;0.271,0.969;-0.271,0.969;-0.399,-0.455" thick=0.04 y=1.72 color=#d8b040
+  part plate pts="-0.258,-0.95;0.258,-0.95;0.38,-0.446;0.258,0.95;-0.258,0.95;-0.38,-0.446" thick=0.5 y=1.98 rot=90 color=#5a2a20
+  part plate pts="-0.271,-0.969;0.271,-0.969;0.399,-0.455;0.271,0.969;-0.271,0.969;-0.399,-0.455" thick=0.04 y=2.24 rot=90 color=#3a2014
+  part plate pts="-0.258,-0.95;0.258,-0.95;0.38,-0.446;0.258,0.95;-0.258,0.95;-0.38,-0.446" thick=0.5 y=2.5 color=#2a1e18
+  part plate pts="-0.271,-0.969;0.271,-0.969;0.399,-0.455;0.271,0.969;-0.271,0.969;-0.399,-0.455" thick=0.04 y=2.76 color=#3a2014
+  part box w=0.25 h=0.3 d=0.02 x=0.3 y=0.75 z=-0.96 color=#efe8d8   # a price tag

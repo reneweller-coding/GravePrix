@@ -1,0 +1,2 @@
+// The program icon (tools/make_icon.py draws it).
+IDI_ICON1 ICON "graveprix.ico"

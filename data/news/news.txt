@@ -1,0 +1,872 @@
+# The tabloid: Das Sensenblatt / The Grim Reader. News items per event (one is picked at random), then the
+# classified ads. Placeholders: {player} {rival} {track} {venue} {car} {place} {money} {league} {days}.
+# No gendered pronouns for {player} or {rival}: either may be anyone.
+
+# ------------------------------------------------------------------------------------------------ player_win
+
+news player_win pwin_1
+  head "{player} siegt – und lebt!"
+  head_en "{player} Wins – and Lives!"
+  text "Beim Rennen „{track}“ fuhr {player} allen davon und kassierte {money}. Zweiter wurde {rival}, nach eigener Aussage nur, „um die Landschaft zu genießen“."
+  text_en "{player} left the field for dead at {track} and pocketed {money}. {rival} came second and claims to have been admiring the scenery."
+
+news player_win pwin_2
+  head "Neuer Liebling der Bestatter"
+  head_en "The Undertakers' New Favourite"
+  text "{player} gewinnt „{track}“ und hinterlässt eine Spur aus Blech, Rauch und zerrissenen Wettscheinen. Graves & Sons meldet einen Rekordumsatz bei Kränzen."
+  text_en "{player} wins at {track}, leaving a trail of scrap, smoke and torn-up betting slips. Graves & Sons reports record wreath sales."
+
+news player_win pwin_3
+  head "Erster! Und zwar nicht in der Leichenhalle"
+  head_en "First in Line – and Not at the Morgue"
+  text "Für {player} gab es heute ausnahmsweise keinen Nachruf, sondern {money} Preisgeld. {rival} kam als Zweiter ins Ziel und hat Rache geschworen. Wir haben den Schwur notiert – für den Nachruf."
+  text_en "For once, {player} gets prize money instead of an obituary: {money}. Runner-up {rival} has sworn revenge. We've made a note of the oath – for the obituary."
+
+news player_win pwin_4
+  head "Schampus statt Schaufel"
+  head_en "Champagne, Not Shovels"
+  text "Siegerehrung bei „{track}“: {player} ganz oben, {rival} eine Stufe tiefer, der Rest noch tiefer – einige davon dauerhaft."
+  text_en "Prize-giving at {track}: {player} on the top step, {rival} one below, everyone else further down – some of them permanently."
+
+news player_win pwin_5
+  head "{player}: „Ich bin einfach nicht gestorben“"
+  head_en "{player}: ‘I Just Didn't Die’"
+  text "Nach dem Geheimnis des Sieges bei „{track}“ gefragt, antwortete {player} knapp: „Nicht sterben.“ Experten halten die Strategie für riskant, aber zukunftsweisend."
+  text_en "Asked for the secret of victory at {track}, {player} said simply: ‘Not dying.’ Experts call the strategy risky but promising."
+
+news player_win pwin_6
+  head "Kein Zufall, sagt der Sieger"
+  head_en "No Fluke, Says the Winner"
+  text "{player} gewinnt {money} und lässt {rival} im Rückspiegel immer kleiner werden. Mortimer Graves applaudierte höflich und machte sich eine Notiz."
+  text_en "{player} wins {money} and watches {rival} shrink in the rear-view mirror. Mortimer Graves applauded politely and made a note."
+
+# ------------------------------------------------------------------------------------------------ player_podium
+
+news player_podium ppod_1
+  head "Treppchen für {player}"
+  head_en "{player} Makes the Podium"
+  text "Platz {place} beim Rennen „{track}“: nicht ganz oben, aber deutlich über der Erde. {rival} gewann und winkte von der obersten Stufe herab."
+  text_en "P{place} at {track}: not quite the top, but comfortably above ground. {rival} won and waved down from the top step."
+
+news player_podium ppod_2
+  head "Knapp daneben ist auch überlebt"
+  head_en "A Near Miss Is Still a Miss"
+  text "{player} wird {place}. und kassiert {money}. Der Sieg ging an {rival}, gefolgt von einem Dauergrinsen in jede verfügbare Kamera – drei Minuten am Stück."
+  text_en "{player} finishes in position {place} for {money}. Victory went to {rival}, who grinned into the cameras for three solid minutes afterwards."
+
+news player_podium ppod_3
+  head "Silber, Bronze, Blech"
+  head_en "Silver, Bronze, Scrap Metal"
+  text "Ein Platz auf dem Treppchen für {player}: Rang {place}. Hedda Epitaph meint dazu: „Für einen Nachruf reicht es noch nicht. Für eine Randnotiz schon.“"
+  text_en "A podium place for {player}: P{place}. Hedda Epitaph's verdict: ‘Not enough for an obituary yet. Enough for a footnote.’"
+
+news player_podium ppod_4
+  head "{rival} vorn, {player} dicht dran"
+  head_en "{rival} Ahead, {player} Breathing Down Their Neck"
+  text "Bei „{track}“ fehlten {player} am Ende nur ein paar Meter – oder eine gut platzierte Mine. Platz {place} und {money} sind trotzdem ein Anfang."
+  text_en "At {track} {player} came up just a few metres short – or one well-placed mine. P{place} and {money} are a start all the same."
+
+news player_podium ppod_5
+  head "Beinahe ein Held"
+  head_en "Almost a Hero"
+  text "Die Menge jubelte {player} zu, als hätte es zum Sieg gereicht. Hat es nicht: Platz {place}. Die Wettbüros zahlen trotzdem aus – an alle, die auf {rival} gesetzt hatten."
+  text_en "The crowd cheered {player} as if it had been a win. It wasn't: P{place}. The bookies are paying out anyway – to everyone who backed {rival}."
+
+# ------------------------------------------------------------------------------------------------ player_lose
+
+news player_lose plose_1
+  head "{player} im Mittelfeld versunken"
+  head_en "{player} Lost in the Midfield"
+  text "Platz {place} beim Rennen „{track}“. {rival} gewann Geld, {player} gewann Erfahrung. Erfahrung ist bekanntlich das, was man bekommt, wenn man nicht bekommt, was man wollte."
+  text_en "P{place} at {track}. {rival} won money; {player} gained experience. Experience, as everyone knows, is what you get when you don't get what you wanted."
+
+news player_lose plose_2
+  head "Viel Lärm, keine Punkte"
+  head_en "All Noise, No Points"
+  text "{player} fuhr laut, schoss viel und kam als {place}. ins Ziel. Sieger {rival} ließ ausrichten, man möge beim nächsten Mal wenigstens im Weg stehen."
+  text_en "{player} drove loudly, fired a lot and came home in position {place}. Winner {rival} sent word: next time, at least try to get in the way."
+
+news player_lose plose_3
+  head "Der Tod war schneller. {rival} auch."
+  head_en "Death Was Faster. So Was {rival}."
+  text "Für {player} reichte es bei „{track}“ nur zu Platz {place}. Das Sensenblatt hat den vorbereiteten Nachruf vorerst wieder in die Schublade gelegt."
+  text_en "{player} managed only P{place} at {track}. The Grim Reader has put the pre-written obituary back in the drawer – for now."
+
+news player_lose plose_4
+  head "Hinten ist auch eine Richtung"
+  head_en "The Back Is a Direction Too"
+  text "Platz {place} für {player}. Das Gute: Hinten wird seltener geschossen. Das Schlechte: Hinten liegen die Minen."
+  text_en "P{place} for {player}. On the bright side, fewer people shoot at you back there. On the dark side, that's where all the mines are."
+
+news player_lose plose_5
+  head "Kein Pokal, aber alle Gliedmaßen"
+  head_en "No Trophy, but All Limbs Present"
+  text "Bei „{track}“ blieb für {player} nur ein Trostgeld von {money}. Es siegte {rival}. Der Kredithai Barnaby Fin bot noch an der Ziellinie seine Dienste an."
+  text_en "{player} came away from {track} with nothing but {money} in consolation money. {rival} won. Loan shark Barnaby Fin was offering his services before the finish line had cooled."
+
+# ------------------------------------------------------------------------------------------------ player_wrecked
+
+news player_wrecked pwreck_1
+  head "{player} zerlegt!"
+  head_en "{player} Dismantled!"
+  text "Bei „{track}“ endete das Rennen für {player} in einer Wolke aus Rauch und Kleinteilen. Zeugen sahen {rival} in der Nähe – grinsend. Lazarus hat bereits einen Kostenvoranschlag geschrieben. Er ist lang."
+  text_en "At {track} {player}'s race ended in a cloud of smoke and small parts. Witnesses saw {rival} nearby – grinning. Lazarus has already written a quote. It's a long one."
+
+news player_wrecked pwreck_2
+  head "Totalschaden, aber Puls"
+  head_en "Total Loss, Pulse Intact"
+  text "{player} hat überlebt, das Auto nicht. Graves & Sons schickte vorsorglich einen Wagen, musste aber unverrichteter Dinge wieder abfahren. Mortimer Graves wirkte enttäuscht."
+  text_en "{player} survived; the car didn't. Graves & Sons sent a hearse just in case but had to leave empty-handed. Mortimer Graves looked disappointed."
+
+news player_wrecked pwreck_3
+  head "Abgeschleppt"
+  head_en "Towed Away"
+  text "Der Abschleppdienst brauchte zwei Anläufe, um {player} aus der Streckenbegrenzung von „{track}“ zu lösen. {rival} ließ ausrichten, es sei „nichts Persönliches“ gewesen. Es war sehr persönlich."
+  text_en "It took the tow truck two attempts to prise {player} out of the barrier at {track}. {rival} let it be known that it was ‘nothing personal’. It was extremely personal."
+
+news player_wrecked pwreck_4
+  head "Unser Fahrer brennt"
+  head_en "Our Driver Is on Fire"
+  text "Ein brennendes Wrack, ein hustender Fahrer, ein strahlender Konkurrent namens {rival}: Das Rennen „{track}“ hatte alles. {player} wird sich davon erholen. Das Konto eher nicht."
+  text_en "A burning wreck, a coughing driver and a beaming {rival}: {track} had it all. {player} will recover. The bank balance, less so."
+
+news player_wrecked pwreck_5
+  head "Ersatzteillager auf Rädern"
+  head_en "A Spare-Parts Shop on Wheels"
+  text "Was vom Auto von {player} übrig ist, passt in einen Schuhkarton. Ein Schrotthändler hat bereits ein Angebot für die Felgen abgegeben – und eins für den Schuhkarton."
+  text_en "What's left of {player}'s car would fit in a shoebox. A scrap dealer has already made an offer for the rims – and one for the shoebox."
+
+# ------------------------------------------------------------------------------------------------ player_spree
+
+news player_spree pspree_1
+  head "Kopfgeldregen für {player}"
+  head_en "Bounty Bonanza for {player}"
+  text "Drei Wracks und mehr in einem einzigen Rennen: {player} räumte bei „{track}“ auf und kassierte {money} Kopfgeld. Graves & Sons hat eine Sonderschicht eingelegt."
+  text_en "Three wrecks or more in a single race: {player} cleaned house at {track} and collected {money} in bounties. Graves & Sons has called in an extra shift."
+
+news player_spree pspree_2
+  head "Der Sensenmann hat eine Aushilfe"
+  head_en "The Reaper Has Hired Help"
+  text "Wo {player} fährt, wächst kein Gras mehr, und kein Auto bleibt heil. Nach „{track}“ wechselten {money} Kopfgeld den Besitzer. Die Floristen der Stadt kommen kaum hinterher."
+  text_en "Where {player} drives, no grass grows and no car survives. {money} in bounties changed hands after {track}. The city's florists can barely keep up."
+
+news player_spree pspree_3
+  head "Abrissunternehmen {player}"
+  head_en "{player} Demolition Ltd."
+  text "Die Bilanz von „{track}“: mehrere Wracks, ein Sieger der Herzen und {money} Prämie. Mortimer Graves soll {player} einen Präsentkorb geschickt haben – voller Visitenkarten."
+  text_en "The tally at {track}: several wrecks, one people's champion and {money} in bonuses. Mortimer Graves is said to have sent {player} a gift hamper – full of business cards."
+
+news player_spree pspree_4
+  head "Massenkarambolage mit Ansage"
+  head_en "Pile-Up, as Announced"
+  text "Ricky Rattle verlor bei „{track}“ zweimal die Stimme und einmal den Überblick: {player} schickte Gegner um Gegner in die Bande. Kopfgeld: {money}."
+  text_en "Ricky Rattle lost his voice twice and his count once at {track}: {player} sent rival after rival into the barriers. Bounty: {money}."
+
+news player_spree pspree_5
+  head "Die Versicherungen weinen"
+  head_en "Insurers in Tears"
+  text "Nach dem Rennen „{track}“ haben drei Versicherungen ihre Tarife für den Grave Prix erhöht, eine hat ganz aufgegeben. Der Grund heißt {player} und hat {money} Kopfgeld eingestrichen."
+  text_en "After {track} three insurers raised their Grave Prix premiums and one gave up altogether. The reason is called {player} and has just banked {money} in bounties."
+
+# ------------------------------------------------------------------------------------------------ player_clean
+
+news player_clean pclean_1
+  head "Ohne einen Kratzer!"
+  head_en "Not a Scratch!"
+  text "{player} kam bei „{track}“ ohne einen einzigen Kratzer ins Ziel. Lazarus ist beleidigt, die Versicherungen sind verwirrt, und Graves & Sons prüft, ob das überhaupt erlaubt ist."
+  text_en "{player} finished at {track} without a single scratch. Lazarus is offended, the insurers are baffled, and Graves & Sons is checking whether that's even allowed."
+
+news player_clean pclean_2
+  head "Lack wie neu"
+  head_en "Showroom Condition"
+  text "Platz {place} und ein Auto, das aussieht wie frisch vom Händler: {player} fährt so sauber, dass Blumen Welk um einen Werbevertrag bittet."
+  text_en "P{place} and a car that looks fresh off the forecourt: {player} drives so cleanly that The Wilting Lily is asking about an advertising deal."
+
+news player_clean pclean_3
+  head "Unberührbar"
+  head_en "Untouchable"
+  text "Keine Delle, kein Einschussloch, kein Brandfleck: {player} glitt durch „{track}“ wie ein Gespenst. Ricky Rattle fragte live nach, ob {player} überhaupt mitgefahren sei."
+  text_en "No dent, no bullet hole, no scorch mark: {player} drifted through {track} like a ghost. Ricky Rattle asked on air whether {player} had actually taken part."
+
+news player_clean pclean_4
+  head "Mechaniker in Sorge"
+  head_en "Mechanic Worried"
+  text "„Wenn das so weitergeht, kann ich zumachen“, klagt Lazarus Sprocket nach dem makellosen Rennen von {player} bei „{track}“. Er hat vorsorglich seine Preise erhöht."
+  text_en "‘If this carries on, I can shut up shop,’ grumbles Lazarus Sprocket after {player}'s flawless run at {track}. He has raised his prices as a precaution."
+
+news player_clean pclean_5
+  head "Saubere Sache"
+  head_en "A Clean Job"
+  text "Bei „{track}“ fuhr {player} wie auf rohen Eiern – und kam an, ohne ein einziges zu zerbrechen. Platz {place}. Die Thanatokosmetik Rosig fragt an, ob {player} Modell sitzen möchte. Zu Lebzeiten, versteht sich."
+  text_en "{player} drove at {track} as if on eggshells – and didn't crack a single one. P{place}. Rosy Cheeks Post-Mortem Beauty has asked whether {player} would sit as a model. While still alive, naturally."
+
+# ------------------------------------------------------------------------------------------------ rival_dead
+# The rival's own obituary line is added after the text.
+
+news rival_dead rdead_1
+  head "{rival} ist tot"
+  head_en "{rival} Is Dead"
+  text "Beim Rennen „{track}“ ist {rival} tödlich verunglückt. Das Sensenblatt trauert, die Wettbüros zahlen aus, und Graves & Sons hat bereits Maß genommen."
+  text_en "{rival} has been killed in a crash at {track}. The Grim Reader mourns, the bookies pay out, and Graves & Sons has already taken measurements."
+
+news rival_dead rdead_2
+  head "Nachruf: {rival}"
+  head_en "Obituary: {rival}"
+  text "Wir nehmen Abschied von {rival}. Bei „{track}“ wurde aus der vorletzten Runde unerwartet die letzte. Die Beisetzung findet im engsten Kreis statt – eng, weil die meisten Freunde ebenfalls schon tot sind."
+  text_en "We bid farewell to {rival}, whose penultimate lap at {track} turned out to be the last. The funeral will be a small, private affair – small, because most of the friends are already dead too."
+
+news rival_dead rdead_3
+  head "Ein Platz wird frei"
+  head_en "A Seat Becomes Available"
+  text "{rival} fährt nicht mehr. Das Rennen „{track}“ endete mit Flammen, Stille und einem diskreten Anruf bei Graves & Sons. Bewerbungen für den freien Platz werden ab sofort angenommen."
+  text_en "{rival} will race no more. {track} ended in flames, silence and a discreet phone call to Graves & Sons. Applications for the vacant seat are now being accepted."
+
+news rival_dead rdead_4
+  head "Letzte Runde für {rival}"
+  head_en "Last Lap for {rival}"
+  text "Es ging schnell, laut und endgültig: {rival} hat „{track}“ nicht überlebt. Ricky Rattle bat um eine Schweigeminute und hielt sie elf Sekunden lang durch."
+  text_en "It was fast, loud and final: {rival} did not survive {track}. Ricky Rattle called for a minute's silence and managed eleven seconds."
+
+news rival_dead rdead_5
+  head "Trauer im Fahrerlager"
+  head_en "Grief in the Paddock"
+  text "Das Fahrerlager trauert um {rival}. Die Konkurrenz zeigte sich tief erschüttert und teilte noch am selben Abend die Ersatzteile unter sich auf."
+  text_en "The paddock mourns {rival}. The competition was deeply shaken and divided up the spare parts that same evening."
+
+news rival_dead rdead_6
+  head "Graves & Sons: Neuer Auftrag"
+  head_en "Graves & Sons: New Booking"
+  text "Mortimer Graves bestätigt den Tod von {rival} beim Rennen „{track}“ und verspricht „eine Feier, die dem Fahrstil gerecht wird“: schnell, chaotisch und mit Feuer."
+  text_en "Mortimer Graves confirms the death of {rival} at {track} and promises ‘a service worthy of the driving style’: fast, chaotic and on fire."
+
+news rival_dead rdead_7
+  head "Ausgefahren"
+  head_en "End of the Road"
+  text "Das Wrack von {rival} brannte noch, als wir in Druck gingen. Die Angehörigen bitten statt Blumen um Spenden für einen Feuerlöscher."
+  text_en "{rival}'s wreck was still burning as we went to press. In lieu of flowers, the family asks for donations towards a fire extinguisher."
+
+news rival_dead rdead_8
+  head "Zielflagge für immer"
+  head_en "Chequered Flag, Forever"
+  text "Bei „{track}“ hat {rival} die Ziellinie nicht mehr erreicht, dafür eine sehr viel endgültigere. Das Sensenblatt erinnert sich:"
+  text_en "At {track} {rival} never reached the finish line – only a far more permanent one. The Grim Reader remembers:"
+
+news rival_dead rdead_9
+  head "{rival}: Ruhe in Teilen"
+  head_en "{rival}: Rest in Pieces"
+  text "Die Bergungsmannschaft war bei „{track}“ zwei Stunden lang mit dem Wrack von {rival} beschäftigt. Die Beisetzung ist morgen, das Wrack geht an den Meistbietenden."
+  text_en "The recovery crew spent two hours at {track} collecting what was left of {rival}'s car. The funeral is tomorrow; the wreck goes to the highest bidder."
+
+news rival_dead rdead_10
+  head "Die Wettbüros trauern mit"
+  head_en "The Bookies Mourn Too"
+  text "Mit {rival} verliert der Grave Prix ein vertrautes Gesicht und die Wettbüros eine sichere Einnahmequelle. Bei „{track}“ ging alles sehr schnell."
+  text_en "With {rival}, the Grave Prix loses a familiar face and the bookies a reliable source of income. At {track} it was all over very quickly."
+
+# ------------------------------------------------------------------------------------------------ rookie
+
+news rookie rookie_1
+  head "Frisches Blut: {rival}"
+  head_en "New Blood: {rival}"
+  text "Kaum ist ein Platz frei, sitzt schon {rival} darin. Der Neuzugang verspricht „spektakuläre Rennen“. Graves & Sons verspricht nichts, hat aber vorsorglich einen Katalog geschickt."
+  text_en "No sooner is a seat free than {rival} is sitting in it. The newcomer promises ‘spectacular racing’. Graves & Sons promises nothing, but has sent over a catalogue just in case."
+
+news rookie rookie_2
+  head "Neu im Grave Prix: {rival}"
+  head_en "New to the Grave Prix: {rival}"
+  text "{rival} übernimmt den Platz eines Verstorbenen und hat sich das Cockpit schon gemütlich eingerichtet. Wir wünschen viel Glück. Und eine gute Haftpflicht."
+  text_en "{rival} takes over a dead driver's seat and has already made the cockpit nice and cosy. We wish them luck. And good liability cover."
+
+news rookie rookie_3
+  head "Nachrücker gefunden"
+  head_en "Replacement Found"
+  text "Der Grave Prix ist um ein bekanntes Gesicht ärmer und um {rival} reicher. Das Sensenblatt hat für den Neuzugang schon mal eine Nachrufmappe angelegt. Man will ja vorbereitet sein."
+  text_en "The Grave Prix is one familiar face poorer and one {rival} richer. The Grim Reader has already opened an obituary file on the newcomer. One likes to be prepared."
+
+news rookie rookie_4
+  head "{rival} rückt nach"
+  head_en "{rival} Steps In"
+  text "Auf dem Platz eines Toten fährt ab sofort {rival}. Der Sitz ist noch warm, die Delle in der Tür auch."
+  text_en "{rival} now drives in a dead driver's seat. The seat is still warm, and so is the dent in the door."
+
+news rookie rookie_5
+  head "Handschlag und Maßband"
+  head_en "A Handshake and a Tape Measure"
+  text "Mortimer Graves begrüßte {rival} persönlich mit Handschlag und Maßband. Auf die Frage, wozu das Maßband gut sei, lächelte er nur."
+  text_en "Mortimer Graves welcomed {rival} in person with a handshake and a tape measure. Asked what the tape measure was for, he only smiled."
+
+# ------------------------------------------------------------------------------------------------ league_up
+
+news league_up lup_1
+  head "{player} steigt auf"
+  head_en "{player} Promoted"
+  text "Neue Liga, neue Gegner, neue Grabstelle: {player} fährt ab sofort in der Liga „{league}“. Mortimer Graves gratuliert und hat die Lebensversicherung von {player} vorsorglich gekündigt."
+  text_en "New league, new rivals, new burial plot: {player} now races in {league}. Mortimer Graves offers his congratulations and has cancelled {player}'s life insurance as a precaution."
+
+news league_up lup_2
+  head "Aufstieg! Tiefer Fall in Sicht"
+  head_en "Promotion! Long Drop Ahead"
+  text "Je höher man steigt, desto tiefer fällt man: {player} ist jetzt in der Liga „{league}“. Die Wettbüros haben die Quoten angepasst – und Graves & Sons die Sargmaße."
+  text_en "The higher you climb, the further you fall: {player} has moved up to {league}. The bookies have adjusted the odds – and Graves & Sons the casket size."
+
+news league_up lup_3
+  head "Willkommen in „{league}“"
+  head_en "Welcome to {league}"
+  text "Die neuen Kollegen begrüßten {player} mit Applaus, Hupen und einer scharfen Mine im Briefkasten. In der Liga „{league}“ gelten andere Regeln, nämlich gar keine."
+  text_en "{player}'s new colleagues gave the newcomer a warm welcome: applause, horns and a live mine in the letterbox. In {league} different rules apply – namely, none."
+
+news league_up lup_4
+  head "Eine Liga höher, ein Sarg edler"
+  head_en "One League Up, One Casket Classier"
+  text "Mit dem Aufstieg in die Liga „{league}“ hat {player} Anspruch auf ein besseres Begräbnis. Graves & Sons empfiehlt, das neue Recht nicht sofort in Anspruch zu nehmen."
+  text_en "With promotion to {league}, {player} is now entitled to a better class of funeral. Graves & Sons recommends not exercising this right immediately."
+
+news league_up lup_5
+  head "Hedda Epitaph: „Ich hab's ja geahnt“"
+  head_en "Hedda Epitaph: ‘I Had a Hunch’"
+  text "Unsere Chefredakteurin hat {player} den Aufstieg von Anfang an zugetraut. Behauptet sie jedenfalls. Den vorbereiteten Nachruf hat sie trotzdem aktualisiert: neue Liga – „{league}“."
+  text_en "Our editor-in-chief always believed {player} would go up. Or so she claims. She has updated the pre-written obituary all the same: new league – {league}."
+
+# ------------------------------------------------------------------------------------------------ showdown_won
+
+news showdown_won swon_1
+  head "{player} stürzt {rival}"
+  head_en "{player} Topples {rival}"
+  text "Im Duell um den Titel hatte {rival} keine Chance. {player} kassierte {money} und den Titel. Die entthronte Größe kündigte eine Revanche an – in einer Liga, in der {player} nicht mehr fährt."
+  text_en "In the title duel {rival} never stood a chance. {player} collected {money} and the crown. The dethroned champion promised a rematch – in a league {player} no longer races in."
+
+news showdown_won swon_2
+  head "Ein neuer Champion!"
+  head_en "A New Champion!"
+  text "Es war eng, es war laut, und am Ende stand {player} ganz oben. {rival} nahm die Niederlage sportlich – und das Lenkrad als Andenken mit nach Hause."
+  text_en "It was tight, it was loud, and at the end {player} was on top. {rival} took the defeat sportingly – and took the steering wheel home as a souvenir."
+
+news showdown_won swon_3
+  head "Der Thron wackelt nicht mehr – er liegt"
+  head_en "The Throne No Longer Wobbles – It's Flat"
+  text "{rival} ist entthront. {player} gewinnt das Duell und {money}. Mortimer Graves soll den Kopf geschüttelt und „bemerkenswert“ gemurmelt haben. Aus seinem Mund ist das eine Drohung."
+  text_en "{rival} has been dethroned. {player} wins the duel and {money}. Mortimer Graves reportedly shook his head and murmured ‘remarkable’. From him, that counts as a threat."
+
+news showdown_won swon_4
+  head "Champion außer Dienst"
+  head_en "Champion, Retired"
+  text "Für {rival} gibt es ab heute einen neuen Titel: „ehemals“. {player} hat das Duell gewonnen und steigt auf. Ricky Rattle feierte live so laut, dass zwei Fensterscheiben sprangen."
+  text_en "From today {rival} holds a new title: ‘former’. {player} won the duel and is moving up. Ricky Rattle celebrated so loudly on air that two windows cracked."
+
+news showdown_won swon_5
+  head "Duell entschieden"
+  head_en "Duel Settled"
+  text "Zwei Autos gingen ins Duell, eines kam heil heraus. {player} schlägt {rival} und kassiert {money}. Die Champion-Schärpe wird gereinigt und weitergereicht."
+  text_en "Two cars went into the duel; one came out in one piece. {player} beats {rival} and pockets {money}. The champion's sash is being dry-cleaned and handed on."
+
+# ------------------------------------------------------------------------------------------------ showdown_lost
+
+news showdown_lost slost_1
+  head "{rival} verteidigt den Titel"
+  head_en "{rival} Defends the Title"
+  text "Das Duell ging an {rival}. {player} landete auf Platz {place} und auf dem Boden der Tatsachen. Eine Revanche ist möglich – sofern {player} dann noch fahren kann."
+  text_en "The duel went to {rival}. {player} finished in position {place} and came back down to earth. A rematch is possible – provided {player} can still drive by then."
+
+news showdown_lost slost_2
+  head "Zu früh gefreut"
+  head_en "Celebrated Too Soon"
+  text "{player} wollte Champion werden und wurde Statist. {rival} lächelte nach dem Duell nur müde. Graves & Sons hat das Angebot für einen Champion-Sarg zurückgezogen."
+  text_en "{player} wanted to be champion and ended up an extra. {rival} merely smiled wearily after the duel. Graves & Sons has withdrawn its offer of a champion's casket."
+
+news showdown_lost slost_3
+  head "Herausforderung gescheitert"
+  head_en "Challenge Failed"
+  text "Mut allein reicht nicht: {player} verliert das Duell gegen {rival}. Hedda Epitaph kommentiert: „Gut, dass ich den Nachruf noch nicht gedruckt habe. Er war ohnehin zu schmeichelhaft.“"
+  text_en "Courage alone isn't enough: {player} loses the duel to {rival}. Hedda Epitaph comments: ‘Good thing I hadn't printed the obituary yet. It was far too flattering anyway.’"
+
+news showdown_lost slost_4
+  head "Der Champion bleibt Champion"
+  head_en "Champion Stays Champion"
+  text "{rival} bleibt an der Spitze, {player} bleibt in der Werkstatt. Lazarus hat einen Kostenvoranschlag für die Reparatur erstellt und dabei lange gelacht."
+  text_en "{rival} stays on top; {player} stays in the garage. Lazarus has drawn up a quote for the repairs and laughed for quite some time while doing it."
+
+news showdown_lost slost_5
+  head "Noch nicht reif"
+  head_en "Not Ready Yet"
+  text "Das Duell gegen {rival} hat vor allem eines gezeigt: {player} braucht mehr Punkte, mehr Leistung und mehr Gottvertrauen. Wer zuletzt lacht, lacht am besten – und gerade lacht {rival}."
+  text_en "The duel against {rival} proved one thing above all: {player} needs more points, more horsepower and more faith. Whoever laughs last laughs longest – and right now {rival} is laughing."
+
+# ------------------------------------------------------------------------------------------------ boss_won
+
+news boss_won bwon_1
+  head "GRAVES GESCHLAGEN!"
+  head_en "GRAVES BEATEN!"
+  text "Unfassbar: {player} hat Mortimer Graves auf dessen eigenem Anwesen besiegt und {money} kassiert. Der Bestatter nahm die Niederlage mit Würde und ließ ausrichten: „Wir sprechen uns noch.“"
+  text_en "Unbelievable: {player} has beaten Mortimer Graves on his own estate and collected {money}. The undertaker accepted defeat with dignity and sent word: ‘We shall speak again.’"
+
+news boss_won bwon_2
+  head "Der Tod hat verloren"
+  head_en "Death Loses One"
+  text "Zum ersten Mal in der Geschichte des Grave Prix hat jemand den Leichenwagen von Mortimer Graves überholt – endgültig. Siegerin oder Sieger: {player}. Ricky Rattle weinte live."
+  text_en "For the first time in Grave Prix history someone has overtaken Mortimer Graves' hearse – for good. The winner: {player}. Ricky Rattle wept on air."
+
+news boss_won bwon_3
+  head "Sonderausgabe: {player} gewinnt den Grave Prix"
+  head_en "Special Edition: {player} Wins the Grave Prix"
+  text "Das Sensenblatt erscheint heute ausnahmsweise mit weißem statt schwarzem Rand. Der Grund: {player} hat das Finale gegen Mortimer Graves gewonnen. Hedda Epitaph hat alle vorgeschriebenen Nachrufe auf {player} feierlich verbrannt."
+  text_en "Today, for once, The Grim Reader is printed with a white border instead of a black one. The reason: {player} has won the final against Mortimer Graves. Hedda Epitaph has ceremonially burned every pre-written obituary for {player}."
+
+news boss_won bwon_4
+  head "Das Grab bleibt leer"
+  head_en "The Grave Stays Empty"
+  text "Auf dem Anwesen der Graves wartete ein frisch ausgehobenes Grab auf {player}. Es wartet weiter. Mit {money} Preisgeld ist {player} nun reich, berühmt und, wie Fachleute betonen, bemerkenswert lebendig."
+  text_en "On the Graves estate a freshly dug grave was waiting for {player}. It's still waiting. With {money} in prize money, {player} is now rich, famous and – as experts point out – remarkably alive."
+
+# ------------------------------------------------------------------------------------------------ loan_overdue
+
+news loan_overdue lover_1
+  head "Inkasso bei {player}"
+  head_en "Debt Collectors Call on {player}"
+  text "Die Herren Soll und Haben vom Inkassobüro Barnaby Fin haben bei {player} vorbeigeschaut und {money} mitgenommen. Die Kniescheiben blieben diesmal noch dran."
+  text_en "Messrs Debit and Credit of the Barnaby Fin collection agency dropped in on {player} and took {money}. The kneecaps stayed attached – this time."
+
+news loan_overdue lover_2
+  head "Zahltag – unfreiwillig"
+  head_en "Payday – Involuntary"
+  text "Weil {player} die Rate vergessen hat, hat Barnaby Fin sie nicht vergessen. Eingezogen: {money}. Fin ließ ausrichten, er nehme beim nächsten Mal auch Organe in Zahlung."
+  text_en "Because {player} forgot the instalment, Barnaby Fin didn't. Collected: {money}. Fin let it be known that next time he'll happily accept organs in lieu."
+
+news loan_overdue lover_3
+  head "Besuch von Soll und Haben"
+  head_en "A Visit from Debit and Credit"
+  text "Zwei breitschultrige Herren mit Notizbuch und Brecheisen haben {player} um {money} erleichtert. Nachbarn berichten von einem höflichen Gespräch und einem sehr lauten Knacken."
+  text_en "Two broad-shouldered gentlemen with a notebook and a crowbar relieved {player} of {money}. Neighbours report a polite conversation and one very loud crack."
+
+news loan_overdue lover_4
+  head "Der Kredithai beißt zu"
+  head_en "Loan Shark Bites"
+  text "Barnaby Fin hat zugeschnappt: {money} gingen bei {player} ein und gleich wieder hinaus. „Zinsen sind wie Haie“, sagte Fin dem Sensenblatt. „Sie schlafen nie.“"
+  text_en "Barnaby Fin has struck: {money} came into {player}'s account and went straight back out. ‘Interest is like a shark,’ Fin told The Grim Reader. ‘It never sleeps.’"
+
+news loan_overdue lover_5
+  head "Pfändung im Fahrerlager"
+  head_en "Repossession in the Paddock"
+  text "Vor laufenden Kameras pfändeten Barnaby Fins Leute bei {player} Werte in Höhe von {money}. Das Publikum applaudierte. Im Grave Prix ist auch Schadenfreude ein Sport."
+  text_en "In front of the cameras Barnaby Fin's men seized {money} worth of assets from {player}. The crowd applauded. In the Grave Prix, gloating is a sport too."
+
+# ------------------------------------------------------------------------------------------------ loan_paid
+
+news loan_paid lpaid_1
+  head "{player} schuldenfrei!"
+  head_en "{player} Debt-Free!"
+  text "{player} hat {money} an Barnaby Fin zurückgezahlt. Der Kredithai war gerührt und fragte, ob man nicht gleich einen neuen Kredit aufnehmen wolle. Zu Sonderkonditionen."
+  text_en "{player} has repaid {money} to Barnaby Fin. The loan shark was touched and asked whether a fresh loan might be of interest right away. On special terms."
+
+news loan_paid lpaid_2
+  head "Soll und Haben arbeitslos"
+  head_en "Debit and Credit Out of Work"
+  text "Seit {player} {money} zurückgezahlt hat, haben die Inkassozwillinge einen freien Abend. Gerüchten zufolge verbringen sie ihn beim Stricken mit Dolores Kaboom."
+  text_en "Since {player} repaid {money}, the collector twins have a free evening. Rumour has it they're spending it knitting with Dolores Kaboom."
+
+news loan_paid lpaid_3
+  head "Rechnung beglichen"
+  head_en "Account Settled"
+  text "{money} wechselten heute den Besitzer, und zwar freiwillig – eine Seltenheit im Büro von Barnaby Fin. {player} verließ das Gebäude auf eigenen Beinen. Auch das ist selten."
+  text_en "{money} changed hands today, voluntarily – a rarity at Barnaby Fin's office. {player} left the building on two working legs. Also rare."
+
+news loan_paid lpaid_4
+  head "Der Hai hat Hunger, aber keinen Anspruch"
+  head_en "Shark Still Hungry, No Longer Owed"
+  text "Barnaby Fin bestätigt den Eingang von {money}. „Ein Vergnügen, mit {player} Geschäfte zu machen“, sagte er und fügte leiser hinzu: „Bis zum nächsten Mal.“"
+  text_en "Barnaby Fin confirms receipt of {money}. ‘A pleasure doing business with {player},’ he said, adding more quietly: ‘Until next time.’"
+
+# ------------------------------------------------------------------------------------------------ sabotage
+
+news sabotage_caught scaught_1
+  head "Sabotage aufgeflogen!"
+  head_en "Sabotage Exposed!"
+  text "Am Wagen von {rival} wurde eine ältere Dame mit Schraubenschlüssel und Plätzchendose erwischt. Die Spur führt zu {player}. Strafe: {money}."
+  text_en "An elderly lady with a spanner and a cookie tin was caught at {rival}'s car. The trail leads to {player}. The fine: {money}."
+
+news sabotage_caught scaught_2
+  head "Schmutzige Tricks"
+  head_en "Dirty Tricks"
+  text "Die Rennleitung hat Manipulationen am Auto von {rival} festgestellt und gegen {player} eine Strafe von {money} verhängt. {rival} schwört Rache und hat schon Minen bestellt."
+  text_en "Race control found tampering on {rival}'s car and fined {player} {money}. {rival} has sworn revenge and already ordered mines."
+
+news sabotage_caught scaught_3
+  head "Zucker im Tank, Ärger im Fahrerlager"
+  head_en "Sugar in the Tank, Trouble in the Paddock"
+  text "Ein Wachmann erwischte eine Komplizin von {player} am Tankdeckel von {rival}. Mortimer Graves verhängte {money} Strafe und betonte: „Bei uns stirbt man fair.“"
+  text_en "A guard caught one of {player}'s accomplices at {rival}'s fuel cap. Mortimer Graves imposed a fine of {money} and stressed: ‘Here, we die fairly.’"
+
+news sabotage_caught scaught_4
+  head "Ertappt!"
+  head_en "Caught Red-Handed!"
+  text "Die Sabotage am Wagen von {rival} ist aufgeflogen. {player} zahlt {money} und hat einen neuen Feind. Die Täterin, eine reizende Seniorin, kam mit einer Verwarnung davon – und mit einem Dank für die Plätzchen."
+  text_en "The sabotage of {rival}'s car has come to light. {player} pays {money} and has made a new enemy. The culprit, a charming pensioner, got off with a caution – and thanks for the cookies."
+
+news sabotage_done sdone_1
+  head "Pech für {rival}"
+  head_en "Bad Luck for {rival}"
+  text "Bei {rival} lief heute rein gar nichts: Die Lenkung hakte, die Bremsen quietschten, und der Auspuff roch seltsam nach Vanille. Die Rennleitung ermittelt nicht."
+  text_en "Nothing went right for {rival} today: the steering stuck, the brakes squealed, and the exhaust smelled strangely of vanilla. Race control is not investigating."
+
+news sabotage_done sdone_2
+  head "Rätselhafte Panne"
+  head_en "Mysterious Breakdown"
+  text "{rival} klagte nach dem Rennen über „eine lockere Schraube, und zwar nicht im Kopf“. Ein Mechaniker fand eine Stricknadel im Getriebe. Niemand weiß, wie sie dorthin kam."
+  text_en "After the race {rival} complained of ‘a screw loose – and not in my head’. A mechanic found a knitting needle in the gearbox. Nobody knows how it got there."
+
+news sabotage_done sdone_3
+  head "Schwarzer Tag für {rival}"
+  head_en "Black Day for {rival}"
+  text "Ein platter Reifen, ein stotternder Motor, ein fluchender Mensch am Steuer: {rival} erlebte ein Rennen zum Vergessen. Insider tippen auf Sabotage, Außenstehende auf Pech. Wir tippen auf Plätzchen."
+  text_en "One flat tyre, one stuttering engine, one swearing driver: {rival} had a race to forget. Insiders suspect sabotage, outsiders bad luck. We suspect cookies."
+
+news sabotage_done sdone_4
+  head "{rival} vom Pech verfolgt"
+  head_en "{rival} Dogged by Misfortune"
+  text "Ob Zucker im Tank oder ein Fluch: {rival} kam nicht in Fahrt. In der Nähe der Box wurde eine ältere Dame in Strickjacke gesehen, die fröhlich winkte."
+  text_en "Whether it was sugar in the tank or a curse, {rival} never got going. An elderly lady in a cardigan was seen near the pits, waving cheerfully."
+
+# ------------------------------------------------------------------------------------------------ record
+
+news record rec_1
+  head "Rundenrekord für {player}"
+  head_en "Lap Record for {player}"
+  text "Schneller war noch niemand auf „{track}“: {player} stellt einen neuen Rundenrekord auf. Steinmetz Felsenfest bietet an, die Zeit kostenlos in Granit zu meißeln. Für später."
+  text_en "Nobody has ever been faster at {track}: {player} sets a new lap record. Set in Stone Monuments has offered to carve the time in granite free of charge. For later."
+
+news record rec_2
+  head "Die Stoppuhr glüht"
+  head_en "Stopwatch Glowing"
+  text "Bei „{track}“ fuhr {player} eine Runde, die selbst Ricky Rattle die Sprache verschlug – drei Sekunden lang, ebenfalls ein Rekord."
+  text_en "At {track} {player} drove a lap that left even Ricky Rattle speechless – for three whole seconds, a record in itself."
+
+news record rec_3
+  head "Schneller als der Tod"
+  head_en "Faster Than Death"
+  text "Der Sensenmann ist bekanntlich pünktlich, doch auf „{track}“ war {player} schneller. Neuer Rundenrekord! Der alte Rekordhalter liegt übrigens auf dem Friedhof nebenan."
+  text_en "The Reaper is famously punctual, but at {track} {player} was quicker. New lap record! The previous record holder, incidentally, lies in the cemetery next door."
+
+news record rec_4
+  head "Rekordverdächtig"
+  head_en "Record-Breaking"
+  text "{player} hat den Rundenrekord auf „{track}“ gebrochen. Die Konkurrenz brach dabei vor allem Achsen, Kotflügel und Herzen."
+  text_en "{player} has broken the lap record at {track}. The competition mostly broke axles, fenders and hearts."
+
+# ------------------------------------------------------------------------------------------------ bought_car
+
+news bought_car car_1
+  head "Neuer Wagen für {player}: {car}"
+  head_en "{player}'s New Wheels: {car}"
+  text "Für {money} hat sich {player} ein neues Auto gegönnt: {car}. Lazarus Sprocket nennt es „einen hervorragenden Gebrauchtwagen mit sehr wenigen Vorbesitzern, die noch leben“."
+  text_en "{player} has splashed out {money} on new wheels: {car}. Lazarus Sprocket calls it ‘an excellent used car with very few previous owners still alive’."
+
+news bought_car car_2
+  head "Autokauf mit Folgen"
+  head_en "A Purchase with Consequences"
+  text "{player} hat {money} in einen neuen Wagen investiert, Modell {car}. Graves & Sons gratuliert und weist darauf hin, dass der Kofferraum für einen Sarg zu klein ist. Man empfiehlt daher, vorsichtig zu fahren."
+  text_en "{player} has invested {money} in a new car, model {car}. Graves & Sons offers congratulations and points out that the boot is too small for a coffin. Careful driving is therefore recommended."
+
+news bought_car car_3
+  head "Neues Spielzeug"
+  head_en "New Toy"
+  text "Die Konkurrenz zittert, die Werkstatt jubelt: {player} rollt ab sofort im {car} vor. Kaufpreis: {money}. Wiederverkaufswert nach dem ersten Rennen: etwa die Hälfte. Nach dem zweiten: Schrottpreis."
+  text_en "Rivals tremble, the garage rejoices: {player} now rolls up in the {car}. Price: {money}. Resale value after the first race: about half. After the second: scrap."
+
+news bought_car car_4
+  head "{car}: Kaum gefahren"
+  head_en "{car}: Barely Driven"
+  text "{player} hat zugeschlagen: {money} für den {car}. Der Vorbesitzer war für eine Stellungnahme nicht zu erreichen. Er liegt auf dem Friedhof."
+  text_en "{player} has gone shopping: {money} for the {car}. The previous owner could not be reached for comment. He's in the cemetery."
+
+news bought_car car_5
+  head "Probefahrt bestanden"
+  head_en "Test Drive Passed"
+  text "Nach einer Probefahrt, bei der nur zwei Laternen umfielen, hat {player} den {car} für {money} gekauft. Ricky Rattle: „Ein schönes Auto. Das gibt ein schönes Wrack.“"
+  text_en "After a test drive that flattened only two lamp posts, {player} bought the {car} for {money}. Ricky Rattle: ‘Lovely car. It'll make a lovely wreck.’"
+
+# ------------------------------------------------------------------------------------------------ day (filler)
+
+news day day_1
+  head "Tag {days} im Grave Prix"
+  head_en "Grave Prix, Day {days}"
+  text "Die Sonne geht auf, die Motoren laufen warm, Graves & Sons poliert die Särge. Ein ganz normaler Tag im Grave Prix."
+  text_en "The sun comes up, the engines warm up, Graves & Sons polishes the caskets. Just another day in the Grave Prix."
+
+news day day_2
+  head "Das Wetter"
+  head_en "Weather"
+  text "Morgen bewölkt, später Niederschläge aus Öl und Schrapnell. Gegen Abend vereinzelt brennende Wracks. Sichtweite: gering. Lebenserwartung: geringer."
+  text_en "Cloudy tomorrow, with later showers of oil and shrapnel. Isolated burning wrecks towards evening. Visibility: poor. Life expectancy: poorer."
+
+news day day_3
+  head "Leserbrief der Woche"
+  head_en "Letter of the Week"
+  text "„Warum fahren die Rennwagen eigentlich immer im Kreis? Mein Mann ist vor drei Wochen losgefahren und noch nicht zurück.“ Die Redaktion antwortet: Er ist zurück. Allerdings liegend."
+  text_en "‘Why do the race cars always go round in circles? My husband set off three weeks ago and still isn't back.’ The editors reply: he is back. Lying down, admittedly."
+
+news day day_4
+  head "Graves & Sons expandiert"
+  head_en "Graves & Sons Expands"
+  text "Mortimer Graves hat einen weiteren Friedhof gekauft. „Die Nachfrage ist stabil“, sagte er auf der Pressekonferenz und lächelte dabei so freundlich, dass zwei Journalisten den Saal verließen."
+  text_en "Mortimer Graves has bought another cemetery. ‘Demand is stable,’ he told the press conference, smiling so warmly that two journalists left the room."
+
+news day day_5
+  head "Ratgeber: Richtig trauern"
+  head_en "Advice Column: Grieving Properly"
+  text "Unsere Trauerkolumnistin rät: Schwarz trägt man nicht nur auf der Beerdigung, sondern auch beim Grave Prix – Ölflecken fallen darauf kaum auf."
+  text_en "Our grief columnist advises: black isn't just for funerals, it's for the Grave Prix too – oil stains hardly show."
+
+news day day_6
+  head "Horoskop"
+  head_en "Horoscope"
+  text "Für alle Sternzeichen gilt diese Woche: Vorsicht in Kurven, Vorsicht vor Minen, Vorsicht vor älteren Damen mit Plätzchen. Glückszahl: die Startnummer des Vordermanns."
+  text_en "For all star signs this week: beware of corners, beware of mines, beware of elderly ladies bearing cookies. Lucky number: whatever's on the car in front."
+
+news day day_7
+  head "Radio Requiem sucht Verstärkung"
+  head_en "Radio Requiem Is Hiring"
+  text "Ricky Rattle sucht einen Co-Kommentator. Voraussetzungen: laute Stimme, starke Nerven, keine Angst vor verirrten Raketen. Der letzte Bewerber erfüllte alle drei – fast."
+  text_en "Ricky Rattle is looking for a co-commentator. Requirements: a loud voice, strong nerves and no fear of stray rockets. The last applicant met all three – nearly."
+
+news day day_8
+  head "Rezept der Woche"
+  head_en "Recipe of the Week"
+  text "Dolores Kaboom verrät ihr Plätzchenrezept: Mehl, Zucker, Butter und eine Prise Schwarzpulver für den gewissen Knall. Bitte nicht im heimischen Backofen nachmachen."
+  text_en "Dolores Kaboom shares her cookie recipe: flour, sugar, butter and a pinch of black powder for that extra pop. Please do not try this in your own oven."
+
+news day day_9
+  head "Vermischtes"
+  head_en "In Brief"
+  text "Auf dem Schrottplatz wurde ein Auto gefunden, das noch fährt. Fachleute sind ratlos. Der Besitzer hat sich nicht gemeldet, vermutlich aus Scham."
+  text_en "A car that still runs has been found at the scrap yard. Experts are baffled. The owner has not come forward, presumably out of embarrassment."
+
+news day day_10
+  head "Statistik"
+  head_en "Statistics"
+  text "Laut einer Umfrage des Sensenblatts halten neun von zehn Fahrern des Grave Prix das Rennen für gefährlich. Der zehnte war für eine Antwort nicht mehr erreichbar."
+  text_en "According to a Grim Reader poll, nine out of ten Grave Prix drivers consider the racing dangerous. The tenth could no longer be reached for comment."
+
+news day day_11
+  head "Verkehrsmeldung"
+  head_en "Traffic News"
+  text "Auf der Ringstraße staut sich der Verkehr hinter einem Leichenwagen im Schritttempo. Autofahrer werden gebeten, nicht zu überholen. Es könnte Mortimer Graves sein."
+  text_en "Traffic is backed up on the ring road behind a hearse doing walking pace. Motorists are asked not to overtake. It might be Mortimer Graves."
+
+news day day_12
+  head "Tag {days}: Noch alle da?"
+  head_en "Day {days}: Everyone Still Here?"
+  text "Wir haben durchgezählt. Fast alle. Die Redaktion bittet die Übrigen, sich bei Graves & Sons zu melden – oder sich wenigstens nicht zu beschweren."
+  text_en "We did a head count. Nearly everyone. The editors ask the rest to report to Graves & Sons – or at least not to complain."
+
+news day day_13
+  head "Kulturtipp"
+  head_en "Culture Corner"
+  text "Der Friedhofsorganist gibt am Sonntag ein Konzert in der Kapelle. Auf dem Programm: drei Trauermärsche und zur Abwechslung ein vierter. Eintritt frei, Austritt ungewiss."
+  text_en "The cemetery organist gives a recital in the chapel on Sunday. On the programme: three funeral marches and, for a change, a fourth. Admission free; exit uncertain."
+
+news day day_14
+  head "Wissenschaft"
+  head_en "Science"
+  text "Forscher haben herausgefunden, dass Rennfahrer mit Glücksbringern genauso oft verunglücken wie Rennfahrer ohne. Der Unterschied: Sie sind dabei besser gelaunt."
+  text_en "Researchers have found that racing drivers with lucky charms crash just as often as those without. The difference: they're in a better mood when they do."
+
+# ------------------------------------------------------------------------------------------------ classified ads
+
+ad ad_01
+  text "VERLOREN: linker Arm, guter Zustand, Ehering noch dran. Ehrliche Finder bitte melden bei L., Fahrerlager 5. Belohnung!"
+  text_en "LOST: left arm, good condition, wedding ring still on. Honest finder please contact L., paddock 5. Reward!"
+
+ad ad_02
+  text "Sarg, kaum benutzt, nur einmal probegelegen. Eiche, Seidenfutter, 300 $ VB."
+  text_en "Coffin, barely used, lain in once for a test. Oak, silk lining, $300 or nearest offer."
+
+ad ad_03
+  text "Graves & Sons: Jetzt zwei Beerdigungen zum Preis von einer! Gilt nur bei gleichzeitigem Ableben."
+  text_en "Graves & Sons: two funerals for the price of one! Valid for simultaneous departures only."
+
+ad ad_04
+  text "Unfallwagen zu verkaufen. Fährt nicht mehr, brennt aber noch wunderschön. Ideal als Kaminersatz. 50 $."
+  text_en "Crashed car for sale. Doesn't run, but still burns beautifully. Makes an ideal fireplace. $50."
+
+ad ad_05
+  text "Kleingedruckt Lebensversicherung: Wir zahlen im Todesfall sofort aus.* (*Gilt nicht bei Tod.)"
+  text_en "Fine Print Life Assurance: we pay out immediately in the event of death.* (*Death excluded.)"
+
+ad ad_06
+  text "Beifahrer für den Grave Prix gesucht. Keine Erfahrung nötig, Lebensversicherung von Vorteil, Testament Pflicht."
+  text_en "Co-driver wanted for the Grave Prix. No experience necessary, life insurance an advantage, will compulsory."
+
+ad ad_07
+  text "Grabstein mit Tippfehler abzugeben. Ideal für alle, die „Gerd Schmitd“ heißen. Oder heißen werden."
+  text_en "Headstone with typo for sale. Ideal for anyone called ‘Gerlad Smith’. Or planning to be."
+
+ad ad_08
+  text "Trauerredner, stets gut gelaunt, bringt eigene Witze mit. Auch für Junggesellenabschiede buchbar."
+  text_en "Eulogist, always cheerful, brings own jokes. Also available for stag nights."
+
+ad ad_09
+  text "Krematorium Aschenputtel: Diese Woche alle Urnen zum halben Preis. Inhalt nicht inbegriffen."
+  text_en "Urn Your Keep Crematorium: all urns half price this week. Contents not included."
+
+ad ad_10
+  text "GEFUNDEN: eine Stoßstange, ein Auspuff und ein Gebiss. Der Eigentümer möge sich melden, sofern noch möglich."
+  text_en "FOUND: one bumper, one exhaust pipe and a set of false teeth. Would the owner please get in touch, if still able."
+
+ad ad_11
+  text "Fahrschule Bleifuß: Führerschein in drei Tagen. Beerdigung in vier."
+  text_en "Lead Foot Driving School: licence in three days. Funeral in four."
+
+ad ad_12
+  text "Wahrsagerin sagt Ihre Platzierung voraus. Trefferquote bei Platz sechs: 100 Prozent."
+  text_en "Fortune teller predicts your finishing position. Accuracy for sixth place: 100 percent."
+
+ad ad_13
+  text "Minen aus Haushaltsauflösung abzugeben, teilweise noch scharf. Nur an Selbstabholer – Lieferung zu gefährlich."
+  text_en "Mines from a house clearance, some still live. Collection only – delivery too dangerous."
+
+ad ad_14
+  text "Witwe, 62, sucht Mann mit Lebensversicherung. Hobbys: Kochen, Pilze sammeln, steile Treppen."
+  text_en "Widow, 62, seeks man with life insurance. Hobbies: cooking, mushroom picking, steep staircases."
+
+ad ad_15
+  text "Blumen Welk: Kränze, die länger halten als Ihre Fahrer. Drei Tage Frische garantiert."
+  text_en "The Wilting Lily: wreaths that last longer than your drivers. Three days' freshness guaranteed."
+
+ad ad_16
+  text "Gebrauchte Airbags abzugeben. Einmal aufgeblasen, leicht ausgeleiert, riechen nach Angst."
+  text_en "Used airbags for sale. Inflated once, slightly saggy, smell faintly of fear."
+
+ad ad_17
+  text "Steinmetz Felsenfest: Ihre letzten Worte in Granit. Die ersten zehn Wörter gratis, danach Abrechnung pro Buchstabe. Fassen Sie sich kurz."
+  text_en "Set in Stone Monuments: your last words in granite. First ten words free, then charged per letter. Keep it brief."
+
+ad ad_18
+  text "Schalldichte Särge für Langschläfer. Auch mit Weckfunktion erhältlich – für alle, die sich nicht ganz sicher sind."
+  text_en "Soundproof coffins for heavy sleepers. Also available with an alarm – for those who aren't quite sure."
+
+ad ad_19
+  text "Zu verschenken: Kater, schwarz, bringt Unglück. Grave-Prix-Fahrer bitte nicht melden."
+  text_en "Free to a good home: black cat, brings bad luck. Grave Prix drivers need not apply."
+
+ad ad_20
+  text "Abschleppdienst Am Haken: Wir holen Sie ab – egal, in wie vielen Teilen."
+  text_en "Off the Hook Towing: we'll pick you up – however many pieces you're in."
+
+ad ad_21
+  text "Thanatokosmetik Rosig: Wir machen aus jedem Unfallopfer einen Hingucker. Lebende Kundschaft nach Vereinbarung."
+  text_en "Rosy Cheeks Post-Mortem Beauty: we turn every crash victim into a looker. Living clients by appointment."
+
+ad ad_22
+  text "Lebensversicherung günstig abzugeben. Versicherte Person wohlauf, aber nicht mehr lange. Ernst gemeinte Angebote unter Chiffre 666."
+  text_en "Life insurance policy going cheap. Policyholder alive and well – but not for long. Serious offers to box 666."
+
+ad ad_23
+  text "Testamentsvollstrecker mit Erfahrung im Motorsport gesucht. Die Bezahlung erfolgt posthum."
+  text_en "Wanted: executor with motorsport experience. Payment made posthumously."
+
+ad ad_24
+  text "Ersatzteile aus erster Hand! Jedes Teil mit Geschichte. Die meisten Geschichten enden traurig."
+  text_en "Spare parts, first hand! Every part comes with a story. Most of the stories end badly."
+
+ad ad_25
+  text "Selbsthilfegruppe „Anonyme Geisterfahrer“ trifft sich dienstags. Bitte aus der richtigen Richtung anreisen."
+  text_en "Support group ‘Wrong-Way Drivers Anonymous’ meets on Tuesdays. Please approach from the correct direction."
+
+ad ad_26
+  text "VERLOREN: Rückspiegel, Ehre und rechter Schuh. Vermisst wird nur der Schuh."
+  text_en "LOST: one rear-view mirror, one sense of honour and one right shoe. Only the shoe is missed."
+
+ad ad_27
+  text "Bestattungshaus Prunk & Pomp vermietet Klageweiber. Heulen nach Stunden, Schluchzen nach Vereinbarung, Ohnmachtsanfälle gegen Aufpreis."
+  text_en "Pomp & Circumstance hires out professional mourners. Wailing by the hour, sobbing by arrangement, fainting fits extra."
+
+ad ad_28
+  text "Lazarus' Werkstatt: Wir reparieren alles. Außer Ihrem Ruf."
+  text_en "Lazarus' Garage: we fix anything. Except your reputation."
+
+ad ad_29
+  text "Nachhilfe in Physik: Was passiert, wenn 1.500 kg auf eine Betonwand treffen? Praktische Vorführung inklusive."
+  text_en "Physics tutoring: what happens when 1,500 kg meets a concrete wall? Practical demonstration included."
+
+ad ad_30
+  text "Trauerkarten im Zehnerpack, vorgedruckt: „Er fuhr schneller, als er konnte.“ Auch in der weiblichen Form erhältlich."
+  text_en "Sympathy cards, pack of ten, pre-printed: ‘Drove faster than he could.’ Also available in the feminine."
+
+ad ad_31
+  text "Kistenkönig Sarg-Discount: Särge zum Selberbauen. Am Ende drei Schrauben übrig? Ganz normal."
+  text_en "Crate Expectations: flat-pack caskets. Three screws left over at the end? Perfectly normal."
+
+ad ad_32
+  text "Crashtest-Dummy gesucht, belastbar, gern auch echt. Bezahlung nach Aufprall."
+  text_en "Wanted: crash-test dummy, resilient, real people welcome. Paid on impact."
+
+ad ad_33
+  text "Glücksbringer aus Unfallwagen: Hufeisen, Hasenpfoten, Würfel. Haben den Vorbesitzern leider nicht geholfen. 5 $ das Stück."
+  text_en "Lucky charms salvaged from wrecks: horseshoes, rabbit's feet, dice. Didn't help the previous owners, sadly. $5 each."
+
+ad ad_34
+  text "Einbalsamierung Ewig Frisch: Bei uns sehen Sie besser aus als zu Lebzeiten. Garantiert, sonst Geld zurück (an die Erben)."
+  text_en "Forever Fresh Embalming: look better than you did alive. Guaranteed, or your money back (to your heirs)."
+
+ad ad_35
+  text "Zimmer frei in ruhiger Lage direkt am Friedhof. Nachbarn sehr still, keine Partys, nie Beschwerden."
+  text_en "Room to let in a quiet spot right by the cemetery. Very quiet neighbours, no parties, never a complaint."
+
+ad ad_36
+  text "Kurs „Erste Hilfe am Unfallort“ und Kurs „Letzte Hilfe am Unfallort“. Beide montags, gleicher Raum, verschiedene Ausgänge."
+  text_en "Courses: ‘First Aid at the Crash Site’ and ‘Last Aid at the Crash Site’. Both on Mondays, same room, different exits."
+
+ad ad_37
+  text "Pfandleihe: Wir nehmen alles. Goldzähne, Orden, Lenkräder. Keine Fragen, keine Quittungen."
+  text_en "Pawnbroker: we take anything. Gold teeth, medals, steering wheels. No questions, no receipts."
+
+ad ad_38
+  text "Rennanzug zu verkaufen, Größe M, ein Vorbesitzer, kleine Brandlöcher, riecht nach Benzin und Ruhm."
+  text_en "Racing suit for sale, size M, one previous owner, small scorch holes, smells of petrol and glory."
+
+ad ad_39
+  text "Gartenfriedhof Elysium: Jetzt Grabstellen mit Seeblick reservieren! Den See füllen wir nächstes Jahr."
+  text_en "Elysian Acres: reserve your lakeside plot now! We'll fill the lake next year."
+
+ad ad_40
+  text "Bestattungs-Sparplan: Jetzt monatlich einzahlen, später würdevoll liegen. Bei vorzeitigem Ableben verfällt das Guthaben."
+  text_en "Funeral savings plan: pay in monthly now, lie in dignity later. Early departure forfeits the balance."
+
+ad ad_41
+  text "Bremsen, nagelneu, nie benutzt. Der Vorbesitzer hielt sie für überflüssig. Nachlassverkauf."
+  text_en "Brakes, brand new, never used. The previous owner considered them unnecessary. Estate sale."
+
+ad ad_42
+  text "Brautkleid, einmal getragen, und Trauerkleid, fünfmal getragen. Zusammen 100 $. Zuschriften an W. W."
+  text_en "Wedding dress, worn once, and mourning dress, worn five times. $100 the pair. Write to W. W."
+
+ad ad_43
+  text "Sargträger gesucht, kräftig und pünktlich. Ein Nebenjob mit Zukunft – die Kundschaft geht uns nie aus."
+  text_en "Pallbearers wanted, strong and punctual. A side job with a future – we never run out of customers."
+
+ad ad_44
+  text "Gebe Unterricht im Schreiben von Nachrufen. Die erste Stunde ist gratis, die letzte auch."
+  text_en "Lessons in obituary writing. The first lesson is free, and so is the last."
+
+ad ad_45
+  text "Partnervermittlung „Bis dass der Tod“: Wir finden Partner mit kurzer Laufzeit."
+  text_en "‘Till Death’ Dating Agency: matching you with partners on short-term contracts."
+
+ad ad_46
+  text "Tausche Lebensversicherung gegen Nitro. Dringend!"
+  text_en "Will swap life insurance for nitro. Urgent!"
+
+ad ad_47
+  text "Rennwagen zu verkaufen. Unfallfrei! (Alle Unfälle sind bereits passiert.)"
+  text_en "Race car for sale. Accident-free! (All the accidents have already happened.)"
+
+ad ad_48
+  text "Graves & Sons bildet aus: Bestattungsfachkraft (m/w/d). Wir bieten einen krisensicheren Arbeitsplatz – gestorben wird immer."
+  text_en "Graves & Sons is taking on apprentices. We offer a recession-proof career – people never stop dying."
+
+ad ad_49
+  text "VERLOREN: Glöckchen an einer Schnur. Ehrliche Finder dürfen es behalten, falls sie jemals lebendig begraben werden."
+  text_en "LOST: little bell on a string. Honest finder may keep it, in case they're ever buried alive."
+
+ad ad_50
+  text "Kredite ohne Fragen, ohne Formulare, ohne Kniescheibengarantie. Barnaby Fin, Finanzdienstleistungen mit Biss."
+  text_en "Loans with no questions, no forms and no kneecap guarantee. Barnaby Fin, financial services with bite."

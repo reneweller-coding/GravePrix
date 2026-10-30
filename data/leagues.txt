@@ -1,0 +1,73 @@
+# The five leagues of the Grave Prix (5 the lowest .. 1 the top) and the final on Graves' estate.
+# The higher the league, the better the grave: that is the whole ladder.
+
+league 5
+  title "Armengrab"
+  title_en "Pauper's Grave"
+  desc "Rostlauben, Schrottplätze, Friedhofsnebel. Wer hier stirbt, bekommt eine Kiste aus Paletten und einen Nachruf in Schriftgröße sechs."
+  desc_en "Rust buckets, scrap yards, graveyard fog. Die down here and you get a box made of pallets and an obituary in six-point type."
+  venues junkyard cemetery
+  purse 1200
+  entry 0
+  points 10 6 4 3 2 1
+  showdown 40
+  intro league_5
+
+league 4
+  title "Reihengrab"
+  title_en "Death Row"
+  desc "Hafenkräne, Wüstenstaub, die ersten echten Raketen. Die Gräber stehen hier schon ordentlich in Reih und Glied – genau wie die Wartenden."
+  desc_en "Harbour cranes, desert dust, the first real rockets. The graves here stand in neat rows – and so do the people waiting for them."
+  venues docks desert
+  purse 3500
+  entry 300
+  points 10 6 4 3 2 1
+  showdown 40
+  intro league_4
+
+league 3
+  title "Familiengruft"
+  title_en "Family Plot"
+  desc "Raffinerien und Sümpfe, Öl und Schlamm. Hier fährt man nicht mehr für sich allein, sondern für ein Plätzchen bei den Ahnen."
+  desc_en "Refineries and swamps, oil and mud. You no longer race just for yourself – you race for a spot next to the ancestors."
+  venues refinery swamp
+  purse 9000
+  entry 900
+  points 10 6 4 3 2 1
+  showdown 40
+  intro league_3
+
+league 2
+  title "Staatsbegräbnis"
+  title_en "Lying in State"
+  desc "Neon in der Stadt, Eis auf dem Pass. Wer hier verunglückt, bekommt Blaskapelle, Fahnen und eine Live-Übertragung."
+  desc_en "Neon downtown, ice on the pass. Crash here and you get a brass band, flags at half-mast and live coverage."
+  venues downtown pass
+  purse 22000
+  entry 2500
+  points 10 6 4 3 2 1
+  showdown 40
+  intro league_2
+
+league 1
+  title "Pharaonengrab"
+  title_en "Pharaoh's Tomb"
+  desc "Rummelplatz und Truppenübungsplatz: die Spitze der Pyramide. Wer hier fährt, wird nicht beerdigt, sondern beigesetzt – mit Grabbeigaben."
+  desc_en "Fairground and proving ground: the tip of the pyramid. Up here you aren't buried, you're entombed – with grave goods."
+  venues fairground proving
+  purse 50000
+  entry 6000
+  points 10 6 4 3 2 1
+  showdown 40
+  intro league_1
+
+# The final: one race against Mortimer Graves on his estate.
+league 0
+  title "Das letzte Geleit"
+  title_en "The Last Procession"
+  desc "Ein Rennen, ein Anwesen, ein Leichenwagen mit Panzerung. Mortimer Graves bittet zum letzten Tanz – die Blumen sind schon bestellt."
+  desc_en "One race, one estate, one armoured hearse. Mortimer Graves requests the last dance – the flowers have already been ordered."
+  venues estate
+  purse 150000
+  entry 0
+  intro boss

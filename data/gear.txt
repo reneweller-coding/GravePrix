@@ -1,0 +1,91 @@
+# The black market (docs/DESIGN.md "Guns, gear and upgrades"): what can be carried into a race.
+# price is per pack; max is the most a car can carry; league is when it goes on sale (5 the lowest).
+# Yardstick: a race win pays 1200 in league 5 and 50000 in league 1.
+
+gear mine
+  title "Grabbeigabe" title_en "Grave Goods"
+  desc "Hinten fallen lassen – der Hintermann nimmt sie mit ins Grab. Scharf nach einer halben Sekunde, geduldig für anderthalb Minuten."
+  desc_en "Drop it behind you – the driver behind takes it to the grave. Armed after half a second, patient for a minute and a half."
+  kind mine
+  price 150
+  pack 3
+  max 9
+  league 5
+  damage 30 radius=3.5 arm=0.6 life=90
+
+gear rocket
+  title "Himmelfahrt" title_en "Ascension"
+  desc "Zielsuchend, zuverlässig, endgültig: findet den Vordermann und schickt ihn ein Stockwerk höher."
+  desc_en "Heat-seeking, reliable, final: finds the car in front and sends it one floor up."
+  kind rocket
+  price 700
+  pack 2
+  max 6
+  league 3
+  damage 42 radius=4.5 speed=75 turn=110 cone=30
+
+gear spikes
+  title "Nagelbett" title_en "Bed of Nails"
+  desc "Ein Streifen Nägel für Reifen, die zu viel Luft haben. Danach fährt der Hintermann wie auf Socken."
+  desc_en "A strip of nails for tyres with too much air in them. Afterwards the car behind drives like it's in socks."
+  kind spikes
+  price 300
+  pack 2
+  max 6
+  league 4
+  damage 10 slow=3 life=40
+
+gear oil
+  title "Letzte Ölung" title_en "Last Rites"
+  desc "Ein Kanister Altöl, gesegnet und verschüttet. Der Hintermann rutscht direkt ins Jenseits."
+  desc_en "A can of used oil, blessed and spilled. The car behind slides straight into the hereafter."
+  kind oil
+  price 120
+  pack 2
+  max 6
+  league 5
+  life 25
+
+gear smoke
+  title "Weihrauch" title_en "Incense"
+  desc "Eine Wolke wie bei der Totenmesse. Wer drinsteckt, sieht nur noch das Licht am Ende des Tunnels."
+  desc_en "A cloud like at a requiem mass. Whoever's inside only sees the light at the end of the tunnel."
+  kind smoke
+  price 220
+  pack 2
+  max 6
+  league 4
+  life 8
+
+gear nitro
+  title "Wiederbelebung" title_en "Resuscitation"
+  desc "Ein Stoß Lachgas direkt ins Herz des Motors. Manche Motoren kommen davon erst richtig zu sich – andere nie wieder."
+  desc_en "A shot of laughing gas straight to the engine's heart. Some engines only really come round after it – others never again."
+  kind nitro
+  price 250
+  pack 2
+  max 6
+  league 5
+  boost 12 dur=2.2
+
+gear ram
+  title "Sargdeckel" title_en "Coffin Lid"
+  desc "Ein massiver Sargdeckel als Frontpanzer: Rammstöße richten doppelten Schaden an – beim anderen – und nur halben bei dir."
+  desc_en "A solid coffin lid bolted to the nose: rams do double damage – to the other guy – and only half to you."
+  kind ram
+  price 6000
+  pack 1
+  max 1
+  league 4
+  mult 2 self=0.5
+
+gear plating
+  title "Grabplatte" title_en "Tombstone Plating"
+  desc "Eine Granitplatte vom Steinmetz, aufs Blech geschraubt. Schwer, hässlich, lebensverlängernd. Die Inschrift kostet extra."
+  desc_en "A granite slab from the stonemason, bolted to the bodywork. Heavy, ugly, life-prolonging. The inscription costs extra."
+  kind plating
+  price 1800
+  pack 1
+  max 3
+  league 5
+  hp 40

@@ -1,0 +1,312 @@
+# Desert props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_docks_desert.py.
+
+# a 5 m saguaro with two arms
+model cactus scale=1.4
+  part dome r=0.7 ry=0.25 color=#c8a870 seg=8
+  part disc r=0.32 h=3.1 y=1.55 seg=8 color=#4a6e3a
+  part dome r=0.32 ry=0.28 y=3.1 color=#4a6e3a seg=8
+  part gun r=0.19 r2=0.2 len=0.559 x=0.425 y=1.55 pitch=10.3 rot=90 seg=7 color=#4a6e3a
+  part disc r=0.19 h=1.2 x=0.7 y=2.02 seg=7 color=#4a6e3a
+  part dome r=0.19 ry=0.16 x=0.7 y=2.62 color=#4a6e3a seg=7
+  part gun r=0.171 r2=0.18 len=0.461 x=-0.375 y=1.15 pitch=12.53 rot=-90 seg=7 color=#4a6e3a
+  part disc r=0.171 h=0.8 x=-0.6 y=1.428 seg=7 color=#4a6e3a
+  part dome r=0.171 ry=0.144 x=-0.6 y=1.828 color=#4a6e3a seg=7
+  part sphere r=0.07 y=3.38 color=#e05a8a seg=5
+  part sphere r=0.06 x=0.15 y=3.3 color=#f0d040 seg=5
+
+# an 8.5 m saguaro with four arms
+model cactus_tall scale=1.3
+  part dome r=1 ry=0.3 color=#c8a870 seg=8
+  part disc r=0.45 h=5.9 y=2.95 seg=9 color=#46683a
+  part dome r=0.45 ry=0.4 y=5.9 color=#46683a seg=9
+  part gun r=0.266 r2=0.28 len=0.747 x=0.58 y=2.45 pitch=7.7 rot=90 seg=7 color=#4a6e3a
+  part disc r=0.266 h=2.1 x=0.95 y=3.338 seg=7 color=#4a6e3a
+  part dome r=0.266 ry=0.224 x=0.95 y=4.388 color=#4a6e3a seg=7
+  part gun r=0.247 r2=0.26 len=0.648 x=-0.53 y=3.35 pitch=8.88 rot=-90 seg=7 color=#4a6e3a
+  part disc r=0.247 h=1.8 x=-0.85 y=4.096 seg=7 color=#4a6e3a
+  part dome r=0.247 ry=0.208 x=-0.85 y=4.996 color=#4a6e3a seg=7
+  part gun r=0.24 len=0.9 rot=0 x=0 y=2 z=0.7 color=#4a6e3a seg=7
+  part disc r=0.24 h=1.6 y=2.7 z=1.1 seg=7 color=#4a6e3a
+  part dome r=0.24 ry=0.2 y=3.5 z=1.1 color=#4a6e3a seg=7
+
+# red sandstone: a hoodoo spire with a cap rock and weathered boulders, ~6 m
+model rock_red
+  part sphere r=2.6 rx=2.469 ry=1.6 rz=2.618 x=0 y=0.72 z=0 rot=57.15 color=#9a4a2a seg=6 noise=0.12   # boulders
+  part sphere r=1.7 rx=1.774 ry=1.2 rz=1.47 x=2.4 y=0.54 z=1 rot=71.337 color=#b0603a seg=6 noise=0.12
+  part sphere r=1.5 rx=1.714 ry=1 rz=1.431 x=-2.2 y=0.45 z=1.2 rot=45.458 color=#a45232 seg=6 noise=0.12
+  part sphere r=1.3 rx=1.262 ry=0.9 rz=1.041 x=1 y=0.405 z=-2 rot=33.394 color=#b86a42 seg=6 noise=0.12
+  part sphere r=1 rx=1.076 ry=0.8 rz=0.821 x=-1.4 y=0.36 z=-1.6 rot=71.438 color=#8e4426 seg=6 noise=0.12
+  part sphere r=1.25 ry=0.806 x=0 y=1.65 z=0 rot=0 color=#b0603a seg=6 noise=0.1   # the hoodoo
+  part ring r=1.188 thick=0.07 y=1.195 color=#d8a070 seg=7
+  part sphere r=1 ry=0.682 x=0.2 y=2.785 z=-0.1 rot=25 color=#a45232 seg=6 noise=0.1
+  part ring r=0.95 thick=0.07 x=0.2 y=2.4 z=-0.1 color=#d8a070 seg=7
+  part sphere r=1.15 ry=0.62 x=0 y=3.78 z=-0.2 rot=50 color=#b86a42 seg=6 noise=0.1
+  part ring r=1.092 thick=0.07 y=3.43 z=-0.2 color=#d8a070 seg=7
+  part sphere r=0.8 ry=0.744 x=0.2 y=4.83 z=-0.3 rot=75 color=#8e4426 seg=6 noise=0.1
+  part ring r=0.76 thick=0.07 x=0.2 y=4.41 z=-0.3 color=#d8a070 seg=7
+  part sphere r=1.7 rx=1.9 ry=0.45 rz=1.5 x=0.3 y=5.62 rot=30 color=#7e3a20 seg=6 noise=0.1   # the cap rock
+
+# a bleached cow skull and a few ribs on the sand (scaled up to read from above)
+model skull_cow scale=1.6
+  part sphere r=0.24 y=0.17 z=0.05 color=#e6dcc4 rx=0.26 rz=0.28 seg=8
+  part box w=0.24 h=0.16 d=0.42 y=0.1 z=-0.32 color=#e6dcc4 taper=0.25
+  part sphere r=0.06 x=-0.12 y=0.24 z=-0.08 color=#1a140e seg=6
+  part gun r=0.05 r2=0.07 len=0.362 x=-0.375 y=0.275 z=0.04 pitch=7.93 rot=-77.12 seg=5 color=#d8ccb0
+  part gun r=0.015 r2=0.05 len=0.303 x=-0.635 y=0.41 z=-0.06 pitch=46.59 rot=-54.78 seg=5 color=#d8ccb0
+  part sphere r=0.06 x=0.12 y=0.24 z=-0.08 color=#1a140e seg=6
+  part gun r=0.05 r2=0.07 len=0.362 x=0.375 y=0.275 z=0.04 pitch=7.93 rot=77.12 seg=5 color=#d8ccb0
+  part gun r=0.015 r2=0.05 len=0.303 x=0.635 y=0.41 z=-0.06 pitch=46.59 rot=54.78 seg=5 color=#d8ccb0
+  part gun r=0.035 len=0.912 x=0.05 y=0.04 z=0.775 rot=99.46 seg=4 color=#e6dcc4
+  part gun r=0.035 len=0.912 x=0.05 y=0.04 z=0.995 rot=99.46 seg=4 color=#e6dcc4
+  part gun r=0.035 len=0.912 x=0.05 y=0.04 z=1.215 rot=99.46 seg=4 color=#e6dcc4
+  part gun r=0.035 len=0.912 x=0.05 y=0.04 z=1.435 rot=99.46 seg=4 color=#e6dcc4
+  part gun r=0.05 len=0.728 x=0.55 y=0.04 z=1.5 rot=74.05 seg=5 color=#e6dcc4
+
+# the 'Last Stop' motel: eight rooms under a walkway, an office, a cracked parking lot
+model motel
+  part box w=34 h=0.12 d=16 y=0.06 z=-2 color=#9a948a
+  part box w=0.15 h=0.02 d=4 x=-15 y=0.13 z=-8 color=#e8e4d4   # parking lines
+  part box w=0.15 h=0.02 d=4 x=-11.8 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=-8.6 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=-5.4 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=-2.2 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=1 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=4.2 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=7.4 y=0.13 z=-8 color=#e8e4d4
+  part box w=0.15 h=0.02 d=4 x=10.6 y=0.13 z=-8 color=#e8e4d4
+  part box w=26 h=3.4 d=8 x=-3 y=1.7 z=1.5 color=#c89a8a
+  part box w=26.4 h=0.35 d=8.4 x=-3 y=3.575 z=1.5 color=#e8e0d0
+  part box w=0.95 h=2.1 d=0.06 x=-14.2 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=-14.2 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=-12.8 y=1.5 z=-2.53 color=#d8a050
+  part box w=0.95 h=2.1 d=0.06 x=-11 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=-11 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=-9.6 y=1.5 z=-2.53 color=#2a3a44
+  part box w=0.95 h=2.1 d=0.06 x=-7.8 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=-7.8 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=-6.4 y=1.5 z=-2.53 color=#2a3a44
+  part box w=0.95 h=2.1 d=0.06 x=-4.6 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=-4.6 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=-3.2 y=1.5 z=-2.53 color=#d8a050
+  part box w=0.95 h=2.1 d=0.06 x=-1.4 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=-1.4 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=0 y=1.5 z=-2.53 color=#2a3a44
+  part box w=0.95 h=2.1 d=0.06 x=1.8 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=1.8 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=3.2 y=1.5 z=-2.53 color=#2a3a44
+  part box w=0.95 h=2.1 d=0.06 x=5 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=5 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=6.4 y=1.5 z=-2.53 color=#d8a050
+  part box w=0.95 h=2.1 d=0.06 x=8.2 y=1.05 z=-2.53 color=#5aa8a0
+  part box w=0.3 h=0.12 d=0.03 x=8.2 y=1.81 z=-2.57 color=#f0e8d0
+  part box w=1.3 h=1 d=0.05 x=9.6 y=1.5 z=-2.53 color=#2a3a44
+  part box w=26 h=0.15 d=2.8 x=-3 y=3.275 z=-4 color=#e8e0d0   # walkway roof
+  part box w=26 h=0.45 d=0.1 x=-3 y=3.175 z=-5.4 color=#5aa8a0
+  part box w=0.14 h=3.2 d=0.14 x=-15.8 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=-12.6 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=-9.4 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=-6.2 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=-3 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=0.2 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=3.4 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=6.6 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=0.14 h=3.2 d=0.14 x=9.8 y=1.6 z=-5.25 color=#e8e0d0
+  part box w=1.4 h=0.8 d=1.2 x=-12 y=4.15 z=2 color=#a8aaa8
+  part disc r=0.45 h=0.06 x=-12 y=4.58 z=2 color=#3a3a3a seg=8
+  part box w=1.4 h=0.8 d=1.2 x=-4 y=4.15 z=3 color=#a8aaa8
+  part disc r=0.45 h=0.06 x=-4 y=4.58 z=3 color=#3a3a3a seg=8
+  part box w=1.4 h=0.8 d=1.2 x=4 y=4.15 z=1.5 color=#a8aaa8
+  part disc r=0.45 h=0.06 x=4 y=4.58 z=1.5 color=#3a3a3a seg=8
+  part box w=1.4 h=0.8 d=1.2 x=8 y=4.15 z=3.5 color=#a8aaa8
+  part disc r=0.45 h=0.06 x=8 y=4.58 z=3.5 color=#3a3a3a seg=8
+  part box w=6 h=4.2 d=7 x=13 y=2.1 z=0.5 color=#5aa8a0   # office
+  part box w=6.3 h=0.3 d=7.3 x=13 y=4.35 z=0.5 color=#e8e0d0
+  part box w=4 h=1.8 d=0.06 x=13 y=1.9 z=-3.03 color=#2a3a44
+  part box w=3 h=0.7 d=0.2 x=13 y=4.85 z=-2.4 color=#c02a1a
+  part box w=2.6 h=0.4 d=0.05 x=13 y=4.85 z=-2.52 color=#f0e8d0
+  part box w=0.9 h=1.8 d=0.7 x=9.6 y=0.9 z=-3.6 color=#c02a1a   # soda machine
+  part box w=0.8 h=0.6 d=0.05 x=9.6 y=1.3 z=-3.97 color=#f0e0c0 emit=0.3
+  part box w=0.6 h=0.02 d=3 x=2 y=0.14 z=-7 color=#5a5650 rot=30   # cracks
+
+# the 9 m motel sign: a red board, a bulb-lit star, an arrow, 'NO VACANCY' lit
+model motel_sign lamp=1
+  part gun r=0.16 len=6.4 x=-1.4 y=3.2 z=0.2 pitch=90 seg=6 color=#6a6a6e
+  part gun r=0.16 len=6.4 x=1.4 y=3.2 z=0.2 pitch=90 seg=6 color=#6a6a6e
+  part plate pts="-2.4,0;2.4,0;2.4,2.8;-2.4,2.8" thick=0.2 pitch=-78 y=5.4 color=#e8c020
+  part plate pts="-2.2,0.2;2.2,0.2;2.2,2.6;-2.2,2.6" thick=0.2 pitch=-78 y=5.4 z=-0.06 color=#c02a1a
+  part plate pts="-1.8,1.5;-1.25,1.5;-1.25,2.2;-1.8,2.2" thick=0.06 pitch=-78 y=5.431 z=-0.147 color=#f8f0d8 emit=0.3   # lettering
+  part plate pts="-1.05,1.5;-0.5,1.5;-0.5,2.2;-1.05,2.2" thick=0.06 pitch=-78 y=5.431 z=-0.147 color=#f8f0d8 emit=0.3
+  part plate pts="-0.3,1.5;0.25,1.5;0.25,2.2;-0.3,2.2" thick=0.06 pitch=-78 y=5.431 z=-0.147 color=#f8f0d8 emit=0.3
+  part plate pts="0.45,1.5;1,1.5;1,2.2;0.45,2.2" thick=0.06 pitch=-78 y=5.431 z=-0.147 color=#f8f0d8 emit=0.3
+  part plate pts="1.2,1.5;1.75,1.5;1.75,2.2;1.2,2.2" thick=0.06 pitch=-78 y=5.431 z=-0.147 color=#f8f0d8 emit=0.3
+  part plate pts="0,4.8;0.265,4.164;0.951,4.109;0.428,3.661;0.588,2.991;0,3.35;-0.588,2.991;-0.428,3.661;-0.951,4.109;-0.265,4.164" thick=0.15 pitch=-78 y=5.4 z=0.15 color=#f0c020 emit=0.4
+  part sphere r=0.09 y=10.116 z=0.9 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=0.265 y=9.494 z=0.768 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=0.951 y=9.44 z=0.756 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=0.428 y=9.002 z=0.663 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=0.588 y=8.346 z=0.524 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=0 y=8.698 z=0.599 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=-0.588 y=8.346 z=0.524 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=-0.428 y=9.002 z=0.663 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=-0.951 y=9.44 z=0.756 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.09 x=-0.265 y=9.494 z=0.768 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=-2.3 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5   # bulbs
+  part sphere r=0.08 x=-1.946 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=-1.592 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=-1.238 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=-0.885 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=-0.531 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=-0.177 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=0.177 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=0.531 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=0.885 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=1.238 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=1.592 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=1.946 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part sphere r=0.08 x=2.3 y=5.425 z=-0.117 color=#fff2c0 emit=1 seg=5
+  part plate pts="-0.25,0;0.25,0;0.25,1.4;-0.25,1.4" thick=0.12 pitch=-78 x=-3 y=3.2 color=#e8c020 emit=0.3   # the arrow
+  part plate pts="-0.6,0;0.6,0;0,-0.9" thick=0.12 pitch=-78 x=-3 y=3.2 color=#e8c020 emit=0.3
+  part box w=4 h=0.9 d=0.15 y=4.45 z=-0.05 color=#1a1a1e
+  part box w=1 h=0.55 d=0.05 x=-1.3 y=4.455 z=-0.15 color=#ff3a8a emit=1   # NO
+  part box w=2 h=0.55 d=0.05 x=0.6 y=4.455 z=-0.15 color=#5a2a3a   # VACANCY (unlit)
+  part light r=0.1 y=4.6 z=-0.6 color=#ff8aa0
+
+# an old gas pump on its island, a globe on top
+model gas_pump
+  part box w=2.1 h=0.22 d=1.1 y=0.11 color=#9a968c
+  part disc r=0.12 h=0.9 x=-0.85 y=0.67 seg=6 color=#e8c020
+  part box w=0.62 h=1.55 d=0.46 x=0.15 y=0.995 color=#c0281c
+  part box w=0.5 h=0.6 d=0.03 x=0.15 y=1.35 z=-0.245 color=#e8e4d4
+  part box w=0.2 h=0.08 d=0.03 x=0.15 y=0.84 z=-0.25 color=#1a1a1a
+  part sphere r=0.24 x=0.15 y=2 color=#f4f0e4 emit=0.3 seg=8
+  part ring r=0.24 thick=0.04 x=0.15 y=2 color=#c0281c seg=10
+  part box w=0.05 h=0.05 d=1.056 x=0.585 y=0.9 z=-0.125 pitch=-71.24 rot=42.61 color=#1a1a1a
+  part box w=0.05 h=0.05 d=0.73 x=0.6 y=0.75 z=-0.275 pitch=73.59 rot=-75.96 color=#1a1a1a
+  part box w=0.12 h=0.25 d=0.1 x=0.5 y=1.125 z=-0.3 color=#8a8a8a
+  part box w=0.25 h=0.4 d=0.03 y=0.5 z=-0.245 color=#7a3a1c
+
+# a 1.1 m tumbleweed
+model tumbleweed
+  part sphere r=0.5 y=0.5 color=#8a6e44 seg=6 noise=0.2
+  part ring r=0.5 thick=0.025 y=0.5 color=#a8885a pitch=90 roll=0 seg=10
+  part ring r=0.5 thick=0.025 y=0.5 color=#a8885a pitch=0 roll=90 seg=10
+  part ring r=0.5 thick=0.025 y=0.5 color=#a8885a pitch=45 roll=45 seg=10
+  part ring r=0.5 thick=0.025 y=0.5 color=#a8885a pitch=60 roll=-30 seg=10
+  part ring r=0.5 thick=0.025 y=0.5 color=#a8885a pitch=20 roll=70 seg=10
+  part gun r=0.02 len=0.38 x=0.477 y=0.605 z=-0.037 pitch=12.4 rot=85.62 seg=3 color=#9a7a4a
+  part gun r=0.02 len=0.38 x=0.341 y=0.648 z=0.319 pitch=17.53 rot=133.12 seg=3 color=#9a7a4a
+  part gun r=0.02 len=0.38 x=-0.305 y=0.264 z=0.303 pitch=-28.75 rot=-134.85 seg=3 color=#9a7a4a
+  part gun r=0.02 len=0.38 x=0.032 y=0.799 z=-0.387 pitch=37.6 rot=4.74 seg=3 color=#9a7a4a
+  part gun r=0.02 len=0.38 x=0.474 y=0.379 z=0.028 pitch=-14.24 rot=93.32 seg=3 color=#9a7a4a
+  part gun r=0.02 len=0.38 x=-0.015 y=0.552 z=-0.487 pitch=6.04 rot=-1.75 seg=3 color=#9a7a4a
+  part gun r=0.02 len=0.38 x=-0.417 y=0.556 z=-0.251 pitch=6.56 rot=-59.03 seg=3 color=#9a7a4a
+
+# a 13 m water tower, sun-bleached, the valley's name on the tank
+model water_tower
+  part gun r=0.16 r2=0.2 len=9.071 x=-2.1 y=4.5 z=-2.1 pitch=82.84 rot=135 seg=6 color=#6a5e52
+  part box w=0.7 h=0.4 d=0.7 x=-2.5 y=0.2 z=-2.5 color=#8a8478
+  part gun r=0.16 r2=0.2 len=9.071 x=2.1 y=4.5 z=-2.1 pitch=82.84 rot=-135 seg=6 color=#6a5e52
+  part box w=0.7 h=0.4 d=0.7 x=2.5 y=0.2 z=-2.5 color=#8a8478
+  part gun r=0.16 r2=0.2 len=9.071 x=-2.1 y=4.5 z=2.1 pitch=82.84 rot=45 seg=6 color=#6a5e52
+  part box w=0.7 h=0.4 d=0.7 x=-2.5 y=0.2 z=2.5 color=#8a8478
+  part gun r=0.16 r2=0.2 len=9.071 x=2.1 y=4.5 z=2.1 pitch=82.84 rot=-45 seg=6 color=#6a5e52
+  part box w=0.7 h=0.4 d=0.7 x=2.5 y=0.2 z=2.5 color=#8a8478
+  part box w=0.07 h=0.07 d=5.938 x=-0.175 y=2.5 z=-2.275 pitch=39.78 rot=94.4 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=0.175 y=2.5 z=-2.275 pitch=39.78 rot=-94.4 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=-0.175 y=6.4 z=-1.925 pitch=45.98 rot=95.19 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=0.175 y=6.4 z=-1.925 pitch=45.98 rot=-95.19 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=2.275 y=2.5 z=-0.175 pitch=39.78 rot=-175.6 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=2.275 y=2.5 z=0.175 pitch=39.78 rot=-4.4 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=1.925 y=6.4 z=-0.175 pitch=45.98 rot=-174.81 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=1.925 y=6.4 z=0.175 pitch=45.98 rot=-5.19 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=0.175 y=2.5 z=2.275 pitch=39.78 rot=-85.6 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=-0.175 y=2.5 z=2.275 pitch=39.78 rot=85.6 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=0.175 y=6.4 z=1.925 pitch=45.98 rot=-84.81 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=-0.175 y=6.4 z=1.925 pitch=45.98 rot=84.81 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=-2.275 y=2.5 z=0.175 pitch=39.78 rot=4.4 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.938 x=-2.275 y=2.5 z=-0.175 pitch=39.78 rot=175.6 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=-1.925 y=6.4 z=0.175 pitch=45.98 rot=5.19 color=#6a5e52
+  part box w=0.07 h=0.07 d=5.563 x=-1.925 y=6.4 z=-0.175 pitch=45.98 rot=174.81 color=#6a5e52
+  part disc r=3 h=0.1 y=9 seg=14 color=#5a5048
+  part ring r=3 thick=0.05 y=9.9 color=#6a5e52 seg=16
+  part disc r=2.6 h=3.3 y=10.65 seg=14 color=#9a948a
+  part disc r=2.62 h=0.25 y=10.725 seg=14 color=#7a3a2a
+  part disc r=2.75 r2=0.2 h=1.3 y=12.95 seg=14 color=#7a7268
+  part sphere r=0.2 y=13.7 color=#6a5e52 seg=6
+  part box w=0.42 h=0.55 d=0.05 x=-1.65 y=11.275 z=-2.58 color=#efe8d8   # lettering
+  part box w=0.42 h=0.55 d=0.05 x=-1.18 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.42 h=0.55 d=0.05 x=-0.71 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.42 h=0.55 d=0.05 x=-0.24 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.42 h=0.55 d=0.05 x=0.23 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.42 h=0.55 d=0.05 x=0.7 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.42 h=0.55 d=0.05 x=1.17 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.42 h=0.55 d=0.05 x=1.64 y=11.275 z=-2.58 color=#efe8d8
+  part box w=0.05 h=0.05 d=9.036 x=1.7 y=4.5 z=-2.15 pitch=84.88 rot=-150.26 color=#6a5e52
+  part box w=0.05 h=0.05 d=9.036 x=2.1 y=4.5 z=-2.15 pitch=84.88 rot=-150.26 color=#6a5e52
+
+# a rusted 50s car half buried in a sand drift
+model wreck_rust
+  part body len=5 wid=2.045 hgt=0.705 y=0.475 round=5 nose=0.22 tail=0.14 drop=0.35 roll=-6 pitch=3 color=#8a4a24
+  part cabin len=2.33 wid=1.818 hgt=0.568 y=1.1 z=0.284 front=0.4 back=0.25 top=0.86 roll=-6 pitch=3 color=#8a4a24 glass=#2a1a10
+  part fin h=0.35 root=0.9 tip=0.2 sweep=0.6 thick=0.08 x=-0.7 y=0.8 z=1.9 color=#7a3e1e
+  part fin h=0.35 root=0.9 tip=0.2 sweep=0.6 thick=0.08 x=0.7 y=0.8 z=1.9 color=#7a3e1e
+  part dome r=1.8 rx=1.6 rz=2.6 ry=0.75 x=-1.2 z=0.2 color=#c8a870 seg=10   # the drift
+  part dome r=1 ry=0.4 x=1.4 z=-1.6 color=#c0a068 seg=8
+  part box w=0.6 h=0.03 d=0.9 x=0.4 y=0.965 z=-1.3 color=#5a2a14
+  part box w=0.4 h=0.03 d=0.5 x=-0.2 y=0.915 z=1.5 color=#a86030
+
+# extra: a flat-topped red rock outcrop ~18 m across, 7 m high, banded strata, scree
+model mesa_rock
+  part box w=18 h=2.2 d=13 y=1.1 color=#8e4426 rot=0 taper=0.1
+  part box w=16.362 h=0.18 d=11.817 y=2.11 color=#d8a070 rot=0   # strata
+  part box w=15.5 h=2 d=11 y=3.15 color=#a8583a rot=8 taper=0.08
+  part box w=14.403 h=0.18 d=10.221 y=4.06 color=#d8a070 rot=8
+  part box w=13.5 h=1.8 d=9.5 y=5 color=#9a4a2c rot=-6 taper=0.08
+  part box w=12.544 h=0.18 d=8.827 y=5.81 color=#d8a070 rot=-6
+  part box w=12 h=1.4 d=8.4 y=6.55 color=#b46a44 rot=4 taper=0.12
+  part box w=10.666 h=0.18 d=7.466 y=7.16 color=#d8a070 rot=4
+  part box w=11 h=0.06 d=7.6 y=7.23 color=#a87048 rot=4   # the flat top
+  part greeble n=8 w=9 d=6 size=0.6 y=7.2 color=#9a5a36 seed=4
+  part sphere r=1.132 x=6.717 y=0.566 z=-6.588 ry=0.793 color=#a45232 seg=5   # scree
+  part sphere r=0.73 x=10.873 y=0.365 z=1.05 ry=0.511 color=#8e4426 seg=5
+  part sphere r=1.116 x=9.731 y=0.558 z=2.661 ry=0.781 color=#b86a42 seg=5
+  part sphere r=0.701 x=7.651 y=0.35 z=-5.548 ry=0.491 color=#a45232 seg=5
+  part sphere r=1.224 x=10.741 y=0.612 z=0.466 ry=0.857 color=#8e4426 seg=5
+  part sphere r=1.098 x=-3.099 y=0.549 z=7.571 ry=0.768 color=#b86a42 seg=5
+  part sphere r=0.803 x=6.747 y=0.402 z=-5.232 ry=0.562 color=#a45232 seg=5
+  part sphere r=0.863 x=-1.617 y=0.432 z=-7.582 ry=0.604 color=#8e4426 seg=5
+  part sphere r=1.285 x=-6.784 y=0.643 z=5.601 ry=0.9 color=#b86a42 seg=5
+  part dome r=3 rx=4 ry=1.2 x=-8.5 z=3 color=#b08850 seg=8
+
+# extra: a bleached ribcage arching out of the sand, the skull beside it
+model ribcage
+  part gun r=0.09 len=3.501 y=0.9 z=0.15 pitch=-1.64 rot=180 seg=5 color=#e6dcc4
+  part ring r=0.367 thick=0.06 y=0.583 z=-1.4 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.632 thick=0.06 y=0.318 z=-0.98 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.828 thick=0.06 y=0.122 z=-0.56 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.934 thick=0.06 y=0.016 z=-0.14 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.94 thick=0.06 y=0.01 z=0.28 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.843 thick=0.06 y=0.107 z=0.7 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.655 thick=0.06 y=0.295 z=1.12 color=#e6dcc4 pitch=90 seg=12
+  part ring r=0.396 thick=0.06 y=0.554 z=1.54 color=#e6dcc4 pitch=90 seg=12
+  part gun r=0.04 r2=0.07 len=1.365 x=0.15 y=0.475 z=2.45 pitch=-33.34 rot=164.74 seg=5 color=#e6dcc4
+  part sphere r=0.24 x=0.625 y=0.17 z=-2.557 color=#e6dcc4 rx=0.26 rz=0.28 seg=8
+  part box w=0.24 h=0.16 d=0.42 x=0.44 y=0.1 z=-2.877 color=#e6dcc4 rot=-30 taper=0.25
+  part sphere r=0.06 x=0.456 y=0.24 z=-2.609 color=#1a140e seg=6
+  part gun r=0.05 r2=0.07 len=0.362 x=0.295 y=0.275 z=-2.378 pitch=7.93 rot=-107.12 seg=5 color=#d8ccb0
+  part gun r=0.015 r2=0.05 len=0.303 x=0.02 y=0.41 z=-2.334 pitch=46.59 rot=-84.78 seg=5 color=#d8ccb0
+  part sphere r=0.06 x=0.664 y=0.24 z=-2.729 color=#1a140e seg=6
+  part gun r=0.05 r2=0.07 len=0.362 x=0.945 y=0.275 z=-2.753 pitch=7.93 rot=47.12 seg=5 color=#d8ccb0
+  part gun r=0.015 r2=0.05 len=0.303 x=1.12 y=0.41 z=-2.969 pitch=46.59 rot=24.78 seg=5 color=#d8ccb0
+
+# extra: a vulture waiting on a fence post
+model vulture_post
+  part box w=0.22 h=2.4 d=0.22 y=1.2 color=#6a5440
+  part box w=1.2 h=0.12 d=0.12 y=2 color=#6a5440
+  part sphere r=0.35 y=2.7 color=#2a2420 rz=0.45 ry=0.38 seg=8
+  part fin h=0.55 root=0.75 tip=0.3 sweep=0.4 thick=0.06 x=0.3 y=2.45 z=0.05 rot=-8 roll=-25 color=#1e1a16 mirror=1
+  part ring r=0.13 thick=0.06 y=2.95 z=-0.22 color=#e8e0d0 seg=8
+  part gun r=0.05 r2=0.07 len=0.335 y=3.1 z=-0.325 pitch=63.43 seg=5 color=#b86a6a
+  part sphere r=0.1 y=3.3 z=-0.45 color=#c86a5a seg=6
+  part cone r=0.04 len=0.161 y=3.24 z=-0.59 pitch=-29.74 seg=4 color=#e8d8a0
+  part box w=0.25 h=0.04 d=0.1 x=0.05 y=2.42 z=-0.1 color=#d8c890

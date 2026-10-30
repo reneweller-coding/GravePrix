@@ -1,0 +1,277 @@
+# Refinery props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_ref_swamp.py.
+
+# a 20 m oil storage tank in its bund, a stair winding up, a lamp at the stair foot
+model tank_oil lamp=1
+  part ring r=12.6 thick=0.45 y=0 color=#6a6660 seg=28   # the bund wall
+  part disc r=10 h=10 y=5 seg=24 color=#c8c4b8
+  part disc r=10.06 h=0.18 y=3.39 seg=24 color=#8e8a80
+  part disc r=10.06 h=0.18 y=6.69 seg=24 color=#8e8a80
+  part disc r=10.1 r2=0.9 h=1.2 y=10.6 seg=24 color=#aca89c
+  part ring r=9.95 thick=0.05 y=11 color=#e0b020 seg=24
+  part disc r=0.9 h=0.4 y=11.3 seg=8 color=#8a867c
+  part box w=0.9 h=0.12 d=1.812 x=-2.824 y=0.46 z=-10.183 pitch=23.41 rot=74.5 color=#5a5a5e   # the stair
+  part box w=0.06 h=0.06 d=1.874 x=-2.937 y=1.46 z=-10.59 pitch=22.6 rot=74.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=-1.196 y=1.18 z=-10.499 pitch=23.41 rot=83.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=-1.244 y=2.18 z=-10.919 pitch=22.6 rot=83.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=0.461 y=1.9 z=-10.557 pitch=23.41 rot=92.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=0.479 y=2.9 z=-10.98 pitch=22.6 rot=92.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=2.107 y=2.62 z=-10.355 pitch=23.41 rot=101.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=2.191 y=3.62 z=-10.769 pitch=22.6 rot=101.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=3.701 y=3.34 z=-9.898 pitch=23.41 rot=110.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=3.849 y=4.34 z=-10.294 pitch=22.6 rot=110.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=5.204 y=4.06 z=-9.197 pitch=23.41 rot=119.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=5.412 y=5.06 z=-9.565 pitch=22.6 rot=119.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=6.578 y=4.78 z=-8.27 pitch=23.41 rot=128.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=6.841 y=5.78 z=-8.601 pitch=22.6 rot=128.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=7.791 y=5.5 z=-7.139 pitch=23.41 rot=137.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=8.103 y=6.5 z=-7.425 pitch=22.6 rot=137.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=8.812 y=6.22 z=-5.832 pitch=23.41 rot=146.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=9.164 y=7.22 z=-6.066 pitch=22.6 rot=146.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=9.616 y=6.94 z=-4.382 pitch=23.41 rot=155.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=10 y=7.94 z=-4.557 pitch=22.6 rot=155.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=10.183 y=7.66 z=-2.824 pitch=23.41 rot=164.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=10.59 y=8.66 z=-2.937 pitch=22.6 rot=164.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=10.499 y=8.38 z=-1.196 pitch=23.41 rot=173.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=10.919 y=9.38 z=-1.244 pitch=22.6 rot=173.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=10.557 y=9.1 z=0.461 pitch=23.41 rot=-177.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=10.98 y=10.1 z=0.479 pitch=22.6 rot=-177.5 color=#e0b020
+  part box w=0.9 h=0.12 d=1.812 x=10.355 y=9.82 z=2.107 pitch=23.41 rot=-168.5 color=#5a5a5e
+  part box w=0.06 h=0.06 d=1.874 x=10.769 y=10.82 z=2.191 pitch=22.6 rot=-168.5 color=#e0b020
+  part box w=0.6 h=3.5 d=0.04 x=5.02 y=6.75 z=8.695 color=#7a5a3a rot=150   # rust runs
+  part box w=0.6 h=4.1 d=0.04 x=2.767 y=7.05 z=9.651 color=#7a5a3a rot=164
+  part box w=0.6 h=4.7 d=0.04 x=0.35 y=7.35 z=10.034 color=#7a5a3a rot=178
+  part box w=0.6 h=5.3 d=0.04 x=-2.087 y=7.65 z=9.821 color=#7a5a3a rot=192
+  part box w=0.6 h=5.9 d=0.04 x=-4.401 y=7.95 z=9.024 color=#7a5a3a rot=206
+  part box w=0.6 h=6.5 d=0.04 x=-6.454 y=8.25 z=7.691 color=#7a5a3a rot=220
+  part box w=1.1 h=1.6 d=0.06 x=-6.46 y=8.3 z=-7.699 color=#141414 rot=-40   # the company band
+  part box w=1.1 h=1.6 d=0.06 x=-5.025 y=8.3 z=-8.704 color=#8a1a14 rot=-30
+  part box w=1.1 h=1.6 d=0.06 x=-3.437 y=8.3 z=-9.444 color=#8a1a14 rot=-20
+  part box w=1.1 h=1.6 d=0.06 x=-1.745 y=8.3 z=-9.897 color=#8a1a14 rot=-10
+  part box w=1.1 h=1.6 d=0.06 y=8.3 z=-10.05 color=#141414 rot=0
+  part box w=1.1 h=1.6 d=0.06 x=1.745 y=8.3 z=-9.897 color=#8a1a14 rot=10
+  part box w=1.1 h=1.6 d=0.06 x=3.437 y=8.3 z=-9.444 color=#8a1a14 rot=20
+  part box w=1.1 h=1.6 d=0.06 x=5.025 y=8.3 z=-8.704 color=#8a1a14 rot=30
+  part box w=1.1 h=1.6 d=0.06 x=6.46 y=8.3 z=-7.699 color=#141414 rot=40
+  part gun r=0.35 len=6.364 x=9.25 y=0.6 z=-9.25 rot=45 seg=8 color=#6a6e72
+  part disc r=0.5 h=0.12 x=9 y=0.6 z=-9 pitch=90 rot=-45 color=#c82a1a seg=8
+  part gun r=0.07 len=3 x=-2.5 y=1.5 z=-10.9 pitch=90 seg=5 color=#3a3a3e
+  part box w=0.3 h=0.25 d=0.5 x=-2.5 y=3.025 z=-11.2 color=#ffb060 emit=0.9
+  part light r=0.06 x=-2.5 y=2.9 z=-11.3 color=#ffb060
+
+# a 12 m pipe bridge, two levels of coloured pipes along x (rows join up)
+model pipe_rack
+  part box w=0.35 h=6.4 d=0.35 x=-5.5 y=3.2 z=-1.6 color=#4a4e52
+  part box w=0.35 h=6.4 d=0.35 x=-5.5 y=3.2 z=1.6 color=#4a4e52
+  part box w=0.3 h=0.3 d=3.6 x=-5.5 y=3.15 color=#4a4e52
+  part box w=0.3 h=0.3 d=3.6 x=-5.5 y=5.75 color=#4a4e52
+  part box w=0.15 h=0.15 d=3.905 x=-5.5 y=1.65 pitch=39.81 rot=180 color=#4a4e52
+  part box w=0.35 h=6.4 d=0.35 x=5.5 y=3.2 z=-1.6 color=#4a4e52
+  part box w=0.35 h=6.4 d=0.35 x=5.5 y=3.2 z=1.6 color=#4a4e52
+  part box w=0.3 h=0.3 d=3.6 x=5.5 y=3.15 color=#4a4e52
+  part box w=0.3 h=0.3 d=3.6 x=5.5 y=5.75 color=#4a4e52
+  part box w=0.15 h=0.15 d=3.905 x=5.5 y=1.65 pitch=39.81 rot=180 color=#4a4e52
+  part gun r=0.32 len=12.2 y=3.57 z=-1.15 rot=90 seg=8 color=#b0b0a8
+  part gun r=0.358 len=0.16 x=-3 y=3.57 z=-1.15 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.358 len=0.16 x=3 y=3.57 z=-1.15 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.4 len=12.2 y=3.7 z=-0.35 rot=90 seg=8 color=#7a3a1c
+  part gun r=0.448 len=0.16 x=-3 y=3.7 z=-0.35 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.448 len=0.16 x=3 y=3.7 z=-0.35 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.25 len=12.2 y=3.45 z=0.45 rot=90 seg=8 color=#c8a020
+  part gun r=0.28 len=0.16 x=-3 y=3.45 z=0.45 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.28 len=0.16 x=3 y=3.45 z=0.45 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.3 len=12.2 y=3.55 z=1.15 rot=90 seg=8 color=#3a5a8a
+  part gun r=0.336 len=0.16 x=-3 y=3.55 z=1.15 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.336 len=0.16 x=3 y=3.55 z=1.15 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.38 len=12.2 y=6.28 z=-0.9 rot=90 seg=8 color=#a8a8a0
+  part gun r=0.426 len=0.16 x=-3 y=6.28 z=-0.9 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.426 len=0.16 x=3 y=6.28 z=-0.9 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.28 len=12.2 y=6.13 z=0.1 rot=90 seg=8 color=#2a6a3a
+  part gun r=0.314 len=0.16 x=-3 y=6.13 z=0.1 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.314 len=0.16 x=3 y=6.13 z=0.1 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.2 len=12.2 y=6 z=1 rot=90 seg=8 color=#8a1a14
+  part gun r=0.224 len=0.16 x=-3 y=6 z=1 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.224 len=0.16 x=3 y=6 z=1 rot=90 seg=8 color=#5a5a5e
+  part gun r=0.3 len=4.114 x=3 y=1.925 z=1.875 pitch=-69.36 rot=180 seg=8 color=#3a5a8a   # a pipe down into the ground
+  part box w=12.2 h=0.08 d=0.7 y=6.54 z=-1.3 color=#3a3a3e   # cable tray
+
+# a 27 m flare stack burning off gas; its flame glows, an orange light at its foot
+model flare_stack lamp=1
+  part box w=3.2 h=1 d=3.2 y=0.5 color=#6a6660
+  part disc r=0.9 r2=0.86 h=3.6 y=2.8 seg=10 color=#8a8680
+  part disc r=0.86 r2=0.82 h=3.6 y=6.4 seg=10 color=#8a8680
+  part disc r=0.82 r2=0.78 h=3.6 y=10 seg=10 color=#8a8680
+  part disc r=0.78 r2=0.74 h=3.6 y=13.6 seg=10 color=#8a8680
+  part disc r=0.74 r2=0.7 h=3.6 y=17.2 seg=10 color=#8a8680
+  part disc r=0.7 r2=0.66 h=3.6 y=20.8 seg=10 color=#c82a1a
+  part disc r=0.66 r2=0.62 h=3.6 y=24.4 seg=10 color=#e8e4dc
+  part disc r=0.62 h=1.4 y=26.9 seg=10 color=#2a2622
+  part disc r=1.9 h=0.12 y=12.06 seg=12 color=#4a4a4e
+  part ring r=1.85 thick=0.04 y=13 color=#e0b020 seg=14
+  part disc r=1.9 h=0.12 y=22.06 seg=12 color=#4a4a4e
+  part ring r=1.85 thick=0.04 y=23 color=#e0b020 seg=14
+  part box w=0.08 h=0.08 d=25.001 x=0.85 y=13.5 pitch=89.54 rot=-90 color=#5a5a5e
+  part box w=0.05 h=0.05 d=25.294 x=2.719 y=10.5 z=-7.471 pitch=56.12 rot=-160 color=#2a2a2c
+  part box w=0.8 h=0.5 d=0.8 x=5.13 y=0.25 z=-14.095 color=#6a6660
+  part box w=0.05 h=0.05 d=25.294 x=5.11 y=10.5 z=6.09 pitch=56.12 rot=-40 color=#2a2a2c
+  part box w=0.8 h=0.5 d=0.8 x=9.642 y=0.25 z=11.491 color=#6a6660
+  part box w=0.05 h=0.05 d=25.294 x=-7.829 y=10.5 z=1.381 pitch=56.12 rot=80 color=#2a2a2c
+  part box w=0.8 h=0.5 d=0.8 x=-14.772 y=0.25 z=2.605 color=#6a6660
+  part cone r=1 len=6.55 x=0.35 y=30.75 z=0.2 pitch=82.93 rot=119.74 seg=6 color=#ff7a14 emit=1   # the flame
+  part cone r=0.7 len=5.025 x=0.25 y=30 z=-0.1 pitch=84.29 rot=36.87 seg=6 color=#ffb030 emit=1
+  part cone r=0.6 len=3.619 x=-0.55 y=29.25 z=0.3 pitch=75.24 rot=-130.6 seg=6 color=#ff5a10 emit=1
+  part cone r=0.5 len=3.008 x=0.1 y=29 z=-0.05 pitch=85.74 rot=116.57 seg=6 color=#fff0a0 emit=1
+  part sphere r=0.9 y=27.8 color=#ffd060 ry=0.6 emit=1 seg=8
+  part light r=0.05 y=5 color=#ff9a40
+
+# a pallet of drums, two lying on top, a few loose
+model barrel_stack
+  part box w=2.3 h=0.14 d=1.5 y=0.07 color=#7a6448
+  part disc r=0.33 h=0.94 x=-0.7 y=0.61 z=-0.36 seg=10 color=#2c4a66
+  part disc r=0.345 h=0.04 x=-0.7 y=0.46 z=-0.36 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 x=-0.7 y=0.78 z=-0.36 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=-0.55 y=1.095 z=-0.36 seg=5 color=#9a9a96
+  part disc r=0.33 h=0.94 x=-0.7 y=0.61 z=0.36 seg=10 color=#8a2a1a
+  part disc r=0.345 h=0.04 x=-0.7 y=0.46 z=0.36 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 x=-0.7 y=0.78 z=0.36 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=-0.55 y=1.095 z=0.36 seg=5 color=#9a9a96
+  part disc r=0.33 h=0.94 y=0.61 z=-0.36 seg=10 color=#2a2a2c
+  part disc r=0.345 h=0.04 y=0.46 z=-0.36 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 y=0.78 z=-0.36 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=0.15 y=1.095 z=-0.36 seg=5 color=#9a9a96
+  part disc r=0.33 h=0.94 y=0.61 z=0.36 seg=10 color=#8a6a20
+  part disc r=0.345 h=0.04 y=0.46 z=0.36 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 y=0.78 z=0.36 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=0.15 y=1.095 z=0.36 seg=5 color=#9a9a96
+  part disc r=0.33 h=0.94 x=0.7 y=0.61 z=-0.36 seg=10 color=#3a5a3a
+  part disc r=0.345 h=0.04 x=0.7 y=0.46 z=-0.36 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 x=0.7 y=0.78 z=-0.36 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=0.85 y=1.095 z=-0.36 seg=5 color=#9a9a96
+  part disc r=0.33 h=0.94 x=0.7 y=0.61 z=0.36 seg=10 color=#2c4a66
+  part disc r=0.345 h=0.04 x=0.7 y=0.46 z=0.36 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 x=0.7 y=0.78 z=0.36 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=0.85 y=1.095 z=0.36 seg=5 color=#9a9a96
+  part gun r=0.33 len=0.94 x=-0.35 y=1.41 rot=180 seg=10 color=#8a6a20
+  part gun r=0.345 len=0.04 x=-0.35 y=1.41 z=-0.15 rot=90 seg=10 color=#1a1a1a
+  part gun r=0.345 len=0.04 x=-0.35 y=1.41 z=0.15 rot=90 seg=10 color=#1a1a1a
+  part gun r=0.33 len=0.94 x=0.35 y=1.41 rot=180 seg=10 color=#8a2a1a
+  part gun r=0.345 len=0.04 x=0.35 y=1.41 z=-0.15 rot=90 seg=10 color=#1a1a1a
+  part gun r=0.345 len=0.04 x=0.35 y=1.41 z=0.15 rot=90 seg=10 color=#1a1a1a
+  part disc r=0.33 h=0.94 x=1.6 y=0.47 z=0.6 seg=10 color=#2a2a2c
+  part disc r=0.345 h=0.04 x=1.6 y=0.32 z=0.6 seg=10 color=#1a1a1a
+  part disc r=0.345 h=0.04 x=1.6 y=0.64 z=0.6 seg=10 color=#1a1a1a
+  part disc r=0.05 h=0.03 x=1.75 y=0.955 z=0.6 seg=5 color=#9a9a96
+  part gun r=0.33 len=0.94 x=1.5 y=0.33 z=-0.7 rot=120 seg=10 color=#2c4a66
+  part gun r=0.345 len=0.04 x=1.37 y=0.33 z=-0.775 rot=90 seg=10 color=#1a1a1a
+  part gun r=0.345 len=0.04 x=1.63 y=0.33 z=-0.625 rot=90 seg=10 color=#1a1a1a
+  part plate pts="-0.6,-0.4;0.4,-0.7;1,0;0.2,0.6;-0.7,0.3" thick=0.02 x=1.6 y=0.02 z=-0.9 color=#0a0a0c
+
+# a manifold valve: two pipes out of the ground, a red handwheel, guard posts
+model valve
+  part gun r=0.22 len=1 x=-1 y=0.5 pitch=90 seg=8 color=#8a8e92
+  part sphere r=0.24 x=-1 y=1 color=#8a8e92 seg=8
+  part gun r=0.22 len=1 x=1 y=0.5 pitch=90 seg=8 color=#8a8e92
+  part sphere r=0.24 x=1 y=1 color=#8a8e92 seg=8
+  part gun r=0.22 len=2 y=1 rot=90 seg=8 color=#8a8e92
+  part disc r=0.36 h=0.1 roll=90 x=-0.45 y=1 color=#5a5e62 seg=8
+  part disc r=0.36 h=0.1 roll=90 x=0.45 y=1 color=#5a5e62 seg=8
+  part sphere r=0.34 y=1 color=#3a5a8a seg=8
+  part disc r=0.1 h=0.7 y=1.55 seg=6 color=#5a5e62
+  part ring r=0.38 thick=0.05 y=1.92 color=#d02818 seg=12
+  part box w=0.05 h=0.05 d=0.76 y=1.92 rot=90 color=#d02818
+  part box w=0.05 h=0.05 d=0.76 y=1.92 rot=180 color=#d02818
+  part disc r=0.1 h=1 x=-1.6 y=0.5 z=-0.9 seg=6 color=#e8b818
+  part disc r=0.105 h=0.15 x=-1.6 y=0.675 z=-0.9 seg=6 color=#141414
+  part disc r=0.1 h=1 x=1.6 y=0.5 z=-0.9 seg=6 color=#e8b818
+  part disc r=0.105 h=0.15 x=1.6 y=0.675 z=-0.9 seg=6 color=#141414
+  part disc r=0.1 h=1 x=-1.6 y=0.5 z=0.9 seg=6 color=#e8b818
+  part disc r=0.105 h=0.15 x=-1.6 y=0.675 z=0.9 seg=6 color=#141414
+  part disc r=0.1 h=1 x=1.6 y=0.5 z=0.9 seg=6 color=#e8b818
+  part disc r=0.105 h=0.15 x=1.6 y=0.675 z=0.9 seg=6 color=#141414
+
+# a 4 m high walkway with yellow rails and a stair down at +x
+model catwalk
+  part box w=10 h=0.14 d=1.4 x=-1 y=4.07 color=#5a5e60
+  part box w=0.2 h=4 d=0.2 x=-5.6 y=2 z=-0.65 color=#4a4e52
+  part box w=0.2 h=4 d=0.2 x=-5.6 y=2 z=0.65 color=#4a4e52
+  part box w=0.1 h=0.1 d=3.7 x=-5.6 y=2.05 pitch=71.08 rot=180 color=#4a4e52
+  part box w=0.2 h=4 d=0.2 x=-1 y=2 z=-0.65 color=#4a4e52
+  part box w=0.2 h=4 d=0.2 x=-1 y=2 z=0.65 color=#4a4e52
+  part box w=0.1 h=0.1 d=3.7 x=-1 y=2.05 pitch=71.08 rot=180 color=#4a4e52
+  part box w=0.2 h=4 d=0.2 x=3.6 y=2 z=-0.65 color=#4a4e52
+  part box w=0.2 h=4 d=0.2 x=3.6 y=2 z=0.65 color=#4a4e52
+  part box w=0.1 h=0.1 d=3.7 x=3.6 y=2.05 pitch=71.08 rot=180 color=#4a4e52
+  part box w=0.06 h=0.06 d=10 x=-1 y=5.1 z=-0.68 rot=90 color=#e0b020
+  part box w=0.05 h=0.05 d=10 x=-1 y=4.6 z=-0.68 rot=90 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-6 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-4.58 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-3.16 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-1.74 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-0.32 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=1.1 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=2.52 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=3.94 y=4.55 z=-0.68 color=#e0b020
+  part box w=0.06 h=0.06 d=10 x=-1 y=5.1 z=0.68 rot=90 color=#e0b020
+  part box w=0.05 h=0.05 d=10 x=-1 y=4.6 z=0.68 rot=90 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-6 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-4.58 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-3.16 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-1.74 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=-0.32 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=1.1 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=2.52 y=4.55 z=0.68 color=#e0b020
+  part box w=0.06 h=1.1 d=0.06 x=3.94 y=4.55 z=0.68 color=#e0b020
+  part box w=0.35 h=0.1 d=1.2 x=4.2 y=3.7 color=#5a5e60   # stair
+  part box w=0.35 h=0.1 d=1.2 x=4.58 y=3.3 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=4.96 y=2.9 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=5.34 y=2.5 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=5.72 y=2.1 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=6.1 y=1.7 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=6.48 y=1.3 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=6.86 y=0.9 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=7.24 y=0.5 color=#5a5e60
+  part box w=0.35 h=0.1 d=1.2 x=7.62 y=0.1 color=#5a5e60
+  part box w=0.12 h=0.12 d=5.657 x=6 y=2 z=-0.62 pitch=-45 rot=90 color=#4a4e52
+  part box w=0.05 h=0.05 d=5.657 x=6 y=3.1 z=-0.62 pitch=-45 rot=90 color=#e0b020
+  part box w=0.12 h=0.12 d=5.657 x=6 y=2 z=0.62 pitch=-45 rot=90 color=#4a4e52
+  part box w=0.05 h=0.05 d=5.657 x=6 y=3.1 z=0.62 pitch=-45 rot=90 color=#e0b020
+  part gun r=0.25 len=10 x=-1 y=3.4 z=-0.3 rot=90 seg=8 color=#a8a8a0
+  part gun r=0.2 len=10 x=-1 y=3.4 z=0.35 rot=90 seg=8 color=#7a3a1c
+
+# a 7.5 m sodium lamp, orange
+model lamp_sodium lamp=1
+  part disc r=0.25 h=0.4 y=0.2 seg=8 color=#3a3a3c
+  part gun r=0.08 r2=0.13 len=7.1 y=3.95 pitch=90 seg=8 color=#6a6e72
+  part box w=0.08 h=0.08 d=1.471 y=7.425 z=-0.675 pitch=9.78 color=#6a6e72
+  part box w=0.45 h=0.2 d=1 y=7.5 z=-1.75 color=#2e3236
+  part box w=0.36 h=0.04 d=0.75 y=7.39 z=-1.75 color=#ffa040 emit=1
+  part light r=0.04 y=6.4 z=-1.75 color=#ff9a30
+
+# extra: a black oil spill round a knocked-over drum
+model oil_puddle
+  part plate pts="0,-2.4;1.45,-2.511;1.905,-1.1;2.6,0;2.685,1.55;1,1.732;0,2.5;-1.4,2.425;-1.819,1.05;-2.7,0;-2.598,-1.5;-1.15,-1.992" thick=0.02 y=0.012 color=#16120e
+  part plate pts="0,-1.8;1.087,-1.884;1.429,-0.825;1.95,0;2.014,1.162;0.75,1.299;0,1.875;-1.05,1.819;-1.364,0.788;-2.025,0;-1.949,-1.125;-0.863,-1.494" thick=0.02 y=0.016 color=#050506
+  part gun r=0.33 len=0.94 x=1.6 y=0.33 z=-1.4 rot=130 seg=10 color=#2a2a2c
+  part gun r=0.345 len=0.04 x=1.485 y=0.33 z=-1.496 rot=90 seg=10 color=#1a1a1a
+  part gun r=0.345 len=0.04 x=1.715 y=0.33 z=-1.304 rot=90 seg=10 color=#1a1a1a
+
+# extra: a 22 m distillation column with platforms and a red beacon
+model distill_column
+  part disc r=2.2 h=1.2 y=0.6 seg=12 color=#6a6660
+  part disc r=1.6 h=20 y=11.2 seg=12 color=#b8bab8
+  part dome r=1.6 ry=1 y=21.2 color=#b8bab8 seg=12
+  part disc r=2.5 h=0.12 y=6.06 seg=12 color=#4a4a4e
+  part ring r=2.45 thick=0.04 y=7 color=#e0b020 seg=16
+  part disc r=1.63 h=0.2 y=4.6 seg=12 color=#8a8c8c
+  part disc r=2.5 h=0.12 y=11.06 seg=12 color=#4a4a4e
+  part ring r=2.45 thick=0.04 y=12 color=#e0b020 seg=16
+  part disc r=1.63 h=0.2 y=9.6 seg=12 color=#8a8c8c
+  part disc r=2.5 h=0.12 y=16.06 seg=12 color=#4a4a4e
+  part ring r=2.45 thick=0.04 y=17 color=#e0b020 seg=16
+  part disc r=1.63 h=0.2 y=14.6 seg=12 color=#8a8c8c
+  part disc r=2.5 h=0.12 y=20.66 seg=12 color=#4a4a4e
+  part ring r=2.45 thick=0.04 y=21.6 color=#e0b020 seg=16
+  part disc r=1.63 h=0.2 y=19.2 seg=12 color=#8a8c8c
+  part box w=0.5 h=0.06 d=19.8 x=1.7 y=11.1 pitch=90 color=#5a5a5e   # ladder
+  part gun r=0.25 len=18 x=-1.9 y=10 z=0.5 pitch=90 seg=6 color=#7a3a1c
+  part gun r=0.25 len=0.86 x=-1.55 y=19.25 z=0.5 pitch=35.54 rot=90 seg=6 color=#7a3a1c
+  part sphere r=0.25 y=22.4 color=#ff2010 emit=1 seg=6

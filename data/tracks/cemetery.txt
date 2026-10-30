@@ -1,0 +1,251 @@
+# The cemetery's tracks (venue cemetery, league 5): Eternal Rest Cemetery, at night in the fog.
+# League 5: wide and friendly; one technical track (Criss-Cross Crypts), one figure-eight (Double Plot).
+
+# The track is a coffin: the start on the long left side, a cypress-lined sweeper at the shoulder, a cobbled chicane
+# round the chapel at the head, the 330 m right side (the last mile) and two square corners at the cobbled foot.
+track cem_overcoat
+  title "Holzpyjama" title_en "Wooden Overcoat"
+  venue cemetery
+  laps 4
+  width 15
+  shoulder 3
+  reverse 1
+  start 0 0 352
+  straight 200
+  right 26 r=90
+  straight 90
+  right 72 r=35
+  straight 20 surface=cobble
+  left 30 r=30 surface=cobble
+  right 60 r=30 surface=cobble
+  left 30 r=30 surface=cobble
+  straight 20 surface=cobble
+  right 72 r=35
+  straight 90
+  right 26 r=90
+  straight 330
+  right 82 r=25
+  straight 87.9 surface=cobble
+  right 82 r=25
+  straight 130
+  close
+  patch water at=760 len=30 lat=-0.4 w=7
+  patch water at=890 len=20 lat=0.5 w=6
+  patch gravel at=1000 len=25 lat=-0.7 w=5
+  hazard oil at=965 lat=0.2 r=2.5
+  hazard barrel at=486 lat=-0.85
+  hazard barrel at=1146 lat=-0.85
+  hazard barrel at=1150 lat=-0.9
+  obstacle grave at=1062 lat=0.35 r=1.4 model=open_grave rot=90
+  pickup nitro at=90 lat=0.3
+  pickup mystery at=180 lat=-0.3
+  pickup cash at=426 lat=0
+  pickup wrench at=560 lat=0.3
+  pickup ammo at=700 lat=-0.3
+  pickup rocket at=820 lat=0.4
+  pickup mine at=930 lat=0
+  pickup cash at=1062 lat=-0.4
+  pickup wrench at=1200 lat=0.2
+  place start_gantry x=0 z=0 rot=352
+  prop grandstand at=30 side=left off=3
+  row cypress at=40 len=160 side=both off=1 every=14
+  row cypress at=1150 len=110 side=both off=1 every=14
+  prop chapel at=426 side=left off=8
+  row wreath at=380 len=90 side=right off=1 every=10
+  row gravestone at=250 len=110 side=left off=2 every=5
+  row gravestone_cross at=530 len=110 side=right off=2 every=5
+  row gravestone at=660 len=320 side=both off=2 every=6
+  prop gravestone_angel at=960 side=left off=4
+  prop crypt at=1062 side=right off=5
+  prop crypt at=1010 side=left off=5 rot=180
+  prop tree_dead at=1110 side=left off=3
+  place mausoleum x=85 z=-120 rot=0
+  place crypt x=60 z=-40 rot=90
+  place crypt x=110 z=-40 rot=270
+  place gravestone_angel x=85 z=20 rot=0
+  place tree_dead x=70 z=70 rot=0
+  place bench x=85 z=-200 rot=180
+  lamps lamp_old every=45 side=both
+
+# Figure-eight: the square family plot (four square corners, cobbled at the gate) and the round loop round the
+# chapel, crossing at right angles (bridge on the second pass).
+track cem_plot
+  title "Doppelgrab" title_en "Double Plot"
+  venue cemetery
+  laps 5
+  width 15
+  shoulder 3
+  reverse 1
+  start 0 0 315
+  straight 100
+  right 90 r=28
+  straight 127
+  left 270 r=45 w=16
+  straight 183 w=15
+  right 90 r=25
+  straight 60 surface=cobble
+  right 90 r=25
+  straight 10
+  close
+  bridge at=505 len=45
+  patch water at=600 len=25 lat=0.4 w=7
+  patch water at=60 len=20 lat=-0.4 w=6
+  patch gravel at=380 len=40 lat=-0.75 w=4
+  hazard barrel at=150 lat=-0.85
+  hazard barrel at=770 lat=-0.85
+  hazard oil at=650 lat=-0.2 r=2.5
+  pickup cash at=226 lat=0
+  pickup nitro at=30 lat=0.3
+  pickup mystery at=377 lat=0.5
+  pickup wrench at=490 lat=-0.3
+  pickup ammo at=620 lat=-0.4
+  pickup rocket at=700 lat=0.3
+  pickup mine at=795 lat=0
+  place start_gantry x=0 z=0 rot=315
+  prop grandstand at=40 side=left off=3
+  place chapel x=-13 z=-232 rot=180
+  place cypress x=-30 z=-250 rot=0
+  place cypress x=5 z=-250 rot=0
+  place mausoleum x=10 z=-45 rot=45
+  place crypt x=-25 z=-80 rot=45
+  place crypt x=45 z=-10 rot=45
+  row gravestone at=100 len=170 side=left off=2 every=5
+  row gravestone_cross at=560 len=100 side=left off=2 every=5
+  row cypress at=271 len=200 side=right off=2 every=16
+  row wreath at=700 len=60 side=right off=1 every=12
+  lamps lamp_old every=45 side=both
+
+# The slalom: four headstones in the road between wavy rows of graves (13 m), a cobbled loop round the crypts, then
+# a fast S-sweep under the cypresses and a square run home.
+track cem_slalom
+  title "Grabsteinslalom" title_en "Headstone Slalom"
+  venue cemetery
+  laps 5
+  width 14
+  shoulder 3
+  reverse 1
+  start 0 0 270
+  straight 80
+  right 45 r=26 w=13
+  left 90 r=26
+  right 90 r=26
+  left 90 r=26
+  right 90 r=26
+  left 45 r=26 w=14
+  straight 30
+  left 180 r=45 surface=cobble
+  straight 60
+  right 50 r=80
+  left 80 r=70
+  right 30 r=80
+  straight 44
+  left 90 r=40
+  straight 28.3
+  left 90 r=40
+  close
+  obstacle headstone at=120 lat=0.8 r=0.8 model=gravestone rot=90
+  obstacle headstone at=161 lat=-0.8 r=0.8 model=gravestone_cross rot=90
+  obstacle headstone at=202 lat=0.8 r=0.8 model=gravestone rot=90
+  obstacle headstone at=243 lat=-0.8 r=0.8 model=gravestone_angel rot=90
+  patch water at=540 len=30 lat=-0.3 w=8
+  patch water at=640 len=25 lat=0.4 w=7
+  patch gravel at=380 len=50 lat=-0.75 w=4
+  hazard oil at=470 lat=0.3 r=2.5
+  hazard barrel at=730 lat=0.85
+  hazard barrel at=905 lat=0.85
+  pickup cash at=181 lat=0
+  pickup mystery at=40 lat=0
+  pickup wrench at=290 lat=0.2
+  pickup ammo at=420 lat=-0.4
+  pickup nitro at=500 lat=0
+  pickup rocket at=620 lat=-0.3
+  pickup mine at=750 lat=0.3
+  pickup cash at=850 lat=-0.6
+  place start_gantry x=0 z=0 rot=270
+  prop grandstand at=30 side=right off=3
+  row gravestone at=80 len=205 side=both off=1 every=4
+  row crypt at=330 len=110 side=left off=5 every=22
+  row cypress at=520 len=200 side=left off=2 every=14
+  row gravestone_cross at=740 len=150 side=right off=2 every=6
+  place chapel x=-150 z=55 rot=0
+  place mausoleum x=-250 z=30 rot=90
+  place gravestone_angel x=-60 z=60 rot=0
+  place tree_dead x=-100 z=40 rot=0
+  place bench x=-200 z=60 rot=0
+  lamps lamp_old every=40 side=both
+
+# The cross: a long foot (two 200 m straights for guns), three arms that end in square hairpins, the cobbled cloister
+# in the head, crypts filling the arms and a mausoleum where the beams meet.
+track cem_cross
+  title "Kreuz und Quer" title_en "Criss-Cross Crypts"
+  venue cemetery
+  laps 3
+  width 14
+  shoulder 2.5
+  reverse 1
+  start 0 0 0
+  straight 182
+  left 90 r=18
+  straight 64
+  right 90 r=18
+  straight 14 surface=gravel
+  right 90 r=18
+  straight 64
+  left 90 r=18
+  straight 64 surface=cobble
+  right 90 r=18 surface=cobble
+  straight 14 surface=cobble
+  right 90 r=18 surface=cobble
+  straight 64 surface=cobble
+  left 90 r=18
+  straight 64
+  right 90 r=18
+  straight 14 surface=gravel
+  right 90 r=18
+  straight 64
+  left 90 r=18
+  straight 204
+  right 90 r=18
+  straight 14
+  right 90 r=18
+  straight 22
+  close
+  patch water at=100 len=25 lat=0.4 w=6
+  patch water at=960 len=30 lat=-0.4 w=6
+  patch water at=600 len=20 lat=0.3 w=6
+  hazard oil at=1080 lat=0 r=2.5
+  hazard barrel at=290 lat=-0.85
+  hazard barrel at=745 lat=-0.85
+  hazard barrel at=548 lat=-0.85
+  obstacle angel at=1000 lat=0.35 r=1.0 model=gravestone_angel rot=180
+  pickup mystery at=90 lat=0
+  pickup cash at=310 lat=0.6
+  pickup wrench at=400 lat=0
+  pickup cash at=536 lat=0.6
+  pickup ammo at=690 lat=-0.3
+  pickup cash at=763 lat=0.6
+  pickup nitro at=920 lat=0
+  pickup rocket at=1050 lat=-0.3
+  pickup mine at=1130 lat=0
+  place start_gantry x=0 z=0 rot=0
+  prop grandstand at=40 side=left off=3
+  place mausoleum x=25 z=-225 rot=0
+  place crypt x=-45 z=-225 rot=90
+  place crypt x=-75 z=-225 rot=90
+  place crypt x=95 z=-225 rot=270
+  place crypt x=125 z=-225 rot=270
+  place crypt x=25 z=-290 rot=0
+  place crypt x=25 z=-320 rot=0
+  place gravestone_angel x=25 z=-165 rot=180
+  place cypress x=25 z=-130 rot=0
+  place gravestone x=25 z=-100 rot=0
+  place gravestone x=25 z=-80 rot=0
+  place gravestone x=25 z=-60 rot=0
+  place open_grave x=25 z=-40 rot=0
+  place cypress x=25 z=-10 rot=0
+  row gravestone_cross at=20 len=160 side=left off=2 every=6
+  row gravestone_cross at=900 len=180 side=left off=2 every=6
+  row cypress at=437 len=60 side=left off=1 every=15
+  row cypress at=572 len=60 side=left off=1 every=15
+  prop chapel at=536 side=left off=6
+  lamps lamp_old every=40 side=both

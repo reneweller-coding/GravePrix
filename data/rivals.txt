@@ -1,0 +1,1455 @@
+# The drivers of the Grave Prix: 25 at the start (five per league, one champion each), 20 rookies who take the
+# seats of the dead, and the boss. "say" lines are German, "say_en" English; several per event.
+# Events: start overtake wreck_player wrecked_by_player hit win lose dead (last words; champions never die).
+
+# ------------------------------------------------------------------------------------------------ league 5
+
+rival barry
+  name "Barry D. Alive"
+  league 5
+  car rustbucket
+  colors #5a4a32 #2b3a22 #d8c9a0
+  skill 0.5
+  aggression 0.45
+  weapons 0.55
+  likes mine
+  champion 1
+  portrait "A broad-shouldered gravedigger in his fifties with a weathered, mud-streaked face, grey stubble and one eyebrow permanently raised; a flat cap, a patched tweed waistcoat over a collarless shirt, braces, a shovel slung across his back; soil under his fingernails; calm and grimly amused; a little brass bell on a string tied round his wrist."
+  bio "Barry wurde vor zwölf Jahren versehentlich beerdigt und hat sich in einer Nacht mit einem Teelöffel wieder ausgegraben. Seitdem trägt er ein Glöckchen am Handgelenk und gräbt Minenlöcher schneller als jeder Bagger. Champion im Armengrab – weil er weiß, wie es da unten aussieht."
+  bio_en "Twelve years ago Barry was buried by mistake and dug himself out overnight with a teaspoon. He has worn a little bell on his wrist ever since and digs a mine hole faster than any excavator. Champion of the Pauper's Grave – because he knows what it's like down there."
+  say start "Sechs Fuß tief? Da war ich schon tiefer." "Schaufel im Kofferraum. Los geht's." "Ich grab euch allen ein hübsches Plätzchen."
+  say_en start "Six feet under? I've been deeper." "Shovel's in the boot. Let's go." "I'll dig you all a lovely little spot."
+  say overtake "Platz da, ich hab um sechs Feierabend." "Durch dich durch wie ein Wurm durchs Erdreich."
+  say_en overtake "Out of the way, I clock off at six." "Through you like a worm through soil."
+  say wreck_player "Ich hol schon mal die Schaufel." "Ruhe sanft. Oder auch nicht, mir egal." "Liegt gut. Ich grab drumherum."
+  say_en wreck_player "I'll fetch my shovel." "Rest in peace. Or don't, your call." "Lies nicely. I'll dig around it."
+  say wrecked_by_player "Halb so wild, ich komm immer wieder raus." "Bimmel, bimmel! Holt mich hier raus!"
+  say_en wrecked_by_player "No matter, I always dig my way out." "Ring-a-ding! Get me out of here!"
+  say hit "He! Ich bin noch nicht tot!" "Das gibt Schwielen."
+  say_en hit "Oi! I'm not dead yet!" "That'll leave calluses."
+  say win "Wer gräbt, der findet. Diesmal den Sieg." "Wieder oben. Ich bleib nie lange unten."
+  say_en win "Dig deep enough and you strike a win." "On top again. I never stay down long."
+  say lose "Kein Grund zur Trauer. Na gut, ein kleiner." "Da grab ich mich auch wieder raus."
+  say_en lose "No reason to mourn. Well, a small one." "I'll dig my way out of this one too."
+  obit "Barry D. Alive wird in einem selbst gegrabenen Loch beigesetzt. Das Glöckchen bleibt dran – man weiß ja nie."
+  obit_en "Barry D. Alive will be laid to rest in a hole of his own digging. The bell stays on – just in case."
+
+rival tess
+  name "Tetanus Tess"
+  league 5
+  car rustbucket
+  colors #a0522d #4a3b2a #e0b070
+  skill 0.38
+  aggression 0.65
+  weapons 0.35
+  likes spikes
+  portrait "A stocky woman in her forties with frizzy copper hair under a welding cap, freckles, a chipped front tooth and a mischievous grin; a sleeveless denim jacket studded with rusty bottle caps and safety pins, leather gloves with the fingertips cut off; streaks of orange rust on her cheeks like war paint; a rusty horseshoe nailed above her shoulder."
+  bio "Tess wohnt auf dem Schrottplatz, isst vom Schrottplatz und hat noch nie eine Tetanusspritze bekommen – sie sagt, der Rost hat sie längst geimpft. Sie rammt alles, was glänzt, und streut Nägel, die sie aus alten Särgen zieht."
+  bio_en "Tess lives on the scrap yard, eats off the scrap yard and has never had a tetanus shot – she says the rust vaccinated her years ago. She rams anything shiny and scatters nails she pulls out of old coffins."
+  say start "Frischer Rost für alle!" "Was glänzt, wird gerammt."
+  say_en start "Fresh rust for everyone!" "If it shines, I ram it."
+  say overtake "Rost wartet auf niemanden!" "Ätsch! Nimm 'nen Nagel mit!" "Zur Seite, Blechdose!"
+  say_en overtake "Rust waits for no one!" "Ha! Have a nail on me!" "Move it, tin can!"
+  say wreck_player "Na, wie fühlt sich Totalschaden an?" "Ich nehm deine Teile. Danke!"
+  say_en wreck_player "How's total loss feel, then?" "Dibs on your parts. Ta!"
+  say wrecked_by_player "Ich komm wieder. In Raten." "Jetzt bin ich selber Schrott."
+  say_en wrecked_by_player "I'll be back in instalments." "Now I'm scrap myself."
+  say hit "Au! Das war mein guter Kotflügel!" "Noch 'ne Delle. Passt zu den anderen."
+  say_en hit "Ow! That was my good fender!" "Another dent. Matches the others."
+  say win "Schrott eins, Glanz null!" "Rost gewinnt. Immer. Irgendwann."
+  say_en win "Scrap one, shiny nil!" "Rust wins. Always. Eventually."
+  say lose "Nächstes Mal mehr Nägel." "Mist. Schrott. Rostiger Mist."
+  say_en lose "More nails next time." "Rubbish. Scrap. Rusty rubbish."
+  say dead "Sagt dem Schrottplatz ... ich komm heim."
+  say_en dead "Tell the scrap yard ... I'm coming home."
+  obit "Tetanus Tess wird auf ihrem Schrottplatz beigesetzt, zwischen einem Kühlschrank und einem Kombi. Sie wollte es so. Der Kombi auch."
+  obit_en "Tetanus Tess will be buried on her scrap yard, between a fridge and an estate car. She wanted it that way. So did the estate car."
+
+rival kalle
+  name "Kalle Kühlfach"
+  league 5
+  car brainfreeze
+  colors #8fd8c8 #f2a0c0 #ffffff
+  skill 0.42
+  aggression 0.35
+  weapons 0.45
+  likes oil
+  portrait "A pale, soft-spoken man in his thirties with slicked-back blond hair, frost-white eyebrows and a permanently cold-red nose; a white ice-cream vendor's jacket and paper hat, with a morgue toe tag hanging from the top button instead of a name badge; a gentle, slightly creepy smile; he holds a melting cone in a rubber glove."
+  bio "Kalle hat zwanzig Jahre lang in der Leichenhalle die Kühlfächer betreut und dann beschlossen, dass Speiseeis die fröhlichere Ware ist. Sein Eiswagen spielt eine Melodie, bei der Kinder weinen und Gegner das Lenkrad verreißen. Wer ihm folgt, rutscht auf geschmolzenem Vanilleöl."
+  bio_en "Kalle spent twenty years minding the cold drawers at the morgue – his surname is German for exactly that – before deciding ice cream was the cheerier merchandise. His van plays a jingle that makes children cry and rivals swerve. Follow him and you skid on melted vanilla oil."
+  say start "Eis gefällig? Ganz frisch aus dem Kühlfach." "Bitte nicht drängeln, jeder kommt dran."
+  say_en start "Ice cream? Fresh from the cold drawer." "No pushing, everyone gets a turn."
+  say overtake "Zwei Kugeln, bitte – an dir vorbei!" "Bimmelimm! Platz für den Eismann!"
+  say_en overtake "Two scoops – and one past you!" "Ding-a-ling! Make way for the ice man!"
+  say wreck_player "Kaltgestellt. Das kann ich gut." "Ich hab da ein Fach für dich frei." "Schön stillhalten. Wie früher."
+  say_en wreck_player "Put on ice. I'm good at that." "I've got a drawer free for you." "Hold nice and still. Like old times."
+  say wrecked_by_player "Mein Eis! Mein schönes Eis!" "Jetzt taut alles auf ..."
+  say_en wrecked_by_player "My ice cream! My lovely ice cream!" "Now everything's thawing out ..."
+  say hit "Vorsicht, die Waffeln brechen!" "Nicht schubsen, das gibt Gefrierbrand."
+  say_en hit "Careful, the wafers will break!" "Don't shove, that gives freezer burn."
+  say win "Eis für alle! Außer für euch." "Cool bleiben zahlt sich aus."
+  say_en win "Ice cream for everyone! Except you lot." "Staying cool pays off."
+  say lose "Schade. Dann eben Sorbet." "Mir ist kalt. Mir ist immer kalt."
+  say_en lose "Pity. Sorbet it is, then." "I'm cold. I'm always cold."
+  say dead "Endlich ... wieder im Kühlfach."
+  say_en dead "Back in the cold drawer ... at last."
+  obit "Kalle Kühlfach wird auf eigenen Wunsch tiefgekühlt aufgebahrt. Der Eiswagen fährt weiter – die Melodie bleibt."
+  obit_en "At his own request, Kalle Kühlfach will lie in state deep-frozen. The van rolls on – and so does the jingle."
+
+rival vic
+  name "Vic Timm"
+  league 5
+  car tincan
+  colors #c8b89a #7a7a80 #e8e0d0
+  skill 0.36
+  aggression 0.15
+  weapons 0.3
+  likes smoke
+  portrait "A thin, nervous man in his late twenties with a receding hairline, big watery eyes behind taped-up glasses and a neck brace he doesn't strictly need; a beige cardigan buttoned to the top, a bicycle helmet worn under his crash helmet; he clutches a thick folder labelled 'Claims'; anxious, apologetic, flinching at the camera flash."
+  bio "Vic ist in seinem Leben schon von einem Bus, einem Kinderwagen und einem Leichenwagen angefahren worden – der Leichenwagen hat sich wenigstens entschuldigt. Er fährt im Grave Prix, weil sein Therapeut gesagt hat, er soll sich seinen Ängsten stellen. Meistens tut er das aus seiner eigenen Rauchwolke heraus."
+  bio_en "In his life Vic has been run over by a bus, a pram and a hearse – at least the hearse apologised. He races in the Grave Prix because his therapist told him to face his fears. Mostly he faces them from inside his own smoke screen."
+  say start "Ich hab ein ganz mieses Bauchgefühl." "Bitte alle vorsichtig fahren, ja?" "Mama, falls du zuhörst ..."
+  say_en start "I've got a terrible feeling in my tummy." "Everyone drive carefully, okay?" "Mum, if you're listening ..."
+  say overtake "Entschuldigung! Tut mir leid! Vorbei!" "Huch, bin ich etwa vorne?"
+  say_en overtake "Sorry! So sorry! Coming through!" "Oh! Am I ahead?"
+  say wreck_player "Oh nein! Das wollte ich nicht! Geht's dir gut?" "Ich bin versichert! Glaub ich."
+  say_en wreck_player "Oh no! I didn't mean to! Are you okay?" "I'm insured! I think."
+  say wrecked_by_player "Natürlich. Immer ich." "Ich hab's gewusst. Ich hab's gewusst!"
+  say_en wrecked_by_player "Of course. Always me." "I knew it. I knew it!"
+  say hit "Aua! Mein Nacken!" "Warum immer ich?!" "Das melde ich der Versicherung!"
+  say_en hit "Ow! My neck!" "Why is it always me?!" "I'm reporting that to my insurer!"
+  say win "Ich ... hab gewonnen? Ist das ein Trick?" "Mama! Überlebt UND gewonnen!"
+  say_en win "I ... won? Is this a trick?" "Mum! I survived AND won!"
+  say lose "Hauptsache, alle Knochen noch dran." "Wenigstens bin ich nicht gestorben. Diesmal."
+  say_en lose "At least all my bones are still attached." "At least I didn't die. This time."
+  say dead "Hab ich doch gesagt ..."
+  say_en dead "I told you so ..."
+  obit "Vic Timm hinterlässt einen Ordner mit 214 offenen Schadensmeldungen. Die Versicherung hat bereits Widerspruch eingelegt."
+  obit_en "Vic Timm leaves behind a folder of 214 open insurance claims. The insurer has already lodged an appeal."
+
+rival nina
+  name "Nine-Lives Nina"
+  league 5
+  car tincan
+  colors #1e1e24 #f0f0f0 #ffb020
+  skill 0.45
+  aggression 0.55
+  weapons 0.3
+  likes nitro
+  portrait "A wiry woman in her sixties with wild grey hair, cat-eye make-up, green eyes and a scar through one eyebrow; a leopard-print racing jacket covered in cat hair, a necklace of eight little brass bells and one empty hook; a ginger cat sits on her shoulder wearing a tiny crash helmet; reckless and cackling."
+  bio "Nina hat acht Unfälle überlebt, die jeder Statistiker für tödlich hält, und trägt für jeden ein Glöckchen um den Hals. Am Haken für das neunte hängt noch nichts. Sie fährt mit Vollgas, Nitro und einer Katze auf der Schulter, die offiziell als Beifahrerin eingetragen ist."
+  bio_en "Nina has survived eight crashes any statistician would call fatal and wears a bell on her necklace for each one. The hook for the ninth is still empty. She drives flat out, on nitro, with a cat on her shoulder that is officially registered as co-driver."
+  say start "Miau! Leben Nummer neun, los geht's!" "Krallen raus, Mädels!"
+  say_en start "Meow! Life number nine, here we go!" "Claws out, ladies!"
+  say overtake "Katzen landen immer vorne!" "Fauch! Vorbei!" "Schnurr, schnurr, tschüss!"
+  say_en overtake "Cats always land in front!" "Hiss! Gone!" "Purr, purr, bye-bye!"
+  say wreck_player "Neugier ist der Katze Tod. Deiner auch." "Platt wie ein Bettvorleger."
+  say_en wreck_player "Curiosity killed the cat. And you." "Flat as a doormat."
+  say wrecked_by_player "Nummer neun? Neiiin!" "Das zählt nicht! Das war Leben achteinhalb!"
+  say_en wrecked_by_player "Number nine? Nooo!" "That doesn't count! That was life eight and a half!"
+  say hit "Fauch!" "Nicht am Fell ziehen!"
+  say_en hit "Hiss!" "Don't pull my fur!"
+  say win "Die Katze hat die Sahne!" "Neun Leben, ein Sieg. Miau!"
+  say_en win "The cat got the cream!" "Nine lives, one win. Meow!"
+  say lose "Die Katze leckt ihre Wunden." "Pfoten hoch. Nächstes Mal."
+  say_en lose "The cat's licking her wounds." "Paws up. Next time."
+  say dead "Neun ... na gut. Füttert die Katze."
+  say_en dead "Nine ... fair enough. Feed the cat."
+  obit "Nine-Lives Nina hat ihr neuntes Leben aufgebraucht. Die Katze, als Beifahrerin unverletzt, erbt alles und hat bereits eine Rennlizenz beantragt."
+  obit_en "Nine-Lives Nina has used up her ninth life. The cat, unhurt in the passenger seat, inherits everything and has already applied for a racing licence."
+
+rival toby
+  name "Toby Continued"
+  league 5
+  car rustbucket
+  colors #2a3a6a #e8c838 #f0f0f0
+  skill 0.4
+  aggression 0.4
+  weapons 0.35
+  likes nitro
+  rookie 1
+  portrait "A handsome but battered man in his early thirties with a perfect quiff, a square jaw covered in sticking plasters and a dramatic stare into the middle distance; a white racing suit with looping embroidery on the back, one arm in a sling; theatrical, always posing as if a camera were rolling; a clapperboard sticks out of his glovebox."
+  bio "Toby war zehn Jahre lang Statist in einer Seifenoper und ist dort in jeder dritten Folge gestorben – Lawine, Hai, böser Zwilling. Er kam jedes Mal wieder. Im Grave Prix will er beweisen, dass das auch ohne Drehbuch klappt."
+  bio_en "Toby spent ten years as an extra on a soap opera and died in every third episode – avalanche, shark, evil twin. He always came back. In the Grave Prix he means to prove it works without a script."
+  say start "Was bisher geschah: Ich war tot. Jetzt nicht mehr." "Und ... Action!"
+  say_en start "Previously on my life: I died. Not any more." "And ... action!"
+  say overtake "Dramatische Wendung!" "Das hat das Publikum nicht kommen sehen!"
+  say_en overtake "Dramatic twist!" "The audience didn't see that coming!"
+  say wreck_player "Deine Rolle wurde gestrichen." "Und – Schnitt!"
+  say_en wreck_player "Your part's been written out." "And – cut!"
+  say wrecked_by_player "Fortsetzung folgt!" "Das war nur der Staffelauftakt!"
+  say_en wrecked_by_player "To be continued!" "That was just the season opener!"
+  say hit "Mein Gesicht! Ich hab einen Vertrag!" "Das stand nicht im Drehbuch!"
+  say_en hit "My face! I'm under contract!" "That wasn't in the script!"
+  say win "Happy End! Abspann, bitte!" "Ich danke meiner Maskenbildnerin!"
+  say_en win "Happy ending! Roll credits!" "I'd like to thank my make-up artist!"
+  say lose "Cliffhanger. Morgen geht's weiter." "Das klärt sich in der nächsten Folge."
+  say_en lose "Cliffhanger. Tune in tomorrow." "All will be explained next episode."
+  say dead "Fortsetzung ... folgt ... bestimmt ..."
+  say_en dead "To be ... continued ... surely ..."
+  obit "Toby Continued ist tot. Seine Fans warten trotzdem auf die nächste Staffel. Toby vermutlich auch."
+  obit_en "Toby Continued is dead. His fans are waiting for the next season anyway. So, probably, is Toby."
+
+rival lefty
+  name "Lucky Lefty"
+  league 5
+  car tincan
+  colors #2e8b3e #d4af37 #101010
+  skill 0.38
+  aggression 0.5
+  weapons 0.5
+  likes rocket
+  rookie 1
+  portrait "A cheerful woman in her mid-twenties with a shaved head, a four-leaf-clover tattoo on her cheek and a wide gap-toothed grin; a green bomber jacket with the left sleeve pinned up and a chrome steering knob fitted where her left forearm used to be; lucky charms hang from every zip – a rabbit's foot, dice, a horseshoe; she gives a big thumbs-up with her right hand."
+  bio "Lefty hat ihren linken Arm im allerersten Rennen verloren und nennt sich trotzdem die glücklichste Frau der Welt – schließlich ist sie Rechtshänderin. Statt der Hand trägt sie jetzt einen Lenkradknauf aus Chrom und schießt Raketen mit links. Ihre Suchanzeige wegen des Arms läuft noch."
+  bio_en "Lefty lost her left arm in her very first race and still calls herself the luckiest woman alive – she's right-handed, after all. Where the hand used to be she now has a chrome steering knob, and she fires rockets with her left. Her ad about the missing arm is still running."
+  say start "Daumen hoch! Ich hab ja noch einen." "Glück gehabt, dass ich dabei bin!"
+  say_en start "Thumbs up! I've still got one." "Lucky me, being here!"
+  say overtake "Glück gehabt! Ich, nicht du." "Mit links!"
+  say_en overtake "Lucky! Me, not you." "Did that one-handed!"
+  say wreck_player "Pech gehabt! Das Glück hab nämlich ich." "Kopf hoch! Falls du ihn noch hast."
+  say_en wreck_player "Bad luck! I've got all the good stuff." "Chin up! If you've still got one."
+  say wrecked_by_player "Na ja. Ein Arm ist ja noch übrig." "Pech im Spiel ..."
+  say_en wrecked_by_player "Ah well. I've got one arm left." "Unlucky at cars ..."
+  say hit "Nicht schon wieder links!" "Hufeisen, tu was!"
+  say_en hit "Not the left side again!" "Come on, horseshoe, do something!"
+  say win "Glück ist eine Frage des Talents!" "Klopf auf Holz! Oder auf Chrom."
+  say_en win "Luck is a matter of talent!" "Knock on wood! Or chrome."
+  say lose "Morgen hab ich wieder Glück. Statistisch." "Die Hasenpfote ist kaputt."
+  say_en lose "I'll be lucky tomorrow. Statistically." "The rabbit's foot's broken."
+  say dead "Hm. Das Glück ... war wohl im linken Arm."
+  say_en dead "Huh. Guess my luck ... was in the left arm."
+  obit "Lucky Lefty hat ihr Glück endgültig aufgebraucht. Ihr linker Arm, der nie gefunden wurde, gilt weiterhin als vermisst."
+  obit_en "Lucky Lefty has finally run out of luck. Her left arm, never found, remains listed as missing."
+
+rival ash
+  name "Ash Trey"
+  league 5
+  car brainfreeze
+  colors #5a5a5e #d84a1a #b0b0b0
+  skill 0.4
+  aggression 0.35
+  weapons 0.45
+  likes smoke
+  rookie 1
+  portrait "A lanky man in his fifties with a hollow-cheeked, ash-grey face, nicotine-stained fingers and a cigarette that never leaves the corner of his mouth; a stoker's leather apron over a singed vest, soot in the creases of his forehead; heavy-lidded and unbothered; a small brass urn hangs from his belt and serves as his ashtray."
+  bio "Ash hat dreißig Jahre lang im Krematorium die Öfen geschürt und dabei mit dem Rauchen angefangen – aus Solidarität. Seine Rauchwolken sind im Grave Prix gefürchtet, sein Husten auch. Den Aschenbecher am Gürtel hat er von einem Stammkunden geerbt."
+  bio_en "Ash stoked the crematorium furnaces for thirty years and took up smoking along the way – out of solidarity. His smoke screens are feared across the Grave Prix, and so is his cough. The urn on his belt was left to him by a regular customer."
+  say start "Kurz noch eine ..." "Feuer frei. Im Ofen, mein ich."
+  say_en start "Just one more cigarette ..." "Fire away. In the furnace, I mean."
+  say overtake "Rauchen gefährdet deine Platzierung." "Hust ... vorbei."
+  say_en overtake "Smoking may seriously harm your position." "Cough ... past you."
+  say wreck_player "Asche zu Asche." "Schön durch. Well done, sozusagen." "Ich kenn da einen guten Ofen."
+  say_en wreck_player "Ashes to ashes." "Nicely done. Well done, even." "I know a lovely furnace."
+  say wrecked_by_player "Hust, hust ... das war's." "Jetzt rauch ich selber."
+  say_en wrecked_by_player "Cough, cough ... that's that." "Now I'm the one smoking."
+  say hit "He, meine Kippe!" "Vorsicht mit der Glut!"
+  say_en hit "Oi, my cigarette!" "Mind the embers!"
+  say win "Darauf eine Zigarette." "Wo Rauch ist, ist auch ein Sieger."
+  say_en win "That calls for a cigarette." "Where there's smoke, there's a winner."
+  say lose "Verpufft." "Egal. Hast du Feuer?"
+  say_en lose "Up in smoke." "Whatever. Got a light?"
+  say dead "Endlich ... rauchfrei."
+  say_en dead "Finally ... smoke-free."
+  obit "Ash Trey hat das Rauchen aufgegeben, wenn auch nicht freiwillig. Er wird eingeäschert – die alten Kollegen sagen, er hätte es nicht anders gewollt."
+  obit_en "Ash Trey has quit smoking, though not voluntarily. He will be cremated – his old colleagues say he wouldn't have had it any other way."
+
+rival betty
+  name "Blowout Betty"
+  league 5
+  car rustbucket
+  colors #c8102e #f5f5f5 #1a1a1a
+  skill 0.42
+  aggression 0.5
+  weapons 0.5
+  likes spikes
+  rookie 1
+  portrait "A buxom woman in her late thirties with a towering red beehive, winged eyeliner and a bubble of pink gum mid-pop; a pink diner waitress uniform with a name tag, roller skates on her feet and a tyre iron in her hand; a belt of spike strips worn like a bandolier; sassy, chewing loudly, one hand on her hip."
+  bio "Betty hat zwanzig Jahre lang in einem Diner an der Fernstraße Kaffee nachgeschenkt und dabei jeden Gast gezählt, der nie wiederkam. Heute streut sie Krähenfüße wie andere Leute Zuckerstreusel. Ihr Lieblingsgeräusch: das Zischen eines platten Reifens."
+  bio_en "Betty spent twenty years topping up coffee in a highway diner, counting every customer who never came back. Today she scatters spikes the way other people sprinkle hundreds and thousands. Her favourite sound: the hiss of a flat tyre."
+  say start "Was darf's sein, Süßer? Ein Platten?" "Kaugummi rein, Gas runter!"
+  say_en start "What'll it be, hon? A flat?" "Gum in, pedal down!"
+  say overtake "Hier ist die Rechnung, Schätzchen!" "Trinkgeld nicht vergessen!"
+  say_en overtake "Here's your bill, sweetie!" "Don't forget the tip!"
+  say wreck_player "Pfffft. Das Geräusch liebe ich." "Bestellung erledigt." "Der Gast kommt nicht wieder."
+  say_en wreck_player "Psssst. Love that sound." "Order up!" "That one won't be back."
+  say wrecked_by_player "He! Ich hab noch nicht kassiert!" "Schicht vorbei. Für immer."
+  say_en wrecked_by_player "Hey! I haven't cashed up!" "Shift's over. Forever."
+  say hit "Pass auf die Frisur auf!" "Rüpel!"
+  say_en hit "Watch the hair!" "Rude!"
+  say win "Der Kaffee geht aufs Haus!" "Das nenn ich Trinkgeld!"
+  say_en win "Coffee's on the house!" "Now that's a tip!"
+  say lose "Flauer Tag im Diner." "Kaugummi verschluckt."
+  say_en lose "Slow day at the diner." "Swallowed my gum."
+  say dead "Die Rechnung ... bitte."
+  say_en dead "Check ... please."
+  obit "Blowout Betty hat ihre letzte Schicht beendet. Sie hinterlässt einen Kaugummi unter jedem Tisch des Diners und ungefähr vierhundert platte Reifen."
+  obit_en "Blowout Betty has finished her last shift. She leaves a piece of gum under every table in the diner and roughly four hundred flat tyres."
+
+# ------------------------------------------------------------------------------------------------ league 4
+
+rival jack
+  name "Jack Knife"
+  league 4
+  car shovelhead
+  colors #2b4c7e #c0c0c0 #ffcc00
+  skill 0.62
+  aggression 0.78
+  weapons 0.55
+  likes rocket
+  champion 1
+  portrait "A huge bear of a man in his fifties with a bushy black beard shot with grey, mirrored aviator sunglasses and a toothpick in the corner of his mouth; a sleeveless flannel shirt, a trucker cap with a winged skull, forearms like hams tattooed with road signs; a CB radio microphone clipped to his chest; slow-talking and unstoppable."
+  bio "Jack ist vierzig Jahre lang Sattelschlepper gefahren und hat dabei drei Mautstationen, zwei Brücken und einen Kirchturm mitgenommen. Er fährt keine Kurven, er fährt durch sie hindurch. Über Funk grüßt er jeden Gegner, bevor er ihn von der Straße schiebt."
+  bio_en "Jack drove eighteen-wheelers for forty years and took out three toll booths, two bridges and a church steeple along the way. He doesn't take corners, he takes them apart. He says hello to every rival over the CB before he shoves them off the road."
+  say start "Breaker, breaker – hier kommt der Brummi." "Gurt an, Hirn aus."
+  say_en start "Breaker, breaker – big rig coming through." "Belt on, brain off."
+  say overtake "Ich blinke nicht. Ich fahre." "Platz da, Schwerlastverkehr!" "Kleiner Schubs unter Freunden."
+  say_en overtake "I don't indicate. I just go." "Make way, heavy load!" "Just a little nudge between friends."
+  say wreck_player "Zehn-vier, Ziel zerlegt." "Sorry, toter Winkel." "Schon meinen Kuhfänger kennengelernt?"
+  say_en wreck_player "Ten-four, target flattened." "Sorry, blind spot." "Have you met my bull bar?"
+  say wrecked_by_player "Mayday, Mayday ... Jack geht vom Funk." "Na, das nenn ich eine Vollbremsung."
+  say_en wrecked_by_player "Mayday, mayday ... Jack's going off air." "Well, that's what I call an emergency stop."
+  say hit "Kitzelt." "Hast du gerade auf einen Laster geschossen?"
+  say_en hit "Tickles." "Did you just shoot at a truck?"
+  say win "Zehn-vier, Ladung zugestellt." "Der Brummi brummt ganz vorne."
+  say_en win "Ten-four, delivery complete." "The big rig rolls in first."
+  say lose "Stau. Muss am Wetter liegen." "Der Tacho geht wohl nach."
+  say_en lose "Traffic jam. Must be the weather." "Speedo must be off."
+  obit "Jack Knife hat sich zum letzten Mal quergestellt. Die Trucker der Gegend hupten ihm zu Ehren eine volle Minute lang – die Anwohner haben Beschwerde eingereicht."
+  obit_en "Jack Knife has jackknifed for the last time. The local truckers honked for a full minute in his honour – the neighbours have filed a complaint."
+
+rival mina
+  name "Mina Field"
+  league 4
+  car hatchet
+  colors #5b6b2f #c2b280 #1c1c1c
+  skill 0.5
+  aggression 0.4
+  weapons 0.68
+  likes mine
+  portrait "A composed woman in her early forties with a short platinum crop, a pale scar across her chin and ice-blue eyes; an olive bomb-disposal vest over a crisp white blouse, a stethoscope round her neck for listening to fuses and a tiny pair of wire cutters on a chain like a pendant; polite, precise and unblinking."
+  bio "Mina hat fünfzehn Jahre lang Minen geräumt und irgendwann gemerkt, dass Legen besser bezahlt wird. Sie hört Zünder ticken, wo andere nur den Motor hören. Ihre Minen liegen immer ordentlich in Reih und Glied – sie hält auf sich."
+  bio_en "Mina spent fifteen years clearing mines before realising that laying them pays better. She can hear a fuse ticking over the roar of an engine. Her mines are always laid in tidy rows – she has standards."
+  say start "Bitte nur auf die markierten Felder treten." "Ich hab hier schon mal ... vorbereitet."
+  say_en start "Please keep to the marked squares." "I've taken the liberty of ... preparing things."
+  say overtake "Achtung, hinter mir wird es knusprig." "Vorbei. Schau lieber auf den Boden."
+  say_en overtake "Careful, it gets crunchy behind me." "Passing. Do mind the ground."
+  say wreck_player "Feld geräumt." "Zündung erfolgreich." "Sauber verlegt, sauber erwischt."
+  say_en wreck_player "Field cleared." "Detonation successful." "Neatly laid, neatly caught."
+  say wrecked_by_player "Rot oder blau ... falsch geraten." "Das stand nicht im Lageplan."
+  say_en wrecked_by_player "Red wire or blue ... wrong guess." "That wasn't on the map."
+  say hit "Unpräzise. Aber wirksam." "Bitte nicht erschüttern."
+  say_en hit "Imprecise. But effective." "Please, no sudden jolts."
+  say win "Ein Sieg auf ganzer Fläche." "Alles nach Plan. Nach meinem Plan."
+  say_en win "Victory across the whole field." "All according to plan. My plan."
+  say lose "Blindgänger. Kommt vor." "Ich lege nach."
+  say_en lose "A dud. It happens." "I'll lay more."
+  say dead "Ach ... da lag ja noch eine."
+  say_en dead "Oh ... I forgot about that one."
+  obit "Mina Field ist auf einer ihrer eigenen Minen verstorben – laut Kollegen der einzigen, die sie je schief verlegt hat. Trauergäste werden gebeten, das Grab nur auf den markierten Wegen zu besuchen."
+  obit_en "Mina Field has died on one of her own mines – according to colleagues, the only one she ever laid crooked. Mourners are asked to approach the grave by the marked paths only."
+
+rival anita
+  name "Anita Hearse"
+  league 4
+  car pallbearer
+  colors #141018 #5a2a6e #d4c4e0
+  skill 0.56
+  aggression 0.32
+  weapons 0.45
+  likes smoke
+  portrait "A tall, elegant woman in her mid-thirties with a severe black bob, purple lipstick and a beauty spot; a tailored black funeral director's suit with a lavender silk pocket square, black lace gloves and a small veiled hat; she swings a brass incense burner on a chain; deadpan, dignified, faintly bored."
+  bio "Anita fährt tagsüber Leichenwagen für Graves & Sons – im Schritttempo, mit gesenktem Blick. Nachts holt sie die verlorenen Stundenkilometer nach. Ihr Weihrauchfass hat sie zur Nebelmaschine umgebaut; der Pfarrer weiß nichts davon."
+  bio_en "By day Anita drives hearses for Graves & Sons – at walking pace, eyes lowered. By night she makes up for every lost mile per hour. She has turned her incense burner into a smoke machine; the vicar doesn't know."
+  say start "Bitte erheben Sie sich. Und dann Gas." "Feierliche Aufstellung. Und los."
+  say_en start "All rise. Then floor it." "Solemn procession. And go."
+  say overtake "Bitte bilden Sie eine Gasse für den Trauerzug." "Verzeihung, ich komme zu spät zu einer Beerdigung."
+  say_en overtake "Kindly make way for the procession." "Excuse me, I'm late for a funeral."
+  say wreck_player "Ich hätte da hinten noch einen Platz frei." "Mein Beileid. Ehrlich gemeint."
+  say_en wreck_player "I've a free seat in the back, as it happens." "My condolences. I mean it."
+  say wrecked_by_player "Wie unwürdig." "Bitte schicken Sie einen anderen Wagen. Für mich."
+  say_en wrecked_by_player "How undignified." "Please send another hearse. For me."
+  say hit "Etwas mehr Pietät, bitte." "Das ist ein Dienstwagen!"
+  say_en hit "A little reverence, please." "This is a company car!"
+  say win "Pünktlich angekommen, wie immer." "Der Verstorbene wäre stolz. Welcher auch immer."
+  say_en win "Arrived on time, as always." "The deceased would be proud. Whichever one."
+  say lose "Kein Grund zur Eile. Bei uns wartet jeder." "Ein würdevoller fünfter Platz."
+  say_en lose "No need to hurry. Our clients always wait." "A dignified fifth place."
+  say dead "Bitte ... Lilien, keine Nelken."
+  say_en dead "Please ... lilies, not carnations."
+  obit "Anita Hearse fährt ein letztes Mal im Leichenwagen mit, diesmal hinten. Die Kollegen versprechen Schritttempo – zumindest bis zur Stadtgrenze."
+  obit_en "Anita Hearse rides in a hearse one last time, in the back for once. Her colleagues promise walking pace – at least as far as the city limits."
+
+rival clyde
+  name "No-Claims Clyde"
+  league 4
+  car hatchet
+  colors #1f5aa6 #ffffff #8a9bb0
+  skill 0.48
+  aggression 0.6
+  weapons 0.4
+  likes oil
+  portrait "A sweaty, smiling man in his forties with a comb-over, a pencil behind his ear and a foam neck brace worn over his collar; a cheap short-sleeved shirt and tie, a clipboard thick with claim forms; a dashboard camera strapped to his forehead; oily charm, rubbing his hands together."
+  bio "Clyde hat mehr Auffahrunfälle provoziert als jeder andere Mensch auf dem Kontinent, und keiner war angeblich seine Schuld. Er bremst grundlos, kippt Öl und wartet mit laufender Kamera auf den Aufprall. Seinen Schadenfreiheitsrabatt hat er nie verloren – weil ihn keine Versicherung mehr nimmt."
+  bio_en "Clyde has staged more rear-end collisions than anyone else on the continent, and not one was allegedly his fault. He brakes for no reason, spills oil and waits for the crunch, camera rolling. He has never lost his no-claims bonus – because no insurer will take him any more."
+  say start "Kamera läuft. Bitte auffahren." "Halten Sie Abstand. Oder lieber nicht."
+  say_en start "Camera's rolling. Rear-end me, please." "Keep your distance. Or rather, don't."
+  say overtake "Vorsicht, ich bremse gleich grundlos!" "Vorbei – ab jetzt sind Sie hinter mir. Haftbar."
+  say_en overtake "Careful, I'm about to brake for no reason!" "Passed you – now you're behind me. Liable."
+  say wreck_player "Das war eindeutig Ihre Schuld." "Ich hab Zeugen. Gekaufte, aber Zeugen."
+  say_en wreck_player "That was clearly your fault." "I have witnesses. Paid ones, but witnesses."
+  say wrecked_by_player "Halswirbel! Schmerzensgeld!" "Ich verklag dich bis ins Jenseits!"
+  say_en wrecked_by_player "Whiplash! Compensation!" "I'll sue you into the afterlife!"
+  say hit "Danke! Das zahlt die Versicherung!" "Aua! Ich meine: Juhu!" "Notiert: Fahrzeug, Kennzeichen, Uhrzeit."
+  say_en hit "Thank you! That one's on the insurance!" "Ow! I mean: yay!" "Noted: vehicle, plate, time of impact."
+  say win "Sieg ohne eine einzige Schadensmeldung. Fast." "Vertragsgemäß zugestellt."
+  say_en win "A win and not a single claim. Almost." "Delivered as per contract."
+  say lose "Ich fechte das Ergebnis an." "Mein Anwalt meldet sich."
+  say_en lose "I'm contesting the result." "My lawyer will be in touch."
+  say dead "Das ... ist nicht ... versichert."
+  say_en dead "This ... isn't ... covered."
+  obit "No-Claims Clyde hinterlässt eine Witwe, drei Anwälte und eine letzte Schadensmeldung. Die Versicherung lehnt ab: Vorsatz."
+  obit_en "No-Claims Clyde leaves a widow, three lawyers and one final claim. The insurer has rejected it: intent."
+
+rival vince
+  name "Vince Vulture"
+  league 4
+  car shovelhead
+  colors #6e5a3c #e8dcc0 #3a2a1a
+  skill 0.54
+  aggression 0.25
+  weapons 0.52
+  likes spikes
+  portrait "A hunched, bald man in his sixties with a long scrawny neck, a hooked nose, beady dark eyes and a ring of white feathery hair; a moth-eaten black duster coat over a vest hung with car badges torn off wrecks, bolt cutters on his belt; patient and gloating, looking at your car's parts rather than at your face."
+  bio "Vince kreist. Er überholt selten, greift nie als Erster an und ist trotzdem immer zur Stelle, wenn es kracht – mit Bolzenschneider und Einkaufstüte. Die Hälfte seines Autos stammt von Gegnern, die die andere Hälfte nicht mehr brauchten."
+  bio_en "Vince circles. He rarely overtakes and never strikes first, yet he's always there when something crashes – with bolt cutters and a shopping bag. Half his car came from rivals who no longer needed the other half."
+  say start "Ich warte einfach. Ich warte gern." "Fahrt ihr nur. Ich sammle dann ein."
+  say_en start "I'll just wait. I like waiting." "You lot go ahead. I'll do the collecting."
+  say overtake "Ah, du schwächelst. Das riech ich." "Vorbei. Ich komm später wieder."
+  say_en overtake "Ah, you're flagging. I can smell it." "Passing. I'll be back for you later."
+  say wreck_player "Die Felgen gehören mir." "Liegen lassen, ich räum auf." "Danke für die Ersatzteile."
+  say_en wreck_player "Dibs on the rims." "Leave it, I'll tidy up." "Thanks for the spare parts."
+  say wrecked_by_player "Jetzt picken die anderen an mir rum." "Krächz ..."
+  say_en wrecked_by_player "Now someone else gets to pick at me." "Caw ..."
+  say hit "Nicht auf den Lack, der ist geklaut!" "Ich bin gar nicht hier."
+  say_en hit "Not the paint, it's stolen!" "I'm not even here."
+  say win "Gut gewartet ist halb gewonnen." "Wer zuletzt angreift, frisst am besten."
+  say_en win "Patience pays. In parts." "Good things come to those who wait. And loot."
+  say lose "Macht nichts. Die Wracks laufen ja nicht weg." "Nicht gewonnen, aber gut gegessen."
+  say_en lose "Never mind. The wrecks aren't going anywhere." "Didn't win, but I ate well."
+  say dead "Jetzt ... kommen die anderen Geier."
+  say_en dead "Now ... the other vultures come."
+  obit "Vince Vulture ist verstorben. Als die Bergung eintraf, fehlten an seinem Wrack bereits die Felgen. Er wäre stolz gewesen."
+  obit_en "Vince Vulture has passed away. When the recovery crew arrived, his wreck was already missing its rims. He would have been proud."
+
+rival skid
+  name "Skid Rowe"
+  league 4
+  car hatchet
+  colors #4b2a7a #39ff14 #1a1a1a
+  skill 0.5
+  aggression 0.5
+  weapons 0.5
+  likes oil
+  rookie 1
+  portrait "A scrawny young man of about twenty with a bleached mullet, a wispy moustache and dark rings under his eyes; a stained purple tracksuit and fingerless gloves, a sleeping bag rolled up on the back seat behind him; restless, grinning, smelling of burnt rubber; black tyre marks across his white trainers."
+  bio "Skid wohnt in seinem Auto, isst in seinem Auto und schläft in seinem Auto, meistens auf einem Supermarktparkplatz, auf dem er nachts Kreise driftet. Er fährt quer, auch wenn es geradeaus ginge. Seine Ölspuren nennt er Kunst."
+  bio_en "Skid lives in his car, eats in his car and sleeps in his car, usually on a supermarket car park where he drifts doughnuts all night. He goes sideways even when straight would do. He calls his oil slicks art."
+  say start "Quer ist das neue Geradeaus." "Reifen? Wer braucht schon Reifen."
+  say_en start "Sideways is the new straight." "Tyres? Who needs tyres."
+  say overtake "Seitwärts an dir vorbei, Alter!" "Guck mal, ohne Grip!"
+  say_en overtake "Sideways past you, mate!" "Look, no grip!"
+  say wreck_player "Ausgerutscht? Ups, mein Öl." "Das war Kunst."
+  say_en wreck_player "Slipped? Oops, my oil." "That was art."
+  say wrecked_by_player "Jetzt bin ich richtig obdachlos!" "Mein Schlafzimmer brennt!"
+  say_en wrecked_by_player "Now I'm properly homeless!" "My bedroom's on fire!"
+  say hit "He, das ist mein Wohnzimmer!" "Pass auf meine Matratze auf!"
+  say_en hit "Oi, that's my living room!" "Mind my mattress!"
+  say win "Heute Nacht schlaf ich im Hotel!" "Gequalmt, gerutscht, gewonnen!"
+  say_en win "Tonight I'm sleeping in a hotel!" "Smoked, slid, won!"
+  say lose "Egal, Hauptsache quer." "Sah aber gut aus."
+  say_en lose "Whatever, at least it was sideways." "Looked good though."
+  say dead "Ein letzter ... Drift ..."
+  say_en dead "One last ... drift ..."
+  obit "Skid Rowe wird in seinem Auto beigesetzt – es war ohnehin seine Wohnung. Die Ölspur, die er hinterlässt, steht inzwischen unter Denkmalschutz."
+  obit_en "Skid Rowe will be buried in his car – it was his home anyway. The oil slick he leaves behind is now a listed monument."
+
+rival dinah
+  name "Dinah Mite"
+  league 4
+  car pallbearer
+  colors #b22222 #0a0a0a #ffd700
+  skill 0.5
+  aggression 0.45
+  weapons 0.7
+  likes mine
+  rookie 1
+  portrait "A short, stocky woman in her late twenties with a sooty face, a blackened fringe standing straight up as if from a blast and singed eyebrows; a red quarry worker's boiler suit, ear defenders round her neck, sticks of dynamite tucked into her breast pocket like pens; an unlit match between her teeth; beaming, with an explosive temper."
+  bio "Dinah hat im Steinbruch Felsen gesprengt, bis es keine Felsen mehr gab. Sie hat eine kurze Zündschnur, im wahrsten Sinne: Ihre Augenbrauen sind seit Jahren nicht nachgewachsen. Im Grave Prix legt sie Minen, weil ihr der Knall fehlt."
+  bio_en "Dinah blasted rock in a quarry until there was no rock left. She has a short fuse in every sense: her eyebrows haven't grown back in years. She lays mines in the Grave Prix because she misses the bang."
+  say start "Drei, zwei, eins ... Bumm! Ach so, Start." "Ohren zu!"
+  say_en start "Three, two, one ... boom! Oh, the start." "Cover your ears!"
+  say overtake "Achtung, Sprengung!" "Hinter mir wird's laut!"
+  say_en overtake "Fire in the hole!" "It gets loud behind me!"
+  say wreck_player "Bumm! Herrlich!" "Sauber gesprengt!" "Hörst du das Pfeifen? Das bleibt."
+  say_en wreck_player "Boom! Lovely!" "Clean blast!" "Hear that ringing? It's permanent."
+  say wrecked_by_player "Na toll. Jetzt bin ich das Echo." "Wer hat meine Lunte angezündet?"
+  say_en wrecked_by_player "Great. Now I'm the echo." "Who lit my fuse?"
+  say hit "Vorsicht, ich hab Dynamit an Bord!" "Nicht so fest, ich bin geladen!"
+  say_en hit "Careful, I've got dynamite on board!" "Easy, I'm loaded!"
+  say win "Durchschlagender Erfolg!" "Ein Sieg mit Knalleffekt!"
+  say_en win "An explosive success!" "Winning with a bang!"
+  say lose "Rohrkrepierer." "Die Zündschnur war zu lang."
+  say_en lose "Misfire." "Fuse was too long."
+  say dead "Ohh ... der war gut."
+  say_en dead "Ohh ... that was a good one."
+  obit "Dinah Mite ist mit einem lauten Knall von uns gegangen, genau wie sie es sich gewünscht hat. Die Trauerfeier findet aus Sicherheitsgründen im Steinbruch statt."
+  obit_en "Dinah Mite went out with a bang, exactly as she always wanted. For safety reasons the service will be held in the quarry."
+
+rival rico
+  name "Rico Shay"
+  league 4
+  car shovelhead
+  colors #c9a227 #1b1b1b #e8e8e8
+  skill 0.52
+  aggression 0.55
+  weapons 0.62
+  likes rocket
+  rookie 1
+  portrait "A slick young man in his mid-twenties with a sharp goatee, gelled black curls and a gold earring; a fringed gold showman's jacket over a black shirt, two empty holsters and a bandolier of tiny rockets; one eye always half-closed as if aiming; cocky and winking, a playing card with a bullet hole through the middle tucked in his hatband."
+  bio "Rico hat im Zirkus Zigaretten aus Mündern geschossen, bis eine Assistentin mit dem Rauchen aufhörte – für immer. Seitdem schießt er auf Autos, die verzeihen mehr. Er trifft fast alles, nur selten das, worauf er zielt."
+  bio_en "Rico used to shoot cigarettes out of people's mouths in the circus, until one assistant quit smoking – permanently. Since then he's switched to cars; they're more forgiving. He hits nearly everything, just rarely what he was aiming at."
+  say start "Kugel im Lauf, Charme im Blick." "Ich ziele heute auf alles."
+  say_en start "Bullet in the chamber, charm in the eye." "Today I'm aiming at everything."
+  say overtake "Vorbei – und nicht mal gezielt!" "Trickschuss, Trickfahrt!"
+  say_en overtake "Passed you – didn't even aim!" "Trick shot, trick drive!"
+  say wreck_player "Volltreffer! Glaub ich jedenfalls." "Ins Schwarze!" "Der war für die Galerie."
+  say_en wreck_player "Direct hit! I think." "Bullseye!" "That one was for the gallery."
+  say wrecked_by_player "Abpraller! Das war ein Abpraller!" "Wer hat da zurückgeschossen?"
+  say_en wrecked_by_player "Ricochet! That was a ricochet!" "Who shot back?"
+  say hit "Unfair, ich war gerade am Zielen!" "Daneben! Ach nein, doch nicht."
+  say_en hit "Unfair, I was aiming!" "Missed! Oh. No, you didn't."
+  say win "Applaus, bitte! Und Geld!" "Hab ich's nicht gesagt? Treffer!"
+  say_en win "Applause, please! And money!" "Didn't I say so? Dead centre!"
+  say lose "Das Visier ist verstellt." "Der Wind. Es war der Wind."
+  say_en lose "My sights are off." "The wind. It was the wind."
+  say dead "Hm. Querschläger ..."
+  say_en dead "Hm. Ricochet ..."
+  obit "Rico Shay wurde von einer abprallenden Rakete getroffen – seiner eigenen. Der Zirkus spendet ein Trapez als Grabschmuck."
+  obit_en "Rico Shay was struck by a ricocheting rocket – his own. The circus has donated a trapeze to decorate the grave."
+
+rival tilly
+  name "Tilly Tailgate"
+  league 4
+  car hatchet
+  colors #e0218a #111111 #f8f8f8
+  skill 0.48
+  aggression 0.8
+  weapons 0.35
+  likes nitro
+  rookie 1
+  portrait "A wiry woman in her forties with a tight blonde ponytail, wraparound sunglasses pushed up on her head and a jaw clenched in permanent road rage; a pink tennis jacket, pearl earrings, a travel coffee mug in one fist; three empty child seats in the back of her car; her high beams flare behind her."
+  bio "Tilly fährt seit zwanzig Jahren jeden Morgen dreißig Zentimeter hinter ihrem Vordermann und hat noch nie einen Termin verpasst. Ihre Lichthupe ist berüchtigt, ihr Nitro auch. Die drei Kindersitze sind leer, weil die Kinder lieber Bus fahren."
+  bio_en "For twenty years Tilly has driven every morning a foot behind the car in front, and she has never once been late. Her high beams are notorious, and so is her nitro. The three child seats are empty because the kids prefer the bus."
+  say start "Ich hab um neun einen Termin!" "Wer blinkt, verliert."
+  say_en start "I've got a meeting at nine!" "Indicating is for losers."
+  say overtake "Endlich! Sonntagsfahrer!" "Lichthupe! Lichthupe! LICHTHUPE!"
+  say_en overtake "Finally! Sunday driver!" "High beams! High beams! HIGH BEAMS!"
+  say wreck_player "Hättest halt Platz gemacht." "Die linke Spur ist meine Spur."
+  say_en wreck_player "Should've moved over." "The fast lane is my lane."
+  say wrecked_by_player "Ich will deinen Vorgesetzten sprechen!" "Das sag ich deiner Mutter!"
+  say_en wrecked_by_player "I want to speak to your manager!" "I'm telling your mother!"
+  say hit "Kratzer im Lack! Ich steig aus. Nein, doch nicht!" "Mein Kaffee!"
+  say_en hit "Scratched paint! I'm getting out. No, I'm not!" "My coffee!"
+  say win "Pünktlich wie immer." "So fährt man, Leute!"
+  say_en win "On time, as always." "That's how you drive, people!"
+  say lose "Alles Sonntagsfahrer hier." "Ich will den Rennleiter sprechen."
+  say_en lose "Sunday drivers, the lot of you." "I want to speak to the race director."
+  say dead "Ich ... komm ... zu spät ..."
+  say_en dead "I'm ... going to be ... late ..."
+  obit "Tilly Tailgate ist ihrem Vordermann ein letztes Mal zu nahe gekommen. Der Trauerzug wird gebeten, ausreichend Abstand zu halten – sie selbst hat es nie getan."
+  obit_en "Tilly Tailgate got too close to the car in front one last time. The procession is asked to keep a safe distance – something she never managed herself."
+
+# ------------------------------------------------------------------------------------------------ league 3
+
+rival petra
+  name "Petra Leum"
+  league 3
+  car widowmaker
+  colors #101010 #2e7d6b #e0a020
+  skill 0.72
+  aggression 0.6
+  weapons 0.7
+  likes oil
+  champion 1
+  portrait "A glamorous woman in her fifties with glossy black hair in a sculpted wave, heavy gold jewellery and a mink stole slick with crude oil; a black satin evening gown under an open hazard-orange refinery jacket, a white hard hat with a diamond tiara welded to the brim; cold and amused, a drop of oil hanging from one gloved fingertip; flare stacks burning behind her."
+  bio "Petra hat eine Raffinerie geerbt, zwei weitere erheiratet und eine dritte einem Ehemann abgenommen, der mitten im Pokerspiel verstarb. Sie fährt, als gehöre ihr die Strecke, und meistens gehört ihr zumindest das Öl darauf. Champion der Familiengruft – ihre eigene Gruft hat einen Pipelineanschluss."
+  bio_en "Petra inherited one refinery, married into two more and won a third off a husband who died mid-poker game. She drives as if she owns the track, and usually she at least owns the oil on it. Champion of the Family Plot – her own crypt has a pipeline connection."
+  say start "Volltanken, bitte. Auf eure Rechnung." "Meine Strecke, mein Öl, meine Regeln."
+  say_en start "Fill her up. On your account." "My track, my oil, my rules."
+  say overtake "Aus dem Weg, Kleinverbraucher." "Ich fahre auf Reserve. Auf eurer."
+  say_en overtake "Out of the way, small consumer." "I'm running on reserves. Yours."
+  say wreck_player "Rohstoff ist Rohstoff." "Hübscher Glanz, dein Wrack." "Ich verbuche das als Spende."
+  say_en wreck_player "Raw material is raw material." "Your wreck has a lovely sheen." "I'll count that as a donation."
+  say wrecked_by_player "Unerhört. Ich verklage die Straße." "Holt meinen Chauffeur."
+  say_en wrecked_by_player "Outrageous. I shall sue the road." "Fetch my chauffeur."
+  say hit "Das war ein Original!" "Wissen Sie überhaupt, wer ich bin?"
+  say_en hit "That was an original!" "Do you have any idea who I am?"
+  say win "Wie erwartet. Champagner, bitte." "Öl schwimmt immer oben."
+  say_en win "As expected. Champagne, please." "Oil always rises to the top."
+  say lose "Dann kaufe ich eben das Ergebnis." "Der Ölpreis ist schuld."
+  say_en lose "Then I'll simply buy the result." "Blame the oil price."
+  obit "Petra Leum ist verstorben. Ihr Testament verteilt drei Raffinerien, elf Pelze und einen Ölteppich, der seit Jahrzehnten vor der Küste treibt."
+  obit_en "Petra Leum has died. Her will divides up three refineries, eleven furs and an oil spill that has been drifting off the coast for decades."
+
+rival wilbur
+  name "Wilbur Widower"
+  league 3
+  car lastcall
+  colors #0d0d0d #f2f2f2 #b8860b
+  skill 0.6
+  aggression 0.8
+  weapons 0.5
+  likes nitro
+  portrait "A dapper, handsome man in his sixties with silver temples, a neatly trimmed moustache and a too-perfect smile; a black morning suit with a white carnation, five wedding rings threaded on a chain round his neck; a heart-shaped box of chocolates under one arm; sorrowful eyes that don't match his grin."
+  bio "Wilbur war fünfmal verheiratet und ist fünfmal Witwer geworden – Treppensturz, Pilzsuppe, Föhn in der Badewanne, noch mal Pilzsuppe, ein Balkon ohne Geländer. Die Polizei hat nie etwas beweisen können. Er fährt Rennen, weil ihm keine Lebensversicherung mehr eine Police verkauft."
+  bio_en "Wilbur has been married five times and widowed five times – a fall down the stairs, mushroom soup, a hairdryer in the bath, mushroom soup again, a balcony without a railing. The police never proved a thing. He races because no life insurer will sell him a policy any more."
+  say start "Liebe Trauergemeinde, wir sind heute hier versammelt ..." "Ich hab's eilig, ich bin verlobt."
+  say_en start "Dearly beloved, we are gathered here today ..." "I'm in a hurry, I'm engaged."
+  say overtake "Bis dass der Tod uns scheidet – also gleich." "Darf ich bitten? Zur Seite."
+  say_en overtake "Till death do us part – so, shortly." "May I have this lane?"
+  say wreck_player "Tragischer Unfall. Wie immer." "Ich hab damit nichts zu tun." "Willst du mich heiraten? Ach, zu spät."
+  say_en wreck_player "A tragic accident. As always." "I had nothing to do with it." "Will you marry me? Oh – too late."
+  say wrecked_by_player "Endlich ... wieder vereint." "Liebling? Welche von euch?"
+  say_en wrecked_by_player "Reunited ... at last." "Darling? Which one of you?"
+  say hit "Das war versuchter Mord! Ich kenn mich da aus." "Vorsicht, ich bin in Trauer!"
+  say_en hit "That was attempted murder! I'd know." "Careful, I'm in mourning!"
+  say win "Dieser Sieg ist für meine Verblichenen. Alle fünf." "Hochzeitsglocken!"
+  say_en win "This one's for my late wives. All five." "Wedding bells!"
+  say lose "Ich trauere. Darin bin ich geübt." "Pilzsuppe hätte geholfen."
+  say_en lose "I'm grieving. I've had practice." "Mushroom soup would have helped."
+  say dead "Sagt ... der Polizei ... nichts."
+  say_en dead "Tell ... the police ... nothing."
+  obit "Wilbur Widower wird im Familiengrab beigesetzt, zwischen seinen fünf Ehefrauen. Die Polizei nimmt die Ermittlungen wieder auf – in allen sechs Fällen."
+  obit_en "Wilbur Widower will be laid in the family plot, between his five wives. Police are reopening their enquiries – into all six cases."
+
+rival flatline
+  name "Doc Flatline"
+  league 3
+  car coroner
+  colors #e8f0ec #2f8f6f #c81e1e
+  skill 0.66
+  aggression 0.45
+  weapons 0.64
+  likes spikes
+  portrait "A gaunt woman in her late forties with pale skin, steel-grey hair in a severe bun and half-moon glasses on a chain; a white lab coat over green surgical scrubs, a stethoscope and a bone saw hanging from her belt, latex gloves snapped on; utterly calm, faintly disappointed in everyone; a clipboard of death certificates filled in except for the names."
+  bio "Dr. Henrietta Flatline ist Gerichtsmedizinerin und fährt den Grave Prix, um Zeit zu sparen: Sie stellt die Totenscheine direkt an der Strecke aus. Ihre Spritzen streut sie wie Krähenfüße. Lächeln sah man sie zuletzt bei einer besonders interessanten Obduktion."
+  bio_en "Dr Henrietta Flatline is a coroner who races in the Grave Prix to save time: she signs the death certificates trackside. She scatters syringes the way others scatter caltrops. The last time anyone saw her smile was at a particularly interesting autopsy."
+  say start "Startzeitpunkt: jetzt. Notiert." "Atmen Sie ruhig weiter. Solange es geht."
+  say_en start "Time of start: now. Noted." "Keep breathing normally. While you can."
+  say overtake "Puls schwach. Überholt." "Sie sehen blass aus. Fahren Sie rechts ran."
+  say_en overtake "Weak pulse. Overtaken." "You look pale. Pull over."
+  say wreck_player "Todeszeitpunkt: genau jetzt." "Keine Wiederbelebung. Zu teuer." "Ich trag das schon mal ein."
+  say_en wreck_player "Time of death: right about now." "Do not resuscitate. Too expensive." "I'll just fill this in now."
+  say wrecked_by_player "Faszinierend. Ich hätte gern meine eigene Obduktion." "Nulllinie. Wie lästig."
+  say_en wrecked_by_player "Fascinating. I'd like to do my own autopsy." "Flatline. How tiresome."
+  say hit "Prellung, zweiten Grades." "Bitte nicht die Instrumente."
+  say_en hit "Contusion, second degree." "Not the instruments, please."
+  say win "Befund: Sieg." "Die Patientin hat überlebt. Ich."
+  say_en win "Findings: victory." "The patient survived. Me."
+  say lose "Befund: unerfreulich." "Ich bitte um eine Zweitmeinung."
+  say_en lose "Findings: disappointing." "I'd like a second opinion."
+  say dead "Todesursache ... bitte genau ... notieren."
+  say_en dead "Cause of death ... note it ... precisely."
+  obit "Dr. Henrietta Flatline ist verstorben. Den Totenschein hatte sie vorsorglich selbst ausgefüllt; Todesursache: „wie erwartet“."
+  obit_en "Dr Henrietta Flatline has died. She had filled in her own death certificate in advance; cause of death: ‘as expected’."
+
+rival cinder
+  name "Cinder Ella"
+  league 3
+  car widowmaker
+  colors #e2581d #2a2a2a #ffd27f
+  skill 0.62
+  aggression 0.5
+  weapons 0.66
+  likes smoke
+  portrait "A young woman in her early twenties with a soot-smudged heart-shaped face, a messy auburn braid crowned by a tiara made of bent spanners and big hopeful eyes; a silver fireproof suit with the hood down, one fireproof boot and one glass slipper; sparks drifting around her; dreamy and dangerous at once."
+  bio "Ella hat jahrelang für ihre Stiefschwestern die Fackeln der Raffinerie geputzt, bis sie eines Nachts auf einen Ball ging – genauer: in einen Feuerball. Seitdem fährt sie Rennen und hinterlässt Rauch, wo andere Bremsspuren hinterlassen. Um Mitternacht verwandelt sich ihr Auto nicht in einen Kürbis; sie hat es überprüft."
+  bio_en "For years Ella cleaned the refinery flare stacks for her stepsisters, until one night she went to a ball – a fireball, to be precise. Since then she races and leaves smoke where others leave skid marks. Her car does not turn into a pumpkin at midnight; she's checked."
+  say start "Bis Mitternacht bin ich vorn!" "Ruß im Gesicht, Blei im Fuß."
+  say_en start "I'll be in front by midnight!" "Soot on my face, lead in my foot."
+  say overtake "Die Guten ins Töpfchen, dich ins Kröpfchen!" "Ein Hauch von Asche, und weg!"
+  say_en overtake "Kiss my cinders!" "A whiff of ash and I'm gone!"
+  say wreck_player "Da brennt nichts mehr an." "Dein Märchen ist aus."
+  say_en wreck_player "Nothing left to burn there." "Your fairy tale's over."
+  say wrecked_by_player "Mein Schuh! Wo ist mein Schuh?" "Es ist Mitternacht, oder?"
+  say_en wrecked_by_player "My slipper! Where's my slipper?" "It's midnight, isn't it?"
+  say hit "Vorsicht, ich fang schnell Feuer!" "Funkenflug!"
+  say_en hit "Careful, I catch fire easily!" "Sparks!"
+  say win "Und sie fuhr glücklich bis an ihr Lebensende!" "Der Schuh passt!"
+  say_en win "And she raced happily ever after!" "The slipper fits!"
+  say lose "Wieder Asche fegen ..." "Kein Prinz in Sicht."
+  say_en lose "Back to sweeping the ashes ..." "No prince in sight."
+  say dead "Und wenn sie nicht gestorben ist ... ach so."
+  say_en dead "And they lived happily ... oh. Never mind."
+  obit "Cinder Ella wird im Krematorium Aschenputtel eingeäschert, das darauf bestand, die Kosten zu übernehmen. Am Unfallort fand man einen gläsernen Schuh; er passt niemandem."
+  obit_en "Cinder Ella will be cremated at Urn Your Keep, which insisted on covering the costs. A glass slipper was found at the scene; it fits no one."
+
+rival marsh
+  name "Marsh Mallow"
+  league 3
+  car coroner
+  colors #4a5d23 #f4c2c2 #8b7355
+  skill 0.58
+  aggression 0.35
+  weapons 0.72
+  likes mine
+  portrait "An enormous, soft-looking man in his forties with a round baby face, a tangled mossy beard and a mosquito net draped over a straw hat; mud-caked dungarees with no shirt, rubber waders, a string of fishing floats and small landmines round his neck like a garland; a gentle, sleepy smile; a stuffed alligator rides on his bonnet."
+  bio "Marsh lebt in einer Pfahlhütte im Sumpf, spricht mit Alligatoren und hat noch keinen von ihnen enttäuscht. Er ist weich wie sein Name und tückisch wie der Schlamm: Er legt Minen wie Reusen und wartet. Geduldig. Sehr geduldig."
+  bio_en "Marsh lives in a stilt hut in the bayou, talks to alligators and has never let one of them down. He's as soft as his name and as treacherous as the mud: he sets mines like fish traps and waits. Patiently. Very patiently."
+  say start "Nur nicht hetzen. Der Sumpf wartet." "Ganz ruhig, Brüderchen."
+  say_en start "No rush. The swamp'll wait." "Easy now, little brother."
+  say overtake "Hoppla. Entschuldige." "Langsam ist auch schnell. Irgendwann."
+  say_en overtake "Oopsie. Sorry about that." "Slow gets there too. Eventually."
+  say wreck_player "Der Sumpf nimmt dich gern." "Bleib liegen, die Alligatoren kommen gleich." "Hab ich dir ja gesagt. Nein, hab ich nicht."
+  say_en wreck_player "The swamp's happy to have you." "Stay put, the gators'll be along." "Told you so. No, I didn't."
+  say wrecked_by_player "Oh. Na gut." "Grüß mir die Alligatoren."
+  say_en wrecked_by_player "Oh. All right then." "Say hi to the gators for me."
+  say hit "Hm? Hat da was gekitzelt?" "Nicht so grob, ich bin weich."
+  say_en hit "Hm? Did something tickle?" "Not so rough, I'm squishy."
+  say win "Oh. Gewonnen. Schön." "Heute Abend gibt's Froschschenkel."
+  say_en win "Oh. Won. Nice." "Frog legs tonight."
+  say lose "Macht nix." "Der Sumpf hat auch schlechte Tage."
+  say_en lose "No matter." "The swamp has bad days too."
+  say dead "Bringt mich ... heim in den Schlamm."
+  say_en dead "Take me ... home to the mud."
+  obit "Marsh Mallow wird auf eigenen Wunsch im Sumpf versenkt. Die Alligatoren haben Trauer angemeldet – und Appetit."
+  obit_en "At his own request, Marsh Mallow will be sunk in the swamp. The alligators are in mourning – and peckish."
+
+rival bodo
+  name "Bodo Bag"
+  league 3
+  car lastcall
+  colors #1a1a1a #9a9a9a #f0e68c
+  skill 0.58
+  aggression 0.6
+  weapons 0.6
+  likes spikes
+  rookie 1
+  portrait "A broad, square-headed man in his thirties with a blond flat-top, a thick neck and small kind eyes; a black rubber apron over a grey porter's uniform, a ring of zip pulls clipped to his belt like a bunch of keys; a black body bag folded neatly over one shoulder like a towel; earnest and tidy, humming to himself."
+  bio "Bodo ist Leichenträger und packt jeden Tag Menschen in Säcke, ordentlich und mit Reißverschluss. Er findet, die Welt wäre aufgeräumter, wenn alles einen Reißverschluss hätte. Auf der Strecke streut er Krähenfüße, damit ihm die Kundschaft nicht wegläuft."
+  bio_en "Bodo is a morgue porter who zips people into bags every day, neatly. He believes the world would be a tidier place if everything had a zip. On the track he scatters spikes so the customers don't run off."
+  say start "Ratsch, Reißverschluss zu, los geht's." "Ich hab Säcke in allen Größen."
+  say_en start "Zip it up, let's go." "I've got bags in every size."
+  say overtake "Ordnung muss sein. Vorbei." "Ich hol dich später ab."
+  say_en overtake "Everything in its place. Passing." "I'll pick you up later."
+  say wreck_player "Einpacken. Zumachen. Fertig." "Größe L, schätz ich."
+  say_en wreck_player "Bag it. Zip it. Done." "Size large, I reckon."
+  say wrecked_by_player "Sich selbst einpacken ist schwer." "Ach du ... Reißverschluss."
+  say_en wrecked_by_player "Bagging yourself is hard." "Oh ... zip."
+  say hit "Nicht drängeln, jeder kommt dran." "Unordentlich!"
+  say_en hit "No shoving, everyone gets a turn." "Untidy!"
+  say win "Sauber erledigt." "Alles verpackt, alles verschnürt."
+  say_en win "Neatly done." "All wrapped up."
+  say lose "Morgen wird ordentlicher gefahren." "Ich zieh mich zurück. Und zu."
+  say_en lose "Tidier driving tomorrow." "I'll zip off now."
+  say dead "Bitte ... ordentlich ... zumachen."
+  say_en dead "Zip me ... up ... neatly."
+  obit "Bodo Bag wurde von seinen Kollegen eingepackt, so ordentlich wie nie zuvor. Nur der Reißverschluss klemmte – er hätte es gehasst."
+  obit_en "Bodo Bag has been bagged by his colleagues, more neatly than ever before. Only the zip stuck – he would have hated that."
+
+rival rex
+  name "Rex Hume"
+  league 3
+  car widowmaker
+  colors #5c4033 #f4d03f #2f2f2f
+  skill 0.6
+  aggression 0.5
+  weapons 0.66
+  likes mine
+  rookie 1
+  portrait "A lean, grinning man in his forties with a long jaw, five days of stubble and a miner's lamp strapped to his forehead; a filthy trench coat whose deep pockets bulge with rings and pocket watches, a folding spade on his back; sly and cheerful, soil on his elbows; a gold tooth that is clearly not his own."
+  bio "Rex ist Exhumierer – offiziell im Auftrag der Behörden, inoffiziell im Auftrag von Rex. Was er ausgräbt, landet manchmal im Labor und meistens im Pfandhaus. Seine Minen vergräbt er so gut, dass er sie selbst nicht mehr wiederfindet."
+  bio_en "Rex is an exhumer – officially on behalf of the authorities, unofficially on behalf of Rex. What he digs up sometimes ends up in a lab and mostly in a pawn shop. He buries his mines so well that even he can't find them again."
+  say start "Was ich verbuddle, findet keiner. Auch ich nicht." "Lampe an, Schaufel raus."
+  say_en start "What I bury, nobody finds. Me included." "Lamp on, spade out."
+  say overtake "Ausgegraben und abgehängt." "Hübscher Goldzahn, den du da hast."
+  say_en overtake "Dug up and left behind." "Nice gold tooth you've got there."
+  say wreck_player "Den hol ich später wieder raus." "Wertsachen dabei? Ich frag nur." "Erst begraben, dann ausgraben."
+  say_en wreck_player "I'll dig that one up later." "Any valuables? Just asking." "Bury first, dig up later."
+  say wrecked_by_player "Na prima. Jetzt gräbt mich einer aus." "Wer hat da eine Mine vergraben? Ach, ich."
+  say_en wrecked_by_player "Great. Now someone'll dig ME up." "Who buried a mine there? Oh. Me."
+  say hit "He! Der Spaten war antik!" "Aua, meine Taschen klirren."
+  say_en hit "Oi! That spade was antique!" "Ow, my pockets are jingling."
+  say win "Ein Schatz! Ausnahmsweise ein legaler." "Ausgegraben: der Sieg."
+  say_en win "Treasure! A legal one, for once." "Unearthed: victory."
+  say lose "Heute kein Gold." "Nur Würmer im Loch."
+  say_en lose "No gold today." "Just worms in the hole."
+  say dead "Bitte ... tief genug ... graben."
+  say_en dead "Dig ... deep enough ... please."
+  obit "Rex Hume wurde beigesetzt. Die Friedhofsverwaltung hat einen Wachmann abgestellt – nicht wegen Rex, sondern wegen seiner Kollegen."
+  obit_en "Rex Hume has been buried. The cemetery has posted a guard – not because of Rex, but because of his colleagues."
+
+rival will
+  name "Will Reading"
+  league 3
+  car coroner
+  colors #1f4d3a #efe6c8 #8b0000
+  skill 0.6
+  aggression 0.3
+  weapons 0.55
+  likes oil
+  rookie 1
+  portrait "A pale, pinched young man in his late twenties with oiled side-parted hair, round spectacles and a long nose; a three-piece suit a size too big, a fountain pen in every pocket and a leather document case stuffed with testaments; licking his thumb to turn a page; polite, patient and visibly calculating."
+  bio "Will ist Erbschleicher von Beruf und Notar aus Leidenschaft. Er hat sich bei jedem Fahrer des Grave Prix als Alleinerbe eintragen lassen und wartet nun geduldig. Er fährt vorsichtig, damit er die Testamentseröffnungen noch erlebt."
+  bio_en "Will is a legacy hunter by trade and a notary at heart. He has had himself named sole heir by every driver in the Grave Prix and is now waiting patiently. He drives carefully so that he lives to see the wills read."
+  say start "Alle Testamente auf dem neuesten Stand? Wunderbar." "Ich bin nur zum Erben hier."
+  say_en start "Wills all up to date? Splendid." "I'm only here for the inheritance."
+  say overtake "Verzeihung, ich habe einen Notartermin." "Nach mir die Sintflut. Und der Nachlass."
+  say_en overtake "Excuse me, I've an appointment with the notary." "After me, the deluge. And the estate."
+  say wreck_player "Mein herzliches Beileid. An mich." "Steht alles im Testament." "Ich nehme die Erbschaft an."
+  say_en wreck_player "My heartfelt condolences. To me." "It's all in the will." "I accept the inheritance."
+  say wrecked_by_player "Ich habe ... kein Testament gemacht!" "Wer beerbt denn jetzt mich?"
+  say_en wrecked_by_player "I never ... made a will!" "Who inherits from me?"
+  say hit "Das wird im Nachlass vermerkt." "Bitte nicht die Dokumente!"
+  say_en hit "This will be noted in the estate." "Mind the documents!"
+  say win "Ein Sieg. Sogar zu Lebzeiten." "Ich habe geerbt – den ersten Platz."
+  say_en win "A win. While still alive, even." "I've inherited first place."
+  say lose "Heute kein Erbe." "Die Testamentseröffnung wurde vertagt."
+  say_en lose "No legacy today." "The reading of the will has been postponed."
+  say dead "Ach ... ich hätte ... mich selbst beerben sollen."
+  say_en dead "I should have ... left it all ... to myself."
+  obit "Will Reading ist ohne Testament verstorben, was in seinem Beruf als Pointe gilt. Sein Erbe fällt an den Staat; Mortimer Graves hat Einspruch eingelegt."
+  obit_en "Will Reading has died intestate, which in his line of work counts as a punchline. His estate goes to the state; Mortimer Graves has filed an objection."
+
+rival ida
+  name "Ida Indemnity"
+  league 3
+  car lastcall
+  colors #6b7b8c #2bb5a8 #ffffff
+  skill 0.62
+  aggression 0.45
+  weapons 0.58
+  likes smoke
+  rookie 1
+  portrait "A brisk woman in her thirties with a neat brown bob, a tight smile and rimless glasses; a grey business suit with a teal scarf and a lanyard ID badge from a claims department, a calculator in one hand and a big rubber stamp in the other; efficient, unflinching and unimpressed by anyone's suffering."
+  bio "Ida ist Schadensreguliererin bei einer großen Versicherung und hat sich in den Grave Prix eingeschrieben, um Betrügern auf die Schliche zu kommen. Inzwischen hat sie selbst vierzig Schäden verursacht und alle abgelehnt. Ihren Rauch nennt sie „vorübergehende Sichtbehinderung, nicht gedeckt“."
+  bio_en "Ida is a claims adjuster for a big insurer who entered the Grave Prix to catch fraudsters in the act. By now she has caused forty claims herself and denied every one. She calls her smoke screen ‘temporary visibility impairment, not covered’."
+  say start "Ich bin nur zur Schadensaufnahme hier." "Police gelesen? Gut. Ich auch."
+  say_en start "I'm only here to assess the damage." "Read your policy? Good. So have I."
+  say overtake "Überholvorgang genehmigt." "Rauch? Höhere Gewalt."
+  say_en overtake "Overtaking approved." "Smoke? Act of God."
+  say wreck_player "Antrag abgelehnt." "Nicht gedeckt. Steht im Kleingedruckten." "Selbstbeteiligung: alles."
+  say_en wreck_player "Claim denied." "Not covered. It's in the small print." "Your excess: everything."
+  say wrecked_by_player "Das ist ... ein Versicherungsfall." "Ich lehne mich selbst ab."
+  say_en wrecked_by_player "This is ... an insured event." "I hereby deny myself."
+  say hit "Fremdverschulden, eindeutig." "Das kommt in die Akte."
+  say_en hit "Third-party fault, clearly." "That's going in the file."
+  say win "Leistung erbracht. Rechnung folgt." "Genehmigt."
+  say_en win "Service rendered. Invoice to follow." "Approved."
+  say lose "Ich lege Widerspruch ein." "Wird geprüft."
+  say_en lose "I'm lodging an objection." "Under review."
+  say dead "Bitte ... Formular ... 12b ..."
+  say_en dead "Form ... 12b ... please ..."
+  obit "Ida Indemnity ist verstorben. Ihre Lebensversicherung hat die Auszahlung abgelehnt – mit einem Formular, das sie selbst entworfen hat."
+  obit_en "Ida Indemnity has died. Her life insurer has refused to pay out – using a form she designed herself."
+
+# ------------------------------------------------------------------------------------------------ league 2
+
+rival gloria
+  name "Gloria Mundy"
+  league 2
+  car banshee
+  colors #e6c200 #ffffff #c0007a
+  skill 0.82
+  aggression 0.65
+  weapons 0.76
+  likes rocket
+  champion 1
+  portrait "A dazzling woman in her late thirties with a platinum-blonde screen-siren wave, huge sunglasses, scarlet lips and a beauty mark; a white sequinned racing suit with a pink feather boa, gold gloves and a diamond choker; she blows a kiss while a firework rocket rests on her shoulder like a parasol; vain, magnetic and utterly sure of her own legend."
+  bio "Gloria war einmal ein Schlagerstar mit drei Hits und einem Skandal, dann ein Skandal mit drei Hits, dann nur noch ein Skandal. Der Grave Prix hat ihr die Bühne zurückgegeben: Neonlicht, Kameras und Raketen, die sie wie Feuerwerk über die Stadt schießt. Champion im Staatsbegräbnis – sie wünscht sich ein großes."
+  bio_en "Gloria was once a pop star with three hits and a scandal, then a scandal with three hits, then just a scandal. The Grave Prix gave her back a stage: neon lights, cameras and rockets she fires over the city like fireworks. Champion of Lying in State – and she's hoping for a big one."
+  say start "Licht! Kamera! Raketen!" "Darling, das hier ist meine Show."
+  say_en start "Lights! Camera! Rockets!" "Darling, this is my show."
+  say overtake "Autogramme gibt's später!" "Applaus, bitte – für mich!" "Platz da für den Star!"
+  say_en overtake "Autographs later!" "Applause, please – for me!" "Make way for the star!"
+  say wreck_player "Kein Talent, kein Auto." "Du warst ein reizendes Publikum." "Das Feuerwerk war für dich, Darling."
+  say_en wreck_player "No talent, no car." "You were a lovely audience." "That firework was for you, darling."
+  say wrecked_by_player "Meine Frisur! Mein Ruf!" "Ein Skandal! Endlich wieder einer!"
+  say_en wrecked_by_player "My hair! My reputation!" "A scandal! Finally, another one!"
+  say hit "Nicht ins Gesicht!" "Das ist versichert, Darling. Mit Millionen."
+  say_en hit "Not the face!" "That's insured, darling. For millions."
+  say win "Zugabe! Zugabe!" "Eine Legende verliert nicht."
+  say_en win "Encore! Encore!" "Legends don't lose."
+  say lose "Das war Playback. Zählt nicht." "Schlechter Abend. Schlechtes Jahrzehnt."
+  say_en lose "That was lip-synced. Doesn't count." "Off night. Off decade, actually."
+  obit "Sic transit Gloria Mundy. Die Diva wird mit Federboa und Feuerwerk beigesetzt; ihre drei Hits laufen in Dauerschleife, der Skandal auch."
+  obit_en "Sic transit Gloria Mundy. The diva will be laid to rest with feather boa and fireworks; her three hits will play on repeat, and so will the scandal."
+
+rival sally
+  name "Sally Cophagus"
+  league 2
+  car sarcophagus
+  colors #d4a548 #1f4e9a #c0392b
+  skill 0.72
+  aggression 0.45
+  weapons 0.8
+  likes mine
+  portrait "A slender woman in her forties with olive skin, kohl-rimmed eyes, a sleek black bob held by a gold scarab clip and a sun-weathered face; a khaki archaeologist's shirt and jodhpurs, a pith helmet slung over one shoulder and linen bandages wound round her forearms; a scarab amulet at her throat; scholarly, secretive, with a smile like a sealed tomb."
+  bio "Sally ist Ägyptologin und hat aus jedem Grab, das sie öffnete, eine Idee mitgenommen: falsche Gänge, einstürzende Decken, Fallgruben. Ihre Minen nennt sie „Grabbeigaben“. Wer hinter ihr fährt, gilt als verflucht – statistisch völlig zu Recht."
+  bio_en "Sally is an Egyptologist who took one idea home from every tomb she opened: false corridors, collapsing ceilings, pit traps. She calls her mines ‘grave goods’. Anyone driving behind her is said to be cursed – and statistically, they are."
+  say start "Wer die Ruhe der Toten stört ..." "Der Fluch ist aktiviert."
+  say_en start "Whoever disturbs the rest of the dead ..." "The curse is now active."
+  say overtake "Folg mir nicht. Ernsthaft." "Hinter mir liegt eine Grabkammer."
+  say_en overtake "Don't follow me. Seriously." "There's a tomb behind me."
+  say wreck_player "Der Fluch hat dich erwischt." "Willkommen in der Grabkammer." "Ab ins Museum mit dir."
+  say_en wreck_player "The curse has claimed you." "Welcome to the burial chamber." "Off to the museum with you."
+  say wrecked_by_player "Wickelt mich ein ... gründlich." "Ich hab den Fluch unterschätzt."
+  say_en wrecked_by_player "Wrap me up ... thoroughly." "I underestimated the curse."
+  say hit "Respektlos! Das ist Kulturgut!" "Dreitausend Jahre und dann so was."
+  say_en hit "Disrespectful! That's a cultural artefact!" "Three thousand years and then this."
+  say win "Die Pharaonen wären stolz." "Zurück in die Pyramide, Leute."
+  say_en win "The pharaohs would be proud." "Back into the pyramid, everyone."
+  say lose "Ein Fluch auf euch alle." "Ich grab mich wieder ein."
+  say_en lose "A curse on all of you." "I'll go back underground."
+  say dead "Das Grab ... ist ... versiegelt."
+  say_en dead "The tomb ... is ... sealed."
+  obit "Sally Cophagus wird in einem Sarkophag beigesetzt, den sie selbst entworfen hat – mit drei Fallgruben und einer Scheinkammer. Der Bestatter liegt seitdem im Krankenhaus."
+  obit_en "Sally Cophagus will be entombed in a sarcophagus of her own design – with three pit traps and a false chamber. The undertaker has been in hospital ever since."
+
+rival audrey
+  name "Audrey Audit"
+  league 2
+  car obituary
+  colors #36454f #cc0000 #f5f5dc
+  skill 0.76
+  aggression 0.3
+  weapons 0.66
+  likes spikes
+  portrait "A prim woman in her fifties with steel-rimmed glasses on a beaded chain, grey hair in a tight French twist and thin pursed lips; a charcoal tweed suit, a red pen tucked behind each ear, a ledger clutched to her chest and black sleeve protectors on her forearms; precise and merciless, peering over her glasses as if you owe her something. You do."
+  bio "Audrey ist Steuerprüferin und weiß, dass im Leben nur zwei Dinge sicher sind. Für das eine ist sie zuständig, für das andere fährt sie Rennen. Sie fährt vorsichtig und präzise und streut Krähenfüße, die sie „Stichproben“ nennt."
+  bio_en "Audrey is a tax auditor who knows there are only two certainties in life. She's in charge of one of them and races for the other. She drives carefully and precisely and scatters spikes she calls ‘spot checks’."
+  say start "Ich habe Ihre Unterlagen gesichtet." "Belege bereithalten, bitte."
+  say_en start "I've reviewed your paperwork." "Have your receipts ready, please."
+  say overtake "Nachzahlung fällig." "Ihre Position wird neu veranlagt."
+  say_en overtake "Back payment due." "Your position has been reassessed."
+  say wreck_player "Abgeschrieben." "Totalverlust, steuerlich absetzbar." "Stichprobe positiv."
+  say_en wreck_player "Written off." "Total loss. Tax-deductible." "Spot check positive."
+  say wrecked_by_player "Das ... wird ein Nachspiel haben." "Ich prüfe das. Von drüben."
+  say_en wrecked_by_player "There ... will be consequences." "I'll audit this. From the other side."
+  say hit "Steuerhinterziehung!" "Das kommt in den Prüfbericht."
+  say_en hit "Tax evasion!" "That's going in my report."
+  say win "Die Bilanz stimmt." "Ordnungsgemäß verbucht."
+  say_en win "The books balance." "Duly recorded."
+  say lose "Ein Rechenfehler. Nicht meiner." "Ich ordne eine Betriebsprüfung an."
+  say_en lose "An accounting error. Not mine." "I'm ordering a full audit."
+  say dead "Tod ... und Steuern ... beides erledigt."
+  say_en dead "Death ... and taxes ... both done."
+  obit "Audrey Audit ist verstorben und hat damit beide Gewissheiten des Lebens persönlich kennengelernt. Ihr Nachlass wird geprüft – auf ihre eigene Anordnung."
+  obit_en "Audrey Audit has died, having now met both of life's certainties in person. Her estate will be audited – on her own instructions."
+
+rival baron
+  name "Baron von Bremsspur"
+  league 2
+  car banshee
+  colors #6d1a36 #d4af37 #f0ead6
+  skill 0.72
+  aggression 0.85
+  weapons 0.6
+  likes oil
+  portrait "A gangly aristocrat in his late fifties with a monocle, a duelling scar, a wispy ginger moustache waxed into points and thinning hair combed over a high forehead; a threadbare burgundy velvet smoking jacket with a faded family crest, jodhpurs and riding boots; a silver-headed cane; haughty and slightly desperate; the crest shows a tyre track rampant."
+  bio "Der Baron stammt aus uraltem Adel und hat außer dem Titel nur die Familiengruft geerbt – samt Hypothek. Er fährt, um die Raten zu bezahlen, und rammt jeden, der ihn nicht mit „Euer Hochwohlgeboren“ anspricht. Sein Name ist Programm: Wo er bremst, bleiben Spuren."
+  bio_en "The Baron comes from ancient nobility and inherited nothing but the title and the family crypt – mortgage included. He races to keep up the payments and rams anyone who fails to address him as ‘Your Lordship’. His name is German for ‘skid mark’, and he lives up to it in every sense."
+  say start "Lakaien, aus dem Weg!" "Für die Gruft! Und die Hypothek!"
+  say_en start "Out of the way, servants!" "For the crypt! And the mortgage!"
+  say overtake "Adel verpflichtet. Zur Führung." "Machen Sie Platz, Bürgerlicher!"
+  say_en overtake "Noblesse oblige. I lead." "Make way, commoner!"
+  say wreck_player "Pöbel gehört in den Graben." "Sie sind entlassen. Mit sofortiger Wirkung." "Halali!"
+  say_en wreck_player "The rabble belongs in the ditch." "You're dismissed, effective immediately." "Tally-ho!"
+  say wrecked_by_player "Revolution! Die Revolution ist da!" "Ich werde ... meine Ahnen ... besuchen."
+  say_en wrecked_by_player "Revolution! The revolution is upon us!" "I shall ... visit ... my ancestors."
+  say hit "Satisfaktion! Ich verlange Satisfaktion!" "Meine Ahnen drehen sich im Grab!"
+  say_en hit "Satisfaction! I demand satisfaction!" "My ancestors are spinning in their graves!"
+  say win "Wie es sich gehört." "Die Rate ist bezahlt!"
+  say_en win "As is only proper." "The mortgage payment is made!"
+  say lose "Das Volk hat betrogen." "Dann verkaufe ich eben noch ein Ölgemälde."
+  say_en lose "The peasants cheated." "I shall have to sell another oil painting."
+  say dead "Endlich ... ist die Gruft ... bezugsfertig."
+  say_en dead "At last ... the crypt ... is occupied."
+  obit "Der Baron von Bremsspur ist in die Familiengruft eingezogen, deren Hypothek er nie abbezahlt hat. Die Bank prüft, ob sie ihn pfänden kann."
+  obit_en "Baron von Bremsspur has moved into the family crypt whose mortgage he never paid off. The bank is looking into repossessing him."
+
+rival dirk
+  name "Dirk Dirge"
+  league 2
+  car sarcophagus
+  colors #3b1f4a #b5a642 #e6e6fa
+  skill 0.7
+  aggression 0.55
+  weapons 0.72
+  likes smoke
+  portrait "A pale, lanky man in his thirties with long black hair, heavy eyeliner, sunken cheeks and long spidery fingers; a black velvet frock coat with buttons shaped like organ pipes, fingerless lace gloves and a brass metronome hanging round his neck; perpetually on the verge of a sigh; sheet music with Latin titles sticks out of every pocket."
+  bio "Dirk ist Organist und spielt auf jeder Beerdigung der Stadt, meistens dieselben drei Trauermärsche. Er fährt Rennen, weil ihm die Kundschaft zu langsam nachkommt. In sein Auto hat er eine Orgel eingebaut, deren Pfeifen dichten schwarzen Rauch ausstoßen."
+  bio_en "Dirk is an organist who plays at every funeral in town, usually the same three dirges. He races because customers aren't coming in fast enough. His car has a built-in pipe organ whose pipes belch thick black smoke."
+  say start "In Moll, bitte." "Ich hab eure Lieder schon rausgesucht."
+  say_en start "In a minor key, please." "I've already picked out your hymns."
+  say overtake "Crescendo!" "Pianissimo an dir vorbei."
+  say_en overtake "Crescendo!" "Pianissimo past you."
+  say wreck_player "Das verlangt nach einem Trauermarsch." "Fermate. Für immer." "Ein Requiem in d-Moll, nur für dich."
+  say_en wreck_player "This calls for a funeral march." "Fermata. Forever." "A requiem in D minor, just for you."
+  say wrecked_by_player "Wer spielt denn jetzt auf meiner Beerdigung?" "Ein Missklang ..."
+  say_en wrecked_by_player "Who'll play at my funeral now?" "A discord ..."
+  say hit "Falsche Note!" "Das war nicht im Takt."
+  say_en hit "Wrong note!" "That was off the beat."
+  say win "Halleluja. Ausnahmsweise." "Ein Sieg in Dur. Wie ungewohnt."
+  say_en win "Hallelujah. Just this once." "A win in a major key. How unusual."
+  say lose "Seufz. Wie immer." "Das Leben ist ein langsamer Satz."
+  say_en lose "Sigh. As always." "Life is a slow movement."
+  say dead "Bitte ... nichts ... Fröhliches ..."
+  say_en dead "Please ... nothing ... cheerful ..."
+  obit "Dirk Dirge ist verstorben. Auf seiner Beerdigung spielt zum ersten Mal seit dreißig Jahren ein anderer Organist – und zwar in Dur, wie empörte Trauergäste berichten."
+  obit_en "Dirk Dirge has died. For the first time in thirty years another organist will play at a funeral in town – in a major key, as outraged mourners report."
+
+rival bea
+  name "Bea Reavement"
+  league 2
+  car banshee
+  colors #111111 #707070 #b03060
+  skill 0.7
+  aggression 0.6
+  weapons 0.7
+  likes rocket
+  rookie 1
+  portrait "A dramatic woman in her forties with a long black lace veil, mascara running down her cheeks in streaks and a permanently trembling lower lip; a black high-collared Victorian mourning dress, a sodden handkerchief in one fist and a rocket launcher in the other; mid-wail; a business card pinned to her bodice advertising weeping by the hour."
+  bio "Bea ist Berufsklagefrau und weint auf Beerdigungen von Leuten, die sie nie gekannt hat, für einen Stundenlohn, von dem Gewerkschaften träumen. Im Grave Prix sorgt sie selbst für Nachschub. Ihr Wehklagen ist so laut, dass ihr Auto keine Hupe braucht."
+  bio_en "Bea is a professional mourner who weeps at the funerals of strangers for an hourly rate unions can only dream of. In the Grave Prix she drums up her own business. Her wailing is so loud her car doesn't need a horn."
+  say start "Huhuhu! Ich wein schon mal vor." "Taschentücher bereit."
+  say_en start "Boo-hoo! I'll start crying in advance." "Hankies at the ready."
+  say overtake "Schluchz! Vorbei!" "Ich weine um dich. Aber von vorne."
+  say_en overtake "Sob! Passing!" "I'll weep for you. From in front."
+  say wreck_player "Neuer Auftrag!" "Oh, wie tragisch! Achtzig die Stunde." "Wehe! Wehe! Ach, wie schön."
+  say_en wreck_player "New booking!" "Oh, how tragic! Eighty an hour." "Woe! Woe! Oh, lovely."
+  say wrecked_by_player "Wer weint denn jetzt um mich?" "Dann mach ich's eben selbst. Huhuhu."
+  say_en wrecked_by_player "Who's going to cry for me?" "Fine, I'll do it myself. Boo-hoo."
+  say hit "Mein Schleier! Huaaah!" "Das gibt Extratränen."
+  say_en hit "My veil! Waaah!" "That's extra tears."
+  say win "Freudentränen! Die berechne ich doppelt." "Ich bin so gerührt!"
+  say_en win "Tears of joy! I charge double for those." "I'm so moved!"
+  say lose "Huhuhu. Diesmal echt." "Umsonst geweint. Furchtbar."
+  say_en lose "Boo-hoo. Real ones this time." "Crying for free. Dreadful."
+  say dead "Bitte ... irgendwer ... weinen ..."
+  say_en dead "Someone ... please ... cry ..."
+  obit "Bea Reavement ist verstorben. Auf ihrer Beerdigung weinte niemand – bis ihre Kolleginnen eine Rechnung schickten."
+  obit_en "Bea Reavement has died. Nobody wept at her funeral – until her colleagues sent an invoice."
+
+rival ava
+  name "Ava Lanche"
+  league 2
+  car obituary
+  colors #f0f8ff #5dade2 #34495e
+  skill 0.74
+  aggression 0.55
+  weapons 0.6
+  likes nitro
+  rookie 1
+  portrait "An athletic woman in her late twenties with windburnt cheeks, white-blonde hair in two thick plaits and pale blue eyes; a skin-tight white and ice-blue downhill ski suit, mirrored goggles pushed up on a knitted bobble hat; a ski pass dangling from her zip and a cowbell on a leather strap; fearless, laughing into the cold."
+  bio "Ava war Abfahrtsläuferin, bis man ihr wegen „Gefährdung des Berges“ die Lizenz entzog. Sie kennt nur eine Richtung: bergab, und zwar schneller. Wer sie überholen will, wird unter einer Welle aus Schnee und Nitro begraben."
+  bio_en "Ava was a downhill skier until her licence was revoked for ‘endangering the mountain’. She knows only one direction: downhill, faster. Anyone who tries to pass her ends up buried under a wave of snow and nitro."
+  say start "Hopp, hopp, talwärts!" "Bindung zu, Hirn aus."
+  say_en start "Hup, hup, downhill!" "Bindings locked, brain off."
+  say overtake "Spur frei!" "Achtung, Lawine!"
+  say_en overtake "Track!" "Avalanche coming!"
+  say wreck_player "Begraben unter Pulverschnee." "Der Berg hat gesprochen." "Lust auf einen Schneeengel?"
+  say_en wreck_player "Buried in powder." "The mountain has spoken." "Fancy a snow angel?"
+  say wrecked_by_player "Brrr. Ganz schön kalt hier unten." "Läutet die Kuhglocke für mich."
+  say_en wrecked_by_player "Brrr. It's cold down here." "Ring the cowbell for me."
+  say hit "Kalt erwischt!" "Das gibt blaue Flecken. Gletscherblau."
+  say_en hit "Caught cold!" "That'll bruise. Glacier blue."
+  say win "Gold für den Berg!" "Schneller als jede Lawine!"
+  say_en win "Gold for the mountain!" "Faster than any avalanche!"
+  say lose "Zu viel Wachs." "Neuschnee. Schlechte Sicht. Ausreden."
+  say_en lose "Too much wax." "Fresh snow. Bad visibility. Excuses."
+  say dead "Weiß ... alles weiß ..."
+  say_en dead "White ... everything's white ..."
+  obit "Ava Lanche ist verstorben. Sie wird auf dem Gipfel beigesetzt; die Bergwacht bittet die Trauergäste, nicht zu laut zu schluchzen – Lawinengefahr."
+  obit_en "Ava Lanche has died. She will be buried on the summit; mountain rescue asks mourners not to sob too loudly – avalanche risk."
+
+rival gil
+  name "Gil O'Tine"
+  league 2
+  car sarcophagus
+  colors #1d3b8a #c0c0c0 #8b0000
+  skill 0.72
+  aggression 0.7
+  weapons 0.62
+  likes spikes
+  rookie 1
+  portrait "A dapper man in his forties with a pencil-thin moustache, slicked black hair parted dead centre and sharp cheekbones; a striped barber's waistcoat with rolled shirtsleeves, a folded cut-throat razor in his breast pocket and a red silk cravat; leaning on a car with a chrome blade along its roof like a shark fin; smooth and smiling, a little too interested in necks."
+  bio "Gil war Barbier und berühmt für die glatteste Rasur der Stadt – bis ein Kunde mit einer etwas zu glatten Rasur nach Hause ging. Jetzt verteilt er Krähenfüße und haarscharfe Manöver. Er beteuert, er habe noch nie jemandem ein Haar gekrümmt."
+  bio_en "Gil was a barber famous for the closest shave in town – until one customer went home with a slightly too close one. Now he dishes out spikes and hair's-breadth manoeuvres. He insists he has never harmed a hair on anyone's head."
+  say start "Waschen, schneiden, rasen?" "Bitte ganz still halten."
+  say_en start "Wash, cut and race?" "Hold very still, please."
+  say overtake "Knapp rasiert!" "Ein sauberer Schnitt."
+  say_en overtake "Close shave!" "A clean cut."
+  say wreck_player "Einmal kurz, bitte. Erledigt." "Rasiert. Gründlich." "Kopf hoch! Ach, zu spät."
+  say_en wreck_player "Short back and sides. Done." "Shaved. Thoroughly." "Heads up! Oh – too late."
+  say wrecked_by_player "Das war ... zu knapp." "Ich hab mich geschnitten."
+  say_en wrecked_by_player "That was ... too close." "I've cut myself."
+  say hit "Vorsicht, ich hab eine Klinge in der Hand!" "Nicht an die Frisur!"
+  say_en hit "Careful, I'm holding a blade!" "Not the hair!"
+  say win "Messerscharf!" "Trinkgeld willkommen."
+  say_en win "Razor sharp!" "Tips welcome."
+  say lose "Stumpfe Klinge heute." "Schlechter Haartag."
+  say_en lose "Blunt blade today." "Bad hair day."
+  say dead "Bitte ... ordentlich ... frisieren."
+  say_en dead "Comb ... my hair ... properly."
+  obit "Gil O'Tine ist verstorben. Seine Stammkunden erscheinen zur Beerdigung im Rollkragenpullover – aus Respekt, sagen sie, und aus alter Gewohnheit."
+  obit_en "Gil O'Tine has died. His regular customers will attend the funeral in turtlenecks – out of respect, they say, and old habit."
+
+rival uschi
+  name "Uschi Unfallflucht"
+  league 2
+  car banshee
+  colors #808080 #ff8c00 #202020
+  skill 0.7
+  aggression 0.75
+  weapons 0.6
+  likes oil
+  rookie 1
+  portrait "A small, sprightly woman in her seventies with a tight grey perm under a plastic rain bonnet, a pinched face and enormous tinted glasses; a beige trench coat, a handbag clamped to her side, leather driving gloves; foot flat to the floor, never looking back – her car has no rear-view mirror."
+  bio "Uschi hat in fünfzig Jahren Fahrpraxis nie angehalten – nicht an Unfallorten, nicht an Ampeln, nicht für die Polizei. Ihren Nachnamen hat sie sich nicht ausgesucht, aber sie lebt ihn. Ihr Rückspiegel liegt seit Jahrzehnten in irgendeiner Hecke."
+  bio_en "In fifty years behind the wheel Uschi has never stopped – not at accident scenes, not at traffic lights, not for the police. She didn't choose her surname, which is German for hit-and-run, but she lives up to it. Her rear-view mirror has been lying in a hedge somewhere for decades."
+  say start "Bloß nicht anhalten." "Ich hab gleich einen Friseurtermin."
+  say_en start "Whatever you do, don't stop." "I've got a hairdresser's appointment."
+  say overtake "Huch. War da was?" "Ich hab nichts gesehen."
+  say_en overtake "Oops. Was something there?" "I didn't see a thing."
+  say wreck_player "Weiterfahren, Uschi, weiterfahren." "Ich war das nicht. Ich war gar nicht hier." "Kennzeichen? Welches Kennzeichen?"
+  say_en wreck_player "Keep driving, Uschi, keep driving." "Wasn't me. I wasn't even here." "Number plate? What number plate?"
+  say wrecked_by_player "Unerhört! Ich halte nie an!" "Jetzt steh ich ja doch."
+  say_en wrecked_by_player "Outrageous! I never stop!" "Now I've stopped after all."
+  say hit "Rowdy!" "Ich ruf die Polizei! Nein, lieber doch nicht."
+  say_en hit "Hooligan!" "I'm calling the police! No, actually, I'm not."
+  say win "Und tschüss!" "Nicht umdrehen, einfach weiter!"
+  say_en win "Ta-ta!" "Don't look back, just keep going!"
+  say lose "Die Jugend von heute." "Früher hatte man noch Vorfahrt."
+  say_en lose "Young people today." "In my day we had right of way."
+  say dead "Ich ... halte ... nicht ..."
+  say_en dead "I ... don't ... stop ..."
+  obit "Uschi Unfallflucht hat zum ersten Mal in ihrem Leben angehalten. Der Trauerzug wird gebeten, nicht stehen zu bleiben – sie hätte es so gewollt."
+  obit_en "Uschi Unfallflucht has stopped for the first time in her life. The funeral procession is asked not to halt – she would have wanted it that way."
+
+# ------------------------------------------------------------------------------------------------ league 1
+
+rival major
+  name "Major Casualty"
+  league 1
+  car mausoleum
+  colors #4b5320 #c2b280 #8b0000
+  skill 0.93
+  aggression 0.8
+  weapons 0.92
+  likes rocket
+  champion 1
+  portrait "A ramrod-straight officer in his sixties with a white handlebar moustache, a jaw like a tank trap and one glass eye that never moves; a pressed olive dress uniform heavy with medals from campaigns nobody has heard of, a swagger stick under his arm and a rocket pod mounted on his shoulder like an epaulette; barking, fearless, delighted by explosions."
+  bio "Der Major hat in sieben Feldzügen gedient, keinen davon gewonnen, aber in jedem am meisten Munition verbraucht. Seit seiner Pensionierung testet er auf dem Truppenübungsplatz Raketen an allem, was sich bewegt. Champion im Pharaonengrab und Mortimer Graves' zuverlässigster Kundenlieferant."
+  bio_en "The Major served in seven campaigns and won none of them, but used up the most ammunition in every one. Since retiring he tests rockets on the proving ground against anything that moves. Champion of the Pharaoh's Tomb and Mortimer Graves' most reliable supplier of customers."
+  say start "Feuer frei! Ich wiederhole: Feuer frei!" "Zum Angriff, marsch!" "Keine Gefangenen!"
+  say_en start "Fire at will! I repeat: fire at will!" "Forward, march!" "Take no prisoners!"
+  say overtake "Flankenangriff erfolgreich!" "Rückzug ist was für Zivilisten!"
+  say_en overtake "Flanking manoeuvre successful!" "Retreat is for civilians!"
+  say wreck_player "Kollateralschaden. Bedauerlich. Weiter!" "Ziel neutralisiert." "Melde gehorsamst: Treffer!"
+  say_en wreck_player "Collateral damage. Regrettable. Onward!" "Target neutralised." "Reporting, sir: target hit!"
+  say wrecked_by_player "Sanitäter! SANITÄTER!" "Alte Soldaten sterben nicht. Sie fahren nur langsamer."
+  say_en wrecked_by_player "Medic! MEDIC!" "Old soldiers never die. They just slow down."
+  say hit "Nur ein Kratzer! Weiterkämpfen!" "Feind an Steuerbord!"
+  say_en hit "Merely a scratch! Fight on!" "Hostile to starboard!"
+  say win "Sieg! Orden für alle! Also für mich." "Auftrag erfüllt. Ab in die Kantine!"
+  say_en win "Victory! Medals all round! For me." "Mission accomplished. To the mess hall!"
+  say lose "Taktischer Rückzug. Von langer Hand geplant." "Die Aufklärung hat versagt!"
+  say_en lose "Tactical retreat. Entirely planned." "Intelligence failed us!"
+  obit "Major Casualty ist gefallen. Er wird mit allen militärischen Ehren beigesetzt; der Ehrensalut wurde vorsichtshalber mit Platzpatronen geschossen. Er hätte das Feigheit genannt."
+  obit_en "Major Casualty has fallen. He will be buried with full military honours; as a precaution, the salute was fired with blanks. He would have called that cowardice."
+
+rival reverend
+  name "Reverend Ash Wednesday"
+  league 1
+  car reaper
+  colors #0b0b0b #ffffff #c9b037
+  skill 0.85
+  aggression 0.6
+  weapons 0.88
+  likes mine
+  portrait "A tall, lean preacher in his fifties with a hawk nose, deep-set burning eyes, a smudge of ash on his forehead and a neatly trimmed grey beard; a black cassock with a white clerical collar, a stole embroidered with tiny gravestones, a swinging censer and a bandolier of landmines each tied with a little ribbon; serene, sermonising, utterly certain."
+  bio "Die Gemeinde des Reverends besteht vor allem aus Beerdigungen, und er fährt den Grave Prix, um näher bei seinen Schäfchen zu sein. Er segnet jede Mine, bevor er sie legt, und spendet die letzte Ölung gleich mit – das Öl stammt aus dem Motor. Er vergibt jedem, den er überfährt."
+  bio_en "The Reverend's congregation consists mainly of funerals, and he races in the Grave Prix to be closer to his flock. He blesses every mine before he lays it and administers the last rites on the spot – with oil from the sump. He forgives everyone he runs over."
+  say start "Lasset uns beten. Und dann Vollgas." "Der Herr ist mein Hirte, mir wird nichts mangeln. Außer PS."
+  say_en start "Let us pray. Then floor it." "The Lord is my shepherd, I shall not want. Except horsepower."
+  say overtake "Die Letzten werden die Ersten sein. Du nicht." "Gehe hin in Frieden. Hinter mir."
+  say_en overtake "The last shall be first. Not you, though." "Go in peace. Behind me."
+  say wreck_player "Ich spende dir die letzte Ölung." "Asche zu Asche, Blech zu Blech." "Dir sei vergeben. Deinem Auto nicht."
+  say_en wreck_player "I administer your last rites." "Ashes to ashes, rust to rust." "You are forgiven. Your car isn't."
+  say wrecked_by_player "Herr, ich komme! Etwas früher als geplant." "Vergib ihnen, denn sie wissen nicht, wie man fährt."
+  say_en wrecked_by_player "Lord, I'm coming! A little earlier than planned." "Forgive them, for they know not how to drive."
+  say hit "Du sollst nicht rammen!" "Das elfte Gebot: Abstand halten!"
+  say_en hit "Thou shalt not ram!" "The eleventh commandment: keep your distance!"
+  say win "Halleluja!" "Der Herr hat gegeben. Mir." "Ein Wunder! Ein ganz gewöhnliches."
+  say_en win "Hallelujah!" "The Lord giveth. To me." "A miracle! A perfectly ordinary one."
+  say lose "Prüfungen. Immer diese Prüfungen." "Der Herr hat genommen."
+  say_en lose "Trials. Always these trials." "The Lord taketh away."
+  say dead "Amen ... und Vollgas."
+  say_en dead "Amen ... and full throttle."
+  obit "Reverend Ash Wednesday ist von der Kanzel in den Sarg gewechselt. Die Trauerpredigt hält er selbst – er hat sie vorsorglich auf Band gesprochen."
+  obit_en "Reverend Ash Wednesday has moved from the pulpit to the coffin. He will deliver his own eulogy – he recorded it on tape, just in case."
+
+rival mirthless
+  name "Mister Mirthless"
+  league 1
+  car requiem
+  colors #b22234 #f5f5f5 #e3c000
+  skill 0.82
+  aggression 0.75
+  weapons 0.8
+  likes oil
+  portrait "A gaunt clown in his fifties with white greasepaint cracked into a permanent frown, a drooping red nose, a single painted tear and limp orange hair; a faded polka-dot suit, enormous shoes, a wilted flower on the lapel that squirts motor oil and a rubber horn on the steering wheel; he never smiles; a deflated balloon tied to his wrist."
+  bio "Mister Mirthless war Clown auf dem Rummelplatz, bis der Rummelplatz pleiteging und die Kinder lieber Raketen sehen wollten. Seitdem hat er nicht mehr gelacht. Die Blume an seinem Revers spritzt Motoröl, seine Bananenschalen sind aus Gummi und tödlich."
+  bio_en "Mister Mirthless was a fairground clown until the fair went bust and the kids preferred rockets. He hasn't laughed since. The flower on his lapel squirts engine oil, and his banana skins are made of rubber and lethal."
+  say start "Manege frei. Leider." "Lacht ruhig. Solange ihr noch könnt."
+  say_en start "Let the show begin. Unfortunately." "Go on, laugh. While you still can."
+  say overtake "Tröt." "Ein Clown überholt dich. Peinlich."
+  say_en overtake "Honk." "A clown just passed you. Embarrassing."
+  say wreck_player "Die Pointe kam überraschend, was?" "Ausgerutscht. Ein Klassiker." "Keiner lacht. Wie immer."
+  say_en wreck_player "Didn't see the punchline coming, eh?" "Slipped. A classic." "Nobody's laughing. As usual."
+  say wrecked_by_player "Endlich lacht mal jemand." "Vorhang."
+  say_en wrecked_by_player "Finally, someone's laughing." "Curtain."
+  say hit "Tröt. Aua." "Eine Torte ins Gesicht wäre netter gewesen."
+  say_en hit "Honk. Ow." "A pie in the face would've been nicer."
+  say win "Gewonnen. Hurra. Tröt." "Ich lächle innerlich. Ganz tief innen."
+  say_en win "Won. Hooray. Honk." "I'm smiling inside. Very deep inside."
+  say lose "Natürlich." "Der Witz geht auf meine Kosten. Wie immer."
+  say_en lose "Naturally." "The joke's on me. As always."
+  say dead "Endlich ... eine gute Pointe."
+  say_en dead "Finally ... a good punchline."
+  obit "Mister Mirthless ist verstorben. Zu seiner Beerdigung passten zwölf Trauergäste in einen einzigen Leichenwagen. Gelacht hat niemand – er wäre stolz gewesen."
+  obit_en "Mister Mirthless has died. Twelve mourners squeezed into a single hearse for his funeral. Nobody laughed – he would have been proud."
+
+rival molly
+  name "Molly Toff"
+  league 1
+  car requiem
+  colors #f7e7ce #046307 #d4af37
+  skill 0.84
+  aggression 0.65
+  weapons 0.86
+  likes smoke
+  portrait "An elegant socialite in her early sixties with a towering silver chignon, a long string of pearls, a long cigarette holder and arched painted eyebrows; an emerald silk cocktail dress under a fur-collared driving coat, opera gloves, and a silver cocktail shaker in one hand that is visibly smoking; amused, cruel and utterly charming."
+  bio "Lady Molly Toff gibt die besten Cocktailpartys der Stadt, und ihre Cocktails sind berüchtigt: Sie qualmen, sie brennen, und wer zu viele trinkt, wacht nicht mehr auf. Im Grave Prix hüllt sie die Konkurrenz in Rauch und erzählt dabei den neuesten Klatsch."
+  bio_en "Lady Molly Toff throws the best cocktail parties in town, and her cocktails are notorious: they smoke, they burn, and anyone who has too many doesn't wake up. In the Grave Prix she wraps the competition in smoke while passing on the latest gossip."
+  say start "Cocktail, Darling? Er qualmt nur ein bisschen." "Wie vulgär, dieses Rennen. Ich liebe es."
+  say_en start "Cocktail, darling? It only smokes a little." "How vulgar, this race. I adore it."
+  say overtake "Pardon, mein Fahrer ist ungeduldig. Ach, das bin ja ich." "Bussi, bussi, tschüss!"
+  say_en overtake "Pardon, my driver's impatient. Oh – that's me." "Mwah, mwah, toodle-oo!"
+  say wreck_player "Zu viel getrunken, Liebes?" "Wie bedauerlich. Wie amüsant." "Das erzähl ich beim Brunch."
+  say_en wreck_player "Too many cocktails, dear?" "How unfortunate. How amusing." "That'll be the talk of brunch."
+  say wrecked_by_player "Wie ... gewöhnlich." "Schick mir die Rechnung, Darling."
+  say_en wrecked_by_player "How ... common." "Send me the bill, darling."
+  say hit "Mein Kleid! Das war Seide!" "Waren Sie überhaupt eingeladen?"
+  say_en hit "My dress! That was silk!" "Were you even invited?"
+  say win "Champagner für alle! Für mich zuerst." "Wie erwartet, ihr Lieben."
+  say_en win "Champagne for everyone! Me first." "As expected, darlings."
+  say lose "Langweilig. Ich gehe." "Die Gästeliste war viel zu lang."
+  say_en lose "Tedious. I'm leaving." "The guest list was far too long."
+  say dead "Noch ... einen ... für den Weg ..."
+  say_en dead "One ... for ... the road ..."
+  obit "Lady Molly Toff ist verstorben. Die Trauerfeier wird eine Cocktailparty; die Gäste werden gebeten, die Getränke nicht anzuzünden."
+  obit_en "Lady Molly Toff has died. Her wake will be a cocktail party; guests are asked not to set the drinks on fire."
+
+rival dee
+  name "Dee Ceased"
+  league 1
+  car reaper
+  colors #ece9e2 #0f0f0f #6a0dad
+  skill 0.9
+  aggression 0.5
+  weapons 0.72
+  likes nitro
+  portrait "A pale, androgynous woman in her thirties with a white-blonde buzz cut, dark-ringed grey eyes, bloodless lips and no expression at all; a black leather racing suit printed with a white skeleton, a hospital toe tag threaded through her boot laces; sitting perfectly still, as if she isn't breathing – maybe she isn't."
+  bio "Dee wurde vor sechs Jahren nach einem Unfall amtlich für tot erklärt und hat nie widersprochen. Seitdem zahlt sie keine Steuern, keine Strafzettel und keine Miete. Sie spricht kaum, fährt eiskalt und ist mit Nitro schneller als ihr eigener Nachruf."
+  bio_en "Six years ago, after a crash, Dee was officially declared dead – and she never contested it. Since then she has paid no taxes, no fines and no rent. She barely speaks, drives ice-cold and, on nitro, outruns her own obituary."
+  say start "..." "Ich bin schon tot. Ihr noch nicht."
+  say_en start "..." "I'm already dead. You're not. Yet."
+  say overtake "Hm." "Zu langsam zum Sterben."
+  say_en overtake "Hm." "Too slow to die."
+  say wreck_player "Willkommen auf meiner Seite." "Kalt."
+  say_en wreck_player "Welcome to my side." "Cold."
+  say wrecked_by_player "Zweimal tot. Na und." "Interessant."
+  say_en wrecked_by_player "Dead twice. So what." "Interesting."
+  say hit "Spür ich nicht." "Tote haben keine Nerven."
+  say_en hit "Can't feel it." "The dead have no nerves."
+  say win "Wie erwartet." "Die Toten fahren schnell."
+  say_en win "As expected." "The dead drive fast."
+  say lose "Egal." "Der Tod hat Zeit."
+  say_en lose "Whatever." "Death can wait."
+  say dead "Endlich ... offiziell."
+  say_en dead "Finally ... official."
+  obit "Dee Ceased ist gestorben. Das Standesamt weigert sich, den Tod zu beurkunden, da sie bereits seit sechs Jahren als verstorben geführt wird."
+  obit_en "Dee Ceased has died. The registry office refuses to record the death, since she has been listed as deceased for six years already."
+
+rival collateral
+  name "Captain Collateral"
+  league 1
+  car mausoleum
+  colors #1c2841 #b5a642 #ff4500
+  skill 0.85
+  aggression 0.75
+  weapons 0.9
+  likes rocket
+  rookie 1
+  portrait "A muscular woman in her forties with a weathered, tanned face, a grey buzz cut, a black eye patch with a target painted on it and a cigar stub between her teeth; a navy pea coat with tarnished brass buttons over a vest, fingerless gloves, a belt of rocket shells; laughing loudly, utterly indifferent to whatever stands behind her target."
+  bio "Die Kapitänin hat auf drei Meeren Geschützbatterien kommandiert und dabei nie zwischen Ziel und Umgebung unterschieden. Ihre Philosophie: Trifft man das Ziel, ist es ein Treffer; trifft man daneben, ist es Kollateralschaden – also auch ein Treffer. Im Grave Prix schießt sie auf alles, was die Strecke kreuzt."
+  bio_en "The Captain commanded gun batteries on three seas without ever distinguishing between the target and its surroundings. Her philosophy: hit the target and it's a hit; miss it and it's collateral damage – so also a hit. In the Grave Prix she fires at anything that crosses the track."
+  say start "Alle Rohre klar!" "Zielen wird überschätzt."
+  say_en start "All tubes ready!" "Aiming is overrated."
+  say overtake "Breitseite und vorbei!" "Volle Fahrt voraus!"
+  say_en overtake "Broadside and away!" "Full steam ahead!"
+  say wreck_player "Treffer! Oder Kollateralschaden. Egal." "Versenkt!" "Ups. Na ja."
+  say_en wreck_player "Hit! Or collateral. Either way." "Sunk!" "Oops. Oh well."
+  say wrecked_by_player "Frau über Bord! Ich!" "Ich geh mit dem Schiff unter."
+  say_en wrecked_by_player "Woman overboard! Me!" "I'm going down with the ship."
+  say hit "Leck im Rumpf!" "Feuer erwidern!"
+  say_en hit "Hull breach!" "Return fire!"
+  say win "Flagge hissen!" "Keine Gefangenen, aber ein Pokal."
+  say_en win "Hoist the colours!" "No prisoners, but one trophy."
+  say lose "Ruder gebrochen." "Nächstes Mal mehr Munition."
+  say_en lose "Broken rudder." "More ammo next time."
+  say dead "Alle Mann ... von Bord ..."
+  say_en dead "Abandon ... ship ..."
+  obit "Captain Collateral ist verstorben. Bei ihrer Seebestattung wurde der Salut versehentlich scharf geschossen; zwei Möwen und ein Ausflugsdampfer gelten als Kollateralschaden. Sie hätte gelacht."
+  obit_en "Captain Collateral has died. At her burial at sea the salute was accidentally fired live; two seagulls and a pleasure steamer count as collateral damage. She would have laughed."
+
+rival ophelia
+  name "Ophelia Pulse"
+  league 1
+  car requiem
+  colors #fdfdfd #c8102e #a7c7e7
+  skill 0.86
+  aggression 0.55
+  weapons 0.84
+  likes spikes
+  rookie 1
+  portrait "A pretty, wide-eyed woman in her late twenties with strawberry-blonde ringlets under an old-fashioned nurse's cap, freckles and a sweet, slightly unsettling smile; a starched white uniform, a fob watch pinned upside down on her chest and a little row of syringes in her breast pocket; she takes your pulse while staring at her watch with great interest."
+  bio "Ophelia ist Nachtschwester im Hospiz und fühlt jeden Puls, auch wenn keiner mehr da ist. Sie ist freundlich, geduldig und hat eine beunruhigende Trefferquote bei der Prognose „übersteht die Nacht nicht“. Im Grave Prix streut sie Spritzen wie Krähenfüße – steril, versteht sich."
+  bio_en "Ophelia is a night nurse at the hospice who checks every pulse, even when there isn't one. She's kind, patient and has an unsettling success rate with the prognosis ‘won't make it through the night’. In the Grave Prix she scatters syringes like caltrops – sterile, of course."
+  say start "Ganz ruhig. Das piekst nur kurz." "Puls schon gemessen? Noch nicht? Gleich."
+  say_en start "Relax. Just a little prick." "Had your pulse taken? Not yet? Soon."
+  say overtake "Visite!" "Sie sollten sich hinlegen."
+  say_en overtake "Ward round!" "You really should lie down."
+  say wreck_player "Fühl ich da einen Puls? Nein." "Ich mach's dir bequem." "Hab ich doch gesagt: nicht die Nacht."
+  say_en wreck_player "Do I feel a pulse? No." "Let me make you comfortable." "Told you: not through the night."
+  say wrecked_by_player "Schwester! Ach, das bin ja ich." "Herzfrequenz ... fallend."
+  say_en wrecked_by_player "Nurse! Oh, wait, that's me." "Heart rate ... dropping."
+  say hit "Vorsicht, die Kanülen!" "Das gibt einen blauen Fleck."
+  say_en hit "Careful, the needles!" "That'll bruise."
+  say win "Der Patientin geht es prächtig!" "Gute Besserung, ihr anderen."
+  say_en win "The patient is doing splendidly!" "Get well soon, the rest of you."
+  say lose "Schichtwechsel." "Morgen wird's besser. Für manche."
+  say_en lose "Shift change." "Better tomorrow. For some."
+  say dead "Kein ... Puls. Wusst ich's doch."
+  say_en dead "No ... pulse. I knew it."
+  obit "Ophelia Pulse ist verstorben. Seit im Hospiz niemand mehr den Patienten den Puls fühlt, sind mehrere von ihnen erstaunlich schnell genesen."
+  obit_en "Ophelia Pulse has died. Since nobody at the hospice takes the patients' pulses any more, several of them have made remarkable recoveries."
+
+rival lou
+  name "Lou Gubrious"
+  league 1
+  car mausoleum
+  colors #4a4e57 #6b8ba4 #2f2f2f
+  skill 0.84
+  aggression 0.5
+  weapons 0.8
+  likes smoke
+  rookie 1
+  portrait "A long-faced, droopy man in his forties with heavy-lidded mournful eyes, a black beret, three days of stubble and a turtleneck so dark it seems to swallow light; a long grey raincoat, a battered notebook of poems and a fountain pen; a little cloud of cigarette smoke hangs over his head like weather; he is sighing, as in every picture ever taken of him."
+  bio "Lou ist Dichter und hat genau einen Gedichtband veröffentlicht: „Alles ist sinnlos, Band 1 bis 12“. Er fährt Rennen, weil das Leben ohnehin keinen Sinn hat, und gewinnt erstaunlich oft, was ihn deprimiert. Seine Rauchwolken nennt er „Stimmung“."
+  bio_en "Lou is a poet who has published exactly one collection: ‘Everything Is Pointless, Volumes 1 to 12’. He races because life has no meaning anyway, and wins surprisingly often, which depresses him. He calls his smoke screens ‘atmosphere’."
+  say start "Wozu eigentlich." "Wieder ein Start. Wieder ein Ende."
+  say_en start "What's the point." "Another start. Another ending."
+  say overtake "Ich überhole dich. Und dann? Nichts." "Seufz. Vorbei."
+  say_en overtake "I pass you. And then what? Nothing." "Sigh. Passing."
+  say wreck_player "Alles vergeht. Du eben schneller." "Ein Gedicht für dich: Rumms." "Ich beneide dich."
+  say_en wreck_player "All things pass. You just passed faster." "A poem for you: crunch." "I envy you."
+  say wrecked_by_player "Endlich. Danke." "Das Nichts. Wie erwartet."
+  say_en wrecked_by_player "Finally. Thank you." "The void. As expected."
+  say hit "Schmerz. Mein alter Freund." "Auch das ist sinnlos."
+  say_en hit "Pain. My old companion." "This too is meaningless."
+  say win "Gewonnen. Wie bedrückend." "Erster. Und trotzdem leer."
+  say_en win "Won. How depressing." "First. And yet empty."
+  say lose "Natürlich. Was sonst." "Das kommt in meinen nächsten Band."
+  say_en lose "Of course. What else." "That'll go in my next volume."
+  say dead "Endlich ... Band dreizehn."
+  say_en dead "At last ... Volume thirteen."
+  obit "Lou Gubrious ist verstorben. Sein Verlag meldet, dass sich sein Gedichtband seither zum ersten Mal verkauft hat – zweimal. Er hätte es sinnlos gefunden."
+  obit_en "Lou Gubrious has died. His publisher reports that his poetry collection has sold for the first time since – twice. He would have found it pointless."
+
+rival earl
+  name "Earl E. Grave"
+  league 1
+  car reaper
+  colors #0066ff #ffffff #ff2052
+  skill 0.88
+  aggression 0.65
+  weapons 0.72
+  likes nitro
+  rookie 1
+  portrait "A gangly teenager of about seventeen with a shock of bleached hair dyed electric blue, braces on his teeth, a few spots and an enormous grin; an electric-blue racing jacket covered in home-made sponsor patches, a backwards cap and headphones, an energy drink in each hand; hyperactive and certain he is invincible, filming himself on a phone taped to the dashboard."
+  bio "Earl ist siebzehn, hat seinen Führerschein seit drei Wochen und hält sich für unsterblich. Seine Eltern haben ihm den Namen gegeben, ohne nachzudenken; der Grave Prix denkt jetzt für sie mit. Er fährt nur mit Nitro und filmt jedes Rennen für seine sieben Follower."
+  bio_en "Earl is seventeen, has had his licence for three weeks and believes he's immortal. His parents named him without thinking; the Grave Prix is now doing the thinking for them. He drives on nothing but nitro and films every race for his seven followers."
+  say start "Läuft die Kamera? Läuft!" "Ich bin unsterblich, Digga!"
+  say_en start "Is the camera on? It's on!" "I'm immortal, bro!"
+  say overtake "Gönn dir!" "Zu langsam, Opa!" "Liken und abonnieren!"
+  say_en overtake "Get wrecked!" "Too slow, grandpa!" "Like and subscribe!"
+  say wreck_player "Krass, hast du das gesehen?" "Das geht viral!" "Sorry, nicht sorry."
+  say_en wreck_player "Whoa, did you see that?" "That's going viral!" "Sorry, not sorry."
+  say wrecked_by_player "Das ... war so nicht geplant." "Mama?"
+  say_en wrecked_by_player "That ... wasn't the plan." "Mum?"
+  say hit "Ey! Mein Handy!" "Unfair, ich hatte Lag!"
+  say_en hit "Hey! My phone!" "Unfair, I lagged!"
+  say win "Ich bin der Beste, Digga!" "Clip des Jahres!"
+  say_en win "I'm the best, bro!" "Clip of the year!"
+  say lose "Gehackt! Ich wurde gehackt!" "Das schneid ich raus."
+  say_en lose "Hacked! I got hacked!" "I'll edit that out."
+  say dead "Hat ... das ... jemand gefilmt?"
+  say_en dead "Did ... anyone ... film that?"
+  obit "Earl E. Grave ist mit siebzehn Jahren verstorben, was seinen Namen im Nachhinein unangenehm treffend macht. Sein letztes Video hat inzwischen elf Aufrufe."
+  obit_en "Earl E. Grave has died at seventeen, which makes his name awkwardly apt in hindsight. His last video now has eleven views."
+
+# ------------------------------------------------------------------------------------------------ the boss
+
+rival mortimer_graves
+  name "Mortimer Graves"
+  league 0
+  car undertaker
+  colors #0a0a0a #c0c0c0 #4b0082
+  skill 0.97
+  aggression 0.85
+  weapons 0.95
+  likes mine
+  champion 1
+  portrait "A tall, gaunt man in his late sixties with silver hair combed back flat, a thin waxed moustache and pale grey eyes; a black frock coat, a silk top hat with a crepe mourning band and white gloves on the wheel of an armoured hearse; a tailor's measuring tape draped round his neck and a single white lily in his buttonhole; polite, patient and terrifying."
+  bio "Mortimer Graves, Inhaber von Graves & Sons, Veranstalter des Grave Prix und Bestatter jedes Fahrers, der ihn nicht überlebt hat. Er fährt einen gepanzerten Leichenwagen, der mehr Gegner unter die Erde gebracht als befördert hat. Söhne hat er keine – nur Kundschaft."
+  bio_en "Mortimer Graves: owner of Graves & Sons, organiser of the Grave Prix and undertaker to every driver who failed to outlive him. He drives an armoured hearse that has put more rivals in the ground than it has ever carried. He has no sons – only customers."
+  say start "Mein aufrichtiges Beileid. Im Voraus." "Entspannen Sie sich. Ich kümmere mich um alles." "Die Blumen sind bestellt."
+  say_en start "My sincere condolences. In advance." "Do relax. I'll take care of everything." "The flowers have been ordered."
+  say overtake "Pardon. Ich habe einen Termin. Ihren." "Bitte bleiben Sie zurück. Wie es sich gehört."
+  say_en overtake "Pardon me. I have an appointment. Yours." "Do stay behind. As is customary."
+  say wreck_player "Ein würdevoller Abgang. Beinahe." "Die Rechnung geht an Sie. Oder an Ihre Erben." "Mein Beileid. Ganz ehrlich."
+  say_en wreck_player "A dignified exit. Almost." "The invoice will go to you. Or your heirs." "My condolences. Truly."
+  say wrecked_by_player "Wie ... ungehörig." "Das wird Sie ... teuer zu stehen kommen."
+  say_en wrecked_by_player "How ... improper." "That will cost you ... dearly."
+  say hit "Etwas mehr Respekt vor dem Gewerbe, bitte." "Dieser Lack, mein Bester, war handpoliert."
+  say_en hit "A little respect for the trade, please." "That paint, my friend, was hand-polished."
+  say win "Wie zu erwarten. Mein Beileid." "Die Firma dankt für Ihr Vertrauen."
+  say_en win "As anticipated. My condolences." "The firm thanks you for your custom."
+  say lose "Bemerkenswert. Ich bin ... beeindruckt." "Nun. Jede Firma braucht einen Nachfolger."
+  say_en lose "Remarkable. I am ... impressed." "Well. Every firm needs a successor."
+  obit "Mortimer Graves ist verstorben. Graves & Sons richtet die Beerdigung aus und gewährt dem Verstorbenen den üblichen Fahrerrabatt von zehn Prozent."
+  obit_en "Mortimer Graves has died. Graves & Sons will handle the arrangements and grant the deceased the customary ten percent driver's discount."

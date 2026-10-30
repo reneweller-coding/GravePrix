@@ -1,0 +1,294 @@
+# The interface in English: "German = English", one per line (see src/Lang.cpp). Keys are trimmed: a German text
+# with spaces around it ("Name: ") is found by its trimmed form, its spaces kept round the English.
+# Format specifiers stay in the same order. Fixed names: see data/lang/glossary.md.
+
+# ------------------------------------------------------------------------------------------------ title and new career
+GRAVE PRIX = GRAVE PRIX
+Das Rennen, bei dem der Bestatter mitverdient. = The race where the undertaker gets a cut.
+Karriere fortsetzen = Continue Career
+Neue Karriere = New Career
+Schnelles Rennen = Quick Race
+Optionen = Options
+Beenden = Quit
+A wählen   ·   Steuerkreuz bewegen = A select   ·   D-pad move
+Eingabe wählen   ·   Pfeile bewegen   ·   F11 Vollbild = Enter select   ·   Arrows move   ·   F11 full screen
+Unterschreib hier. Und hier. Und auf dem Organspendeausweis. = Sign here. And here. And on the organ donor card.
+Name: = Name:
+Schwierigkeit: = Difficulty:
+Lackierung: = Paint:
+Unterschreiben = Sign
+Namen tippen, Eingabe fertig = Type a name, Enter when done
+Links/Rechts ändern   ·   A wählen   ·   B zurück = Left/Right change   ·   A select   ·   B back
+Links/Rechts ändern   ·   Eingabe beim Namen: tippen   ·   Esc zurück = Left/Right change   ·   Enter on the name: type   ·   Esc back
+Fahrer = Driver
+Tag %d = Day %d
+Schulden: %s = Debt: %s
+
+# The paint schemes.
+Blut und Kohle = Blood and Coal
+Bestatterschwarz = Undertaker Black
+Knochenweiß = Bone White
+Grabmoos = Grave Moss
+Trauerviolett = Mourning Violet
+Kürbis = Pumpkin
+Leichenhallenblau = Morgue Blue
+Warngelb = Hazard Yellow
+Grundierung = Primer
+Kranzrosa = Wreath Pink
+
+# ------------------------------------------------------------------------------------------------ story pages
+Seite %d / %d = Page %d / %d
+A weiter   ·   B überspringen = A next   ·   B skip
+Eingabe weiter   ·   Esc überspringen = Enter next   ·   Esc skip
+
+# ------------------------------------------------------------------------------------------------ quick race
+Ohne Karriere, ohne Schulden, ohne Beerdigung. = No career, no debts, no funeral.
+Rennen = Race
+Derby = Derby
+Zeitfahren = Time Trial
+(Rekord %.2f s) = (record %.2f s)
+Art: = Mode:
+Schauplatz: = Venue:
+Strecke: = Track:
+keine = none
+Richtung: = Direction:
+rückwärts = reversed
+vorwärts = forwards
+Auto: = Car:
+Gegner: = Rivals:
+Runden: = Laps:
+Start! = Start!
+Links/Rechts ändern   ·   A Start   ·   B zurück = Left/Right change   ·   A start   ·   B back
+Links/Rechts ändern   ·   Eingabe Start   ·   Esc zurück = Left/Right change   ·   Enter start   ·   Esc back
+Du = You
+Fahrer %d = Driver %d
+
+# ------------------------------------------------------------------------------------------------ options
+Sprache: = Language:
+Musik: = Music:
+Effekte: = Effects:
+Vollbild: = Full screen:
+an = on
+aus = off
+Grafik: = Graphics:
+(automatisch) = (automatic)
+Schnell = Fast
+Ausgewogen = Balanced
+Fein = High
+Kamerahöhe: = Camera height:
+Bildwackeln: = Screen shake:
+Vibration: = Rumble:
+Sprüche im Rennen: = Trash talk in races:
+Schriftgröße: = Text size:
+Steuerung = Controls
+Zurück = Back
+Links/Rechts ändern   ·   F11 Vollbild   ·   F12 Bildschirmfoto = Left/Right change   ·   F11 full screen   ·   F12 screenshot
+
+# ------------------------------------------------------------------------------------------------ controls
+Eingabe: Taste neu belegen   ·   Links/Rechts: Tastatur oder Pad = Enter: rebind   ·   Left/Right: keyboard or pad
+Gas = Throttle
+Bremse / Rückwärts = Brake / Reverse
+Links = Left
+Rechts = Right
+Handbremse = Handbrake
+Bordkanone = Gun
+Heckware abwerfen = Drop rear gear
+Rakete = Rocket
+Lachgas = Nitro
+Heckware wechseln = Switch rear gear
+Hupe = Horn
+Pause = Pause
+Standard wiederherstellen = Restore defaults
+Pad-Knopf drücken ... = Press a pad button ...
+Taste drücken ... (Esc bricht ab) = Press a key ... (Esc cancels)
+Spalte: Pad   ·   Lenkung, Gas und Bremse auch über Stick und Trigger = Column: pad   ·   steering, throttle and brake also on stick and triggers
+Spalte: Tastatur = Column: keyboard
+
+# Key and button names.
+Leertaste = Space
+Umschalt = Shift
+Umschalt rechts = Right Shift
+Strg = Ctrl
+Strg rechts = Right Ctrl
+Eingabe = Enter
+Rücktaste = Backspace
+Pfeil hoch = Up Arrow
+Pfeil runter = Down Arrow
+Pfeil links = Left Arrow
+Pfeil rechts = Right Arrow
+Kreuz hoch = D-pad Up
+Kreuz runter = D-pad Down
+Kreuz links = D-pad Left
+Kreuz rechts = D-pad Right
+
+# ------------------------------------------------------------------------------------------------ the race
+LOS! = GO!
+ist verschrottet = is wrecked
+VERSCHROTTET = WRECKED
+Runde %d = Lap %d
+LETZTE RUNDE = FINAL LAP
+SIEG! = VICTORY!
+ZIEL  ·  Platz %d = FINISH  ·  Place %d
+FALSCHE RICHTUNG = WRONG WAY
+Noch %d = %d left
+Der Letzte, der fährt, gewinnt = Last car moving wins
+Runde %d/%d = Lap %d/%d
+Beste = Best
+Panzerung = Armour
+Hitze = Heat
+Munition = Ammo
+Heck leer = Rack empty
+Minen = Mines
+Krähenfüße = Spikes
+Öl = Oil
+Nebel = Smoke
+Raketen %d = Rockets %d
+Lachgas %d = Nitro %d
+km/h = km/h
+
+# Pickups.
+Bargeld = Cash
+Ein Sack voll Bargeld = A sack full of cash
+Reparatur = Repairs
+Volle Reparatur = Full repair
+Zwei Lachgas = Two nitros
+Drei Minen = Three mines
+Zwei Raketen = Two rockets
+Grabbeigabe: Öl unterm eigenen Wagen = Grave gift: oil under your own wheels
+
+# The pause menu.
+Weiter = Resume
+Aufgeben (letzter Platz) = Retire (last place)
+Neu starten = Restart
+Aufgeben und Speichern = Retire and save
+Zum Hauptmenü = Main menu
+
+# ------------------------------------------------------------------------------------------------ results
+Sieg! = Victory!
+Verschrottet = Wrecked
+Platz %d = Place %d
+Platz = Pos.
+Wagen = Car
+Zeit = Time
+Preis / Punkte = Prize / Points
+✝ verstorben = ✝ deceased
+Wrack = Wreck
+·  %d P = ·  %d pts
+%d P = %d pts
+Preisgeld = Prize money
+Kopfgeld = Bounties
+Aufgesammelt = Picked up
+Schnellste Runde = Fastest lap
+Sponsor = Sponsor
+Gesamt = Total
+Schaden: %d %% = Damage: %d %%
+Reparatur: = Repairs:
+%d Ligapunkte = %d league points
+A weiter = A continue
+Eingabe weiter = Enter continue
+
+# ------------------------------------------------------------------------------------------------ the paddock
+Zustand = Condition
+Panzerung %d  ·  Spitze %d km/h = Armour %d  ·  Top %d km/h
+Motor %d/%d  Reifen %d/%d  Panzer %d/%d  Kanone %d/%d = Engine %d/%d  Tyres %d/%d  Armour %d/%d  Gun %d/%d
+Minen %d  Krähenfüße %d  Öl %d  Nebel %d  Raketen %d  Lachgas %d = Mines %d  Spikes %d  Oil %d  Smoke %d  Rockets %d  Nitro %d
+Fahrerlager = Paddock
+Finale = Final
+FINALE gegen Mortimer Graves = FINAL against Mortimer Graves
+SHOWDOWN gegen den Ligachampion = SHOWDOWN with the league champion
+Renntag: die Angebote = Race day: the offers
+Werkstatt = Garage
+Schwarzmarkt = Black Market
+Kredithai = Loan Shark
+Das Sensenblatt = The Grim Reader
+Tabelle = Standings
+Speichern und Hauptmenü = Save and main menu
+A wählen   ·   B Hauptmenü = A select   ·   B main menu
+Eingabe wählen   ·   Esc Hauptmenü = Enter select   ·   Esc main menu
+
+# ------------------------------------------------------------------------------------------------ race day
+Renntag = Race Day
+Tag %d  ·  drei Angebote, ein Leben = Day %d  ·  three offers, one life
+Heute keine Rennen. = No races today.
+Hinterhofrennen = Back-Alley Race
+Hauptrennen = Main Event
+Großer Preis = Grand Prize
+·  rückwärts = ·  reversed
+%d Runden = %d laps
+Siegprämie: = Winner's purse:
+Startgeld: = Entry fee:
+Achtung: dein Wagen ist zu %d %% Schrott. = Warning: your car is %d %% scrap.
+Links/Rechts wählen   ·   A antreten   ·   B zurück = Left/Right choose   ·   A race   ·   B back
+Links/Rechts wählen   ·   Eingabe antreten   ·   Esc zurück = Left/Right choose   ·   Enter race   ·   Esc back
+
+# ------------------------------------------------------------------------------------------------ garage
+Tuning = Tuning
+Autohaus = Car Lot
+Bordwaffen = Guns
+Lack = Paint
+Reparieren: = Repair:
+Der Wagen ist heil. = The car is in one piece.
+Motor = Engine
+Reifen = Tyres
+·   ausgereizt = ·   maxed out
+Eintauschwert deines Wagens: = Trade-in value of your car:
+(deiner) = (yours)
+eingebaut = fitted
+Links/Rechts: die Farben tauschen (kostenlos) = Left/Right: swap the colours (free)
+Panzerung %d   Spitze %d km/h   Kraft %.1f   Grip %.2f = Armour %d   Top %d km/h   Power %.1f   Grip %.2f
+LB/RB Bereich   ·   A kaufen   ·   B zurück = LB/RB section   ·   A buy   ·   B back
+Q/E Bereich   ·   Eingabe kaufen   ·   Esc zurück = Q/E section   ·   Enter buy   ·   Esc back
+
+# ------------------------------------------------------------------------------------------------ black market
+für %d = for %d
+Sabotage: = Sabotage:
+Sabotage bestellt: = Sabotage ordered:
+Ihr Wagen startet im nächsten Rennen halb kaputt. Wer erwischt wird, zahlt. = Their car starts the next race half broken. Get caught and you pay.
+A kaufen   ·   Links/Rechts: Sabotageziel   ·   B zurück = A buy   ·   Left/Right: sabotage target   ·   B back
+Eingabe kaufen   ·   Links/Rechts: Sabotageziel   ·   Esc zurück = Enter buy   ·   Left/Right: sabotage target   ·   Esc back
+
+# ------------------------------------------------------------------------------------------------ loan shark
+Leihen: = Borrow:
+Leihen: alles, was geht ( = Borrow: all you can get (
+Zurückzahlen: = Repay:
+Zurückzahlen: alles = Repay: everything
+Schulden: = Debt:
+Zinsen: %d %% pro Renntag = Interest: %d %% per race day
+Fällig an Tag %d. Danach kommen die Inkasso-Herren. = Due on day %d. After that, the collectors come calling.
+A wählen   ·   B zurück = A select   ·   B back
+Eingabe wählen   ·   Esc zurück = Enter select   ·   Esc back
+
+# ------------------------------------------------------------------------------------------------ sponsors
+Sponsoren = Sponsors
+Wer zahlt, bestimmt die Grabinschrift. = Whoever pays chooses the epitaph.
+(unter Vertrag) = (under contract)
+Niemand will dich. Noch nicht. = Nobody wants you. Not yet.
+Sieg = Win
+Podest = Podium
+je Wrack = per wreck
+ohne Kratzer = without a scratch
+schnellste Runde = fastest lap
+ohne einen Schuss = without firing a shot
+A unterschreiben   ·   B zurück = A sign   ·   B back
+Eingabe unterschreiben   ·   Esc zurück = Enter sign   ·   Esc back
+
+# ------------------------------------------------------------------------------------------------ the tabloid
+Tag %d  ·  Unabhängig von allem außer dem Bestattungsgewerbe  ·  Preis: ein Stoßgebet = Day %d  ·  Independent of everything except the funeral trade  ·  Price: one quick prayer
+Kleinanzeigen = Classifieds
+
+# ------------------------------------------------------------------------------------------------ standings
+Du hast den Grave Prix gewonnen = You have won the Grave Prix
+Pleite und begraben = Broke and buried
+Showdown ab %d Punkten auf Platz 1 = Showdown at %d points and first place
+Auf dem Friedhof = In the cemetery
+(Tag %d) = (day %d)
+Rennen %d  ·  Siege %d  ·  Wracks verursacht %d  ·  selbst verschrottet %d  ·  verdient %s = Races %d  ·  Wins %d  ·  Wrecks caused %d  ·  Wrecked %d  ·  Earned %s
+A / B zurück = A / B back
+Eingabe / Esc zurück = Enter / Esc back
+
+# ------------------------------------------------------------------------------------------------ the news
+ein Unbekannter = an unknown driver
+# Added with the seasons.
+Saisontag %d/%d = Season day %d/%d
+Showdown ab %d Punkten unter den ersten zwei  ·  Saisontag %d/%d, danach beginnt die Tabelle von vorn = Showdown from %d points in the top two  ·  season day %d/%d, then the table starts afresh
+Champion = Champion

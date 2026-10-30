@@ -1,0 +1,166 @@
+# The venues (docs/DESIGN.md "Venues"): the look, the surfaces, the walls, the props, the music of each place.
+
+venue junkyard
+  title "Schrottplatz Blechfriedhof" title_en "Tin Graveyard Scrapyard"
+  league 5
+  time overcast
+  weather clear
+  sun dir=220 height=40 color=#e0d8c8 power=0.7
+  ambient #7a7a78 power=0.75
+  fog #8a8478 density=0.005
+  ground dirt color=#4e3e2c color2=#3c3226
+  road dirt color=#7e705c line=#c0b090
+  shoulder gravel color=#5e564a
+  wall scrap
+  props scrap_pile*4 wreck_stack*3 tire_pile*4 wreck_car*4 engine_block*3 barrel_oil*3 tire_stack*2 crate_stack*1 shack_tin*1 oil_tank_small*1 wreck_bus*1 car_crusher*0.3 crane_magnet*0.3
+  density 1.1
+
+venue cemetery
+  title "Friedhof Ewige Ruh" title_en "Eternal Rest Cemetery"
+  league 5
+  time night
+  weather fog
+  sun dir=40 height=40 color=#8a9ad0 power=0.45
+  ambient #34405a power=0.95
+  fog #222a3a density=0.011
+  ground grass color=#2e4026 color2=#3a3424
+  road asphalt color=#4c4c54 line=#c8c8b0
+  shoulder gravel color=#5a5448
+  wall stone
+  props gravestone*10 gravestone_cross*6 gravestone_candle*4 grave_plot*4 gravestone_angel*2 cypress*4 tree_dead*2 obelisk*1.5 wreath*1.5 lamp_old*1.5 bench*1 crypt*2 mausoleum*0.6 open_grave*0.8 chapel*0.2
+  density 1.8
+
+venue docks
+  title "Hafen Letzter Anker" title_en "Last Anchor Docks"
+  league 4
+  time dusk
+  weather rain
+  sun dir=260 height=12 color=#ff8a50 power=0.6
+  ambient #3a4a60 power=0.95
+  fog #34404c density=0.007
+  ground concrete color=#5a5c60 color2=#4a4c52
+  road asphalt color=#2e3036 line=#e0c040
+  shoulder concrete color=#6a6a6c
+  wall containers
+  props container*4 container_stack*3 bollard*3 pallet_stack*3 crate_stack*3 crate*2 barrel_oil*2 lamp_harbor*2 forklift*1 buoy*1 warehouse*0.4
+  density 1.1
+
+venue desert
+  title "Knochental" title_en "Bone Valley"
+  league 4
+  time noon
+  weather dust
+  sun dir=160 height=70 color=#fff0d0 power=0.9
+  ambient #9a8a6c power=0.5
+  fog #d8c8a0 density=0.003
+  ground sand color=#c09a60 color2=#a88048
+  road asphalt color=#4e4a46 line=#f0f0e0
+  shoulder sand color=#b08e58
+  wall tires
+  props cactus*6 cactus_tall*3 rock_red*3 tumbleweed*4 skull_cow*3 ribcage*1 vulture_post*1 wreck_rust*1.5 mesa_rock*0.6 water_tower*0.2
+  density 1.1
+
+venue refinery
+  title "Raffinerie Höllenfeuer" title_en "Hellfire Refinery"
+  league 3
+  time night
+  weather clear
+  sun dir=90 height=30 color=#6070a0 power=0.3
+  ambient #4a3024 power=0.9
+  fog #2a1a12 density=0.006
+  ground concrete color=#3e3a34 color2=#2c2824
+  road concrete color=#5e5a54 line=#f0c020
+  shoulder gravel color=#48423a
+  wall pipes
+  props barrel_stack*3 barrel_oil*3 valve*3 oil_puddle*3 pipe_rack*2 lamp_sodium*2 catwalk*1 crate_stack*1 oil_tank_small*1 distill_column*0.6 tank_oil*0.5 flare_stack*0.3
+  density 1.2
+
+venue swamp
+  title "Moorbad Sumpfgruft" title_en "Bog Crypt Bayou"
+  league 3
+  time dawn
+  weather fog
+  sun dir=100 height=12 color=#ffb080 power=0.7
+  ambient #4a5a48 power=0.85
+  fog #607060 density=0.01
+  ground mud color=#3a3a24 color2=#2a3020
+  road dirt color=#6a5a40 line=#a09070
+  shoulder mud color=#4a4430
+  wall wood
+  props reeds*8 tree_swamp*5 stump*3 bog_pool*3 gator*1.5 lantern*1.2 boat_wreck*1 sunken_car*1 stilt_hut*0.8 dock_wood*0.5
+  density 1.3
+
+venue downtown
+  title "Innenstadt Totenstille" title_en "Dead Quiet Downtown"
+  league 2
+  time night
+  weather rain
+  sun dir=0 height=40 color=#6070b0 power=0.3
+  ambient #2e2c4c power=1.05
+  fog #1e1a32 density=0.006
+  ground concrete color=#3a3a44 color2=#2e2e36
+  road asphalt color=#46464e line=#f0f0f0
+  shoulder concrete color=#4a4a54
+  wall neon
+  props building_a*3 building_b*3 building_tall*1.5 parked_car*2 parked_van*1 dumpster*2 hydrant*2 lamp_city*2 newsstand*1 neon_sign*1 bus_stop*0.6
+  density 1.0
+
+venue pass
+  title "Pass zur Letzten Ruhe" title_en "Last Rest Pass"
+  league 2
+  time day
+  weather snow
+  sun dir=200 height=25 color=#f0f4ff power=0.75
+  ambient #8a98b8 power=0.75
+  fog #b0b8c8 density=0.006
+  ground snow color=#e8ecf4 color2=#c8d0e0
+  road snow color=#727c8c line=#3a4252
+  shoulder gravel color=#7c7870
+  wall snowbank
+  props fir_snow*8 fir_tree*6 rock_snow*4 snow_bank*2 avalanche_fence*1 cabin_wood*0.6 lift_pylon*0.5 snowman*0.6 snow_plow*0.3
+  density 1.3
+
+venue fairground
+  title "Rummel Zum Lachenden Sarg" title_en "Laughing Coffin Funfair"
+  league 1
+  time dusk
+  weather clear
+  sun dir=280 height=8 color=#ff7040 power=0.55
+  ambient #4a3860 power=0.9
+  fog #302838 density=0.005
+  ground grass color=#34442a color2=#44402e
+  road asphalt color=#5a5258 line=#f0e0a0
+  shoulder dirt color=#6a5a48
+  wall fence
+  props ticket_booth*2 balloon_stand*2 bumper_car*2 lamp_street*1.5 tent_striped*1 clown_head*1 bulb_arch*1 high_striker*1 crate_stack*1 barrel_oil*1 carousel*0.6 coaster_segment*0.4 ghost_train*0.3 ferris_wheel*0.25
+  density 1.3
+
+venue proving
+  title "Sperrgebiet Friedhofsruh" title_en "Restricted Zone Graveyard Shift"
+  league 1
+  time day
+  weather dust
+  sun dir=130 height=55 color=#fff0d0 power=1.0
+  ambient #8a8270 power=0.6
+  fog #b0a080 density=0.004
+  ground dirt color=#9a8660 color2=#7a6a48
+  road concrete color=#55534f line=#e0e0d0
+  shoulder gravel color=#7a7060
+  wall sandbags
+  props crater*6 tank_trap*4 sandbag_wall*3 barbed_post*2 target_board*2 tank_wreck*1 jeep_wreck*1 bunker*1 watchtower*1 crash_dummy*1 barrel_oil*1 radar_dish*0.4
+  density 1.0
+
+venue estate
+  title "Anwesen Graves" title_en "Graves Estate"
+  league 0
+  time night
+  weather storm
+  sun dir=300 height=30 color=#a0b0ff power=0.35
+  ambient #2a2c44 power=0.95
+  fog #14141e density=0.01
+  ground grass color=#24301e color2=#2e2c22
+  road cobble color=#4e4a48 line=#b0a080
+  shoulder gravel color=#423e3a
+  wall iron
+  props hedge_block*3 tree_dead*3 gravestone*3 tree_dead_big*2 gargoyle*2 lamp_gothic*2 cypress*2 gravestone_angel*1.5 statue_reaper*1 mausoleum*1 crypt*1 obelisk*1 manor_wall*1 coffin_stack*0.6 fountain_skull*0.5 mausoleum_large*0.2
+  density 1.3

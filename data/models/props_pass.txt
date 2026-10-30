@@ -1,0 +1,189 @@
+# Mountain pass props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_town_pass.py.
+
+# an 11 m fir
+model fir_tree
+  part gun r=0.275 r2=0.385 len=3.3 y=1.65 pitch=90 seg=6 color=#3a2a1e
+  part disc r=2.64 r2=0.317 h=3.3 y=3.19 seg=8 color=#1e3a28 rot=0
+  part disc r=2.26 r2=0.271 h=3.069 y=4.79 seg=8 color=#1e3a28 rot=17
+  part disc r=1.88 r2=0.226 h=2.838 y=6.391 seg=8 color=#1e3a28 rot=34
+  part disc r=1.5 r2=0.18 h=2.607 y=7.991 seg=8 color=#1e3a28 rot=51
+  part disc r=1.119 r2=0.134 h=2.376 y=9.592 seg=8 color=#1e3a28 rot=68
+  part cone r=0.475 len=1.32 y=10.56 pitch=90 seg=8 color=#1e3a28
+
+# a 10 m fir with snow on every tier
+model fir_snow
+  part gun r=0.25 r2=0.35 len=3 y=1.5 pitch=90 seg=6 color=#3a2a1e
+  part disc r=2.4 r2=0.288 h=3 y=2.9 seg=8 color=#24402c rot=0
+  part disc r=1.872 r2=0.24 h=1.26 y=3.83 seg=8 color=#e8eef8 rot=0
+  part disc r=2.054 r2=0.247 h=2.79 y=4.355 seg=8 color=#24402c rot=17
+  part disc r=1.602 r2=0.205 h=1.172 y=5.22 seg=8 color=#e8eef8 rot=17
+  part disc r=1.709 r2=0.205 h=2.58 y=5.81 seg=8 color=#24402c rot=34
+  part disc r=1.333 r2=0.171 h=1.084 y=6.61 seg=8 color=#e8eef8 rot=34
+  part disc r=1.363 r2=0.164 h=2.37 y=7.265 seg=8 color=#24402c rot=51
+  part disc r=1.063 r2=0.136 h=0.995 y=8 seg=8 color=#e8eef8 rot=51
+  part disc r=1.018 r2=0.122 h=2.16 y=8.72 seg=8 color=#24402c rot=68
+  part disc r=0.794 r2=0.102 h=0.907 y=9.39 seg=8 color=#e8eef8 rot=68
+  part cone r=0.432 len=1.2 y=9.6 pitch=90 seg=8 color=#e8eef8
+
+# granite boulders under a snow cap, ~4 m
+model rock_snow
+  part box w=3.4 h=2.4 d=2.8 y=1.2 color=#6a6e74 rot=20 taper=0.3
+  part dome r=1.292 rx=1.224 rz=1.008 ry=0.35 x=0 y=2.35 z=0 rot=20 color=#e8eef8 seg=7
+  part box w=2 h=1.4 d=1.8 x=1.8 y=0.7 z=1.2 color=#6a6e74 rot=-25 taper=0.3
+  part dome r=0.76 rx=0.72 rz=0.648 ry=0.35 x=1.8 y=1.35 z=1.2 rot=-25 color=#e8eef8 seg=7
+  part box w=1.6 h=1.1 d=1.4 x=-1.6 y=0.55 z=1 color=#6a6e74 rot=50 taper=0.3
+  part dome r=0.608 rx=0.576 rz=0.504 ry=0.35 x=-1.6 y=1.05 z=1 rot=50 color=#e8eef8 seg=7
+  part crystal r=0.7 len=2.8 seg=5 pitch=80 x=-0.6 y=1.4 z=-1 color=#5e6268
+  part dome r=2.6 ry=0.4 x=0.6 z=1.8 color=#d4dce8 seg=8
+
+# a 14 m steel snow-bridge, leaning back into the slope, snow on its beams
+model avalanche_fence
+  part box w=0.2 h=0.2 d=3.574 x=-6.6 y=1.7 z=0.05 pitch=72.07 color=#4a3a2e
+  part box w=0.14 h=0.14 d=3.162 x=-6.6 y=1.3 z=0.7 pitch=55.3 color=#4a3a2e
+  part box w=0.2 h=0.2 d=3.574 x=-3.3 y=1.7 z=0.05 pitch=72.07 color=#4a3a2e
+  part box w=0.14 h=0.14 d=3.162 x=-3.3 y=1.3 z=0.7 pitch=55.3 color=#4a3a2e
+  part box w=0.2 h=0.2 d=3.574 y=1.7 z=0.05 pitch=72.07 color=#4a3a2e
+  part box w=0.14 h=0.14 d=3.162 y=1.3 z=0.7 pitch=55.3 color=#4a3a2e
+  part box w=0.2 h=0.2 d=3.574 x=3.3 y=1.7 z=0.05 pitch=72.07 color=#4a3a2e
+  part box w=0.14 h=0.14 d=3.162 x=3.3 y=1.3 z=0.7 pitch=55.3 color=#4a3a2e
+  part box w=0.2 h=0.2 d=3.574 x=6.6 y=1.7 z=0.05 pitch=72.07 color=#4a3a2e
+  part box w=0.14 h=0.14 d=3.162 x=6.6 y=1.3 z=0.7 pitch=55.3 color=#4a3a2e
+  part box w=14 h=0.16 d=0.16 y=0.58 z=0.438 color=#4a3a2e
+  part box w=14 h=0.08 d=0.2 y=0.7 z=0.438 color=#e8eef8
+  part box w=14 h=0.16 d=0.16 y=1.28 z=0.212 color=#4a3a2e
+  part box w=14 h=0.08 d=0.2 y=1.4 z=0.212 color=#e8eef8
+  part box w=14 h=0.16 d=0.16 y=1.98 z=-0.015 color=#4a3a2e
+  part box w=14 h=0.08 d=0.2 y=2.1 z=-0.015 color=#e8eef8
+  part box w=14 h=0.16 d=0.16 y=2.68 z=-0.241 color=#4a3a2e
+  part box w=14 h=0.08 d=0.2 y=2.8 z=-0.241 color=#e8eef8
+  part box w=14 h=0.16 d=0.16 y=3.38 z=-0.468 color=#4a3a2e
+  part box w=14 h=0.08 d=0.2 y=3.5 z=-0.468 color=#e8eef8
+  part box w=14.4 h=0.5 d=2 y=0.25 z=1 color=#e8eef8 taper=0.6   # the drift behind it
+
+# a log cabin 8 x 6 m under a snowed roof, warm windows, firewood, skis
+model cabin_wood lamp=1
+  part box w=8 h=3 d=6 y=1.5 color=#6a4a2c
+  part box w=8.1 h=0.06 d=0.06 y=0.28 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=0.28 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=0.28 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=0.28 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=0.7 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=0.7 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=0.7 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=0.7 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=1.12 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=1.12 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=1.12 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=1.12 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=1.54 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=1.54 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=1.54 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=1.54 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=1.96 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=1.96 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=1.96 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=1.96 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=2.38 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=2.38 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=2.38 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=2.38 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=2.8 z=-3.03 color=#4a321e
+  part box w=8.1 h=0.06 d=0.06 y=2.8 z=3.03 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=-4.03 y=2.8 color=#4a321e
+  part box w=0.06 h=0.06 d=6.1 x=4.03 y=2.8 color=#4a321e
+  part plate pts="-4,0;4,0;0,2.6" thick=0.1 pitch=-90 y=3 z=-3 color=#6a4a2c
+  part plate pts="-4,0;4,0;0,2.6" thick=0.1 pitch=-90 y=3 z=3 color=#6a4a2c
+  part wing span=4.8 root=7.2 tip=7.2 sweep=0 thick=0.3 dihedral=-2.8 y=5.75 color=#3a2a1e
+  part wing span=4.75 root=7.1 tip=7.1 sweep=0 thick=0.25 dihedral=-2.75 y=5.98 color=#e8eef8
+  part box w=0.9 h=2.4 d=0.9 x=2.4 y=4.8 z=1.2 color=#6a6660
+  part box w=1 h=0.3 d=1 x=2.4 y=6.15 z=1.2 color=#e8eef8
+  part box w=1.1 h=0.9 d=0.06 x=-2.4 y=1.65 z=-3.06 color=#ffc068 emit=0.75
+  part box w=0.35 h=0.95 d=0.04 x=-3.15 y=1.655 z=-3.07 color=#8a2a1a
+  part box w=0.35 h=0.95 d=0.04 x=-1.65 y=1.655 z=-3.07 color=#8a2a1a
+  part box w=1.1 h=0.9 d=0.06 x=2.4 y=1.65 z=-3.06 color=#ffc068 emit=0.75
+  part box w=0.35 h=0.95 d=0.04 x=1.65 y=1.655 z=-3.07 color=#8a2a1a
+  part box w=0.35 h=0.95 d=0.04 x=3.15 y=1.655 z=-3.07 color=#8a2a1a
+  part box w=1 h=2.1 d=0.06 y=1.05 z=-3.06 color=#3a2414
+  part box w=1.8 h=1 d=0.7 x=-3.2 y=0.5 z=-3.6 color=#5a3a22   # firewood
+  part disc r=0.14 h=0.72 pitch=90 x=-3.9 y=0.25 z=-3.6 color=#a07a50 seg=6
+  part disc r=0.14 h=0.72 pitch=90 x=-3.45 y=0.65 z=-3.6 color=#a07a50 seg=6
+  part disc r=0.14 h=0.72 pitch=90 x=-3 y=0.25 z=-3.6 color=#a07a50 seg=6
+  part disc r=0.14 h=0.72 pitch=90 x=-2.55 y=0.65 z=-3.6 color=#a07a50 seg=6
+  part box w=1.9 h=0.12 d=0.8 x=-3.2 y=1.06 z=-3.6 color=#e8eef8
+  part box w=0.08 h=0.03 d=1.822 x=3.3 y=0.9 z=-3.2 pitch=81.07 rot=135 color=#c02a1a
+  part box w=0.08 h=0.03 d=1.822 x=3.5 y=0.9 z=-3.2 pitch=81.07 rot=135 color=#c02a1a
+  part box w=0.35 h=0.25 d=0.25 y=2.425 z=-3.2 color=#ffd890 emit=0.9
+  part light r=0.08 y=2.2 z=-3.6 color=#ffc880
+  part dome r=2 ry=0.6 x=-4.5 z=2.5 color=#e8eef8 seg=8
+
+# plowed snow, grey at the foot, a buried car's roof showing
+model snow_bank
+  part dome r=3.3 ry=1.4 color=#b8c0cc seg=10
+  part dome r=3 ry=1.6 x=0.2 color=#e8eef8 seg=10
+  part dome r=1.8 ry=1.5 x=2.4 z=0.8 color=#d4dce8 seg=8
+  part dome r=1.5 ry=1.2 x=-2.4 z=-0.6 color=#e8eef8 seg=8
+  part cabin len=1.9 wid=1.5 hgt=0.45 y=1.55 x=-0.6 z=0.3 rot=25 front=0.4 back=0.25 top=0.86 color=#2a5a8a glass=#1a2430   # the buried car
+  part box w=1.4 h=0.15 d=1.2 x=-0.55 y=1.825 z=0.3 color=#e8eef8 rot=25
+
+# a 10 m chairlift pylon; the cable along z, a chair hanging
+model lift_pylon
+  part box w=1.4 h=0.6 d=1.4 y=0.3 color=#7a7a7e
+  part gun r=0.32 r2=0.45 len=9.4 y=5.3 pitch=90 seg=8 color=#6a7078
+  part box w=6 h=0.45 d=0.6 y=10.225 color=#6a7078
+  part box w=6 h=0.12 d=0.65 y=10.51 color=#e8eef8
+  part disc r=0.45 h=0.15 roll=90 x=-2.6 y=9.8 color=#2a2a2c seg=8
+  part box w=0.05 h=0.05 d=22.001 x=-2.6 y=9.5 pitch=-0.52 rot=180 color=#1a1a1a
+  part disc r=0.45 h=0.15 roll=90 x=2.6 y=9.8 color=#2a2a2c seg=8
+  part box w=0.05 h=0.05 d=22.001 x=2.6 y=9.5 pitch=-0.52 rot=180 color=#1a1a1a
+  part box w=0.4 h=0.05 d=9.401 x=0.425 y=5.3 z=0.35 pitch=89.09 rot=-90 color=#3a3a3e   # ladder
+  part box w=0.8 h=0.5 d=0.05 y=7.25 z=-0.45 color=#e8c020
+  part box w=0.06 h=0.06 d=2.3 x=2.6 y=8.35 z=-6 pitch=-90 color=#2a2a2c
+  part box w=1.4 h=0.12 d=0.6 x=2.6 y=7.16 z=-6 color=#c02a1a
+  part box w=1.4 h=0.6 d=0.1 x=2.6 y=7.5 z=-5.7 color=#c02a1a
+  part box w=1.45 h=0.08 d=0.6 x=2.6 y=7.86 z=-5.9 color=#e8eef8
+
+# a yellow curve-warning diamond on a post, tilted back
+model sign_curve
+  part gun r=0.06 len=2.4 y=1.2 z=0.25 pitch=90 seg=5 color=#8a8a8e
+  part box w=0.13 h=0.25 d=0.13 y=0.925 z=0.25 color=#c02a1a
+  part box w=0.13 h=0.12 d=0.13 y=1.11 z=0.25 color=#efefe8
+  part plate pts="0,-1;1,0;0,1;-1,0" thick=0.05 pitch=-60 y=2.3 color=#121214
+  part plate pts="0,-0.88;0.88,0;0,0.88;-0.88,0" thick=0.03 pitch=-60 y=2.315 z=-0.026 color=#f0c018 emit=0.15
+  part box w=0.04 h=0.13 d=0.5 x=-0.15 y=2.075 z=-0.211 pitch=60 rot=180 color=#121214
+  part box w=0.04 h=0.13 d=0.292 x=-0.075 y=2.4 z=-0.023 pitch=47.95 rot=129.81 color=#121214
+  part box w=0.04 h=0.13 d=0.292 x=0.125 y=2.573 z=0.077 pitch=26.46 rot=106.7 color=#121214
+  part plate pts="0.08,0.5;0.45,0.48;0.3,0.15" thick=0.03 pitch=-60 y=2.335 z=-0.061 color=#121214
+
+# extra: a snowman with crossed-out eyes, a top hat and a red scarf
+model snowman
+  part sphere r=0.65 y=0.6 color=#e8eef8 seg=8
+  part sphere r=0.48 y=1.55 color=#e8eef8 seg=8
+  part sphere r=0.34 y=2.25 color=#e8eef8 seg=8
+  part ring r=0.36 thick=0.08 y=1.95 color=#c02a1a seg=10
+  part box w=0.15 h=0.6 d=0.05 x=0.25 y=1.65 z=-0.4 color=#c02a1a rot=-10
+  part cone r=0.07 len=0.451 y=2.235 z=-0.525 pitch=-3.81 seg=6 color=#f07a1a
+  part box w=0.16 h=0.035 d=0.04 x=-0.13 y=2.37 z=-0.3 color=#121214 roll=45
+  part box w=0.16 h=0.035 d=0.04 x=-0.13 y=2.37 z=-0.3 color=#121214 roll=-45
+  part box w=0.16 h=0.035 d=0.04 x=0.13 y=2.37 z=-0.3 color=#121214 roll=45
+  part box w=0.16 h=0.035 d=0.04 x=0.13 y=2.37 z=-0.3 color=#121214 roll=-45
+  part disc r=0.36 h=0.05 y=2.545 seg=10 color=#121214
+  part disc r=0.24 h=0.45 y=2.785 seg=10 color=#121214
+  part gun r=0.02 r2=0.04 len=0.949 x=0.8 y=1.85 z=0.05 pitch=31.81 rot=97.13 seg=4 color=#4a321e
+  part gun r=0.02 r2=0.04 len=0.787 x=-0.75 y=1.45 z=-0.1 pitch=-22.4 rot=-74.05 seg=4 color=#4a321e
+
+# extra: an abandoned yellow snowplough stuck in a drift, its beacons still turning
+model snow_plow
+  part box w=2.5 h=1.4 d=6.5 y=1.6 z=0.8 color=#3a3a3e
+  part box w=2.5 h=2 d=2.2 y=2.2 z=-1.6 color=#e0a020
+  part box w=2.52 h=0.8 d=1.6 y=2.6 z=-1.5 color=#1a2028
+  part box w=2.5 h=0.12 d=2.2 y=3.26 z=-1.6 color=#e8eef8
+  part box w=2.5 h=1.7 d=3.8 y=1.85 z=2.1 color=#e0a020 taper=0.1
+  part box w=2.4 h=0.15 d=3.6 y=2.775 z=2.1 color=#e8eef8
+  part box w=3.6 h=1.2 d=0.2 y=0.7 z=-3.4 color=#d84018 rot=-12 pitch=-15   # the blade
+  part box w=3.6 h=0.25 d=0.4 y=1.3 z=-3.3 color=#e8eef8 rot=-12
+  part disc r=0.55 h=0.4 roll=90 x=1.1 y=0.55 z=-1.6 color=#141414 seg=8 mirror=1
+  part disc r=0.55 h=0.4 roll=90 x=1.1 y=0.55 z=1.6 color=#141414 seg=8 mirror=1
+  part disc r=0.55 h=0.4 roll=90 x=1.1 y=0.55 z=3 color=#141414 seg=8 mirror=1
+  part disc r=0.14 h=0.2 x=-0.8 y=3.4 z=-1.6 seg=6 color=#ff9a10 emit=1
+  part disc r=0.14 h=0.2 x=0.8 y=3.4 z=-1.6 seg=6 color=#ff9a10 emit=1
+  part dome r=2.4 rx=2.8 rz=2.2 ry=1.1 x=-1.2 z=-3.4 color=#e8eef8 seg=9

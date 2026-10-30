@@ -1,0 +1,570 @@
+# The cars of the Grave Prix (data/cars/cars.txt): one model per car, built by the Forge from parts.
+# Model space: x right, y up, -z is the nose; metres; y = 0 is the ground the wheels stand on.
+# paint = the driver's main colour, paint2 = stripes, roofs, bonnets, paint3 = trim (sparingly).
+# Common colours: glass #1a2430, chrome #c8ccd4, black trim #18181c, headlights #fff4d0, tail lights #ff2414.
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 1 – scrap
+# ---------------------------------------------------------------------------------------------------------------
+
+# Rustbucket: a tired seventies saloon – primer bonnet, rust, one dead tail light, a spare tyre on the roof rack.
+model car_rustbucket
+  part body len=4.3 wid=1.74 hgt=0.6 y=0.52 round=6 nose=0.18 tail=0.14 drop=0.25 pinch=0.06 color=paint
+  part cabin len=2.1 wid=1.6 hgt=0.5 y=1.07 z=0.15 front=0.35 back=0.22 top=0.88 color=paint glass=#1a2430
+  part box w=1.3 h=0.06 d=0.75 y=0.81 z=-1.35 color=#7a756a noise=0.12                   # primer bonnet
+  part box w=0.36 h=0.02 d=0.28 x=-0.42 y=0.835 z=-0.95 rot=15 color=rust noise=0.25     # rust patches
+  part box w=0.42 h=0.02 d=0.3 x=0.35 y=0.825 z=1.62 rot=-10 color=#7a3a20 noise=0.25
+  part box w=0.3 h=0.02 d=0.24 x=0.32 y=1.33 z=0.45 rot=20 color=rust noise=0.25
+  part box w=1.77 h=0.12 d=1.3 y=0.3 z=0.6 color=#6a3420 noise=0.25                     # rotten sills
+  part box w=0.02 h=0.36 d=0.95 x=0.875 y=0.58 z=-0.2 color=#8a8478                      # a door from the scrap yard
+  part box w=1.8 h=0.13 d=0.14 y=0.38 z=-2.18 rot=3 color=#c8ccd4                        # bumpers, dented
+  part box w=1.8 h=0.13 d=0.14 y=0.36 z=2.18 roll=5 color=#9a9a98
+  part box w=0.95 h=0.17 d=0.05 y=0.56 z=-2.14 color=#202022                            # grille
+  part disc r=0.1 h=0.06 pitch=90 x=0.6 y=0.56 z=-2.15 color=#fff4d0 emit=1 mirror=1     # round headlights
+  part box w=0.12 h=0.06 d=0.04 x=0.62 y=0.4 z=-2.15 color=#ffa020 emit=0.6 mirror=1    # indicators
+  part box w=0.3 h=0.12 d=0.05 x=0.6 y=0.58 z=2.15 color=#ff2414 emit=0.9               # tail light (one works)
+  part box w=0.3 h=0.12 d=0.05 x=-0.6 y=0.58 z=2.15 color=#3a1410                       # the other one doesn't
+  part box w=0.34 h=0.03 d=0.06 x=-0.6 y=0.58 z=2.17 roll=25 color=#c8c0a0               # gaffer tape
+  part engine r=0.05 len=0.3 x=0.5 y=0.27 z=2.18 pitch=-6 color=#3a3a3a mirror=0         # exhaust
+  part box w=1.36 h=0.04 d=0.05 y=1.36 z=-0.05 color=#2a2a2a                             # roof rack
+  part box w=1.36 h=0.04 d=0.05 y=1.36 z=0.6 color=#2a2a2a
+  part box w=0.05 h=0.06 d=0.05 x=0.66 y=1.33 z=-0.05 color=#2a2a2a mirror=1
+  part box w=0.05 h=0.06 d=0.05 x=0.66 y=1.33 z=0.6 color=#2a2a2a mirror=1
+  part disc r=0.3 h=0.17 y=1.47 z=0.33 seg=14 color=#18181a                              # the spare tyre
+  part disc r=0.14 h=0.18 y=1.47 z=0.33 color=#7a7a7a
+  part box w=0.64 h=0.02 d=0.03 y=1.565 z=0.33 color=#b8a070                             # rope
+  part box w=0.12 h=0.08 d=0.06 x=0.88 y=0.95 z=-0.72 color=#c8ccd4                      # one mirror left
+  part box w=0.04 h=0.04 d=0.04 x=-0.86 y=0.93 z=-0.72 color=#2a2a2a
+  part box w=0.015 h=0.55 d=0.015 x=-0.75 y=1.05 z=-1.0 pitch=25 roll=-10 color=#222222  # coat-hanger aerial
+  part wheel r=0.32 w=0.22 x=0.78 z=-1.36 front=1
+  part wheel r=0.32 w=0.22 x=0.78 z=1.34 hub=#5a5a5a
+
+# Tin Can: a tin-toy city car, frog eyes, a rolled canvas roof and a brass wind-up key in its back.
+model car_tincan
+  part body len=3.7 wid=1.62 hgt=0.74 y=0.62 round=3.5 nose=0.24 tail=0.1 drop=0.42 pinch=0.15 color=paint
+  part cabin len=2.15 wid=1.5 hgt=0.58 y=1.28 z=0.3 front=0.33 back=0.12 top=0.84 color=paint2 glass=#203040
+  part box w=1.66 h=0.06 d=2.6 y=0.78 z=0.1 color=paint3                                 # tin-toy belt line
+  part disc r=0.15 h=0.12 pitch=90 x=0.48 y=0.72 z=-1.72 color=#c8ccd4 mirror=1          # frog eyes
+  part disc r=0.12 h=0.04 pitch=90 x=0.48 y=0.72 z=-1.79 color=#fff4d0 emit=1 mirror=1
+  part box w=0.6 h=0.06 d=0.04 y=0.45 z=-1.84 color=#c8ccd4                              # the grin
+  part gun r=0.04 len=1.5 rot=90 y=0.36 z=-1.9 color=#c8ccd4                             # tube bumpers
+  part gun r=0.04 len=1.5 rot=90 y=0.36 z=1.9 color=#c8ccd4
+  part disc r=0.08 h=0.04 pitch=90 x=0.55 y=0.6 z=1.85 color=#ff2414 emit=0.9 mirror=1   # tail lights
+  part gun r=0.08 len=1.0 rot=90 y=1.6 z=0.98 color=#c8c0a8                              # rolled canvas roof
+  part disc r=0.06 h=0.03 roll=90 x=0.86 y=1.0 z=-0.6 color=#c8ccd4 mirror=1             # round mirrors
+  part engine r=0.05 len=0.22 x=-0.45 y=0.32 z=1.86 color=#3a3a3a mirror=0
+  part gun r=0.04 len=0.42 y=0.75 z=2.02 color=#d8b048                                   # wind-up key
+  part disc r=0.17 h=0.05 x=0.17 y=0.75 z=2.24 color=#d8b048 mirror=1
+  part disc r=0.06 h=0.06 y=0.75 z=2.22 color=#d8b048
+  part wheel r=0.29 w=0.2 x=0.72 z=-1.12 front=1 hub=#e8e8e8
+  part wheel r=0.29 w=0.2 x=0.72 z=1.15 hub=#e8e8e8
+
+# Brain Freeze: an ice-cream van – serving hatch with a candy awning, a speaker on the roof, a giant cone on top.
+model car_brainfreeze
+  part body len=5.0 wid=2.0 hgt=0.62 y=0.58 round=7 nose=0.14 tail=0.03 drop=0.3 pinch=0.05 color=paint
+  part cabin len=1.35 wid=1.92 hgt=0.72 y=1.25 z=-1.55 front=0.5 back=0 top=0.94 color=paint2 glass=#1a2430
+  part box w=2.04 h=1.3 d=3.35 y=1.54 z=0.82 color=paint                                 # the box
+  part box w=2.0 h=0.05 d=3.3 y=2.215 z=0.82 color=paint2                                # roof
+  part box w=2.06 h=0.22 d=3.35 y=1.0 z=0.82 color=paint2                                # lower band
+  part box w=0.04 h=0.6 d=1.5 x=1.02 y=1.62 z=0.75 color=#1a2430                         # serving hatch
+  part box w=0.06 h=0.05 d=1.56 x=1.03 y=1.94 z=0.75 color=#c8ccd4
+  part box w=0.24 h=0.05 d=1.56 x=1.12 y=1.3 z=0.75 color=#c8ccd4                        # counter
+  part box w=0.32 h=0.025 d=0.32 x=1.16 y=1.99 z=0.11 roll=-18 color=#f2f0ea             # candy-striped awning
+  part box w=0.32 h=0.025 d=0.32 x=1.16 y=1.99 z=0.43 roll=-18 color=#ff7aa8
+  part box w=0.32 h=0.025 d=0.32 x=1.16 y=1.99 z=0.75 roll=-18 color=#f2f0ea
+  part box w=0.32 h=0.025 d=0.32 x=1.16 y=1.99 z=1.07 roll=-18 color=#ff7aa8
+  part box w=0.32 h=0.025 d=0.32 x=1.16 y=1.99 z=1.39 roll=-18 color=#f2f0ea
+  part disc r=0.42 h=0.03 roll=90 x=-1.03 y=1.58 z=0.85 color=paint3                     # the sign on the left
+  part plate pts="0,-0.15;0,0.15;-0.34,0" thick=0.03 roll=90 x=-1.05 y=1.6 z=0.85 color=#c8964a
+  part disc r=0.14 h=0.03 roll=90 x=-1.06 y=1.68 z=0.85 color=#ff7aa8
+  part disc r=0.13 h=0.05 y=2.255 z=1.55 color=#c8ccd4                                   # the cone on the roof
+  part cone r=0.32 len=0.75 pitch=-90 y=2.655 z=1.55 color=#c8964a
+  part ring r=0.25 thick=0.02 y=2.88 z=1.55 color=#a87838
+  part ring r=0.16 thick=0.02 y=2.65 z=1.55 color=#a87838
+  part sphere r=0.32 y=3.13 z=1.55 color=#ff8ab0                                         # strawberry
+  part sphere r=0.25 y=3.47 z=1.52 color=#f4ecd8                                         # vanilla
+  part sphere r=0.08 y=3.75 z=1.5 color=#d01828                                          # the cherry
+  part box w=0.06 h=0.42 d=0.06 x=0.16 y=3.5 z=1.44 pitch=-20 roll=-15 color=#5a3018      # the flake
+  part cone r=0.16 len=0.4 rot=180 y=2.42 z=-0.45 color=#c8ccd4                          # jingle speaker
+  part box w=0.06 h=0.16 d=0.06 y=2.3 z=-0.45 color=#2a2a2a
+  part box w=1.0 h=0.25 d=0.05 y=0.6 z=-2.48 color=#c8ccd4                               # grille
+  part disc r=0.12 h=0.05 pitch=90 x=0.7 y=0.6 z=-2.48 color=#fff4d0 emit=1 mirror=1
+  part box w=2.04 h=0.14 d=0.14 y=0.36 z=-2.55 color=#c8ccd4
+  part box w=2.04 h=0.14 d=0.14 y=0.36 z=2.55 color=#c8ccd4
+  part box w=0.6 h=0.4 d=0.03 x=0.4 y=1.72 z=2.5 color=#1a2430 mirror=1                 # rear windows
+  part box w=0.12 h=0.35 d=0.04 x=0.92 y=1.2 z=2.5 color=#ff2414 emit=0.9 mirror=1
+  part box w=0.06 h=0.22 d=0.1 x=1.02 y=1.45 z=-1.9 color=#18181c mirror=1               # mirrors
+  part engine r=0.05 len=0.25 x=-0.7 y=0.3 z=2.52 color=#3a3a3a mirror=0
+  part wheel r=0.36 w=0.24 x=0.86 z=-1.55 front=1 hub=#e0e0e0
+  part wheel r=0.36 w=0.24 x=0.86 z=1.6 hub=#e0e0e0
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 2 – street
+# ---------------------------------------------------------------------------------------------------------------
+
+# Hatchet: a hot hatch – twin stripes, bonnet scoop, flared arches, roof spoiler and a hatchet strapped on the roof.
+model car_hatchet
+  part body len=4.0 wid=1.76 hgt=0.62 y=0.54 round=5 nose=0.2 tail=0.06 drop=0.35 pinch=0.1 color=paint
+  part body len=3.98 wid=0.2 hgt=0.62 y=0.552 x=0.17 round=5 nose=0.2 tail=0.06 drop=0.35 pinch=0 color=paint2 mirror=1
+  part cabin len=2.3 wid=1.6 hgt=0.52 y=1.11 z=0.6 front=0.38 back=0.12 top=0.84 color=paint glass=#1a2430
+  part box w=0.2 h=0.02 d=1.1 x=0.17 y=1.375 z=0.9 color=paint2 mirror=1                # roof stripes
+  part box w=0.14 h=0.2 d=0.9 x=0.88 y=0.62 z=-1.28 taper=0.35 color=paint mirror=1      # flared arches
+  part box w=0.14 h=0.2 d=0.9 x=0.88 y=0.62 z=1.28 taper=0.35 color=paint mirror=1
+  part box w=0.5 h=0.09 d=0.42 y=0.87 z=-0.75 taper=0.3 color=paint2                     # bonnet scoop
+  part box w=0.36 h=0.05 d=0.02 y=0.89 z=-0.96 color=#111111
+  part box w=0.36 h=0.1 d=0.06 x=0.56 y=0.56 z=-1.97 color=#fff4d0 emit=1 mirror=1
+  part box w=0.7 h=0.16 d=0.04 y=0.44 z=-1.99 color=#111111
+  part disc r=0.07 h=0.04 pitch=90 x=0.6 y=0.33 z=-1.99 color=#ffe8a0 emit=1 mirror=1   # fog lights
+  part box w=1.66 h=0.04 d=0.2 y=0.24 z=-1.96 color=#18181c                              # splitter
+  part box w=0.05 h=0.08 d=1.6 x=0.885 y=0.27 z=0 color=#18181c mirror=1                 # side skirts
+  part wing span=0.68 root=0.3 tip=0.28 sweep=0.02 thick=0.04 y=1.38 z=1.52 pitch=-8 color=paint2
+  part box w=0.3 h=0.1 d=0.04 x=0.62 y=0.55 z=1.99 color=#ff2414 emit=0.9 mirror=1
+  part engine r=0.065 len=0.22 x=0.12 y=0.3 z=2.02 color=#c8ccd4                         # twin centre pipes
+  part box w=1.1 h=0.1 d=0.14 y=0.29 z=1.97 color=#18181c                               # diffuser
+  part box w=0.1 h=0.07 d=0.12 x=0.86 y=0.95 z=-0.42 color=paint mirror=1
+  part box w=0.06 h=0.06 d=1.0 x=0.45 y=1.4 z=0.85 color=#8a5a30                         # the hatchet: handle
+  part plate pts="0.06,-0.09;0.06,0.09;-0.15,0.15;-0.33,0.22;-0.37,0;-0.33,-0.22;-0.15,-0.15" thick=0.05 x=0.45 y=1.41 z=0.36 color=#c8ccd4
+  part box w=0.04 h=0.052 d=0.4 x=0.1 y=1.41 z=0.36 color=#e8ecf2                         # its edge
+  part box w=0.1 h=0.04 d=0.05 x=0.45 y=1.39 z=0.7 color=#18181c                         # clamps
+  part box w=0.1 h=0.04 d=0.05 x=0.45 y=1.39 z=1.1 color=#18181c
+  part wheel r=0.33 w=0.26 x=0.8 z=-1.28 front=1 hub=paint3
+  part wheel r=0.33 w=0.26 x=0.8 z=1.28 hub=paint3
+
+# Pallbearer: a long hearse – curtained rear compartment, landau irons, a coffin with a wreath on the roof rails.
+model car_pallbearer
+  part body len=5.6 wid=1.9 hgt=0.62 y=0.55 round=6 nose=0.16 tail=0.03 drop=0.32 pinch=0.06 color=paint
+  part cabin len=1.55 wid=1.8 hgt=0.52 y=1.12 z=-0.7 front=0.42 back=0 top=0.92 color=paint2 glass=#1a2430
+  part cabin len=2.64 wid=1.8 hgt=0.56 y=1.14 z=1.4 front=0 back=0.06 top=0.95 color=paint2 glass=#2a1622
+  part box w=1.78 h=0.12 d=0.1 y=0.82 z=2.68 color=paint
+  part box w=1.84 h=0.5 d=0.55 y=1.13 z=2.4 color=paint                                  # landau panels
+  part ring r=0.09 thick=0.018 roll=90 x=0.93 y=1.18 z=2.26 color=#c8ccd4 mirror=1       # landau irons
+  part box w=0.02 h=0.025 d=0.36 x=0.935 y=1.22 z=2.45 pitch=-15 color=#c8ccd4 mirror=1
+  part box w=1.92 h=0.04 d=3.8 y=0.36 z=0.2 color=#c8ccd4                                # chrome rocker trim
+  part box w=0.04 h=0.05 d=2.3 x=0.62 y=1.47 z=1.4 color=#c8ccd4 mirror=1                # roof rails
+  part box w=0.04 h=0.06 d=0.04 x=0.62 y=1.44 z=0.4 color=#c8ccd4 mirror=1
+  part box w=0.04 h=0.06 d=0.04 x=0.62 y=1.44 z=2.4 color=#c8ccd4 mirror=1
+  part box w=1.28 h=0.04 d=0.06 y=1.5 z=0.7 color=#c8ccd4
+  part box w=1.28 h=0.04 d=0.06 y=1.5 z=2.1 color=#c8ccd4
+  part plate pts="-0.22,-1.0;0.22,-1.0;0.36,-0.55;0.18,1.0;-0.18,1.0;-0.36,-0.55" thick=0.32 y=1.68 z=1.4 color=#5a3418  # the coffin
+  part plate pts="-0.23,-1.01;0.23,-1.01;0.37,-0.55;0.19,1.01;-0.19,1.01;-0.37,-0.55" thick=0.05 y=1.865 z=1.4 color=#6e4224
+  part box w=0.03 h=0.04 d=0.2 x=0.33 y=1.68 z=0.7 color=#d0b060 mirror=1                # brass handles
+  part box w=0.03 h=0.04 d=0.2 x=0.29 y=1.68 z=1.6 color=#d0b060 mirror=1
+  part box w=0.06 h=0.015 d=0.6 y=1.9 z=1.0 color=#d0b060                                # cross on the lid
+  part box w=0.3 h=0.015 d=0.06 y=1.9 z=0.85 color=#d0b060
+  part box w=0.8 h=0.02 d=0.05 y=1.9 z=1.55 color=#18181c                                # straps
+  part box w=0.6 h=0.02 d=0.05 y=1.9 z=2.15 color=#18181c
+  part ring r=0.15 thick=0.04 y=1.92 z=1.85 color=#2a5a2a                                # the wreath
+  part sphere r=0.06 x=0.1 y=1.95 z=1.8 color=#c01830
+  part sphere r=0.06 x=-0.08 y=1.95 z=1.94 color=#e8e0f0
+  part sphere r=0.05 x=0.05 y=1.95 z=1.98 color=#c01830
+  part box w=0.85 h=0.22 d=0.05 y=0.56 z=-2.78 color=#c8ccd4                             # chrome grille
+  part box w=0.04 h=0.18 d=0.02 y=0.56 z=-2.81 color=#111111
+  part box w=0.04 h=0.18 d=0.02 x=0.13 y=0.56 z=-2.81 color=#111111 mirror=1
+  part box w=0.04 h=0.18 d=0.02 x=0.26 y=0.56 z=-2.81 color=#111111 mirror=1
+  part box w=0.28 h=0.12 d=0.05 x=0.66 y=0.56 z=-2.78 color=#fff4d0 emit=1 mirror=1
+  part box w=0.03 h=0.16 d=0.03 y=0.86 z=-2.45 color=#d0b060                             # hood cross
+  part box w=0.1 h=0.03 d=0.03 y=0.9 z=-2.45 color=#d0b060
+  part box w=1.9 h=0.12 d=0.12 y=0.36 z=-2.84 color=#c8ccd4
+  part box w=1.9 h=0.12 d=0.12 y=0.36 z=2.84 color=#c8ccd4
+  part box w=0.1 h=0.3 d=0.04 x=0.82 y=0.62 z=2.79 color=#ff2414 emit=0.9 mirror=1
+  part box w=0.1 h=0.07 d=0.12 x=0.9 y=0.95 z=-1.25 color=#c8ccd4 mirror=1
+  part engine r=0.05 len=0.25 x=0.6 y=0.28 z=2.82 color=#3a3a3a mirror=0
+  part wheel r=0.34 w=0.22 x=0.86 z=-1.85 front=1
+  part wheel r=0.34 w=0.22 x=0.86 z=1.8
+
+# Shovelhead: a pickup with a dozer blade – bed full of junk and a shovel, roll bar with work lights, amber beacon.
+model car_shovelhead
+  part body len=4.9 wid=2.0 hgt=0.55 y=0.68 z=0.15 round=7 nose=0.1 tail=0.03 drop=0.2 pinch=0.04 color=paint
+  part box w=1.96 h=0.27 d=3.0 y=1.08 z=-0.7 taper=0.03 color=paint                      # bonnet and cab floor
+  part cabin len=1.6 wid=1.9 hgt=0.66 y=1.545 z=0 front=0.32 back=0.04 top=0.92 color=paint2 glass=#1a2430
+  part box w=0.08 h=0.4 d=1.8 x=0.96 y=1.155 z=1.7 color=paint mirror=1                  # the bed
+  part box w=1.92 h=0.4 d=0.08 y=1.155 z=0.84 color=paint
+  part box w=1.92 h=0.4 d=0.08 y=1.155 z=2.56 color=paint
+  part box w=0.12 h=0.03 d=1.84 x=0.96 y=1.37 z=1.7 color=paint2 mirror=1
+  part box w=1.84 h=0.02 d=1.68 y=0.965 z=1.7 color=#202022
+  part box w=1.8 h=0.28 d=0.38 y=1.11 z=1.08 color=#c8ccd4                               # toolbox
+  part disc r=0.26 h=0.7 x=-0.5 y=1.32 z=2.12 color=#2f5a3a                             # oil drum
+  part disc r=0.27 h=0.04 x=-0.5 y=1.67 z=2.12 color=#3f6a4a
+  part greeble n=6 w=0.7 d=1.0 x=0.4 y=0.98 z=1.95 size=0.28 seed=4 color=#7a6448        # junk
+  part box w=0.04 h=0.04 d=1.2 x=0.25 y=1.32 z=1.8 rot=20 color=#8a6038                  # the shovel
+  part box w=0.22 h=0.02 d=0.28 x=0.05 y=1.32 z=1.22 rot=20 color=#6a6a6a
+  part box w=0.08 h=0.95 d=0.08 x=0.92 y=1.43 z=0.92 color=#222222 mirror=1              # roll bar
+  part box w=1.92 h=0.08 d=0.08 y=1.94 z=0.92 color=#222222
+  part box w=0.18 h=0.12 d=0.08 x=0.3 y=2.03 z=0.92 color=#fff4d0 emit=1 mirror=1        # work lights
+  part box w=0.18 h=0.12 d=0.08 x=0.7 y=2.03 z=0.92 color=#fff4d0 emit=1 mirror=1
+  part disc r=0.12 h=0.06 x=0.6 y=1.905 z=0.45 color=#222222                             # amber beacon
+  part light r=0.11 x=0.6 y=2.0 z=0.45 color=#ffa020
+  part disc r=0.065 h=1.0 x=1.02 y=1.5 z=0.72 color=#2a2a2a                              # exhaust stack
+  part engine r=0.07 len=0.2 pitch=-90 x=1.02 y=2.05 z=0.72 color=#2a2a2a mirror=0
+  part box w=2.34 h=0.78 d=0.1 y=0.66 z=-2.78 pitch=-12 color=#d8a020 noise=0.12        # the dozer blade
+  part box w=2.34 h=0.1 d=0.16 y=0.3 z=-2.76 color=#3a3a3a
+  part box w=2.34 h=0.06 d=0.14 y=1.06 z=-2.86 color=#18181c
+  part box w=0.08 h=0.72 d=0.4 x=1.15 y=0.64 z=-2.68 rot=-15 color=#d8a020 mirror=1
+  part gun r=0.06 len=1.0 x=0.62 y=0.5 z=-2.25 color=#2a2a2a                             # push arms
+  part gun r=0.05 len=0.75 x=0.35 y=0.85 z=-2.4 pitch=15 color=#c8ccd4                   # hydraulic rams
+  part box w=1.2 h=0.25 d=0.05 y=1.0 z=-2.22 color=#151515
+  part box w=0.28 h=0.16 d=0.05 x=0.72 y=1.05 z=-2.22 color=#fff4d0 emit=1 mirror=1
+  part box w=0.12 h=0.08 d=1.0 x=1.02 y=0.95 z=-1.4 color=#18181c mirror=1               # fender flares
+  part box w=0.12 h=0.08 d=1.0 x=1.02 y=0.95 z=1.75 color=#18181c mirror=1
+  part box w=0.06 h=0.25 d=0.12 x=1.05 y=1.45 z=-0.6 color=#222222 mirror=1
+  part box w=0.1 h=0.2 d=0.04 x=0.92 y=1.1 z=2.62 color=#ff2414 emit=0.9 mirror=1
+  part box w=2.0 h=0.15 d=0.2 y=0.45 z=2.65 color=#c8ccd4
+  part box w=0.1 h=0.08 d=0.25 y=0.42 z=2.8 color=#222222
+  part wheel r=0.42 w=0.32 x=0.92 z=-1.4 front=1 hub=#3a3a3a
+  part wheel r=0.42 w=0.32 x=0.92 z=1.75 hub=#3a3a3a
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 3 – muscle
+# ---------------------------------------------------------------------------------------------------------------
+
+# Widowmaker: a fastback muscle car – twin stripes, a supercharger through the bonnet, side pipes, a red hourglass.
+model car_widowmaker
+  part body len=4.8 wid=1.86 hgt=0.6 y=0.52 round=6 nose=0.22 tail=0.1 drop=0.25 pinch=0.08 color=paint
+  part body len=4.78 wid=0.22 hgt=0.6 y=0.532 x=0.18 round=6 nose=0.22 tail=0.1 drop=0.25 pinch=0 color=paint2 mirror=1
+  part cabin len=1.8 wid=1.66 hgt=0.42 y=1.03 z=0.5 front=0.38 back=0.32 top=0.84 color=paint glass=#1a2430
+  part plate pts="-0.17,-0.22;0.17,-0.22;0.02,0;0.17,0.22;-0.17,0.22;-0.02,0" thick=0.02 y=1.25 z=0.55 color=#c8141e  # the hourglass
+  part box w=0.52 h=0.24 d=0.56 y=0.92 z=-1.0 color=#c8ccd4                              # the blower
+  part box w=0.44 h=0.14 d=0.36 y=1.11 z=-1.02 taper=0.2 color=#222222
+  part disc r=0.1 h=0.05 x=0.11 y=1.2 z=-1.02 color=#c8ccd4 mirror=1
+  part disc r=0.1 h=0.05 pitch=90 y=0.92 z=-1.3 color=#333333
+  part box w=0.14 h=0.2 d=1.0 x=0.92 y=0.6 z=1.48 taper=0.4 color=paint mirror=1        # haunches
+  part gun r=0.06 len=1.5 x=0.97 y=0.3 z=0.05 color=#c8ccd4                              # side pipes
+  part engine r=0.065 len=0.14 x=0.97 y=0.3 z=0.86 color=#c8ccd4 glow=#ff6020
+  part box w=1.6 h=0.07 d=0.28 y=0.79 z=2.2 pitch=-14 color=paint                        # ducktail
+  part box w=1.84 h=0.1 d=0.1 y=0.36 z=-2.4 color=#c8ccd4
+  part box w=1.84 h=0.1 d=0.1 y=0.36 z=2.42 color=#c8ccd4
+  part box w=1.4 h=0.2 d=0.04 y=0.5 z=-2.38 color=#111111
+  part disc r=0.08 h=0.04 pitch=90 x=0.5 y=0.5 z=-2.4 color=#fff4d0 emit=1 mirror=1
+  part disc r=0.08 h=0.04 pitch=90 x=0.72 y=0.5 z=-2.38 color=#fff4d0 emit=1 mirror=1
+  part box w=1.3 h=0.08 d=0.04 y=0.58 z=2.39 color=#ff2414 emit=0.9
+  part box w=0.1 h=0.07 d=0.12 x=0.9 y=0.92 z=-0.3 color=#c8ccd4 mirror=1
+  part wheel r=0.32 w=0.24 x=0.82 z=-1.5 front=1
+  part wheel r=0.35 w=0.32 x=0.82 z=1.48
+
+# Last Call: a box ambulance – battenburg checks, light bar and beacons, a marking on the roof.
+model car_lastcall
+  part body len=5.4 wid=2.04 hgt=0.6 y=0.6 round=7 nose=0.14 tail=0.03 drop=0.35 pinch=0.05 color=paint
+  part cabin len=1.35 wid=1.96 hgt=0.75 y=1.275 z=-1.65 front=0.55 back=0 top=0.94 color=paint glass=#1a2430
+  part box w=2.1 h=1.5 d=3.68 y=1.65 z=0.86 color=paint                                  # patient compartment
+  part box w=2.12 h=0.08 d=3.68 y=2.0 z=0.86 color=paint2
+  part box w=0.02 h=0.32 d=0.6 x=1.055 y=1.2 z=-0.6 color=paint2 mirror=1                # battenburg checks
+  part box w=0.02 h=0.32 d=0.6 x=1.055 y=1.2 z=0.0 color=paint3 mirror=1
+  part box w=0.02 h=0.32 d=0.6 x=1.055 y=1.2 z=0.6 color=paint2 mirror=1
+  part box w=0.02 h=0.32 d=0.6 x=1.055 y=1.2 z=1.2 color=paint3 mirror=1
+  part box w=0.02 h=0.32 d=0.6 x=1.055 y=1.2 z=1.8 color=paint2 mirror=1
+  part box w=0.02 h=0.32 d=0.6 x=1.055 y=1.2 z=2.4 color=paint3 mirror=1
+  part box w=2.12 h=0.3 d=0.5 y=1.85 z=0.0 color=#1a2430                                 # side windows
+  part box w=1.7 h=0.1 d=0.26 y=2.45 z=-0.82 color=#18181c                               # light bar
+  part box w=0.38 h=0.1 d=0.24 x=0.62 y=2.53 z=-0.82 color=#2050ff emit=1 mirror=1
+  part box w=0.36 h=0.1 d=0.24 x=0.22 y=2.53 z=-0.82 color=#ff2020 emit=1 mirror=1
+  part light r=0.09 x=0.95 y=2.47 z=2.6 color=#3060ff mirror=1                           # rear beacons
+  part disc r=0.62 h=0.02 y=2.41 z=1.75 color=paint3                                     # roof marking: a heart
+  part plate pts="0,0.45;0.4,0.05;0.45,-0.15;0.38,-0.32;0.22,-0.38;0.08,-0.3;0,-0.18;-0.08,-0.3;-0.22,-0.38;-0.38,-0.32;-0.45,-0.15;-0.4,0.05" thick=0.02 y=2.43 z=1.75 color=paint2
+  part box w=0.32 h=0.015 d=0.04 x=-0.38 y=2.445 z=1.72 color=#111111                   # ... and its flatline
+  part box w=0.04 h=0.015 d=0.3 x=-0.2 y=2.445 z=1.62 rot=20 color=#111111
+  part box w=0.04 h=0.015 d=0.36 x=-0.1 y=2.445 z=1.74 rot=-25 color=#111111
+  part box w=0.6 h=0.015 d=0.04 x=0.25 y=2.445 z=1.72 color=#111111
+  part box w=0.55 h=0.35 d=0.03 x=0.42 y=1.9 z=2.71 color=#1a2430 mirror=1
+  part box w=0.1 h=0.4 d=0.04 x=0.98 y=1.3 z=2.71 color=#ff2414 emit=0.9 mirror=1
+  part box w=1.9 h=0.14 d=0.3 y=0.48 z=2.78 color=#2a2a2a                                # step bumper
+  part box w=1.1 h=0.22 d=0.05 y=0.65 z=-2.69 color=#18181c
+  part box w=0.32 h=0.14 d=0.05 x=0.68 y=0.62 z=-2.69 color=#fff4d0 emit=1 mirror=1
+  part box w=0.1 h=0.05 d=0.03 x=0.3 y=0.52 z=-2.72 color=#2050ff emit=1 mirror=1
+  part box w=2.04 h=0.16 d=0.14 y=0.4 z=-2.72 color=#2a2a2a
+  part box w=0.06 h=0.28 d=0.12 x=1.06 y=1.4 z=-1.3 color=#18181c mirror=1
+  part engine r=0.05 len=0.22 x=-0.7 y=0.33 z=2.7 color=#3a3a3a mirror=0
+  part wheel r=0.38 w=0.26 x=0.9 z=-1.65 front=1 hub=#d8d8d8
+  part wheel r=0.38 w=0.26 x=0.9 z=1.75 hub=#d8d8d8
+
+# Coroner: a pursuit sedan – two-tone doors and roof, push bar, light bar, spotlight, a shield on the doors.
+model car_coroner
+  part body len=5.0 wid=1.9 hgt=0.62 y=0.56 round=6 nose=0.18 tail=0.14 drop=0.3 pinch=0.06 color=paint
+  part cabin len=2.3 wid=1.74 hgt=0.5 y=1.12 z=0.2 front=0.32 back=0.28 top=0.86 color=paint2 glass=#1a2430
+  part box w=1.92 h=0.42 d=1.95 y=0.62 z=0.15 color=paint2                               # two-tone doors
+  part plate pts="0.12,-0.12;0.12,0.12;-0.02,0.12;-0.16,0;-0.02,-0.12" thick=0.02 roll=90 x=0.965 y=0.66 z=0.1 color=#d0b060 mirror=1
+  part box w=1.3 h=0.1 d=0.3 y=1.42 z=0.1 color=#18181c                                  # light bar
+  part box w=0.5 h=0.1 d=0.28 x=-0.36 y=1.5 z=0.1 color=#ff1818 emit=1
+  part box w=0.5 h=0.1 d=0.28 x=0.36 y=1.5 z=0.1 color=#1840ff emit=1
+  part box w=0.16 h=0.08 d=0.26 y=1.49 z=0.1 color=#e8e8e8 emit=0.4
+  part disc r=0.08 h=0.12 pitch=90 x=-0.92 y=1.0 z=-0.9 color=#c8ccd4                    # spotlight
+  part disc r=0.065 h=0.02 pitch=90 x=-0.92 y=1.0 z=-0.97 color=#fff4d0 emit=1
+  part box w=1.1 h=0.08 d=0.08 y=0.72 z=-2.66 color=#141414                              # push bar
+  part box w=1.1 h=0.08 d=0.08 y=0.42 z=-2.66 color=#141414
+  part box w=0.08 h=0.42 d=0.08 x=0.42 y=0.55 z=-2.66 color=#141414 mirror=1
+  part box w=0.06 h=0.06 d=0.25 x=0.42 y=0.45 z=-2.52 color=#141414 mirror=1
+  part box w=0.1 h=0.05 d=0.03 x=0.25 y=0.72 z=-2.71 color=#ff1818 emit=1
+  part box w=0.1 h=0.05 d=0.03 x=-0.25 y=0.72 z=-2.71 color=#1840ff emit=1
+  part box w=0.9 h=0.18 d=0.04 y=0.55 z=-2.49 color=#111111
+  part box w=0.32 h=0.1 d=0.05 x=0.62 y=0.58 z=-2.48 color=#fff4d0 emit=1 mirror=1
+  part box w=0.015 h=0.75 d=0.015 x=0.35 y=1.25 z=1.75 color=#111111                     # aerial
+  part box w=0.42 h=0.1 d=0.04 x=0.6 y=0.6 z=2.49 color=#ff2414 emit=0.9 mirror=1
+  part box w=1.88 h=0.14 d=0.12 y=0.38 z=2.5 color=#18181c
+  part box w=1.88 h=0.14 d=0.12 y=0.38 z=-2.5 color=#18181c
+  part engine r=0.055 len=0.2 x=0.55 y=0.3 z=2.5 color=#c8ccd4
+  part box w=0.1 h=0.08 d=0.12 x=0.92 y=0.95 z=-0.75 color=paint mirror=1
+  part wheel r=0.34 w=0.24 x=0.84 z=-1.55 front=1 hub=#3a3a3a
+  part wheel r=0.34 w=0.24 x=0.84 z=1.52 hub=#3a3a3a
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 4 – pro
+# ---------------------------------------------------------------------------------------------------------------
+
+# Banshee: a rally car – four spotlights on the bonnet, roof scoop, big wing, mud flaps and a coat of mud.
+model car_banshee
+  part body len=4.3 wid=1.8 hgt=0.6 y=0.6 round=5 nose=0.2 tail=0.1 drop=0.3 pinch=0.1 color=paint
+  part cabin len=2.05 wid=1.62 hgt=0.52 y=1.16 z=0.25 front=0.36 back=0.2 top=0.84 color=paint2 glass=#1a2430
+  part box w=1.84 h=0.2 d=3.6 y=0.4 color=#5a4630 noise=0.3                               # mud
+  part greeble n=10 w=0.25 d=3.6 size=0.08 seed=9 roll=-90 x=0.9 y=0.48 color=#6a5034 mirror=1
+  part box w=1.3 h=0.06 d=0.2 y=0.85 z=-1.82 color=#18181c                               # light pod
+  part disc r=0.13 h=0.1 pitch=90 x=0.17 y=0.98 z=-1.86 color=#18181c mirror=1
+  part disc r=0.13 h=0.1 pitch=90 x=0.49 y=0.98 z=-1.86 color=#18181c mirror=1
+  part disc r=0.115 h=0.03 pitch=90 x=0.17 y=0.98 z=-1.925 color=#fff6d8 emit=1 mirror=1
+  part disc r=0.115 h=0.03 pitch=90 x=0.49 y=0.98 z=-1.925 color=#fff6d8 emit=1 mirror=1
+  part box w=0.36 h=0.11 d=0.38 y=1.47 z=-0.08 taper=0.35 color=paint                    # roof scoop
+  part box w=0.28 h=0.06 d=0.02 y=1.48 z=-0.27 color=#111111
+  part wing span=0.82 root=0.32 tip=0.3 sweep=0 thick=0.05 y=1.3 z=1.85 pitch=-8 color=paint2
+  part box w=0.03 h=0.18 d=0.36 x=0.83 y=1.33 z=1.85 color=paint2 mirror=1
+  part box w=0.04 h=0.42 d=0.18 x=0.5 y=1.09 z=1.85 color=#18181c mirror=1
+  part box w=0.34 h=0.32 d=0.03 x=0.82 y=0.3 z=-0.92 color=#18181c mirror=1              # mud flaps
+  part box w=0.34 h=0.32 d=0.03 x=0.82 y=0.3 z=1.72 color=#18181c mirror=1
+  part disc r=0.24 h=0.02 roll=90 x=0.9 y=0.66 z=0.15 color=#f0f0f0 mirror=1             # door roundels
+  part box w=0.02 h=0.22 d=0.05 x=0.915 y=0.66 z=0.15 color=#111111 mirror=1
+  part box w=1.2 h=0.05 d=0.7 y=0.3 z=-1.75 color=#c8ccd4                                # sump guard
+  part box w=0.05 h=0.05 d=0.12 x=0.45 y=0.4 z=-2.18 color=#d02020                       # tow hooks
+  part box w=0.05 h=0.05 d=0.12 x=-0.45 y=0.42 z=2.18 color=#d02020
+  part box w=0.3 h=0.1 d=0.05 x=0.6 y=0.62 z=-2.13 color=#fff4d0 emit=1 mirror=1
+  part box w=0.3 h=0.1 d=0.04 x=0.62 y=0.66 z=2.13 color=#ff2414 emit=0.9 mirror=1
+  part engine r=0.075 len=0.25 x=0.55 y=0.35 z=2.15 color=#c8ccd4 mirror=0
+  part box w=0.1 h=0.07 d=0.12 x=0.86 y=1.0 z=-0.55 color=paint2 mirror=1
+  part wheel r=0.34 w=0.25 x=0.82 z=-1.33 front=1 hub=#ececec
+  part wheel r=0.34 w=0.25 x=0.82 z=1.33 hub=#ececec
+
+# Sarcophagus: an armoured cash van – shuttered windscreen, riveted plates, a cow catcher, spare wheels on the doors,
+# and a pharaoh's golden mummy case on the roof.
+model car_sarcophagus
+  part body len=5.3 wid=2.1 hgt=0.7 y=0.7 round=8 nose=0.12 tail=0.03 drop=0.3 pinch=0.05 color=paint
+  part cabin len=1.6 wid=2.02 hgt=0.75 y=1.425 z=-1.55 front=0.3 back=0 top=0.9 color=paint glass=#10161a
+  part box w=1.9 h=0.44 d=0.04 y=1.25 z=-2.25 pitch=32 color=#55595e                     # windscreen shutters
+  part box w=1.8 h=0.25 d=0.04 y=1.71 z=-1.96 pitch=32 color=#55595e
+  part box w=2.12 h=1.35 d=3.52 y=1.725 z=0.93 color=paint                               # the strongroom
+  part box w=0.05 h=0.95 d=1.55 x=1.08 y=1.62 z=0.2 color=#5a5e64 mirror=1               # armour plates
+  part box w=0.05 h=0.95 d=1.55 x=1.08 y=1.62 z=1.85 color=#5a5e64 mirror=1
+  part greeble n=26 w=0.85 d=3.3 size=0.05 seed=11 roll=-90 x=1.105 y=1.62 z=1.0 color=#8a8e94 mirror=1
+  part box w=2.14 h=0.3 d=4.2 y=0.6 z=0.1 color=#4a4e54                                  # armoured skirts
+  part greeble n=18 w=0.2 d=4.0 size=0.045 seed=12 roll=-90 x=1.075 y=0.6 z=0.1 color=#7a7e84 mirror=1
+  part box w=0.03 h=0.08 d=0.22 x=1.11 y=1.95 z=1.02 color=#0a0a0a mirror=1              # firing ports
+  part box w=0.03 h=0.08 d=0.22 x=1.11 y=1.95 z=2.65 color=#0a0a0a mirror=1
+  part plate pts="0,-1.1;0.22,-1.05;0.3,-0.85;0.28,-0.62;0.42,-0.45;0.38,0.3;0.28,1.0;0.18,1.1;-0.18,1.1;-0.28,1.0;-0.38,0.3;-0.42,-0.45;-0.28,-0.62;-0.3,-0.85;-0.22,-1.05" thick=0.12 y=2.46 z=1.25 color=#c8a040  # the mummy case
+  part dome r=0.2 rx=0.18 ry=0.06 rz=0.2 y=2.52 z=0.37 color=#e0c060
+  part box w=0.05 h=0.01 d=0.03 x=0.06 y=2.585 z=0.3 color=#111111 mirror=1
+  part box w=0.78 h=0.012 d=0.07 y=2.525 z=0.95 color=#1a2a6a
+  part box w=0.78 h=0.012 d=0.07 y=2.525 z=1.25 color=#1a2a6a
+  part box w=0.74 h=0.012 d=0.07 y=2.525 z=1.55 color=#1a2a6a
+  part box w=0.64 h=0.012 d=0.07 y=2.525 z=1.85 color=#1a2a6a
+  part box w=0.07 h=0.012 d=0.5 y=2.53 z=0.68 rot=40 color=#a07a28                       # crossed arms
+  part box w=0.07 h=0.012 d=0.5 y=2.53 z=0.68 rot=-40 color=#a07a28
+  part box w=0.1 h=0.25 d=0.1 x=0.6 y=1.92 z=-1.2 color=#3a3a3a                          # periscope
+  part box w=0.12 h=0.08 d=0.15 x=0.6 y=2.06 z=-1.24 color=#3a3a3a
+  part plate pts="-1.05,0;1.05,0;0.6,-0.2;0,-0.3;-0.6,-0.2" thick=0.42 y=0.62 z=-2.62 color=#4a4e54  # cow catcher
+  part greeble n=10 w=1.6 d=0.15 size=0.05 seed=3 y=0.83 z=-2.7 color=#7a7e84
+  part box w=0.9 h=0.25 d=0.05 y=0.65 z=-2.64 color=#1a1a1a
+  part box w=0.3 h=0.14 d=0.05 x=0.7 y=0.78 z=-2.63 color=#fff4d0 emit=1 mirror=1
+  part box w=0.32 h=0.02 d=0.02 x=0.7 y=0.78 z=-2.67 color=#222222 mirror=1
+  part disc r=0.4 h=0.24 pitch=90 x=0.52 y=1.55 z=2.82 seg=14 color=#18181a mirror=1     # spare wheels
+  part disc r=0.18 h=0.25 pitch=90 x=0.52 y=1.55 z=2.82 color=#555555 mirror=1
+  part box w=0.12 h=0.3 d=0.04 x=1.0 y=1.0 z=2.7 color=#ff2414 emit=0.9 mirror=1
+  part box w=2.1 h=0.18 d=0.2 y=0.5 z=2.75 color=#2a2a2a
+  part engine r=0.06 len=0.25 x=-0.8 y=0.4 z=2.72 color=#3a3a3a mirror=0
+  part box w=0.06 h=0.25 d=0.12 x=1.1 y=1.55 z=-2.0 color=#222222 mirror=1
+  part wheel r=0.42 w=0.32 x=0.92 z=-1.6 front=1 hub=#3a3a3a
+  part wheel r=0.42 w=0.32 x=0.92 z=1.75 hub=#3a3a3a
+
+# Obituary: a low sports coupé – pop-up headlights, an offset stripe, louvres over the rear window, a ducktail.
+model car_obituary
+  part body len=4.5 wid=1.82 hgt=0.52 y=0.47 round=5 nose=0.26 tail=0.12 drop=0.38 pinch=0.12 color=paint
+  part body len=4.48 wid=0.3 hgt=0.52 y=0.482 x=-0.24 round=5 nose=0.26 tail=0.12 drop=0.38 pinch=0 color=paint2
+  part cabin len=1.9 wid=1.6 hgt=0.42 y=0.94 z=0.35 front=0.45 back=0.38 top=0.8 color=paint glass=#1a2430
+  part box w=0.3 h=0.02 d=0.34 x=-0.24 y=1.16 z=0.42 color=paint2
+  part box w=1.21 h=0.025 d=0.06 y=1.117 z=0.686 pitch=30 color=paint                    # rear louvres
+  part box w=1.26 h=0.025 d=0.06 y=1.046 z=0.809 pitch=30 color=paint
+  part box w=1.32 h=0.025 d=0.06 y=0.974 z=0.932 pitch=30 color=paint
+  part box w=1.37 h=0.025 d=0.06 y=0.903 z=1.055 pitch=30 color=paint
+  part box w=1.43 h=0.025 d=0.06 y=0.831 z=1.177 pitch=30 color=paint
+  part box w=0.36 h=0.13 d=0.22 x=0.55 y=0.7 z=-1.78 color=paint mirror=1                # pop-up headlights
+  part box w=0.32 h=0.09 d=0.02 x=0.55 y=0.7 z=-1.895 color=#fff4d0 emit=1 mirror=1
+  part box w=1.2 h=0.1 d=0.04 y=0.35 z=-2.24 color=#111111
+  part box w=0.14 h=0.04 d=0.03 x=0.62 y=0.42 z=-2.22 color=#ffa020 emit=0.6 mirror=1
+  part box w=0.03 h=0.12 d=0.35 x=0.9 y=0.5 z=-0.75 color=#111111 mirror=1               # side vents
+  part wing span=0.76 root=0.26 tip=0.24 sweep=0.02 thick=0.04 y=0.82 z=1.95 pitch=-10 color=paint
+  part box w=0.04 h=0.12 d=0.12 x=0.5 y=0.74 z=1.95 color=#111111 mirror=1
+  part box w=1.5 h=0.07 d=0.04 y=0.48 z=2.24 color=#ff2414 emit=0.9                      # light bar
+  part engine r=0.045 len=0.18 x=0.5 y=0.27 z=2.24 color=#c8ccd4
+  part engine r=0.045 len=0.18 x=0.62 y=0.27 z=2.24 color=#c8ccd4
+  part box w=1.2 h=0.08 d=0.12 y=0.25 z=2.2 color=#111111
+  part box w=0.12 h=0.06 d=0.1 x=0.86 y=0.82 z=-0.45 color=paint mirror=1
+  part wheel r=0.32 w=0.25 x=0.8 z=-1.42 front=1 hub=#d0d0d0
+  part wheel r=0.32 w=0.25 x=0.8 z=1.4 hub=#d0d0d0
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 5 – elite
+# ---------------------------------------------------------------------------------------------------------------
+
+# Requiem: a mid-engined supercar – a wedge, a canopy, a row of chrome organ pipes for exhausts, a church-roof wing.
+model car_requiem
+  part body len=4.6 wid=2.0 hgt=0.5 y=0.42 round=4.5 nose=0.32 tail=0.08 drop=0.55 pinch=0.25 color=paint
+  part cabin len=1.9 wid=1.5 hgt=0.42 y=0.86 z=-0.2 front=0.5 back=0.35 top=0.72 color=paint2 glass=#101820
+  part box w=1.4 h=0.08 d=1.25 y=0.7 z=1.2 taper=0.05 color=#141414                      # engine deck
+  part box w=1.2 h=0.02 d=0.06 y=0.745 z=1.5 color=paint
+  part box w=1.2 h=0.02 d=0.06 y=0.745 z=1.64 color=paint
+  part box w=1.2 h=0.02 d=0.06 y=0.745 z=1.78 color=paint
+  part engine r=0.07 len=0.8 pitch=-90 y=1.14 z=1.0 color=#d8dce4 glow=#ff6a30 mirror=0  # organ pipes
+  part engine r=0.06 len=0.68 pitch=-90 x=0.17 y=1.08 z=1.0 color=#d8dce4 glow=#ff6a30
+  part engine r=0.06 len=0.56 pitch=-90 x=0.32 y=1.02 z=1.0 color=#d8dce4 glow=#ff6a30
+  part engine r=0.06 len=0.44 pitch=-90 x=0.47 y=0.96 z=1.0 color=#d8dce4 glow=#ff6a30
+  part box w=0.06 h=0.05 d=0.02 y=0.86 z=0.925 color=#111111                             # pipe mouths
+  part box w=0.05 h=0.05 d=0.02 x=0.17 y=0.86 z=0.935 color=#111111 mirror=1
+  part box w=0.05 h=0.05 d=0.02 x=0.32 y=0.84 z=0.935 color=#111111 mirror=1
+  part box w=0.05 h=0.05 d=0.02 x=0.47 y=0.82 z=0.935 color=#111111 mirror=1
+  part box w=1.1 h=0.04 d=0.05 y=1.0 z=1.07 color=#444444
+  part wing span=0.95 root=0.36 tip=0.32 sweep=0.02 thick=0.05 y=1.15 z=2.0 pitch=-6 color=paint stripe=paint2
+  part box w=0.03 h=0.26 d=0.42 x=0.96 y=1.12 z=2.0 color=paint mirror=1
+  part box w=0.04 h=0.45 d=0.15 x=0.4 y=0.88 z=2.05 color=#141414 mirror=1
+  part box w=0.16 h=0.24 d=0.7 x=0.93 y=0.47 z=0.5 color=#111111 mirror=1                # side intakes
+  part box w=0.42 h=0.03 d=0.16 x=0.58 y=0.465 z=-2.05 rot=-14 color=#fff4d0 emit=1 mirror=1
+  part box w=1.6 h=0.03 d=0.22 y=0.19 z=-2.2 color=#111111                               # splitter
+  part box w=1.7 h=0.05 d=0.04 y=0.35 z=2.29 color=#ff2414 emit=0.9
+  part box w=1.4 h=0.12 d=0.25 y=0.24 z=2.2 color=#111111                                # diffuser
+  part box w=0.1 h=0.06 d=0.1 x=0.82 y=0.75 z=-0.75 color=paint mirror=1
+  part wheel r=0.33 w=0.27 x=0.88 z=-1.38 front=1 hub=paint3
+  part wheel r=0.35 w=0.33 x=0.88 z=1.42 hub=paint3
+
+# Reaper: an electric endurance prototype – wheel pods, a bubble canopy, a scythe-blade fin and a swept silver wing.
+model car_reaper
+  part body len=5.0 wid=1.96 hgt=0.3 y=0.3 round=6 nose=0.2 tail=0.05 drop=0.45 pinch=0.22 color=paint
+  part body len=1.55 wid=0.44 hgt=0.42 y=0.5 x=0.78 z=-1.62 round=3 nose=0.4 tail=0.25 drop=0.45 pinch=0.2 color=paint mirror=1
+  part body len=1.75 wid=0.5 hgt=0.46 y=0.52 x=0.76 z=1.45 round=3 nose=0.45 tail=0.12 drop=0.35 pinch=0.15 color=paint mirror=1
+  part body len=3.6 wid=0.96 hgt=0.42 y=0.56 z=0.1 round=3 nose=0.32 tail=0.12 drop=0.55 color=paint
+  part cabin len=1.5 wid=0.92 hgt=0.32 y=0.93 z=-0.25 front=0.55 back=0.3 top=0.7 color=paint2 glass=#101820
+  part fin h=0.42 root=1.5 tip=0.25 sweep=1.2 thick=0.035 y=0.76 z=1.25 color=paint2      # the scythe fin
+  part wing span=1.0 root=0.42 tip=0.07 sweep=0.4 thick=0.05 y=1.02 z=2.15 color=#c8ccd4  # the blade
+  part box w=0.04 h=0.55 d=0.2 x=0.22 y=0.725 z=2.2 color=#18181c mirror=1
+  part box w=1.9 h=0.03 d=0.3 y=0.2 z=-2.35 color=#111111                                # splitter
+  part box w=0.25 h=0.02 d=0.18 x=0.85 y=0.42 z=-2.1 rot=20 color=#111111 mirror=1       # canards
+  part box w=0.22 h=0.05 d=0.18 x=0.78 y=0.62 z=-2.15 color=#e8f0ff emit=1 mirror=1
+  part box w=0.3 h=0.05 d=0.04 x=0.76 y=0.52 z=2.32 color=#ff2414 emit=0.9 mirror=1
+  part box w=1.2 h=0.12 d=0.3 y=0.24 z=2.42 color=#111111
+  part engine r=0.05 len=0.15 x=0.14 y=0.6 z=1.92 color=#222222 glow=#a080ff             # soul vents
+  part box w=0.12 h=0.05 d=0.08 x=0.55 y=0.8 z=-0.6 color=paint mirror=1
+  part wheel r=0.34 w=0.3 x=0.8 z=-1.6 front=1 hub=#1a1a1a
+  part wheel r=0.36 w=0.34 x=0.8 z=1.5 hub=#1a1a1a
+
+# Mausoleum: an armoured six-wheel limousine – the rear is a marble tomb with columns, frieze and a gabled roof;
+# flags on the wings, a towering grille, riveted plates.
+model car_mausoleum
+  part body len=5.8 wid=2.1 hgt=0.65 y=0.6 round=7 nose=0.14 tail=0.05 drop=0.3 pinch=0.05 color=paint
+  part cabin len=1.6 wid=1.92 hgt=0.5 y=1.175 z=-0.75 front=0.4 back=0.04 top=0.88 color=paint2 glass=#10161a
+  part box w=1.82 h=0.33 d=0.04 y=1.045 z=-1.437 pitch=52 color=#55595e                  # windscreen armour
+  part box w=1.86 h=0.78 d=2.9 y=1.315 z=1.35 color=paint                                # the tomb
+  part box w=2.0 h=0.06 d=2.98 y=0.955 z=1.35 color=#cfc8b8                              # stylobate
+  part box w=2.06 h=0.12 d=3.06 y=1.765 z=1.35 color=#e4ded0                             # frieze
+  part disc r=0.065 h=0.76 x=0.97 y=1.325 z=0.0 seg=10 color=#e4ded0 mirror=1            # columns
+  part disc r=0.065 h=0.76 x=0.97 y=1.325 z=0.93 seg=10 color=#e4ded0 mirror=1
+  part disc r=0.065 h=0.76 x=0.97 y=1.325 z=1.86 seg=10 color=#e4ded0 mirror=1
+  part disc r=0.065 h=0.76 x=0.97 y=1.325 z=2.72 seg=10 color=#e4ded0 mirror=1
+  part box w=0.16 h=0.05 d=0.16 x=0.97 y=1.68 z=0.0 color=#e4ded0 mirror=1
+  part box w=0.16 h=0.05 d=0.16 x=0.97 y=1.68 z=0.93 color=#e4ded0 mirror=1
+  part box w=0.16 h=0.05 d=0.16 x=0.97 y=1.68 z=1.86 color=#e4ded0 mirror=1
+  part box w=0.16 h=0.05 d=0.16 x=0.97 y=1.68 z=2.72 color=#e4ded0 mirror=1
+  part box w=1.1 h=0.05 d=3.1 x=0.515 y=2.0 z=1.35 roll=-18 color=#cfc8b8 mirror=1      # gabled roof
+  part box w=0.08 h=0.06 d=3.12 y=2.18 z=1.35 color=#bdb5a4
+  part plate pts="-1.03,0;1.03,0;0,-0.33" thick=0.04 pitch=90 y=1.83 z=-0.17 color=#e4ded0  # pediments
+  part plate pts="-1.03,0;1.03,0;0,-0.33" thick=0.04 pitch=90 y=1.83 z=2.87 color=#e4ded0
+  part ring r=0.1 thick=0.025 pitch=90 y=1.95 z=-0.21 color=#2a5a2a                      # wreath
+  part box w=0.7 h=0.65 d=0.03 y=1.29 z=2.81 color=#6a4a28                               # bronze door
+  part box w=1.0 h=0.36 d=0.06 y=0.66 z=-2.88 color=#c8ccd4                              # towering grille
+  part box w=0.04 h=0.3 d=0.02 y=0.66 z=-2.915 color=#111111
+  part box w=0.04 h=0.3 d=0.02 x=0.13 y=0.66 z=-2.915 color=#111111 mirror=1
+  part box w=0.04 h=0.3 d=0.02 x=0.26 y=0.66 z=-2.915 color=#111111 mirror=1
+  part box w=0.04 h=0.3 d=0.02 x=0.39 y=0.66 z=-2.915 color=#111111 mirror=1
+  part disc r=0.08 h=0.04 pitch=90 x=0.68 y=0.62 z=-2.88 color=#fff4d0 emit=1 mirror=1
+  part disc r=0.08 h=0.04 pitch=90 x=0.86 y=0.62 z=-2.86 color=#fff4d0 emit=1 mirror=1
+  part box w=2.1 h=0.14 d=0.14 y=0.38 z=-2.94 color=#c8ccd4
+  part box w=2.1 h=0.14 d=0.14 y=0.38 z=2.95 color=#c8ccd4
+  part disc r=0.05 h=0.1 y=0.95 z=-2.3 color=#d0b060                                     # urn ornament
+  part sphere r=0.05 y=1.02 z=-2.3 color=#d0b060
+  part box w=0.02 h=0.4 d=0.02 x=0.82 y=0.98 z=-2.5 color=#c8ccd4 mirror=1               # flags
+  part box w=0.015 h=0.16 d=0.28 x=0.82 y=1.1 z=-2.36 color=paint3 mirror=1
+  part box w=0.04 h=0.42 d=1.5 x=1.055 y=0.6 z=-0.8 color=#55595e mirror=1               # armour
+  part box w=0.04 h=0.38 d=2.8 x=1.055 y=0.58 z=1.4 color=#55595e mirror=1
+  part greeble n=14 w=0.35 d=1.4 size=0.04 seed=21 roll=-90 x=1.075 y=0.6 z=-0.8 color=#8a8e94 mirror=1
+  part greeble n=22 w=0.3 d=2.7 size=0.04 seed=22 roll=-90 x=1.075 y=0.58 z=1.4 color=#8a8e94 mirror=1
+  part box w=0.14 h=0.2 d=0.04 x=0.9 y=0.62 z=2.89 color=#ff2414 emit=0.9 mirror=1
+  part engine r=0.06 len=0.22 x=0.6 y=0.32 z=2.92 color=#c8ccd4
+  part box w=0.1 h=0.08 d=0.12 x=1.0 y=1.0 z=-1.45 color=paint2 mirror=1
+  part wheel r=0.38 w=0.27 x=0.96 z=-1.85 front=1 hub=#d0b060
+  part wheel r=0.38 w=0.27 x=0.96 z=1.3 hub=#d0b060
+  part wheel r=0.38 w=0.27 x=0.96 z=2.25 hub=#d0b060
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 6 – the boss
+# ---------------------------------------------------------------------------------------------------------------
+
+# The Undertaker: Mortimer Graves' armoured hearse-limousine – a glass compartment with gilded gothic arches, candles
+# and black plumes on the roof, coach lanterns, a gothic chrome grille with a skull whose eyes glow, spiked hubs.
+model car_undertaker
+  part body len=6.0 wid=2.16 hgt=0.66 y=0.6 round=7 nose=0.15 tail=0.05 drop=0.32 pinch=0.06 color=paint
+  part cabin len=1.6 wid=1.98 hgt=0.52 y=1.19 z=-0.8 front=0.42 back=0.03 top=0.9 color=paint glass=#0c1014
+  part cabin len=3.05 wid=1.98 hgt=0.85 y=1.355 z=1.48 front=0.02 back=0.03 top=0.97 color=paint glass=#1c2430
+  part box w=0.06 h=0.85 d=0.06 x=0.985 y=1.355 z=0.0 color=#b8962e mirror=1             # gilded posts
+  part box w=0.06 h=0.85 d=0.06 x=0.985 y=1.355 z=0.75 color=#b8962e mirror=1
+  part box w=0.06 h=0.85 d=0.06 x=0.985 y=1.355 z=1.5 color=#b8962e mirror=1
+  part box w=0.06 h=0.85 d=0.06 x=0.985 y=1.355 z=2.25 color=#b8962e mirror=1
+  part box w=0.06 h=0.85 d=0.06 x=0.985 y=1.355 z=2.96 color=#b8962e mirror=1
+  part plate pts="-0.32,-0.28;-0.32,0.28;0.12,0.28;0.25,0.16;0.33,0;0.25,-0.16;0.12,-0.28" thick=0.02 roll=90 x=0.995 y=1.33 z=0.375 color=#b8962e mirror=1
+  part plate pts="-0.32,-0.28;-0.32,0.28;0.12,0.28;0.25,0.16;0.33,0;0.25,-0.16;0.12,-0.28" thick=0.02 roll=90 x=0.995 y=1.33 z=1.125 color=#b8962e mirror=1
+  part plate pts="-0.32,-0.28;-0.32,0.28;0.12,0.28;0.25,0.16;0.33,0;0.25,-0.16;0.12,-0.28" thick=0.02 roll=90 x=0.995 y=1.33 z=1.875 color=#b8962e mirror=1
+  part plate pts="-0.32,-0.28;-0.32,0.28;0.12,0.28;0.25,0.16;0.33,0;0.25,-0.16;0.12,-0.28" thick=0.02 roll=90 x=0.995 y=1.33 z=2.6 color=#b8962e mirror=1
+  part plate pts="-0.27,-0.23;-0.27,0.23;0.1,0.23;0.21,0.13;0.27,0;0.21,-0.13;0.1,-0.23" thick=0.02 roll=90 x=1.01 y=1.33 z=0.375 color=#0e1218 mirror=1
+  part plate pts="-0.27,-0.23;-0.27,0.23;0.1,0.23;0.21,0.13;0.27,0;0.21,-0.13;0.1,-0.23" thick=0.02 roll=90 x=1.01 y=1.33 z=1.125 color=#0e1218 mirror=1
+  part plate pts="-0.27,-0.23;-0.27,0.23;0.1,0.23;0.21,0.13;0.27,0;0.21,-0.13;0.1,-0.23" thick=0.02 roll=90 x=1.01 y=1.33 z=1.875 color=#0e1218 mirror=1
+  part plate pts="-0.27,-0.23;-0.27,0.23;0.1,0.23;0.21,0.13;0.27,0;0.21,-0.13;0.1,-0.23" thick=0.02 roll=90 x=1.01 y=1.33 z=2.6 color=#0e1218 mirror=1
+  part box w=0.04 h=0.08 d=2.95 x=0.92 y=1.82 z=1.48 color=#b8962e mirror=1              # roof cresting
+  part box w=0.12 h=0.03 d=1.1 y=1.795 z=1.55 color=#b8962e                              # the gilded cross
+  part box w=0.6 h=0.03 d=0.12 y=1.795 z=1.25 color=#b8962e
+  part disc r=0.045 h=0.18 x=0.7 y=1.87 z=0.4 color=#e8e0c8 mirror=1                     # candles
+  part disc r=0.045 h=0.18 x=0.7 y=1.87 z=1.1 color=#e8e0c8 mirror=1
+  part disc r=0.045 h=0.18 x=0.7 y=1.87 z=1.85 color=#e8e0c8 mirror=1
+  part disc r=0.045 h=0.18 x=0.7 y=1.87 z=2.6 color=#e8e0c8 mirror=1
+  part light r=0.05 x=0.7 y=2.0 z=0.4 color=#ffb040 mirror=1
+  part light r=0.05 x=0.7 y=2.0 z=1.1 color=#ffb040 mirror=1
+  part light r=0.05 x=0.7 y=2.0 z=1.85 color=#ffb040 mirror=1
+  part light r=0.05 x=0.7 y=2.0 z=2.6 color=#ffb040 mirror=1
+  part cone r=0.1 len=0.5 pitch=90 x=0.88 y=2.03 z=0.05 color=#121212 mirror=1           # black plumes
+  part cone r=0.1 len=0.5 pitch=90 x=0.88 y=2.03 z=2.9 color=#121212 mirror=1
+  part plate pts="-0.48,0;0.48,0;0.48,-0.3;0.32,-0.5;0,-0.66;-0.32,-0.5;-0.48,-0.3" thick=0.06 pitch=90 y=0.32 z=-3.02 color=#d8dce4  # gothic grille
+  part box w=0.04 h=0.5 d=0.02 y=0.6 z=-3.06 color=#0a0a0a
+  part box w=0.04 h=0.48 d=0.02 x=0.12 y=0.59 z=-3.06 color=#0a0a0a mirror=1
+  part box w=0.04 h=0.42 d=0.02 x=0.24 y=0.56 z=-3.06 color=#0a0a0a mirror=1
+  part box w=0.04 h=0.34 d=0.02 x=0.36 y=0.52 z=-3.06 color=#0a0a0a mirror=1
+  part sphere r=0.11 y=0.92 z=-2.72 color=#d8dce4                                        # the skull
+  part box w=0.12 h=0.07 d=0.1 y=0.84 z=-2.8 color=#d8dce4
+  part box w=0.04 h=0.035 d=0.02 x=0.04 y=0.94 z=-2.83 color=#ff2010 emit=1 mirror=1
+  part box w=0.3 h=0.07 d=0.05 x=0.75 y=0.62 z=-2.98 color=#e8f0ff emit=1 mirror=1
+  part box w=0.16 h=0.04 d=0.16 x=0.92 y=0.95 z=-2.2 color=#b8962e mirror=1              # coach lanterns
+  part box w=0.11 h=0.18 d=0.11 x=0.92 y=1.06 z=-2.2 color=#ffc860 emit=0.8 mirror=1
+  part box w=0.16 h=0.06 d=0.16 x=0.92 y=1.18 z=-2.2 taper=0.6 color=#b8962e mirror=1
+  part box w=0.13 h=0.2 d=0.13 x=1.06 y=1.45 z=2.95 color=#ffc860 emit=0.8 mirror=1
+  part box w=0.17 h=0.06 d=0.17 x=1.06 y=1.58 z=2.95 taper=0.6 color=#b8962e mirror=1
+  part box w=2.16 h=0.14 d=0.16 y=0.38 z=-3.0 color=#d8dce4
+  part cone r=0.05 len=0.22 x=0.5 y=0.38 z=-3.18 color=#d8dce4 mirror=1                  # bumper spikes
+  part cone r=0.05 len=0.22 x=0.9 y=0.38 z=-3.18 color=#d8dce4 mirror=1
+  part box w=2.2 h=0.36 d=5.2 y=0.55 z=0.1 color=#3a3c40                                 # riveted armour
+  part greeble n=30 w=0.22 d=5.0 size=0.045 seed=5 roll=-90 x=1.105 y=0.55 z=0.1 color=#7a7e84 mirror=1
+  part cone r=0.07 len=0.3 rot=90 x=1.27 y=0.4 z=-2.0 color=#d8dce4 mirror=1             # spiked hubs
+  part cone r=0.07 len=0.3 rot=90 x=1.27 y=0.4 z=1.95 color=#d8dce4 mirror=1
+  part box w=0.12 h=0.28 d=0.04 x=0.95 y=0.68 z=2.99 color=#ff2414 emit=0.9 mirror=1
+  part box w=2.16 h=0.14 d=0.16 y=0.38 z=3.02 color=#d8dce4
+  part engine r=0.07 len=0.3 x=0.75 y=0.3 z=3.0 color=#d8dce4 glow=#80ff60
+  part box w=0.1 h=0.08 d=0.12 x=1.04 y=1.0 z=-1.45 color=paint mirror=1
+  part wheel r=0.4 w=0.28 x=0.98 z=-2.0 front=1 hub=#b8962e
+  part wheel r=0.4 w=0.28 x=0.98 z=1.95 hub=#b8962e

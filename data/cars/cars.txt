@@ -1,0 +1,480 @@
+# The cars of the Grave Prix (docs/DESIGN.md "Cars"); their models are in data/models/cars.txt.
+#
+# Within a class each car has its own character: one is quick and nimble but made of tin foil, one is a heavy
+# brick that shrugs off a hail of bullets, one goes for top speed. Every class is clearly faster than the one below.
+#
+# Note on the order of lines: "upgrades engine=.. armor=.. gun=.." comes before "engine", "armor" and "gun", because
+# a block's named values and its lines' first words share one table (the later one wins).
+# "length" and "width" stand on lines of their own for the same reason.
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 1 – scrap (on sale in league 5)
+# ---------------------------------------------------------------------------------------------------------------
+
+car rustbucket
+  title "Rustbucket" title_en "Rustbucket"
+  desc "Mehr Rost als Auto, mehr Gebet als Bremse. Der Vorbesitzer fährt jetzt einen Sarg – deutlich bequemer."
+  desc_en "More rust than car, more prayer than brakes. The previous owner drives a coffin now – much comfier."
+  model car_rustbucket
+  class 1
+  price 0
+  league 5
+  upgrades engine=4 tires=4 armor=4 gun=4
+  upgrade_cost 0.4
+  mass 1100
+  power 10.5
+  top 35
+  grip 0.95
+  brake 0.9
+  steer 1.0
+  offroad 1.0
+  armor 110
+  length 4.4
+  width 1.78
+  engine v6
+  horn plain
+  gun mg
+  mount_front 0 0.82 -1.25
+  mount_roof 0 1.38 -0.35
+  mount_rear 0 0.42 2.26
+  perk ammo=1.25
+
+car tincan
+  title "Tin Can" title_en "Tin Can"
+  desc "Ein Kleinwagen aus Blechspielzeug, mit Aufziehschlüssel. Nach einem Unfall muss man nur noch den Deckel draufmachen."
+  desc_en "A tin-toy runabout with a wind-up key. After a crash they just put the lid on."
+  model car_tincan
+  class 1
+  price 3500
+  league 5
+  upgrades engine=4 tires=4 armor=3 gun=3
+  upgrade_cost 0.45
+  mass 780
+  power 12
+  top 34
+  grip 1.08
+  brake 1.1
+  steer 1.2
+  offroad 0.9
+  armor 80
+  length 3.9
+  width 1.66
+  engine tin
+  horn klaxon
+  gun mg
+  mount_front 0 0.97 -1.05
+  mount_roof 0 1.58 0.3
+  mount_rear 0 0.4 1.96
+  perk nitro=1
+
+car brainfreeze
+  title "Brain Freeze" title_en "Brain Freeze"
+  desc "Ein Eiswagen mit Glockenspiel und einer Kühltruhe, in die ein Erwachsener passt. Fragen Sie nicht. Verschüttet Himbeersoße, die ewig klebt."
+  desc_en "An ice-cream van with a jingle and a chest freezer that fits a grown adult. Don't ask. Spills raspberry syrup that sticks forever."
+  model car_brainfreeze
+  class 1
+  price 5800
+  league 5
+  upgrades engine=3 tires=4 armor=4 gun=3
+  upgrade_cost 0.5
+  mass 1700
+  power 9.5
+  top 36
+  grip 0.88
+  brake 0.85
+  steer 0.85
+  offroad 0.95
+  armor 140
+  length 5.15
+  width 2.08
+  engine diesel
+  horn ice
+  gun mg
+  mount_front 0 0.72 -2.25
+  mount_roof 0 2.24 0.35
+  mount_rear 0 0.45 2.62
+  perk slick=1
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 2 – street (league 4)
+# ---------------------------------------------------------------------------------------------------------------
+
+car hatchet
+  title "Hatchet" title_en "Hatchet"
+  desc "Kurz, giftig, ein Beil auf dem Dach – und eine Heckklappe, die sich praktischerweise bei voller Fahrt öffnet."
+  desc_en "Short, vicious, a hatchet on the roof – and a tailgate that conveniently opens at full speed."
+  model car_hatchet
+  class 2
+  price 9500
+  league 4
+  upgrades engine=5 tires=5 armor=4 gun=4
+  upgrade_cost 0.75
+  mass 1050
+  power 13.5
+  top 38.5
+  grip 1.06
+  brake 1.1
+  steer 1.15
+  offroad 1.0
+  armor 105
+  length 4.05
+  width 1.84
+  engine i4
+  horn dixie
+  gun mg
+  mount_front 0 0.83 -1.25
+  mount_roof -0.22 1.38 0.75
+  mount_rear 0 0.4 2.08
+  perk mines=2
+
+car pallbearer
+  title "Pallbearer" title_en "Pallbearer"
+  desc "Ein Leichenwagen mit Sarg auf dem Dach – der ist noch frei. Für jedes Wrack zahlt die Firma Provision."
+  desc_en "A hearse with a coffin on the roof – still vacant. The firm pays commission on every wreck."
+  model car_pallbearer
+  class 2
+  price 14500
+  league 4
+  upgrades engine=4 tires=4 armor=5 gun=4
+  upgrade_cost 0.85
+  mass 1750
+  power 12.5
+  top 41.5
+  grip 0.96
+  brake 0.9
+  steer 0.85
+  offroad 1.0
+  armor 165
+  length 5.7
+  width 1.94
+  engine v8
+  horn funeral
+  gun mg
+  mount_front 0 0.86 -1.95
+  mount_roof 0 1.38 -0.65
+  mount_rear 0 0.42 2.92
+  perk bounty=1.5
+
+car shovelhead
+  title "Shovelhead" title_en "Shovelhead"
+  desc "Ein Pick-up mit Planierschild: Er räumt die Strecke frei und hebt bei Bedarf gleich das Grab aus."
+  desc_en "A pickup with a dozer blade: it clears the track and digs the grave while it's at it."
+  model car_shovelhead
+  class 2
+  price 18500
+  league 4
+  upgrades engine=4 tires=4 armor=5 gun=4
+  upgrade_cost 0.95
+  mass 2050
+  power 12.5
+  top 39
+  grip 1.0
+  brake 0.9
+  steer 0.85
+  offroad 1.2
+  armor 180
+  length 5.6
+  width 2.2
+  engine diesel
+  horn truck
+  gun mg
+  mount_front 0 1.215 -1.6
+  mount_roof 0 1.88 -0.1
+  mount_rear 0 0.5 2.88
+  perk ramproof=0.5
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 3 – muscle (league 3)
+# ---------------------------------------------------------------------------------------------------------------
+
+car widowmaker
+  title "Widowmaker" title_en "Widowmaker"
+  desc "Acht Zylinder, ein Kompressor und eine Sanduhr auf dem Dach. Die Versicherung hat vorsorglich schon gekündigt."
+  desc_en "Eight cylinders, a supercharger and an hourglass on the roof. The insurers cancelled in advance."
+  model car_widowmaker
+  class 3
+  price 29000
+  league 3
+  upgrades engine=5 tires=5 armor=5 gun=5
+  upgrade_cost 1.3
+  mass 1500
+  power 16
+  top 46.5
+  grip 1.0
+  brake 0.95
+  steer 0.95
+  offroad 1.0
+  armor 145
+  length 4.85
+  width 1.9
+  engine v8
+  horn dixie
+  gun mg
+  mount_front 0 0.79 -1.7
+  mount_roof 0 0.83 1.75
+  mount_rear 0 0.38 2.5
+  perk nitro=2
+
+car lastcall
+  title "Last Call" title_en "Last Call"
+  desc "Ein Krankenwagen, der sich selbst flickt. Ob er Sie in die Klinik oder in die Leichenhalle bringt, entscheidet die Rennleitung."
+  desc_en "An ambulance that patches itself up. Whether it takes you to hospital or the morgue is up to race control."
+  model car_lastcall
+  class 3
+  price 36000
+  league 3
+  upgrades engine=5 tires=5 armor=5 gun=4
+  upgrade_cost 1.45
+  mass 2200
+  power 14.5
+  top 43.5
+  grip 1.02
+  brake 0.9
+  steer 0.85
+  offroad 1.05
+  armor 215
+  length 5.55
+  width 2.12
+  engine diesel
+  horn siren
+  gun mg
+  mount_front 0 0.9 -2.45
+  mount_roof 0 2.4 0.4
+  mount_rear 0 0.55 2.95
+  perk regen=0.6
+
+car coroner
+  title "Coroner" title_en "Coroner"
+  desc "Der Abfangjäger des Gerichtsmediziners. Wer ihn im Rückspiegel sieht, fährt rechts ran – freiwillig oder für immer."
+  desc_en "The coroner's interceptor. See it in your mirror and you pull over – voluntarily or permanently."
+  model car_coroner
+  class 3
+  price 43000
+  league 3
+  upgrades engine=5 tires=5 armor=5 gun=5
+  upgrade_cost 1.6
+  mass 1650
+  power 14.5
+  top 45
+  grip 1.1
+  brake 1.1
+  steer 1.05
+  offroad 1.0
+  armor 175
+  length 5.3
+  width 1.94
+  engine v6
+  horn siren
+  gun twinmg
+  mount_front 0 0.86 -1.5
+  mount_roof 0 1.37 0.65
+  mount_rear 0 0.42 2.58
+  perk scare=1
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 4 – pro (league 2)
+# ---------------------------------------------------------------------------------------------------------------
+
+car banshee
+  title "Banshee" title_en "Banshee"
+  desc "Ein Rallyeauto, das auf Schotter heult wie eine Todesfee. Wer es hört, sollte sein Testament schon gemacht haben."
+  desc_en "A rally car that wails on gravel like a banshee. If you can hear it, you'd better have made your will."
+  model car_banshee
+  class 4
+  price 58000
+  league 2
+  upgrades engine=6 tires=6 armor=5 gun=5
+  upgrade_cost 2.0
+  mass 1250
+  power 17
+  top 47
+  grip 1.04
+  brake 1.1
+  steer 1.18
+  offroad 1.3
+  armor 150
+  length 4.35
+  width 1.86
+  engine boxer
+  horn klaxon
+  gun mg
+  mount_front 0 0.88 -1.25
+  mount_roof 0 1.42 0.5
+  mount_rear 0 0.45 2.22
+  perk nitro=1
+
+car sarcophagus
+  title "Sarcophagus" title_en "Sarcophagus"
+  desc "Ein Geldtransporter mit Pharaonengrab auf dem Dach. Panzerglas, Panzerplatten, Panzerlaune – und Minen als Grabbeigabe."
+  desc_en "A cash van with a pharaoh's tomb on the roof. Armoured glass, armoured plates, armoured temper – and mines as grave goods."
+  model car_sarcophagus
+  class 4
+  price 74000
+  league 2
+  upgrades engine=5 tires=5 armor=6 gun=5
+  upgrade_cost 2.2
+  mass 2700
+  power 17
+  top 47.5
+  grip 1.06
+  brake 0.9
+  steer 0.92
+  offroad 1.0
+  armor 260
+  length 5.6
+  width 2.2
+  engine v8
+  horn truck
+  gun mg
+  mount_front 0 1.05 -2.45
+  mount_roof 0 2.4 -0.35
+  mount_rear 0 0.6 2.92
+  perk ramproof=0.4 mines=2
+
+car obituary
+  title "Obituary" title_en "Obituary"
+  desc "Ein Sportcoupé mit Klappscheinwerfern und viel zu sagen. Jede Runde schreibt es jemandem den Nachruf."
+  desc_en "A sports coupé with pop-up headlights and a lot to say. Every lap it writes somebody's obituary."
+  model car_obituary
+  class 4
+  price 88000
+  league 2
+  upgrades engine=6 tires=6 armor=5 gun=6
+  upgrade_cost 2.4
+  mass 1320
+  power 17.5
+  top 51
+  grip 1.12
+  brake 1.12
+  steer 1.1
+  offroad 0.9
+  armor 145
+  length 4.55
+  width 1.86
+  engine rotary
+  horn plain
+  gun mg
+  mount_front 0 0.72 -1.3
+  mount_roof 0 1.15 0.42
+  mount_rear 0 0.36 2.3
+  perk ammo=1.5
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 5 – elite (league 1)
+# ---------------------------------------------------------------------------------------------------------------
+
+car requiem
+  title "Requiem" title_en "Requiem"
+  desc "Zwölf Zylinder, Orgelpfeifen als Auspuff und ein Heckflügel wie ein Kirchendach. Jede Ausfahrt eine Totenmesse."
+  desc_en "Twelve cylinders, organ pipes for exhausts and a wing like a church roof. Every drive a requiem mass."
+  model car_requiem
+  class 5
+  price 125000
+  league 1
+  upgrades engine=6 tires=6 armor=6 gun=6
+  upgrade_cost 3.0
+  mass 1420
+  power 21
+  top 58
+  grip 1.15
+  brake 1.15
+  steer 1.1
+  offroad 0.95
+  armor 180
+  length 4.65
+  width 2.06
+  engine v12
+  horn plain
+  gun mg
+  mount_front 0 0.58 -1.55
+  mount_roof 0 1.07 -0.05
+  mount_rear 0 0.3 2.38
+  perk nitro=2
+
+car reaper
+  title "Reaper" title_en "Reaper"
+  desc "Ein elektrischer Prototyp mit einem Heckflügel wie eine Sense. Man hört ihn nicht kommen – nur gehen. Sein Sponsor zahlt pro Seele."
+  desc_en "An electric prototype with a rear wing like a scythe. You never hear it coming – only leaving. Its sponsor pays per soul."
+  model car_reaper
+  class 5
+  price 160000
+  league 1
+  upgrades engine=6 tires=6 armor=6 gun=6
+  upgrade_cost 3.3
+  mass 1050
+  power 18
+  top 51
+  grip 1.3
+  brake 1.3
+  steer 1.22
+  offroad 0.9
+  armor 165
+  length 5.0
+  width 1.98
+  engine electric
+  horn klaxon
+  gun mg
+  mount_front 0 0.64 -1.25
+  mount_roof 0 1.09 -0.2
+  mount_rear 0 0.45 2.5
+  perk bounty=1.5
+
+car mausoleum
+  title "Mausoleum" title_en "Mausoleum"
+  desc "Eine gepanzerte Sechsrad-Limousine mit Säulen und Giebeldach. Wer drinsitzt, ist bereits standesgemäß beigesetzt."
+  desc_en "An armoured six-wheel limousine with columns and a gabled roof. Whoever sits inside is already entombed in style."
+  model car_mausoleum
+  class 5
+  price 178000
+  league 1
+  upgrades engine=6 tires=6 armor=6 gun=6
+  upgrade_cost 3.5
+  mass 3300
+  power 19.5
+  top 53
+  grip 1.15
+  brake 0.95
+  steer 0.95
+  offroad 1.0
+  armor 320
+  length 5.9
+  width 2.16
+  engine turbine
+  horn truck
+  gun twinmg
+  mount_front 0 0.92 -2.1
+  mount_roof 0 1.43 -0.45
+  mount_rear 0 0.45 3.05
+  perk ramproof=0.5 regen=0.5
+
+# ---------------------------------------------------------------------------------------------------------------
+# Class 6 – the boss (not for sale)
+# ---------------------------------------------------------------------------------------------------------------
+
+car undertaker
+  title "The Undertaker" title_en "The Undertaker"
+  desc "Mortimer Graves' gepanzerter Leichenwagen, mit Kerzen auf dem Dach und einem Totenkopf als Kühlerfigur. Er nimmt jeden mit – nur nie zurück."
+  desc_en "Mortimer Graves' armoured hearse, with candles on the roof and a skull on the bonnet. It takes everyone along – it just never brings them back."
+  model car_undertaker
+  class 6
+  price 250000
+  league 0
+  upgrades engine=6 tires=6 armor=6 gun=6
+  upgrade_cost 4.0
+  mass 3400
+  power 20
+  top 56
+  grip 1.18
+  brake 1.0
+  steer 0.9
+  offroad 1.0
+  armor 600
+  length 6.1
+  width 2.24
+  engine v12
+  horn funeral
+  gun cannon
+  mount_front 0 0.93 -2.1
+  mount_roof 0 1.45 -0.5
+  mount_rear 0 0.5 3.15
+  perk ramproof=0.5 regen=1.0

@@ -1,0 +1,209 @@
+# Proving-ground props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_fair_prv_est.py.
+
+# a 9 m concrete bunker: camouflage, a firing slit, a blast door, sandbags, earth banked up
+model bunker
+  part dome r=3.2 rx=6 rz=4.6 ry=1.8 color=#8a7a58 seg=10   # banked earth
+  part box w=9 h=3 d=7 y=1.5 color=#7a766a taper=0.12
+  part box w=7.8 h=0.4 d=5.8 y=3.2 color=#6e6a5e
+  part box w=2.6 h=0.05 d=2.2 x=-2 y=3.425 z=-1 color=#5a5a3a rot=20   # camouflage
+  part box w=2.8 h=0.05 d=1.8 x=1.6 y=3.425 z=1.2 color=#6a5a3e rot=20
+  part box w=1.4 h=0.05 d=1.2 x=2.4 y=3.425 z=-1.6 color=#4a4a30 rot=20
+  part box w=4 h=0.35 d=0.1 y=1.975 z=-3.25 color=#0a0a0a   # firing slit
+  part box w=1.6 h=2.2 d=0.12 x=4.1 y=1.1 z=1 color=#4a4e48 rot=90
+  part box w=0.6 h=0.28 d=0.4 x=-2.6 y=0.14 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-2.3 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-1.98 y=0.14 z=-4 color=#9a8a64 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-1.68 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-1.36 y=0.14 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-1.06 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-0.74 y=0.14 z=-4 color=#9a8a64 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-0.44 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=-0.12 y=0.14 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=0.18 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=0.5 y=0.14 z=-4 color=#9a8a64 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=0.8 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=1.12 y=0.14 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=1.42 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=1.74 y=0.14 z=-4 color=#9a8a64 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=2.04 y=0.42 z=-4 color=#8a7a58 taper=0.25
+  part box w=0.6 h=0.28 d=0.4 x=2.36 y=0.14 z=-4 color=#8a7a58 taper=0.25
+  part gun r=0.04 len=3.6 x=-3 y=5.2 z=2 pitch=90 seg=4 color=#3a3a3a
+  part disc r=0.5 h=0.3 x=2 y=3.55 z=1.6 seg=8 color=#4a4e48
+
+# a burnt-out tank, turret turned, the barrel drooping
+model tank_wreck
+  part plate pts="0,-3.43;1.57,-3.06;3.09,-1.32;2.54,0;2.56,1.46;2.1,2.87;0,3.32;-1.8,2.4;-3.11,1.99;-3.4,0;-3.16,-1.31;-1.9,-3.04" thick=0.02 y=0.014 color=#2a241c   # scorch
+  part box w=3.2 h=1.2 d=6.4 y=1.1 color=#3e3e2c taper=0.15
+  part box w=0.75 h=1 d=7 x=-1.75 y=0.5 color=#22221c
+  part box w=0.75 h=1 d=7 x=1.75 y=0.5 color=#22221c
+  part disc r=0.38 h=0.2 roll=90 x=1.8 y=0.42 z=-2.6 color=#2e2e26 seg=8 mirror=1   # road wheels
+  part disc r=0.38 h=0.2 roll=90 x=1.8 y=0.42 z=-1.56 color=#2e2e26 seg=8 mirror=1
+  part disc r=0.38 h=0.2 roll=90 x=1.8 y=0.42 z=-0.52 color=#2e2e26 seg=8 mirror=1
+  part disc r=0.38 h=0.2 roll=90 x=1.8 y=0.42 z=0.52 color=#2e2e26 seg=8 mirror=1
+  part disc r=0.38 h=0.2 roll=90 x=1.8 y=0.42 z=1.56 color=#2e2e26 seg=8 mirror=1
+  part disc r=0.38 h=0.2 roll=90 x=1.8 y=0.42 z=2.6 color=#2e2e26 seg=8 mirror=1
+  part box w=2.4 h=0.85 d=2.9 x=0.2 y=2.125 z=0.2 color=#46462e rot=35 taper=0.3
+  part gun r=0.12 r2=0.16 len=4.73 x=2.322 y=1.55 z=-2.831 pitch=-13.45 rot=35 seg=6 color=#3a3a2a
+  part disc r=0.4 h=0.15 x=0.6 y=2.625 z=0.6 seg=8 color=#2a2a22
+  part box w=0.8 h=0.08 d=0.8 x=1.1 y=2.9 z=0.9 color=#3e3e2c roll=-60
+  part box w=1.4 h=0.03 d=1.2 x=-0.6 y=1.715 z=-1.8 color=#141210   # burns
+  part box w=1.2 h=0.03 d=1.6 x=0.8 y=1.715 z=2 color=#141210
+  part box w=0.6 h=0.4 d=0.04 x=-1 y=1 z=-3.2 color=#d8d0b8
+
+# a Czech hedgehog: three crossed steel beams (obstacle r~1.3)
+model tank_trap
+  part box w=0.24 h=0.24 d=2.6 y=0.75 pitch=35.26 rot=15 color=#5a4a3a
+  part box w=0.06 h=0.34 d=2.6 y=0.75 pitch=35.26 rot=15 color=#4a3a2e
+  part box w=0.24 h=0.24 d=2.6 y=0.75 pitch=35.26 rot=135 color=#5a4a3a
+  part box w=0.06 h=0.34 d=2.6 y=0.75 pitch=35.26 rot=135 color=#4a3a2e
+  part box w=0.24 h=0.24 d=2.6 y=0.75 pitch=35.26 rot=-105 color=#5a4a3a
+  part box w=0.06 h=0.34 d=2.6 y=0.75 pitch=35.26 rot=-105 color=#4a3a2e
+  part sphere r=0.2 y=0.75 color=#4a3a2e seg=6
+
+# a 6 m sandbag wall, three courses
+model sandbag_wall
+  part box w=0.6 h=0.3 d=0.42 x=-2.7 y=0.15 color=#9a8a64 rot=-3.167 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-2.1 y=0.15 color=#8a7a58 rot=2.655 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-1.5 y=0.15 color=#9a8a64 rot=-4.14 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-0.9 y=0.15 color=#a89870 rot=-5.762 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-0.3 y=0.15 color=#9a8a64 rot=5.015 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=0.3 y=0.15 color=#a89870 rot=-3.337 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=0.9 y=0.15 color=#9a8a64 rot=-1.677 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=1.5 y=0.15 color=#8a7a58 rot=3.922 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=2.1 y=0.15 color=#9a8a64 rot=-3.427 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=2.7 y=0.15 color=#8a7a58 rot=3.947 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-2.4 y=0.43 z=0.03 color=#9a8a64 rot=3.605 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-1.8 y=0.43 z=0.03 color=#8a7a58 rot=-4.022 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-1.2 y=0.43 z=0.03 color=#a89870 rot=1.524 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-0.6 y=0.43 z=0.03 color=#8a7a58 rot=5.531 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=0 y=0.43 z=0.03 color=#a89870 rot=-4.959 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=0.6 y=0.43 z=0.03 color=#8a7a58 rot=-1.951 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=1.2 y=0.43 z=0.03 color=#9a8a64 rot=0.071 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=1.8 y=0.43 z=0.03 color=#8a7a58 rot=-3.032 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=2.4 y=0.43 z=0.03 color=#a89870 rot=-4.928 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-2.7 y=0.71 z=0.06 color=#9a8a64 rot=4.086 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-2.1 y=0.71 z=0.06 color=#a89870 rot=4.906 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-1.5 y=0.71 z=0.06 color=#8a7a58 rot=2.459 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-0.9 y=0.71 z=0.06 color=#a89870 rot=4.177 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=-0.3 y=0.71 z=0.06 color=#8a7a58 rot=-3.658 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=0.3 y=0.71 z=0.06 color=#8a7a58 rot=1.187 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=0.9 y=0.71 z=0.06 color=#9a8a64 rot=-0.584 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=1.5 y=0.71 z=0.06 color=#9a8a64 rot=-2.339 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=2.1 y=0.71 z=0.06 color=#8a7a58 rot=-5.027 taper=0.25
+  part box w=0.6 h=0.3 d=0.42 x=2.7 y=0.71 z=0.06 color=#8a7a58 rot=1.516 taper=0.25
+
+# a 10 m watchtower: braced legs, a cabin, a searchlight
+model watchtower
+  part box w=0.25 h=0.25 d=7.051 x=-1.6 y=3.5 z=-1.6 pitch=83.09 rot=135 color=#5a4a38
+  part box w=0.25 h=0.25 d=7.051 x=1.6 y=3.5 z=-1.6 pitch=83.09 rot=-135 color=#5a4a38
+  part box w=0.25 h=0.25 d=7.051 x=-1.6 y=3.5 z=1.6 pitch=83.09 rot=45 color=#5a4a38
+  part box w=0.25 h=0.25 d=7.051 x=1.6 y=3.5 z=1.6 pitch=83.09 rot=-45 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.611 x=-0.15 y=2.05 z=-1.7 pitch=42.25 rot=95.04 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.611 x=1.7 y=2.05 z=-0.15 pitch=42.25 rot=-174.96 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.611 x=0.15 y=2.05 z=1.7 pitch=42.25 rot=-84.96 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.611 x=-1.7 y=2.05 z=0.15 pitch=42.25 rot=5.04 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.305 x=-0.115 y=5.2 z=-1.435 pitch=48.02 rot=94.58 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.305 x=1.435 y=5.2 z=-0.115 pitch=48.02 rot=-175.42 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.305 x=0.115 y=5.2 z=1.435 pitch=48.02 rot=-85.42 color=#5a4a38
+  part box w=0.1 h=0.1 d=4.305 x=-1.435 y=5.2 z=0.115 pitch=48.02 rot=4.58 color=#5a4a38
+  part box w=3.4 h=0.2 d=3.4 y=7.1 color=#4a3a2e
+  part box w=3.2 h=1.1 d=3.2 y=7.75 color=#6a5a44
+  part box w=3 h=0.9 d=3 y=7.85 color=#1a1a16
+  part box w=0.12 h=1.4 d=0.12 x=-1.5 y=9 z=-1.5 color=#5a4a38
+  part box w=0.12 h=1.4 d=0.12 x=1.5 y=9 z=-1.5 color=#5a4a38
+  part box w=0.12 h=1.4 d=0.12 x=-1.5 y=9 z=1.5 color=#5a4a38
+  part box w=0.12 h=1.4 d=0.12 x=1.5 y=9 z=1.5 color=#5a4a38
+  part disc r=2.6 r2=0.15 h=1 y=10.2 seg=4 color=#3e3a2a rot=45
+  part box w=0.5 h=0.06 d=7.06 x=0.9 y=3.5 z=-1.95 pitch=82.5 rot=-167.47 color=#3a3a3a   # ladder
+  part box w=0.6 h=0.5 d=0.7 x=1.2 y=8.6 z=-1.7 color=#3a3a3a pitch=-20
+  part disc r=0.25 h=0.05 pitch=70 x=1.2 y=8.5 z=-2.07 color=#fff4d0 emit=0.9 seg=8
+
+# a shell crater, ~7 m: scorched hollow, a raised rim, clods
+model crater
+  part ring r=3 thick=0.6 y=-0.15 color=#6a5a40 seg=14
+  part plate pts="0,-2.7;1.35,-2.338;2.338,-1.35;2.7,0;2.338,1.35;1.35,2.338;0,2.7;-1.35,2.338;-2.338,1.35;-2.7,0;-2.338,-1.35;-1.35,-2.338" thick=0.02 y=0.016 color=#2a241c
+  part plate pts="0,-1.4;0.99,-0.99;1.4,0;0.99,0.99;0,1.4;-0.99,0.99;-1.4,0;-0.99,-0.99" thick=0.02 y=0.02 color=#16120e
+  part greeble n=12 w=7.5 d=7.5 size=0.35 color=#5a4a34 seed=6
+  part box w=0.6 h=0.3 d=1.2 x=1.2 y=0.15 z=-0.6 color=#3a3a32 rot=30   # a shell fragment
+
+# a radar on a trailer: a 4.4 m dish looking up and ahead
+model radar_dish
+  part box w=2.6 h=1 d=5.2 y=1.1 color=#4a4a32
+  part disc r=0.5 h=0.35 roll=90 x=1.3 y=0.5 z=-1.4 color=#1a1a1a seg=8 mirror=1
+  part disc r=0.5 h=0.35 roll=90 x=1.3 y=0.5 z=1.4 color=#1a1a1a seg=8 mirror=1
+  part box w=2.2 h=1.8 d=2 y=2.5 z=1.4 color=#525238
+  part box w=1 h=0.5 d=0.05 x=0.3 y=2.55 z=0.38 color=#1a2024
+  part gun r=0.3 len=3 y=3.1 z=-1.2 pitch=90 seg=8 color=#6a6a5a
+  part dome r=2.2 ry=0.9 y=5 z=-1.2 pitch=125 color=#b8b8b0 seg=12   # the dish
+  part gun r=0.06 len=1.844 y=5.6 z=-1.9 pitch=40.6 seg=4 color=#8a8a84
+  part box w=0.25 h=0.25 d=0.3 y=6.225 z=-2.7 color=#3a3a3a
+  part box w=0.12 h=0.12 d=0.906 x=1.15 y=0.15 z=-3 pitch=-19.35 rot=-20.56 color=#4a4a32
+
+# a shooting target: a car's silhouette with a bullseye, riddled
+model target_board
+  part box w=0.15 h=2.2 d=0.15 x=-1.6 y=1.1 z=0.3 color=#5a4a38
+  part box w=0.15 h=2.2 d=0.15 x=1.6 y=1.1 z=0.3 color=#5a4a38
+  part box w=3.6 h=2.2 d=0.08 y=1.9 color=#b89a6a pitch=12
+  part plate pts="-1.6,-0.75;1.6,-0.75;1.6,-0.1;0.9,0;0.4,0.55;-0.5,0.55;-1,0.05;-1.6,-0.05" thick=0.02 pitch=-78 y=1.912 z=-0.059 color=#1a1a1a   # the car silhouette
+  part disc r=0.62 h=0.02 y=1.821 z=-0.109 pitch=-78 color=#efe8d8 seg=12
+  part disc r=0.46 h=0.02 y=1.825 z=-0.128 pitch=-78 color=#c82a2a seg=12
+  part disc r=0.3 h=0.02 y=1.829 z=-0.148 pitch=-78 color=#efe8d8 seg=12
+  part disc r=0.14 h=0.02 y=1.833 z=-0.168 pitch=-78 color=#c82a2a seg=12
+  part box w=0.08 h=0.08 d=0.02 x=-0.529 y=1.325 z=-0.317 color=#0a0a0a pitch=12   # bullet holes
+  part box w=0.08 h=0.08 d=0.02 x=0.453 y=1.187 z=-0.346 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=0.108 y=1.703 z=-0.236 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=-1.326 y=1.953 z=-0.183 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=-1.388 y=1.823 z=-0.211 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=-1.29 y=1.219 z=-0.339 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=-0.226 y=2.515 z=-0.064 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=-1.129 y=1.452 z=-0.289 color=#0a0a0a pitch=12
+  part box w=0.08 h=0.08 d=0.02 x=0.382 y=2.728 z=-0.018 color=#0a0a0a pitch=12
+
+# 8 m of concertina wire along x between angle-iron posts (rows every ~8 m join up)
+model barbed_post
+  part box w=0.08 h=0.08 d=1.408 x=-4 y=0.7 z=0.075 pitch=83.88 rot=180 color=#5a5650
+  part box w=0.08 h=0.08 d=1.408 y=0.7 z=0.075 pitch=83.88 rot=180 color=#5a5650
+  part box w=0.025 h=0.025 d=8 y=0.35 z=0.065 rot=90 color=#8a8a86
+  part box w=0.025 h=0.025 d=8 y=0.75 z=0.105 rot=90 color=#8a8a86
+  part box w=0.025 h=0.025 d=8 y=1.15 z=0.145 rot=90 color=#8a8a86
+  part ring r=0.45 thick=0.02 x=-3.7 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6   # the concertina coil
+  part ring r=0.45 thick=0.02 x=-3.08 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=8 seg=6
+  part ring r=0.45 thick=0.02 x=-2.46 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6
+  part ring r=0.45 thick=0.02 x=-1.84 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=8 seg=6
+  part ring r=0.45 thick=0.02 x=-1.22 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6
+  part ring r=0.45 thick=0.02 x=-0.6 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=8 seg=6
+  part ring r=0.45 thick=0.02 x=0.02 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6
+  part ring r=0.45 thick=0.02 x=0.64 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=8 seg=6
+  part ring r=0.45 thick=0.02 x=1.26 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6
+  part ring r=0.45 thick=0.02 x=1.88 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=8 seg=6
+  part ring r=0.45 thick=0.02 x=2.5 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6
+  part ring r=0.45 thick=0.02 x=3.12 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=8 seg=6
+  part ring r=0.45 thick=0.02 x=3.74 y=0.46 z=-0.45 color=#9a9a96 roll=90 rot=-8 seg=6
+
+# extra: a crash-test dummy strapped to a post, a 'volunteer'
+model crash_dummy
+  part box w=0.15 h=2.4 d=0.15 y=1.2 z=0.2 color=#5a4a38
+  part box w=1.6 h=0.12 d=0.12 y=2 z=0.2 color=#5a4a38
+  part box w=0.5 h=0.75 d=0.3 y=1.675 color=#e8c020
+  part sphere r=0.2 y=2.3 color=#e8c020 seg=8
+  part disc r=0.07 h=0.03 pitch=90 x=-0.08 y=2.32 z=-0.19 color=#141414 seg=6
+  part box w=0.12 h=0.12 d=0.485 x=-0.54 y=1.975 z=0.075 pitch=5.92 rot=-95.95 color=#e8c020
+  part box w=0.15 h=0.15 d=0.906 x=-0.15 y=0.85 z=-0.05 pitch=-83.18 rot=-21.8 color=#e8c020
+  part disc r=0.08 h=0.03 pitch=90 x=-0.14 y=1.6 z=-0.16 color=#141414 seg=6
+  part disc r=0.07 h=0.03 pitch=90 x=0.08 y=2.32 z=-0.19 color=#141414 seg=6
+  part box w=0.12 h=0.12 d=0.485 x=0.54 y=1.975 z=0.075 pitch=5.92 rot=95.95 color=#e8c020
+  part box w=0.15 h=0.15 d=0.906 x=0.15 y=0.85 z=-0.05 pitch=-83.18 rot=21.8 color=#e8c020
+  part disc r=0.08 h=0.03 pitch=90 x=0.14 y=1.6 z=-0.16 color=#141414 seg=6
+  part box w=0.55 h=0.06 d=0.32 y=1.68 color=#141414
+
+# extra: a burnt-out army jeep missing a wheel
+model jeep_wreck
+  part plate pts="0,-1.67;0.99,-1.49;1.41,-0.99;2.51,0;2.04,0.9;1.06,1.6;0,1.67;-0.89,2.19;-2.1,1.2;-2.39,0;-1.63,-1.11;-1.16,-2.12" thick=0.02 y=0.014 color=#2a241c   # scorch
+  part box w=1.6 h=0.7 d=3.4 y=0.7 color=#3a3a28 roll=-5
+  part box w=1.5 h=0.08 d=1.1 y=1.09 z=-1.1 color=#46462e roll=-5
+  part box w=1.5 h=0.5 d=0.05 y=1.4 z=-0.5 color=#2a2a22 pitch=-20
+  part box w=0.5 h=0.5 d=0.4 x=-0.4 y=1.2 z=0.4 color=#1a1a16
+  part disc r=0.38 h=0.25 roll=90 x=0.8 y=0.38 z=-1.1 color=#1a1a1a seg=8
+  part disc r=0.38 h=0.25 roll=90 x=-0.8 y=0.38 z=-1.1 color=#1a1a1a seg=8
+  part disc r=0.38 h=0.25 roll=90 x=0.8 y=0.38 z=1.1 color=#1a1a1a seg=8
+  part disc r=0.36 h=0.25 pitch=90 y=0.8 z=1.85 color=#1a1a1a seg=8

@@ -1,0 +1,18 @@
+# Quick races from the title: a race and a derby with a computer driver at the wheel.
+expect title
+down accept
+expect quick
+up accept wait 5
+expect race
+race wait 5
+expect results
+accept wait 2
+expect quick
+down right up accept wait 5
+expect race
+race wait 5
+expect results
+accept wait 2
+expect quick
+back
+expect title

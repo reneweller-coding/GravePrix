@@ -1,0 +1,33 @@
+# The garage's upgrades (docs/DESIGN.md "Guns, gear and upgrades"). cost: per level, times the car's upgrade_cost.
+# The effects are added per level as shares of the car's own values: six levels give about +36 % power, +12 % top
+# speed, +25 % grip, +100 % armour. Each effect stands on a line of its own.
+
+upgrade engine
+  title "Motor" title_en "Engine"
+  desc "Mehr Hubraum, mehr Ladedruck, mehr Witwen. Jede Stufe zieht kräftiger und läuft ein wenig schneller."
+  desc_en "More displacement, more boost, more widows. Every level pulls harder and runs a little faster."
+  cost 600 1400 2800 5200 9000 15000
+  power 0.06
+  top 0.02
+
+upgrade tires
+  title "Reifen" title_en "Tyres"
+  desc "Profil ist alles: Wer in der Kurve haftet, muss nicht für den Rest haften. Mehr Grip, kürzere Bremswege, besser im Dreck."
+  desc_en "Tread is everything: stick to the road, not to the morgue slab. More grip, shorter braking, better in the dirt."
+  cost 400 1000 2000 3800 6500 11000
+  grip 0.042
+  brake 0.05
+  offroad 0.05
+
+upgrade armor
+  title "Panzerung" title_en "Armour"
+  desc "Stahlblech zwischen dir und dem Bestatter. Jede Stufe hält ein paar Treffer mehr aus."
+  desc_en "Sheet steel between you and the undertaker. Every level soaks up a few more hits."
+  cost 500 1100 2200 4200 7200 12000
+  hp 0.17
+
+upgrade gun
+  title "Bewaffnung" title_en "Guns"
+  desc "Mehr Schaden, mehr Kadenz, mehr Munition. Beileidskarten bitte selbst mitbringen."
+  desc_en "More damage, a faster rate of fire, more ammunition. Bring your own condolence cards."
+  cost 500 1200 2400 4400 7600 12500

@@ -1,0 +1,278 @@
+# Pass tracks (venue pass, league 2): a mountain pass in winter, snow, ice, fir trees, avalanche fences.
+# Designed with the turtle path (docs/DESIGN.md "Tracks"); the "#free" straights were solved so each path closes.
+
+# Hairpins up the mountain: four switchbacks stacked up the slope (gritted legs, icy exits), a fast descent
+# through esses past fallen rock and a cleared asphalt straight along the valley floor.
+track pas_serpentin
+  title "Serpentinen ins Jenseits" title_en "Switchbacks to the Beyond"
+  venue pass
+  laps 4
+  width 12
+  shoulder 3
+  reverse 1
+  start 0 0 90
+  straight 120
+  left 180 r=16
+  straight 110
+  right 180 r=16
+  straight 110
+  left 180 r=16
+  straight 110
+  right 180 r=18
+  straight 160
+  right 60 r=60 w=14
+  left 30 r=80
+  right 60 r=50
+  straight 40
+  right 30 r=60
+  left 30 r=60
+  right 90 r=40
+  straight 245.2 #free
+  right 90 r=30
+  straight 55.6 w=12 #free
+  right 90 r=25
+  straight 30
+  close
+  patch ice at=172 len=22 lat=0 w=12
+  patch gravel at=331 len=110
+  patch ice at=493 len=22 lat=0 w=12
+  patch gravel at=657 len=160
+  patch ice at=1020 len=30 lat=0.5 w=6
+  patch asphalt at=1150 len=230
+  obstacle rock at=990 lat=-0.45 r=1.8 model=rock_snow rot=30
+  hazard barrel at=140 lat=0.85
+  hazard barrel at=620 lat=-0.85
+  lamps lamp_street every=70 side=left
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=20 side=right off=4
+  prop sign_curve at=105 side=right off=1
+  prop sign_curve at=265 side=left off=1
+  prop sign_curve at=425 side=right off=1
+  prop sign_curve at=585 side=left off=1
+  row rock_snow at=125 len=40 side=right off=2 every=14
+  row rock_snow at=445 len=40 side=right off=2 every=14
+  row avalanche_fence at=660 len=300 side=left every=18 off=3
+  row fir_snow at=820 len=320 side=left every=20 off=5
+  row fir_tree at=1150 len=230 side=left every=22 off=5
+  row snow_bank at=1150 len=230 side=right every=30 off=1
+  row fir_snow at=1390 len=140 side=left every=20 off=4
+  prop sign_curve at=1060 side=left off=1
+  place lift_pylon x=0 z=55
+  place lift_pylon x=70 z=55
+  place lift_pylon x=140 z=55
+  place lift_pylon x=210 z=55
+  place cabin_wood x=180 z=-55 rot=20
+  place fir_snow x=60 z=-150
+  place fir_snow x=-40 z=-60
+  place fir_snow x=-45 z=-120
+  place rock_snow x=330 z=40
+
+# Figure eight like a tied ribbon: a slow teardrop hairpin at the top, an icy bridge over the crossing and a
+# broad lower loop with a gritted hairpin and a boulder on the long straight.
+track pas_frost
+  title "Gefrierbrand" title_en "Freezer Burn"
+  venue pass
+  laps 6
+  width 13
+  shoulder 3
+  reverse 1
+  start 0 0 200
+  straight 90
+  right 110 r=30
+  straight 110
+  right 70 r=50
+  straight 52.5 #free
+  left 15 r=60
+  straight 130
+  left 240 r=28
+  straight 130
+  left 15 r=60
+  straight 55.4 #free
+  right 90 r=50
+  straight 40
+  close
+  bridge at=658 len=50
+  patch ice at=658 len=50
+  patch ice at=560 len=30 lat=-0.5 w=5
+  patch gravel at=95 len=50
+  obstacle rock at=205 lat=0.45 r=1.6 model=rock_snow rot=60
+  pickup nitro at=30 lat=0.3
+  pickup cash at=120 lat=0.5
+  pickup ammo at=210 lat=-0.4
+  pickup mystery at=468 lat=0
+  pickup wrench at=575 lat=0.4
+  pickup rocket at=720 lat=0
+  pickup cash at=800 lat=-0.4
+  pickup mine at=880 lat=0
+  place start_gantry x=0 z=0 rot=200
+  prop grandstand at=15 side=left off=4
+  prop sign_curve at=80 side=left off=1
+  row fir_snow at=150 len=100 side=left every=20 off=4
+  row avalanche_fence at=390 len=120 side=right every=16 off=3
+  prop sign_curve at=505 side=right off=1
+  row snow_bank at=530 len=100 side=right every=20 off=1
+  row avalanche_fence at=640 len=120 side=left every=16 off=3
+  row fir_tree at=780 len=120 side=left every=22 off=5
+  place cabin_wood x=-172 z=-228 rot=10
+  place fir_snow x=-80 z=0
+  place fir_snow x=-100 z=40
+  place rock_snow x=-60 z=30
+  place lift_pylon x=-260 z=-120
+  place lift_pylon x=-260 z=-40
+  place lift_pylon x=-260 z=40
+
+# Fast and flowing: an S down the valley - two long 100 m sweepers, two medium bends and a hairpin at each end
+# of the S; ice on the outside of the first sweeper, a cleared asphalt run round the lower bowl.
+track pas_sarg
+  title "Schneewittchensarg" title_en "Glass Coffin Run"
+  venue pass
+  laps 4
+  width 15
+  shoulder 3
+  reverse 1
+  start 0 0 270
+  straight 50
+  left 90 r=100
+  straight 60
+  left 90 r=100
+  straight 40
+  right 90 r=55
+  straight 30
+  right 90 r=55
+  left 180 r=22.5
+  left 90 r=100
+  straight 30
+  left 90 r=100
+  straight 40
+  right 90 r=55
+  straight 60
+  right 90 r=55
+  straight 80
+  left 180 r=22.5
+  straight 30
+  close
+  patch ice at=200 len=60 lat=0.55 w=6
+  patch gravel at=667 len=71
+  patch asphalt at=738 len=344
+  patch ice at=1210 len=40 lat=-0.5 w=6
+  patch gravel at=1435 len=70
+  hazard barrel at=700 lat=-0.85
+  hazard barrel at=1470 lat=-0.85
+  place start_gantry x=0 z=0 rot=270
+  prop grandstand at=15 side=right off=4
+  prop grandstand at=-20 side=right off=4
+  row avalanche_fence at=60 len=360 side=right every=18 off=3
+  row fir_snow at=60 len=360 side=left every=20 off=2
+  prop sign_curve at=455 side=left off=1
+  row fir_tree at=470 len=190 side=right every=22 off=4
+  prop sign_curve at=655 side=right off=1
+  row avalanche_fence at=745 len=330 side=right every=18 off=3
+  row fir_snow at=1125 len=220 side=right every=20 off=2
+  prop sign_curve at=1420 side=right off=1
+  place cabin_wood x=-50 z=110 rot=0
+  place rock_snow x=-30 z=130
+  place fir_snow x=-70 z=150
+  place lift_pylon x=180 z=100
+  place lift_pylon x=180 z=200
+  place lift_pylon x=180 z=300
+  place fir_snow x=30 z=300
+  place rock_snow x=10 z=330
+
+# Long straights on the high plateau: an L of gritted 18 m straights with a hairpin cap at each end, a tight
+# inner corner, a chicane and a huge outer bend back onto the start; boulders lie on the open road.
+track pas_abgang
+  title "Kalter Abgang" title_en "Cold Departure"
+  venue pass
+  laps 5
+  width 18
+  shoulder 4
+  reverse 1
+  start 0 0 90
+  straight 190.0 surface=gravel #free
+  right 180 r=30
+  straight 220 surface=gravel
+  left 90 r=25
+  straight 100 surface=gravel
+  right 30 r=40
+  left 60 r=40
+  right 30 r=40
+  straight 80 surface=gravel
+  right 180 r=30
+  straight 260.0 surface=gravel #free
+  right 90 r=85
+  straight 30 surface=gravel
+  close
+  patch ice at=205 len=40 lat=0.5 w=8
+  patch ice at=820 len=40 lat=0.5 w=8
+  patch snow at=400 len=30 lat=-0.5 w=8
+  obstacle rock at=100 lat=0.35 r=1.8 model=rock_snow rot=10
+  obstacle rock at=1030 lat=-0.3 r=1.8 model=rock_snow rot=80
+  hazard barrel at=520 lat=0.85
+  hazard barrel at=530 lat=0.85
+  pickup nitro at=30 lat=-0.4
+  pickup cash at=240 lat=0.5
+  pickup ammo at=380 lat=0
+  pickup mystery at=525 lat=-0.5
+  pickup wrench at=690 lat=0
+  pickup rocket at=780 lat=0.3
+  pickup nitro at=920 lat=-0.3
+  pickup cash at=1090 lat=0.4
+  pickup mine at=1230 lat=0
+  pickup ammo at=1300 lat=-0.3
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=20 side=left off=5
+  prop grandstand at=80 side=left off=5
+  row avalanche_fence at=0 len=180 side=left every=20 off=3
+  prop sign_curve at=175 side=right off=1
+  row fir_snow at=290 len=210 side=left every=24 off=3
+  prop cabin_wood at=525 side=right off=6 rot=45
+  row fir_tree at=550 len=250 side=left every=24 off=4
+  prop sign_curve at=795 side=right off=1
+  row avalanche_fence at=905 len=250 side=left every=20 off=3
+  row snow_bank at=905 len=250 side=right every=40 off=1
+  row fir_snow at=1170 len=120 side=left every=20 off=5
+  place lift_pylon x=60 z=150
+  place lift_pylon x=120 z=230
+  place lift_pylon x=180 z=310
+  place cabin_wood x=150 z=140 rot=-30
+  place rock_snow x=0 z=200
+  place fir_snow x=-85 z=220
+  place fir_snow x=-85 z=300
+
+# Derby arena: a frozen lake - a wide tri-oval whose three straights are bare ice, with a fishing hut in the
+# middle and holes in the ice.
+track pas_eis
+  title "Tiefkühltruhe" title_en "The Deep Freeze"
+  venue pass
+  arena 1
+  laps 1
+  width 18
+  shoulder 4
+  start 0 0 90
+  straight 30 surface=ice
+  right 120 r=38
+  straight 60 surface=ice
+  right 120 r=38
+  straight 60 surface=ice
+  right 120 r=38
+  straight 30 surface=ice
+  close
+  patch water at=140 len=6 lat=-0.5 w=4
+  patch water at=280 len=6 lat=0.5 w=4
+  patch water at=20 len=6 lat=0.4 w=4
+  hazard barrel at=70 lat=0.85
+  hazard barrel at=210 lat=0.85
+  hazard barrel at=350 lat=0.85
+  pickup cash at=15 lat=-0.4
+  pickup nitro at=70 lat=-0.4
+  pickup mystery at=140 lat=0.3
+  pickup wrench at=190 lat=0
+  pickup ammo at=230 lat=-0.4
+  pickup rocket at=280 lat=-0.3
+  pickup mine at=330 lat=0
+  pickup cash at=395 lat=0.4
+  place cabin_wood x=0 z=55 rot=15
+  place rock_snow x=-12 z=40
+  place snow_bank x=14 z=68
+  row fir_snow at=0 len=419 side=left every=24 off=4
+  row snow_bank at=0 len=419 side=left every=40 off=0

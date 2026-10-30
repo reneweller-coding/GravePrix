@@ -1,0 +1,238 @@
+# Restricted Zone Graveyard Shift (league 1): the tracks of the military proving ground (docs/DESIGN.md "Tracks").
+
+track prv_runway
+  title "Witwenmacher-Piste" title_en "Widowmaker Runway"
+  venue proving
+  laps 5
+  width 18
+  shoulder 3
+  reverse 1
+  start 60 0 90
+  straight 500 wall=concrete
+  right 180 r=30 w=15
+  straight 148.4
+  left 45 r=50
+  straight 60 surface=dirt w=13
+  right 90 r=35 surface=dirt
+  left 90 r=40 surface=dirt
+  straight 57.1 surface=dirt
+  right 45 r=60 surface=gravel
+  straight 150 surface=gravel
+  right 90 r=35 w=15
+  straight 100
+  right 90 r=40 w=18
+  straight 60
+  close
+  # the runway: review stands, flags, tank traps along its second half
+  place start_gantry x=60 z=0 rot=90
+  row grandstand at=1451.8 len=120 side=left off=6 every=40
+  row flag_pole at=1431.8 len=40 side=both off=1 every=10
+  row cone at=0 len=480 side=right off=0 every=30
+  place radar_dish x=280 z=-60 rot=0
+  place radar_dish x=340 z=-66 rot=40
+  row tank_trap at=280 len=90 side=both off=1 every=15
+  prop watchtower at=480 side=left off=6
+  # the turnaround and the taxiway
+  row tire_stack at=506 len=84 side=left off=0 every=6
+  prop tank_wreck at=545 side=left off=5 rot=30
+  place bunker x=470 z=30 rot=0
+  place bunker x=300 z=30 rot=0
+  hazard barrel at=660 lat=0.85
+  hazard barrel at=664 lat=0.85
+  # the tank trail: dirt, barbed wire, live mines
+  row barbed_post at=785 len=230 side=both off=1 every=10
+  hazard mine at=815 lat=0.45
+  hazard mine at=930 lat=-0.4
+  hazard mine at=985 lat=0.35
+  prop crater at=870 side=left off=3
+  patch sand at=940 len=16 lat=0.3 w=6
+  # the gravel firing range
+  row target_board at=1070 len=130 side=left off=8 every=40
+  hazard barrel at=1130 lat=0.8
+  hazard oil at=1190 lat=-0.3 r=2.2
+  prop watchtower at=1240 side=left off=6
+  row sandbag_wall at=1280 len=80 side=left off=1 every=16
+
+track prv_noman
+  title "Niemandsland" title_en "No Man's Lap"
+  venue proving
+  laps 5
+  width 16
+  shoulder 3
+  reverse 1
+  start 0 -60 0
+  straight 110.4
+  left 90 r=30 w=15
+  straight 50 surface=dirt w=13
+  right 60 r=25 surface=dirt
+  straight 40 surface=dirt
+  left 120 r=20 surface=dirt
+  straight 40 surface=dirt
+  right 120 r=20 surface=dirt
+  straight 40 surface=dirt
+  left 60 r=25 surface=dirt
+  straight 60 surface=dirt
+  left 90 r=30 surface=gravel
+  straight 230 surface=gravel
+  left 90 r=30
+  straight 132.6 surface=dirt
+  left 45 r=25 surface=dirt w=12
+  right 90 r=25 surface=dirt
+  left 45 r=25 surface=dirt w=13
+  straight 79.3
+  left 90 r=30 w=16
+  straight 60
+  close
+  # the start: the only concrete
+  place start_gantry x=0 z=-60 rot=0
+  row grandstand at=1190.5 len=60 side=right off=5 every=30
+  row flag_pole at=1155.5 len=30 side=both off=1 every=10
+  # the trench line: barbed wire, a watchtower, live mines
+  row barbed_post at=160 len=360 side=both off=1 every=8
+  prop watchtower at=295 side=right off=5
+  prop bunker at=376 side=left off=4 rot=0
+  prop bunker at=460 side=right off=4 rot=0
+  hazard mine at=252 lat=-0.5
+  hazard mine at=338 lat=0.45
+  hazard mine at=418 lat=-0.45
+  hazard mine at=490 lat=0.5
+  # the crater field on the gravel: soft craters, a tank wreck on the road
+  patch sand at=595 len=14 lat=-0.4 w=6
+  patch sand at=660 len=14 lat=0.45 w=6
+  obstacle wreck at=630 lat=0.45 r=2.5 model=tank_wreck
+  prop crater at=620 side=left off=2
+  prop crater at=685 side=right off=2
+  hazard mine at=700 lat=-0.35
+  # the bottom: tank traps before the chicane
+  obstacle trap at=900 lat=-0.5 r=1.2 model=tank_trap
+  obstacle trap at=935 lat=0.5 r=1.2 model=tank_trap
+  hazard barrel at=990 lat=0.85
+  hazard barrel at=1050 lat=-0.85
+  row sandbag_wall at=1060 len=70 side=right off=1 every=14
+  place crater x=-250 z=-60 rot=0
+  place crater x=-180 z=-40 rot=0
+  place crater x=-110 z=-75 rot=0
+  place crater x=-60 z=-30 rot=0
+  place crater x=-290 z=-15 rot=0
+  place tank_wreck x=-150 z=-90 rot=70
+  pickup nitro at=40 lat=0.4
+  pickup cash at=295 lat=-0.3
+  pickup mine at=376 lat=0.3
+  pickup mystery at=540 lat=0
+  pickup wrench at=630 lat=-0.5
+  pickup rocket at=820 lat=0.3
+  pickup cash at=960 lat=-0.3
+  pickup ammo at=1090 lat=0.4
+
+track prv_shellshock
+  title "Granatenschock" title_en "Shell Shock"
+  venue proving
+  laps 5
+  width 16
+  shoulder 3
+  reverse 1
+  start 0 0 30
+  straight 210
+  left 60 r=60 w=14
+  straight 80 surface=gravel
+  left 120 r=22
+  straight 80 surface=gravel
+  left 60 r=60
+  straight 330
+  right 60 r=60 w=16
+  straight 159.9
+  right 120 r=30
+  straight 159.9
+  right 60 r=60 w=16
+  straight 120
+  close
+  bridge at=630 len=60
+  # the start, the crossing over the tank ditch
+  place start_gantry x=0 z=0 rot=30
+  row grandstand at=1420 len=60 side=left off=5 every=30
+  row flag_pole at=20 len=40 side=both off=1 every=10
+  place crater x=10 z=-90 rot=0
+  place crater x=82 z=-70 rot=0
+  # the north lobe: gravel and a hairpin
+  row tank_trap at=275 len=75 side=both off=1 every=12
+  row tank_trap at=400 len=75 side=both off=1 every=12
+  prop bunker at=376 side=right off=4 rot=0
+  place watchtower x=46 z=-205 rot=0
+  hazard barrel at=405 lat=0.85
+  hazard oil at=200 lat=0.3 r=2.2
+  # the south lobe: a tank-trap slalom, a sand trap, mines
+  row target_board at=880 len=200 side=left off=8 every=50
+  obstacle trap at=985 lat=-0.75 r=1.3 model=tank_trap
+  obstacle trap at=1040 lat=0.75 r=1.3 model=tank_trap
+  prop tank_wreck at=1125 side=left off=6 rot=0
+  patch sand at=1190 len=60 lat=0 w=16
+  hazard mine at=1265 lat=0.5
+  hazard mine at=1290 lat=-0.45
+  place tank_wreck x=46 z=150 rot=20
+  place radar_dish x=46 z=230 rot=0
+
+track prv_salute
+  title "Ehrenrunde mit Salut" title_en "Lap of Honour, Full Salute"
+  venue proving
+  laps 6
+  width 16
+  shoulder 3
+  reverse 1
+  start 60 0 90
+  straight 260 wall=concrete
+  right 180 r=90
+  straight 130.5
+  right 70 r=35 w=12 wall=concrete
+  straight 40.1 surface=sand w=11 wall=concrete
+  left 140 r=20 wall=concrete
+  straight 50 wall=concrete
+  right 70 r=30 w=13 wall=concrete
+  straight 60 w=16
+  right 180 r=93
+  straight 60
+  close
+  # the parade straight: review stands and flags
+  place start_gantry x=60 z=0 rot=90
+  row grandstand at=1283.8 len=240 side=left off=5 every=40
+  row flag_pole at=1243.8 len=320 side=right off=1 every=20
+  # the banked east turn of the test oval
+  row target_board at=290 len=230 side=left off=10 every=46
+  place radar_dish x=250 z=90 rot=0
+  place watchtower x=200 z=40 rot=0
+  place bunker x=55 z=95 rot=90
+  hazard barrel at=580 lat=-0.85
+  hazard barrel at=640 lat=0.85
+  # the infield handling course: narrow, concrete walls, sand, a mine at the hairpin exit
+  row tank_trap at=680 len=200 side=both off=1 every=14
+  hazard mine at=825 lat=0.4
+  hazard oil at=870 lat=-0.3 r=2.0
+  # the west turn: gravel on the outside edge
+  patch gravel at=1040 len=60 lat=-0.65 w=5
+  prop watchtower at=1100 side=left off=6
+  hazard barrel at=1190 lat=-0.85
+
+track prv_crater
+  title "Bombenstimmung" title_en "Having a Blast"
+  venue proving
+  arena 1
+  laps 1
+  width 17
+  shoulder 3
+  start 0 0 45
+  straight 48
+  left 270 r=32
+  straight 64
+  right 270 r=32
+  straight 16
+  close
+  place crater x=11 z=-56 rot=0
+  place crater x=11 z=34 rot=0
+  place watchtower x=-45 z=-11 rot=90
+  place watchtower x=68 z=-11 rot=270
+  obstacle trap at=123 lat=0 r=1.3 model=tank_trap
+  obstacle trap at=338 lat=0 r=1.3 model=tank_trap
+  hazard mine at=100 lat=0.5
+  hazard mine at=250 lat=-0.5
+  hazard barrel at=180 lat=-0.85
+  hazard barrel at=395 lat=0.85
+  bridge at=206 len=50

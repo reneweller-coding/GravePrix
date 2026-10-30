@@ -1,0 +1,284 @@
+# Refinery tracks (venue refinery, league 3): night, flare stacks, pipes, tanks, oil puddles.
+# Designed with the turtle path (docs/DESIGN.md "Tracks"); the "#free" straights were solved so each path closes.
+
+# Fast and flowing: a long start straight, a sweeper round the tank farm, an S at the bottom and one slow
+# hairpin finger into the infield over steel plates.
+track ref_oelung
+  title "Letzte Ölung" title_en "The Last Oiling"
+  venue refinery
+  laps 4
+  width 14
+  shoulder 3
+  reverse 1
+  start 0 0 90
+  straight 160
+  right 70 r=100
+  straight 80
+  left 45 r=80
+  right 95 r=50
+  straight 110
+  right 60 r=40
+  straight 166.7 #free
+  left 60 r=30
+  right 90 r=30
+  straight 100
+  right 60 r=70
+  straight 50
+  right 90 r=30
+  straight 70
+  left 180 r=16
+  straight 70
+  right 90 r=30
+  straight 85.1 #free
+  right 90 r=60
+  straight 40
+  close
+  patch metal at=1175 len=70
+  patch metal at=1296 len=70
+  patch oil at=560 len=20 lat=-0.5 w=6
+  hazard oil at=740 lat=0.45 r=3
+  hazard barrel at=1255 lat=0.88
+  hazard barrel at=1270 lat=0.9
+  hazard barrel at=1285 lat=0.88
+  lamps lamp_sodium every=40 side=both
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=15 side=left off=5
+  prop grandstand at=75 side=left off=5
+  prop billboard at=130 side=left off=3
+  row pipe_rack at=170 len=200 side=left every=16 off=3
+  row barrel_stack at=670 len=150 side=left every=38 off=2
+  prop billboard at=780 side=left off=3
+  row pipe_rack at=1180 len=60 side=left every=12 off=1
+  prop wreck_car at=1262 side=right off=1 rot=40
+  prop wreck_car at=1290 side=right off=2 rot=-20
+  row valve at=1420 len=60 side=right every=20 off=2
+  place tank_oil x=80 z=80
+  place tank_oil x=150 z=80
+  place tank_oil x=110 z=290
+  place tank_oil x=190 z=290
+  place tank_oil x=225 z=175
+  place catwalk x=150 z=130 rot=90
+  place flare_stack x=150 z=190
+  place flare_stack x=450 z=140
+  place flare_stack x=-190 z=250
+  place flare_stack x=60 z=-90
+
+# Narrow and technical: an 11 m pipe maze with a hairpin finger, steel plates, a stepped corner and a real
+# chicane on the way back.
+track ref_rohr
+  title "Rohrkrepierer" title_en "Backfire Bends"
+  venue refinery
+  laps 6
+  width 11
+  shoulder 2
+  reverse 1
+  start 0 0 0
+  straight 103.0 #free
+  right 90 r=20
+  straight 40 surface=metal
+  left 90 r=16
+  straight 30
+  right 180 r=14
+  straight 60
+  left 90 r=20
+  right 40 r=30
+  left 40 r=30
+  straight 80
+  right 90 r=24 w=11
+  straight 50
+  right 90 r=30
+  straight 60 w=13
+  right 35 r=18
+  left 70 r=18
+  right 35 r=18
+  straight 84.4 #free
+  left 60 r=20 w=11
+  right 150 r=18
+  straight 30
+  close
+  patch metal at=274 len=60
+  patch oil at=598 len=10 lat=-0.6 w=4
+  hazard oil at=212 lat=0.45 r=2.2
+  hazard barrel at=686 lat=-0.88
+  hazard barrel at=704 lat=0.88
+  hazard barrel at=722 lat=-0.88
+  pickup nitro at=40 lat=-0.4
+  pickup cash at=250 lat=0.55
+  pickup ammo at=300 lat=0
+  pickup mystery at=440 lat=0.3
+  pickup wrench at=545 lat=-0.3
+  pickup cash at=703 lat=0
+  pickup rocket at=770 lat=0.4
+  pickup mine at=860 lat=0
+  lamps lamp_sodium every=35 side=both
+  place start_gantry x=0 z=0 rot=0
+  prop grandstand at=12 side=left off=4
+  prop billboard at=70 side=left off=3
+  row pipe_rack at=5 len=90 side=right every=14 off=1
+  prop barrel_stack at=118 side=left off=2
+  place catwalk x=40 z=-140 rot=90
+  place valve x=90 z=-150
+  row pipe_rack at=410 len=70 side=both every=14 off=1
+  prop barrel_stack at=505 side=left off=2
+  row pipe_rack at=625 len=50 side=left every=14 off=1
+  row barrel_oil at=730 len=70 side=left every=10 off=1
+  prop barrel_stack at=840 side=left off=2
+  place tank_oil x=150 z=-25
+  place tank_oil x=210 z=-25
+  place tank_oil x=60 z=-45
+  place flare_stack x=30 z=-180
+  place flare_stack x=330 z=-40
+
+# Figure eight with a steel bridge: a broad upper loop with a kink and a tight teardrop hairpin below; the
+# road narrows from 15 m to 12 m on the way down.
+track ref_feuer
+  title "Feuerbestattung" title_en "Cremation Eight"
+  venue refinery
+  laps 6
+  width 13
+  shoulder 3
+  reverse 1
+  start 0 0 45
+  straight 109.3 #free
+  left 90 r=50 w=15
+  straight 60
+  right 20 r=40
+  left 40 r=40
+  right 20 r=40
+  left 90 r=35
+  straight 40
+  left 90 r=45 w=13
+  straight 169.4 #free
+  right 60 r=60 w=12
+  straight 100
+  right 150 r=20
+  straight 80
+  right 60 r=40 w=13
+  straight 30
+  close
+  bridge at=598 len=52
+  patch metal at=598 len=52
+  patch oil at=660 len=15 lat=-0.6 w=4.5
+  hazard oil at=215 lat=0.4 r=3
+  hazard barrel at=815 lat=-0.9
+  hazard barrel at=828 lat=-0.92
+  hazard barrel at=841 lat=-0.9
+  lamps lamp_sodium every=40 side=both
+  place start_gantry x=0 z=0 rot=45
+  prop grandstand at=-25 side=left off=4
+  prop billboard at=90 side=right off=3
+  row pipe_rack at=120 len=170 side=right every=16 off=3
+  row barrel_stack at=330 len=120 side=right every=40 off=2
+  prop billboard at=500 side=left off=3
+  prop wreck_car at=828 side=left off=2 rot=70
+  row valve at=860 len=70 side=right every=24 off=1
+  place flare_stack x=0 z=-120
+  place tank_oil x=8 z=75
+  place tank_oil x=125 z=-160
+  place tank_oil x=-130 z=-60
+  place catwalk x=-30 z=-150 rot=45
+  place flare_stack x=120 z=60
+  place flare_stack x=-110 z=-260
+
+# Long straights for guns and nitro: an 18 m wide burn-off mile with pillars and explosive barrels, a hairpin
+# U at the west end, a jink on the narrower back straight and a tight double corner onto the start.
+track ref_fackel
+  title "Abfackelmeile" title_en "Burn-Off Mile"
+  venue refinery
+  laps 5
+  width 18
+  shoulder 4
+  reverse 1
+  start 0 0 270
+  straight 386.2 #free
+  left 90 r=40
+  straight 50
+  left 90 r=40
+  straight 120 w=14
+  right 45 r=60
+  left 45 r=60
+  straight 200 w=18
+  left 90 r=35
+  straight 55.2 #free
+  right 40 r=40
+  left 130 r=30
+  straight 40
+  close
+  obstacle pillar at=215 lat=0.05 r=1.2 model=pillar_concrete
+  obstacle pillar at=245 lat=0.05 r=1.2 model=pillar_concrete
+  obstacle pillar at=880 lat=0 r=1.2 model=pillar_concrete
+  hazard barrel at=110 lat=-0.92
+  hazard barrel at=140 lat=0.92
+  hazard barrel at=300 lat=-0.92
+  hazard barrel at=330 lat=0.92
+  hazard barrel at=470 lat=0.9
+  hazard oil at=610 lat=0.3 r=3
+  patch oil at=900 len=30 lat=0.5 w=7
+  patch metal at=1031 len=55
+  pickup nitro at=30 lat=-0.5
+  pickup cash at=160 lat=0.6
+  pickup ammo at=230 lat=-0.6
+  pickup rocket at=360 lat=0
+  pickup wrench at=520 lat=0.4
+  pickup mystery at=700 lat=0
+  pickup nitro at=790 lat=0.5
+  pickup cash at=905 lat=0.5
+  pickup mine at=1000 lat=-0.3
+  pickup ammo at=1150 lat=0.2
+  lamps lamp_sodium every=45 side=both
+  place start_gantry x=0 z=0 rot=270
+  prop grandstand at=-15 side=right off=5
+  prop grandstand at=30 side=right off=5
+  row flare_stack at=60 len=320 side=right every=80 off=8
+  row pipe_rack at=60 len=300 side=left every=20 off=2
+  row barrel_stack at=570 len=100 side=left every=33 off=2
+  prop billboard at=620 side=right off=3
+  row pipe_rack at=790 len=180 side=right every=18 off=2
+  prop billboard at=1040 side=right off=3
+  place flare_stack x=-60 z=65
+  place flare_stack x=-150 z=65
+  place flare_stack x=-240 z=65
+  place flare_stack x=-330 z=65
+  place tank_oil x=-105 z=250
+  place tank_oil x=-195 z=250
+  place tank_oil x=130 z=60
+
+# Derby arena: a wide figure eight round two boilers; the cars meet head-on at the crossing.
+track ref_kessel
+  title "Kesselschlacht" title_en "Boiler Room Brawl"
+  venue refinery
+  arena 1
+  laps 1
+  width 18
+  shoulder 4
+  start 0 0 45
+  straight 60.0 #free
+  left 270 r=30
+  straight 60.0 #free
+  right 270 r=30
+  close
+  patch oil at=110 len=14 lat=0.5 w=5
+  patch oil at=310 len=14 lat=-0.5 w=5
+  hazard barrel at=95 lat=0.85
+  hazard barrel at=165 lat=-0.85
+  hazard barrel at=295 lat=-0.85
+  hazard barrel at=365 lat=0.85
+  hazard oil at=250 lat=0 r=3
+  pickup cash at=15 lat=0.4
+  pickup nitro at=80 lat=-0.4
+  pickup mystery at=130 lat=0
+  pickup wrench at=180 lat=0.3
+  pickup ammo at=215 lat=-0.4
+  pickup rocket at=280 lat=0.4
+  pickup mine at=330 lat=0
+  pickup cash at=385 lat=-0.3
+  lamps lamp_sodium every=30 side=both
+  place flare_stack x=21.2 z=-63.6
+  place barrel_stack x=21.2 z=21.2
+  place valve x=14 z=14
+  place tank_oil x=110 z=-20
+  place tank_oil x=-68 z=-20
+  place flare_stack x=21 z=-150
+  place flare_stack x=21 z=110
+  row pipe_rack at=70 len=120 side=right every=18 off=2
+  row pipe_rack at=270 len=120 side=left every=18 off=2

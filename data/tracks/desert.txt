@@ -1,0 +1,287 @@
+# The desert's tracks (venue desert, league 4): Bone Valley at glaring noon.
+# League 4: narrower and harder; the motel key (Final Check-Out), the riverbed (Bone Dry), a figure-eight (Vulture
+# Loop), the highway triangle (Thirst Mile) and the derby arena (Sunstroke Bowl).
+
+# The track is a motel room key: the start on the shaft (the highway past the motel), a tight square tip, the teeth --
+# two square notches through the dusty car park -- back along the shaft and round the bow past the water tower.
+track des_checkout
+  title "Endgültiger Check-out" title_en "Final Check-Out"
+  venue desert
+  laps 5
+  width 13
+  shoulder 2.5
+  reverse 1
+  start 0 0 90
+  straight 200
+  right 90 r=18 w=14
+  right 90 r=18
+  straight 30 w=13
+  left 90 r=12 surface=dirt
+  straight 10 surface=dirt
+  right 90 r=12 surface=dirt
+  straight 4 surface=dirt
+  right 90 r=12 surface=dirt
+  straight 10 surface=dirt
+  left 90 r=12 surface=dirt
+  straight 20 surface=dirt
+  left 90 r=12 surface=dirt
+  straight 10 surface=dirt
+  right 90 r=12 surface=dirt
+  straight 4 surface=dirt
+  right 90 r=12 surface=dirt
+  straight 10 surface=dirt
+  left 90 r=12 surface=dirt
+  straight 50.1
+  left 45 r=20
+  straight 22.5
+  right 270 r=45
+  left 45 r=20
+  straight 20
+  close
+  patch sand at=215 len=25 lat=-0.4 w=7
+  patch sand at=640 len=40 lat=-0.6 w=6
+  patch sand at=740 len=30 lat=0.5 w=6
+  hazard oil at=120 lat=-0.3 r=2.5
+  hazard barrel at=261 lat=0.85
+  hazard barrel at=392 lat=-0.85
+  hazard barrel at=511 lat=-0.85
+  hazard barrel at=515 lat=-0.9
+  obstacle pump at=604 lat=-0.35 r=1.2 model=gas_pump rot=45
+  pickup nitro at=40 lat=0.3
+  pickup mystery at=120 lat=0.3
+  pickup ammo at=190 lat=-0.4
+  pickup cash at=336 lat=0.6
+  pickup wrench at=386 lat=0
+  pickup cash at=456 lat=0.6
+  pickup rocket at=530 lat=0
+  pickup mine at=680 lat=0.5
+  pickup wrench at=790 lat=0
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=30 side=left off=3
+  prop motel at=110 side=left off=6
+  prop motel_sign at=185 side=left off=2
+  row gas_pump at=270 len=30 side=left off=2 every=10
+  row tumbleweed at=300 len=200 side=right off=3 every=40
+  row cactus at=560 len=240 side=left off=4 every=22
+  row wreck_rust at=410 len=80 side=right off=4 every=40
+  place water_tower x=-66 z=26 rot=0
+  place skull_cow x=-50 z=10 rot=30
+  place rock_red x=-85 z=45 rot=0
+  place cactus_tall x=100 z=15 rot=0
+  place cactus x=60 z=15 rot=0
+  place wreck_rust x=150 z=15 rot=80
+  place motel x=110 z=-45 rot=0
+
+# The dry riverbed: two deep dirt meanders along the bottom of the valley, the bank road up and back over the top
+# with a third meander round a red rock, and a long straight on the old asphalt.
+track des_bonedry
+  title "Knochentrocken" title_en "Bone Dry"
+  venue desert
+  laps 3
+  width 13
+  shoulder 3
+  reverse 1
+  start 202.6 -160.0 270
+  straight 202.6
+  left 90 r=40
+  straight 80
+  left 90 r=40
+  straight 60
+  right 60 r=50 surface=dirt
+  left 120 r=50 surface=dirt
+  right 60 r=50 surface=dirt
+  straight 40 surface=dirt
+  left 60 r=50 surface=dirt
+  right 120 r=50 surface=dirt
+  left 60 r=50 surface=dirt
+  straight 40
+  left 90 r=40
+  straight 80
+  left 90 r=40
+  straight 100
+  right 50 r=60
+  left 100 r=60 surface=dirt
+  right 50 r=60
+  close
+  patch sand at=558 len=40 lat=-0.5 w=7
+  patch sand at=808 len=40 lat=0.5 w=7
+  patch sand at=1368 len=40 lat=0.4 w=7
+  patch sand at=76 len=20
+  hazard oil at=126 lat=-0.3 r=2.5
+  hazard barrel at=1033 lat=0.85
+  hazard barrel at=266 lat=0.85
+  hazard barrel at=270 lat=0.9
+  obstacle rock at=698 lat=0.4 r=2.0 model=rock_red rot=30
+  obstacle wreck at=120 lat=-0.45 r=2.2 model=wreck_rust rot=120
+  pickup nitro at=448 lat=0
+  pickup cash at=573 lat=0.6
+  pickup ammo at=698 lat=-0.4
+  pickup cash at=823 lat=-0.6
+  pickup wrench at=948 lat=0
+  pickup mystery at=1068 lat=0
+  pickup rocket at=1208 lat=0.3
+  pickup cash at=1378 lat=-0.6
+  pickup mine at=76 lat=0.4
+  pickup wrench at=226 lat=-0.3
+  pickup mystery at=346 lat=0
+  place start_gantry x=202.6 z=-160 rot=270
+  prop grandstand at=20 side=left off=3
+  row rock_red at=478 len=440 side=both off=3 every=30
+  row cactus at=968 len=200 side=right off=4 every=20
+  row skull_cow at=508 len=400 side=right off=1 every=90
+  row cactus_tall at=6 len=190 side=left off=5 every=35
+  row tumbleweed at=6 len=190 side=right off=2 every=50
+  place rock_red x=294 z=-200 rot=0
+  place water_tower x=250 z=-80 rot=0
+  place wreck_rust x=150 z=-90 rot=40
+  place skull_cow x=400 z=-90 rot=0
+  place cactus_tall x=80 z=-100 rot=0
+
+# Figure-eight: the long straight out to a tight dirt hairpin on the ridge where the vultures wait, back down across
+# the first straight (bridge) and round the wide, sandy bowl at the bottom.
+track des_vulture
+  title "Geierschleife" title_en "Vulture Loop"
+  venue desert
+  laps 5
+  width 13
+  shoulder 3
+  reverse 1
+  start 0 0 30
+  straight 231.2
+  left 90 r=35 w=14
+  straight 30 surface=dirt
+  left 150 r=22 surface=dirt
+  straight 269 w=13
+  right 120 r=70
+  straight 60
+  right 120 r=70
+  close
+  bridge at=438 len=48
+  patch sand at=683 len=50 lat=-0.6 w=6
+  patch sand at=863 len=40 lat=-0.6 w=6
+  patch sand at=100 len=20
+  hazard oil at=210 lat=0.2 r=2.5
+  hazard barrel at=380 lat=0.85
+  hazard barrel at=384 lat=0.9
+  hazard barrel at=990 lat=-0.85
+  pickup nitro at=60 lat=0
+  pickup mystery at=150 lat=-0.3
+  pickup cash at=181 lat=0
+  pickup ammo at=300 lat=0.4
+  pickup cash at=345 lat=-0.6
+  pickup wrench at=405 lat=0
+  pickup rocket at=593 lat=-0.3
+  pickup mine at=733 lat=0.5
+  pickup wrench at=913 lat=0
+  place start_gantry x=0 z=0 rot=30
+  prop grandstand at=25 side=left off=3
+  place rock_red x=88 z=-232 rot=0
+  place skull_cow x=75 z=-215 rot=0
+  place water_tower x=120 z=40 rot=0
+  place wreck_rust x=90 z=70 rot=20
+  place cactus_tall x=150 z=10 rot=0
+  place cactus_tall x=60 z=0 rot=0
+  row rock_red at=231 len=145 side=right off=3 every=25
+  row cactus at=643 len=350 side=left off=4 every=25
+  row tumbleweed at=40 len=160 side=right off=3 every=40
+  row skull_cow at=455 len=180 side=left off=2 every=60
+
+# The highway: a 500 m straight with a kink, a dirt hairpin at the tip of the triangle, 457 m straight back down with
+# sand drifting across it, a dirt corner at the bottom and a chicane at the gas station on the way home.
+track des_thirst
+  title "Durststrecke" title_en "Thirst Mile"
+  venue desert
+  laps 3
+  width 14
+  shoulder 3
+  reverse 1
+  start 0 0 70
+  straight 250 w=15
+  right 12 r=200
+  left 12 r=200
+  straight 200
+  right 140 r=22 w=13 surface=dirt
+  straight 456.8 w=14
+  right 100 r=45 surface=dirt
+  straight 120
+  left 25 r=50 w=12
+  right 50 r=50
+  left 25 r=50 w=14
+  straight 115
+  right 120 r=35
+  close
+  patch sand at=420 len=25
+  patch sand at=760 len=20
+  patch sand at=900 len=30 lat=0.4 w=8
+  patch sand at=1180 len=20 lat=-0.5 w=6
+  hazard oil at=520 lat=0.2 r=2.5
+  hazard oil at=1030 lat=-0.2 r=2.5
+  hazard barrel at=595 lat=-0.85
+  hazard barrel at=599 lat=-0.9
+  hazard barrel at=1130 lat=-0.85
+  hazard barrel at=1335 lat=0.85
+  obstacle wreck at=820 lat=0.55 r=2.2 model=wreck_rust rot=200
+  obstacle wreck at=170 lat=-0.4 r=2.2 model=wreck_car rot=60
+  pickup nitro at=60 lat=0
+  pickup mystery at=210 lat=0
+  pickup ammo at=380 lat=-0.3
+  pickup cash at=560 lat=0.6
+  pickup wrench at=640 lat=0
+  pickup nitro at=700 lat=0.3
+  pickup rocket at=880 lat=-0.3
+  pickup cash at=1080 lat=0.6
+  pickup mine at=1200 lat=0
+  pickup cash at=1287 lat=0
+  pickup wrench at=1400 lat=0.3
+  pickup mystery at=1480 lat=0
+  place start_gantry x=0 z=0 rot=70
+  prop grandstand at=30 side=left off=3
+  prop grandstand at=80 side=left off=3
+  row billboard at=120 len=380 side=left off=4 every=80
+  row cactus at=600 len=440 side=right off=5 every=30
+  row tumbleweed at=600 len=440 side=left off=3 every=55
+  prop gas_pump at=1280 side=left off=2
+  prop gas_pump at=1290 side=left off=2
+  prop motel_sign at=1270 side=left off=8
+  row wreck_rust at=1050 len=80 side=left off=3 every=40
+  place water_tower x=280 z=60 rot=0
+  place motel x=230 z=120 rot=40
+  place rock_red x=350 z=0 rot=0
+  place skull_cow x=320 z=90 rot=0
+  place cactus_tall x=200 z=40 rot=0
+  place cactus_tall x=380 z=-40 rot=0
+
+# Derby arena: a wide sun-baked triangle round the water tower, a rock and a wreck lying in the road.
+track des_sunstroke
+  title "Sonnenstich" title_en "Sunstroke Bowl"
+  venue desert
+  arena 1
+  laps 1
+  width 18
+  shoulder 3
+  start 0 0 90
+  straight 60
+  right 120 r=32
+  straight 60
+  right 120 r=32
+  straight 60
+  right 120 r=32
+  close
+  patch sand at=140 len=35 lat=-0.5 w=8
+  patch sand at=270 len=30 lat=0.5 w=8
+  hazard oil at=100 lat=0.3 r=3
+  hazard oil at=330 lat=-0.3 r=3
+  hazard barrel at=60 lat=-0.85
+  hazard barrel at=190 lat=-0.85
+  hazard barrel at=315 lat=-0.85
+  obstacle rock at=30 lat=0.35 r=2.0 model=rock_red
+  obstacle wreck at=220 lat=-0.3 r=2.2 model=wreck_rust rot=80
+  pickup ammo at=0 lat=0
+  pickup wrench at=127 lat=0.3
+  pickup mine at=254 lat=0
+  pickup rocket at=320 lat=-0.3
+  place water_tower x=30 z=48 rot=0
+  place skull_cow x=15 z=60 rot=0
+  place cactus_tall x=45 z=35 rot=0
+  row cactus at=0 len=380 side=left off=4 every=25
+  row tire_stack at=0 len=380 side=right off=0 every=10

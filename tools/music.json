@@ -1,0 +1,116 @@
+{
+ "name": "Grave Prix",
+ "style": "1990s PC combat racing soundtrack reimagined with modern production, instrumental heavy rock and industrial metal, distorted guitar riffs, pounding live drums, driving bass, dark synths, sardonic gothic undertone, high energy",
+ "key": "E minor",
+ "bpm": 140,
+ "timesig": "4",
+ "takes": 2,
+ "format": "flac",
+ "seed": 6661,
+ "cues": [
+  {
+   "id": "title",
+   "type": "loop",
+   "bars": 16,
+   "bpm": 118,
+   "key": "D minor",
+   "style": "main title anthem of a death race run by an undertaker, gothic heavy metal, church organ riff doubled by downtuned guitars, slow pounding drums, mournful choir pad, menacing and grand"
+  },
+  {
+   "id": "junkyard",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 146,
+   "key": "E minor",
+   "style": "rusty industrial metal race in a scrapyard, clanging scrap metal percussion, crunchy chugging guitars, grinding bass, hammering drums, mechanical and gritty"
+  },
+  {
+   "id": "cemetery",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 138,
+   "key": "A minor",
+   "style": "gothic metal race through a foggy cemetery at night, eerie organ melody, harpsichord stabs, tremolo guitars, double bass drum gallop, haunting and fast"
+  },
+  {
+   "id": "docks",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 132,
+   "key": "D minor",
+   "style": "dark grunge rock race in a rainy harbour at dusk, heavy sludgy riffs, foghorn-like bass swells, crashing cymbals, brooding and powerful"
+  },
+  {
+   "id": "desert",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 150,
+   "key": "E phrygian",
+   "style": "fast desert stoner rock race at high noon, fuzzy baritone guitar riffs, surf twang lead, spaghetti western whistle melody, driving tom-heavy drums, scorching heat"
+  },
+  {
+   "id": "refinery",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 152,
+   "key": "C minor",
+   "style": "pounding industrial metal race in a burning oil refinery at night, machine-gun kick drums, distorted synth bass, hissing steam noises, aggressive guitar stabs, relentless"
+  },
+  {
+   "id": "swamp",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 128,
+   "key": "G minor",
+   "style": "dark swamp rock race through a bayou at dawn, heavy slide guitar riff, stomping blues drums, dirty bass, eerie banjo picking, sweaty and menacing"
+  },
+  {
+   "id": "downtown",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 144,
+   "key": "F minor",
+   "style": "neon city night race, cyber industrial metal, pulsing synth arpeggios over chugging guitars, gated snares, sirens in the distance, sleek and dangerous"
+  },
+  {
+   "id": "pass",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 160,
+   "key": "B minor",
+   "style": "icy mountain pass race in a blizzard, fast melodic metal with tremolo picked guitars, blast-free driving double bass drums, cold synth strings, epic and frantic"
+  },
+  {
+   "id": "fairground",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 140,
+   "key": "D minor",
+   "style": "twisted circus metal race through an abandoned funfair, out-of-tune calliope melody over heavy guitars, oompah bass turned sinister, manic drums, creepy and fun"
+  },
+  {
+   "id": "proving",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 148,
+   "key": "E minor",
+   "style": "military metal race on an army proving ground, marching snare rolls, battle horn synths, tank-heavy chugging riffs, war drums, relentless and martial"
+  },
+  {
+   "id": "estate",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 150,
+   "key": "C minor",
+   "style": "final race on a gothic estate in a thunderstorm, symphonic metal with pipe organ, choir, thundering timpani and double bass drums, soaring evil lead guitar, apocalyptic and grand"
+  },
+  {
+   "id": "win",
+   "type": "loop",
+   "bars": 8,
+   "bpm": 126,
+   "key": "D major",
+   "style": "triumphant victory fanfare of a death race, big heavy rock power chords, cheeky brass-like synth melody, celebratory drums, cocky and short"
+  }
+ ]
+}

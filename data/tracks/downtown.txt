@@ -1,0 +1,329 @@
+# Downtown tracks (venue downtown, league 2): a city centre at night, neon, rain, wet streets, traffic lights.
+# Designed with the turtle path (docs/DESIGN.md "Tracks"); the "#free" straights were solved so each path closes.
+
+# City blocks: a 16 m boulevard, then 12 m side streets round the blocks - ten right angles, a cobbled street,
+# a long avenue under the elevated railway (pillars in the middle) and puddles everywhere.
+track dwn_welle
+  title "Rote Welle" title_en "The Red Wave"
+  venue downtown
+  laps 4
+  width 16
+  shoulder 2
+  reverse 1
+  start 0 0 90
+  straight 200
+  right 90 r=18
+  straight 20 w=12
+  straight 60
+  right 90 r=16
+  straight 60
+  left 90 r=16
+  straight 100
+  left 90 r=18
+  straight 120
+  right 90 r=20
+  straight 60
+  right 90 r=16
+  straight 20 w=16
+  straight 350.0 #free
+  right 90 r=20
+  straight 20 w=12
+  straight 80
+  right 90 r=16
+  straight 40
+  left 90 r=16
+  straight 152.0 #free
+  straight 20 w=16
+  right 90 r=20
+  straight 30
+  close
+  patch cobble at=418 len=100
+  patch water at=120 len=10 lat=-0.4 w=5
+  patch water at=470 len=8 lat=0.4 w=4
+  patch water at=600 len=12 lat=-0.3 w=5
+  patch water at=1080 len=14 lat=0.4 w=6
+  patch water at=1230 len=10 lat=-0.4 w=4
+  patch water at=1450 len=10 lat=0.4 w=5
+  obstacle pillar at=900 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=945 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=990 lat=0 r=1.2 model=pillar_concrete
+  hazard barrel at=690 lat=-0.88
+  hazard barrel at=775 lat=-0.88
+  lamps lamp_city every=35 side=both
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=20 side=left off=4
+  prop grandstand at=80 side=left off=4
+  row building_tall at=10 len=180 side=left every=32 off=8
+  row building_a at=10 len=180 side=right every=26 off=6
+  prop traffic_light at=195 side=right off=0
+  prop traffic_light at=303 side=right off=0
+  row building_b at=240 len=60 side=left every=24 off=6
+  prop neon_sign at=350 side=left off=2
+  prop traffic_light at=388 side=left off=0
+  row building_a at=430 len=80 side=left every=24 off=6
+  row building_b at=430 len=80 side=right every=24 off=6
+  prop traffic_light at=513 side=left off=0
+  prop bus_stop at=600 side=left off=1
+  row building_tall at=560 len=100 side=left every=30 off=8
+  prop traffic_light at=662 side=right off=0
+  row building_b at=710 len=50 side=left every=24 off=6
+  prop traffic_light at=753 side=right off=0
+  row parked_car at=810 len=320 side=left every=14 off=0
+  row building_a at=810 len=330 side=left every=26 off=6
+  row hydrant at=820 len=320 side=right every=60 off=0
+  prop newsstand at=1100 side=right off=1
+  prop traffic_light at=1148 side=right off=0
+  row building_b at=1195 len=90 side=left every=24 off=6
+  prop traffic_light at=1280 side=right off=0
+  prop neon_sign at=1330 side=left off=2
+  prop traffic_light at=1345 side=left off=0
+  row building_tall at=1390 len=130 side=left every=32 off=8
+  row building_a at=1390 len=130 side=right every=26 off=6
+  prop billboard at=1500 side=left off=3
+  place building_tall x=60 z=110
+  place building_a x=60 z=190
+  place building_b x=40 z=280
+  place building_tall x=200 z=290
+  place building_a x=-60 z=290
+  place neon_sign x=170 z=60
+
+# Figure eight over an overpass: up the east street, round a big block with a road-works chicane, over the
+# crossing on the bridge and round a small block back to the start.
+track dwn_ueber
+  title "Überführung" title_en "Passing Over"
+  venue downtown
+  laps 5
+  width 14
+  shoulder 2
+  reverse 1
+  start 0 0 0
+  straight 265.0 #free
+  left 90 r=25
+  straight 140
+  left 90 r=25
+  straight 60
+  right 30 r=25
+  left 60 r=25
+  right 30 r=25
+  straight 30
+  left 90 r=25
+  straight 265.0 #free
+  right 90 r=25
+  straight 120
+  right 90 r=20
+  straight 80
+  right 90 r=25
+  straight 40
+  close
+  bridge at=805 len=50
+  patch cobble at=310 len=130
+  patch water at=40 len=12 lat=0.4 w=5
+  patch water at=200 len=10 lat=-0.4 w=5
+  patch water at=720 len=12 lat=0.4 w=6
+  patch water at=1010 len=10 lat=-0.4 w=5
+  hazard barrel at=552 lat=0.85
+  hazard barrel at=588 lat=-0.85
+  pickup nitro at=30 lat=-0.4
+  pickup mystery at=100 lat=0
+  pickup cash at=285 lat=-0.5
+  pickup ammo at=380 lat=0.3
+  pickup wrench at=570 lat=0
+  pickup rocket at=700 lat=-0.3
+  pickup mystery at=830 lat=0
+  pickup cash at=900 lat=0.4
+  pickup mine at=1030 lat=0
+  pickup ammo at=1160 lat=-0.3
+  lamps lamp_city every=35 side=both
+  place start_gantry x=0 z=0 rot=0
+  prop grandstand at=-20 side=left off=4
+  prop grandstand at=20 side=right off=4
+  row building_a at=130 len=120 side=right every=26 off=6
+  row building_tall at=130 len=120 side=left every=32 off=8
+  prop traffic_light at=260 side=left off=0
+  row building_b at=310 len=130 side=right every=24 off=6
+  prop neon_sign at=380 side=left off=2
+  prop traffic_light at=440 side=left off=0
+  row cone at=535 len=70 side=both every=6 off=0
+  row building_a at=605 len=20 side=right every=24 off=6
+  prop traffic_light at=622 side=left off=0
+  row building_tall at=680 len=110 side=left every=30 off=8
+  row building_b at=860 len=60 side=left every=24 off=6
+  prop traffic_light at=925 side=right off=0
+  row parked_car at=980 len=100 side=left every=14 off=0
+  prop bus_stop at=1050 side=left off=1
+  prop traffic_light at=1085 side=right off=0
+  row building_a at=1125 len=70 side=left every=26 off=6
+  prop newsstand at=1150 side=right off=1
+  prop traffic_light at=1196 side=right off=0
+  place building_tall x=-95 z=-195
+  place building_a x=-140 z=-160
+  place building_b x=-60 z=-240
+  place building_a x=62 z=-15
+  place neon_sign x=-95 z=-140
+
+# Narrow and technical: 11 m alleys down a staircase of right angles (three of them cobbled), round the
+# back of the block and up another staircase; walls close enough to touch.
+track dwn_gasse
+  title "Gassenhauer" title_en "Dead End Alleys"
+  venue downtown
+  laps 6
+  width 11
+  shoulder 2
+  reverse 1
+  start 0 0 90
+  straight 60
+  right 90 r=14
+  straight 40 surface=cobble
+  left 90 r=14
+  straight 40
+  right 90 r=14
+  straight 40 surface=cobble
+  left 90 r=14
+  straight 40
+  right 90 r=16
+  straight 80
+  right 90 r=16
+  straight 88.0 #free
+  right 90 r=16
+  straight 40
+  left 90 r=14
+  straight 40 surface=cobble
+  right 90 r=14
+  straight 40
+  left 90 r=14
+  straight 40
+  right 90 r=16
+  straight 78.0 #free
+  right 90 r=16
+  straight 30
+  close
+  patch water at=160 len=10 lat=0.3 w=5
+  patch water at=360 len=12 lat=-0.4 w=5
+  patch water at=480 len=10 lat=0.4 w=4
+  patch water at=840 len=12 lat=-0.3 w=5
+  hazard barrel at=128 lat=0.86
+  hazard barrel at=420 lat=-0.86
+  hazard barrel at=720 lat=0.86
+  lamps lamp_city every=30 side=both
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=15 side=left off=3
+  row building_a at=70 len=240 side=left every=22 off=4
+  row building_b at=70 len=240 side=right every=22 off=4
+  row crate_stack at=90 len=200 side=right every=45 off=0
+  prop neon_sign at=150 side=left off=1
+  prop neon_sign at=275 side=left off=1
+  row building_tall at=330 len=90 side=left every=30 off=7
+  row building_b at=440 len=90 side=left every=24 off=4
+  row parked_car at=445 len=80 side=right every=14 off=0
+  row building_a at=550 len=240 side=left every=22 off=4
+  row building_b at=550 len=240 side=right every=22 off=4
+  row crate_stack at=560 len=220 side=right every=50 off=0
+  prop neon_sign at=630 side=left off=1
+  prop newsstand at=760 side=left off=1
+  row building_tall at=800 len=90 side=left every=30 off=7
+  prop traffic_light at=900 side=right off=0
+  place building_tall x=110 z=150
+  place building_a x=150 z=200
+  place building_b x=60 z=120
+
+# The fast boulevard: two carriageways 68 m apart, a roundabout at the far end taken flat out at 18 m wide,
+# a chicane on the way back and a squared U-turn onto the start.
+track dwn_schmaus
+  title "Leichenschmaus-Allee" title_en "Wake Avenue"
+  venue downtown
+  laps 5
+  width 16
+  shoulder 2
+  reverse 1
+  start 0 0 90
+  straight 520
+  left 40 r=50 w=18
+  right 260 r=60
+  left 40 r=50 w=16
+  straight 230.0 #free
+  left 30 r=30
+  right 60 r=30
+  left 30 r=30
+  straight 230
+  straight 30 w=13
+  right 90 r=20
+  straight 28.5 #free
+  right 90 r=20
+  straight 30 w=16
+  close
+  patch water at=180 len=16 lat=0.4 w=6
+  patch water at=420 len=14 lat=-0.4 w=6
+  patch water at=950 len=16 lat=0.3 w=6
+  patch water at=1260 len=14 lat=-0.4 w=6
+  hazard barrel at=1100 lat=-0.85
+  hazard barrel at=1150 lat=-0.85
+  hazard barrel at=1430 lat=-0.88
+  hazard oil at=700 lat=0.5 r=3
+  lamps lamp_city every=40 side=both
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=20 side=left off=4
+  prop grandstand at=80 side=left off=4
+  row building_tall at=120 len=380 side=left every=34 off=8
+  row bus_stop at=150 len=300 side=right every=150 off=1
+  prop billboard at=480 side=left off=3
+  row neon_sign at=560 len=260 side=left every=45 off=4
+  row building_a at=560 len=260 side=left every=40 off=14
+  row building_b at=880 len=470 side=left every=28 off=6
+  row parked_car at=880 len=200 side=right every=16 off=0
+  row hydrant at=1170 len=200 side=left every=50 off=0
+  prop traffic_light at=1410 side=left off=0
+  prop traffic_light at=1470 side=left off=0
+  prop newsstand at=1460 side=left off=2
+  place building_tall x=590.7 z=34.3
+  place neon_sign x=560 z=34
+  place neon_sign x=620 z=34
+  place building_a x=120 z=34
+  place building_b x=240 z=34
+  place building_a x=360 z=34
+  place building_b x=470 z=34
+
+# Derby arena: the top deck of a multi-storey car park - a wide square ring with concrete pillars down the
+# middle, parked cars in the corners and puddles from the leaking roof.
+track dwn_park
+  title "Dauerparker" title_en "Permanent Parking"
+  venue downtown
+  arena 1
+  laps 1
+  width 18
+  shoulder 2
+  start 0 0 90
+  straight 50
+  right 90 r=18
+  straight 60
+  right 90 r=18
+  straight 100
+  right 90 r=18
+  straight 60
+  right 90 r=18
+  straight 50
+  close
+  obstacle pillar at=25 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=108 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=191 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=216 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=241 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=325 lat=0 r=1.2 model=pillar_concrete
+  obstacle pillar at=408 lat=0 r=1.2 model=pillar_concrete
+  obstacle car at=64 lat=-0.75 r=2 model=parked_car rot=45
+  obstacle car at=280 lat=-0.75 r=2 model=parked_car rot=135
+  patch water at=120 len=14 lat=0.4 w=6
+  patch water at=300 len=12 lat=-0.4 w=6
+  hazard barrel at=150 lat=0.85
+  hazard barrel at=370 lat=0.85
+  pickup cash at=12 lat=0.5
+  pickup nitro at=90 lat=-0.5
+  pickup mystery at=150 lat=0
+  pickup wrench at=205 lat=0.5
+  pickup ammo at=230 lat=-0.5
+  pickup rocket at=310 lat=0.4
+  pickup mine at=340 lat=0
+  pickup cash at=395 lat=-0.5
+  lamps lamp_city every=25 side=both
+  place building_a x=0 z=48
+  row parked_car at=0 len=420 side=right every=24 off=1
+  row building_tall at=0 len=420 side=left every=40 off=8

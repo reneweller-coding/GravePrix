@@ -1,0 +1,242 @@
+# Graves Estate (the final venue): the tracks of Mortimer Graves' gothic estate (docs/DESIGN.md "Tracks").
+
+track est_finale
+  title "Testamentseröffnung" title_en "The Reading of the Will"
+  venue estate
+  laps 5
+  width 18
+  shoulder 3
+  reverse 1
+  start 60 0 90
+  # the avenue of gargoyles
+  straight 215.3
+  right 90 r=45 w=15
+  straight 60 surface=gravel
+  right 90 r=40 w=13
+  # the hedge maze: narrow gravel paths between hedges
+  straight 30 surface=gravel w=13 wall=hedge shoulder=2
+  left 90 r=14 surface=gravel wall=hedge
+  straight 20 surface=gravel wall=hedge
+  right 90 r=14 surface=gravel wall=hedge
+  straight 20 surface=gravel wall=hedge
+  right 90 r=14 surface=gravel wall=hedge
+  straight 30 surface=gravel wall=hedge
+  left 90 r=14 surface=gravel wall=hedge
+  straight 20 surface=gravel wall=hedge
+  left 90 r=14 surface=gravel wall=hedge
+  straight 45 surface=gravel wall=hedge
+  right 90 r=14 surface=gravel wall=hedge
+  straight 20 surface=gravel wall=hedge
+  right 90 r=14 surface=gravel wall=hedge
+  straight 20 surface=gravel wall=hedge
+  left 90 r=14 surface=gravel wall=hedge
+  straight 30 surface=gravel wall=hedge
+  # out of the maze, down the diagonal over the brook to the chapel grounds
+  right 45 r=60 w=15 shoulder=3
+  straight 136.6
+  straight 50
+  left 60 r=70
+  straight 24.2
+  left 75 r=40 w=16
+  # the wet lawn round the skull fountain, the mausoleum hairpin
+  straight 95.1 surface=grass
+  left 50 r=50 surface=grass
+  right 50 r=50
+  straight 30
+  left 180 r=16 w=13
+  straight 80 surface=gravel w=14
+  right 45 r=60
+  straight 100
+  straight 40
+  right 45 r=60 w=18
+  straight 20
+  straight 60
+  close
+  bridge at=973 len=60
+  # the avenue of gargoyles before the manor, the mourners' stand, the iron gate at its end
+  place start_gantry x=60 z=0 rot=90
+  row grandstand at=1730.2 len=60 side=left off=6 every=30
+  row gargoyle at=1810.2 len=255 side=both off=1 every=18
+  row manor_wall at=1800.2 len=270 side=left off=10 every=12
+  lamps lamp_gothic every=34 side=both
+  prop iron_gate at=208 side=both off=0
+  hazard oil at=140 lat=0.45 r=2.2
+  # the gravel straight past the family mausoleum
+  prop mausoleum_large at=320 side=left off=5 rot=0
+  row tree_dead_big at=290 len=60 side=left off=6 every=30
+  # the hedge maze
+  row hedge_block at=405 len=420 side=both off=0 every=5
+  hazard barrel at=830 lat=0.85
+  hazard barrel at=835 lat=0.85
+  # the diagonal over the brook into the chapel grounds
+  row tree_dead_big at=870 len=100 side=both off=4 every=33
+  place chapel_gothic x=-160 z=35 rot=45
+  row mausoleum_large at=1060 len=60 side=right off=6 every=30
+  # the wet lawn round the skull fountain, the mausoleum hairpin
+  obstacle fountain at=1240 lat=0 r=2.5 model=fountain_skull
+  patch water at=1215 len=14 lat=-0.45 w=6
+  patch water at=1275 len=12 lat=0.4 w=6
+  patch water at=1335 len=18 lat=0 w=8
+  row tree_dead_big at=1300 len=80 side=right off=5 every=40
+  prop mausoleum_large at=1440 side=right off=4 rot=0
+  place gargoyle x=-195 z=215 rot=180
+  patch water at=1500 len=12 lat=-0.4 w=5
+  # back over the crossing to the avenue
+  row gargoyle at=1600 len=80 side=both off=1 every=20
+  pickup nitro at=90 lat=0
+  pickup cash at=180 lat=-0.6
+  pickup wrench at=360 lat=0.4
+  pickup mystery at=471 lat=0
+  pickup ammo at=660 lat=0
+  pickup cash at=805 lat=0
+  pickup rocket at=900 lat=-0.4
+  pickup mine at=1090 lat=0.3
+  pickup cash at=1260 lat=-0.55
+  pickup mystery at=1400 lat=0
+  pickup wrench at=1520 lat=0.4
+  pickup nitro at=1640 lat=-0.3
+
+track est_vault
+  title "Gruft mit Aussicht" title_en "Vault with a View"
+  venue estate
+  laps 6
+  width 15
+  shoulder 3
+  reverse 1
+  start 0 -60 0
+  straight 130
+  right 90 r=22 w=13
+  straight 60 surface=gravel w=12
+  left 20 r=50 surface=gravel
+  right 20 r=50 surface=gravel
+  straight 76 surface=gravel
+  right 45 r=60
+  right 45 r=32 w=15
+  straight 43.3
+  left 40 r=30
+  right 80 r=28
+  left 40 r=30
+  straight 70
+  right 90 r=35
+  straight 40
+  right 90 r=25 w=12
+  straight 90 surface=gravel
+  left 180 r=17 surface=gravel
+  straight 90 surface=gravel
+  right 90 r=25 w=13
+  straight 40
+  right 90 r=45 w=15
+  straight 60
+  close
+  # the start and the crypt corner
+  place start_gantry x=0 z=-60 rot=0
+  row grandstand at=1139.6 len=60 side=left off=5 every=30
+  lamps lamp_gothic every=34 side=both
+  prop mausoleum_large at=147 side=left off=5 rot=0
+  # the gravel path along the row of mausoleums
+  row mausoleum_large at=170 len=160 side=right off=6 every=40
+  row tree_dead_big at=180 len=150 side=left off=5 every=50
+  patch water at=280 len=12 lat=0.35 w=5
+  row gargoyle at=340 len=60 side=left off=2 every=20
+  # the family-vault chicane through the iron gate
+  prop iron_gate at=492 side=both off=0
+  hazard barrel at=460 lat=-0.85
+  patch water at=550 len=16 lat=-0.3 w=6
+  patch mud at=580 len=14 lat=0.4 w=5
+  hazard barrel at=640 lat=-0.85
+  hazard barrel at=644 lat=-0.85
+  # the hook to the vault and back
+  prop mausoleum_large at=854 side=right off=4 rot=180
+  place gargoyle x=127 z=-40 rot=180
+  place gargoyle x=127 z=0 rot=180
+  place fountain_skull x=60 z=-60 rot=0
+  place tree_dead_big x=200 z=-100 rot=0
+  place tree_dead_big x=60 z=-130 rot=0
+  hazard oil at=1030 lat=0.3 r=2.0
+
+track est_disinherit
+  title "Enterbt" title_en "Cut Out of the Will"
+  venue estate
+  laps 4
+  width 16
+  shoulder 3
+  reverse 1
+  start 60 0 90
+  straight 140
+  right 40 r=120
+  straight 82.7
+  right 50 r=70
+  straight 60
+  left 70 r=80 surface=grass w=16
+  right 140 r=45 surface=grass
+  straight 120
+  left 40 r=90
+  right 60 r=60 w=15
+  straight 80
+  right 45 r=25 w=11 wall=stone
+  left 90 r=25 wall=stone
+  right 45 r=25 wall=stone
+  straight 60 w=15
+  right 90 r=50
+  straight 143.1 wall=stone
+  right 20 r=120 wall=stone
+  left 20 r=120 wall=stone
+  straight 150 wall=stone
+  right 90 r=40 w=16
+  straight 60
+  close
+  # the manor terrace
+  place start_gantry x=60 z=0 rot=90
+  row grandstand at=1647.7 len=80 side=left off=6 every=40
+  row manor_wall at=1617.7 len=200 side=left off=8 every=14
+  lamps lamp_gothic every=36 side=both
+  # the fast sweepers through the park
+  row tree_dead_big at=150 len=200 side=left off=6 every=40
+  # the lawn round the skull fountain
+  place fountain_skull x=403 z=312 rot=0
+  patch water at=460 len=14 lat=0.3 w=6
+  patch water at=580 len=16 lat=-0.35 w=6
+  row gargoyle at=640 len=110 side=both off=1 every=22
+  hazard oil at=700 lat=0.3 r=2.2
+  # through the iron gate (narrow, stone walls)
+  prop iron_gate at=1000 side=both off=0
+  hazard barrel at=1050 lat=-0.85
+  hazard barrel at=1054 lat=-0.85
+  # along the manor wall
+  row manor_wall at=1180 len=370 side=left off=4 every=12
+  row tree_dead_big at=1190 len=360 side=right off=8 every=60
+  place chapel_gothic x=200 z=200 rot=0
+  place mausoleum_large x=110 z=330 rot=90
+  place mausoleum_large x=290 z=110 rot=0
+
+track est_wake
+  title "Leichenschmaus" title_en "The Wake"
+  venue estate
+  arena 1
+  laps 1
+  width 18
+  shoulder 3
+  start 0 0 90
+  straight 30
+  right 90 r=30
+  straight 60
+  right 90 r=30
+  straight 60
+  right 90 r=30
+  straight 60
+  right 90 r=30
+  straight 30
+  close
+  # the manor courtyard round the skull fountain
+  place start_gantry x=0 z=0 rot=90
+  place fountain_skull x=0 z=60 rot=0
+  lamps lamp_gothic every=30 side=left
+  row gargoyle at=0 len=420 side=right off=2 every=25
+  obstacle statue at=107 lat=0 r=1.3 model=gargoyle
+  obstacle statue at=160 lat=0.5 r=1.3 model=gargoyle
+  obstacle statue at=321 lat=0 r=1.3 model=gargoyle
+  obstacle statue at=375 lat=0.5 r=1.3 model=gargoyle
+  patch water at=40 len=25 lat=-0.4 w=7
+  patch water at=250 len=25 lat=0.3 w=7
+  hazard barrel at=120 lat=-0.85
+  hazard barrel at=340 lat=-0.85

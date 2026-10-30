@@ -1,0 +1,279 @@
+# Laughing Coffin Funfair (league 1): the tracks of the abandoned amusement park (docs/DESIGN.md "Tracks").
+
+track fair_lastride
+  title "Die Letzte Fahrt" title_en "The Last Ride"
+  venue fairground
+  laps 5
+  width 17
+  shoulder 3
+  reverse 1
+  start 60 0 90
+  straight 200 w=17
+  right 45 r=100 w=15
+  right 50 r=55
+  straight 50
+  left 50 r=60
+  right 50 r=60
+  straight 140 surface=wood w=12
+  right 165 r=20 w=14
+  straight 30
+  left 80 r=45 w=15
+  straight 53.7
+  right 35 r=80
+  left 70 r=80
+  right 35 r=80
+  straight 52
+  left 20 r=150
+  right 140 r=55 surface=cobble
+  straight 164.7
+  left 40 r=40
+  right 100 r=45 w=17
+  straight 60
+  close
+  # the start: grandstands outside, bulb arches inside
+  place start_gantry x=60 z=0 rot=90
+  row grandstand at=1555.8 len=170 side=left off=4 every=34
+  row flag_pole at=1535.8 len=30 side=both off=1 every=15
+  row bulb_arch at=1570.8 len=200 side=right off=1 every=40
+  lamps lamp_street every=42 side=both
+  # the fast double right under the coaster
+  row tire_stack at=240 len=80 side=left off=0 every=6
+  place coaster_segment x=400 z=60 rot=10
+  place coaster_segment x=408 z=100 rot=5
+  place coaster_segment x=410 z=140 rot=0
+  place coaster_segment x=416 z=180 rot=350
+  # the esses through the clown alley
+  row clown_head at=385 len=90 side=left off=3 every=45
+  hazard barrel at=410 lat=0.85
+  # the boardwalk along the pier, then the pier hairpin
+  row tent_striped at=490 len=120 side=left off=3 every=24
+  row balloon_stand at=500 len=110 side=right off=2 every=36
+  hazard oil at=580 lat=0.45 r=2.2
+  row tire_stack at=624 len=56 side=left off=0 every=5
+  prop clown_head at=652 side=left off=6
+  # the coaster dip: a fast left-right-left
+  patch dirt at=900 len=45 lat=0.55 w=6
+  place coaster_segment x=130 z=240 rot=80
+  place coaster_segment x=90 z=236 rot=95
+  hazard barrel at=950 lat=-0.85
+  hazard barrel at=954 lat=-0.85
+  # the Ferris wheel corner
+  place ferris_wheel x=-84 z=250 rot=30
+  row ticket_booth at=1130 len=120 side=left off=4 every=60
+  patch oil at=1090 len=10 lat=-0.35 w=4
+  # the coaster's legs stand on the diagonal
+  obstacle pillar at=1340 lat=-0.85 r=1.2 model=pillar_concrete
+  obstacle pillar at=1340 lat=0.85 r=1.2 model=pillar_concrete
+  place coaster_segment x=-80 z=128 rot=300
+  place coaster_segment x=-20 z=150 rot=300
+  row billboard at=1270 len=140 side=left off=6 every=70
+  row tire_stack at=1435 len=30 side=right off=0 every=5
+
+track fair_laughdeath
+  title "Zum Totlachen" title_en "Laughed to Death"
+  venue fairground
+  laps 5
+  width 14
+  shoulder 3
+  reverse 1
+  start 0 -60 0
+  straight 77.3
+  left 30 r=40 w=14
+  right 60 r=35
+  left 30 r=40
+  straight 26.3 w=12
+  right 90 r=26 w=13
+  straight 36
+  right 90 r=20 w=11
+  straight 50 surface=cobble
+  left 180 r=16
+  straight 50
+  right 180 r=16
+  straight 70
+  left 90 r=25 w=13
+  straight 119.3 surface=dirt
+  right 180 r=30
+  straight 40
+  left 90 r=25
+  straight 50
+  right 90 r=25
+  straight 80
+  left 45 r=25
+  right 45 r=25
+  straight 60
+  right 90 r=25 w=14
+  straight 60
+  close
+  # the start and the clown's nose chicane
+  place start_gantry x=0 z=-60 rot=0
+  row grandstand at=1215 len=100 side=left off=4 every=30
+  row tent_striped at=1115 len=80 side=right off=3 every=20
+  row tire_stack at=90 len=60 side=both off=0 every=6
+  prop clown_head at=116 side=right off=4
+  lamps lamp_street every=36 side=both
+  # the switchbacks between the tents (cobble), narrow
+  row bulb_arch at=190 len=75 side=left off=2 every=30
+  prop clown_head at=368 side=right off=3
+  prop clown_head at=470 side=left off=3
+  place tent_striped x=98 z=-232
+  place tent_striped x=130 z=-206
+  place balloon_stand x=48 z=-215
+  hazard barrel at=318 lat=0.8
+  hazard barrel at=418 lat=-0.8
+  # the dirt run to the carousel
+  row balloon_stand at=618 len=100 side=left off=2 every=33
+  obstacle crate at=673 lat=0.55 r=1.2 model=crate_stack
+  hazard oil at=698 lat=-0.4 r=2.0
+  place carousel x=290 z=-120 rot=0
+  row tire_stack at=738 len=70 side=left off=0 every=6
+  # the back: sawdust from the circus tent, the kink
+  place tent_striped x=160 z=-60 rot=0
+  patch sand at=978 len=28 lat=0.45 w=5
+  row ticket_booth at=998 len=60 side=right off=3 every=30
+  row tire_stack at=1068 len=40 side=both off=0 every=5
+  hazard barrel at=1138 lat=-0.8
+  pickup nitro at=60 lat=-0.5
+  pickup mystery at=125 lat=0.45
+  pickup cash at=368 lat=-0.55
+  pickup wrench at=468 lat=0.55
+  pickup ammo at=588 lat=0
+  pickup rocket at=698 lat=0.4
+  pickup cash at=778 lat=-0.6
+  pickup mine at=928 lat=0
+  pickup mystery at=1088 lat=-0.3
+  pickup cash at=1148 lat=0.4
+
+track fair_ghosttrain
+  title "Geisterbahn ohne Wiederkehr" title_en "Ghost Train, No Return"
+  venue fairground
+  laps 6
+  width 15
+  shoulder 3
+  reverse 1
+  start 42.4 -42.4 45
+  straight 181
+  left 90 r=34 w=16
+  straight 76 w=14
+  left 90 r=18
+  straight 50 surface=wood
+  left 90 r=30
+  straight 150.3
+  right 60 r=70
+  straight 60
+  right 30 r=90
+  straight 40
+  right 90 r=50
+  straight 60
+  right 90 r=45 w=15
+  straight 60
+  close
+  bridge at=505 len=60
+  # the start and the crossing
+  place start_gantry x=42.4 z=-42.4 rot=45
+  row grandstand at=1035.8 len=110 side=left off=4 every=36
+  row flag_pole at=90 len=60 side=both off=1 every=12
+  lamps lamp_street every=40 side=both
+  # the ghost-train lobe: a hairpin and the wooden tunnel
+  row tent_striped at=190 len=110 side=right off=3 every=27
+  row tire_stack at=312 len=30 side=right off=0 every=5
+  prop ghost_train at=365 side=right off=2 rot=0
+  prop ghost_train at=365 side=left off=2 rot=180
+  prop clown_head at=328 side=right off=5
+  place clown_head x=112 z=-220 rot=135
+  place balloon_stand x=96 z=-196
+  hazard barrel at=280 lat=0.8
+  # the coaster lobe: fast sweepers around the roller coaster
+  place coaster_segment x=100 z=-10 rot=20
+  place coaster_segment x=125 z=20 rot=40
+  place coaster_segment x=120 z=55 rot=110
+  place coaster_segment x=80 z=70 rot=180
+  place coaster_segment x=45 z=50 rot=250
+  place ticket_booth x=70 z=20 rot=45
+  row bulb_arch at=640 len=200 side=left off=2 every=40
+  hazard oil at=700 lat=0.45 r=2.2
+  hazard barrel at=830 lat=-0.85
+  hazard barrel at=835 lat=-0.85
+  row tire_stack at=950 len=60 side=left off=0 every=6
+
+track fair_freeride
+  title "Freifahrt ins Jenseits" title_en "Free Ride to the Hereafter"
+  venue fairground
+  laps 5
+  width 16
+  shoulder 3
+  reverse 1
+  start 60 0 90
+  straight 469.5
+  right 150 r=20 w=15
+  straight 150.6 w=16
+  left 25 r=40 surface=dirt
+  right 50 r=30 surface=dirt
+  left 25 r=40 surface=dirt
+  straight 180
+  right 75 r=50
+  straight 24
+  left 90 r=22 surface=cobble w=12
+  right 90 r=22 surface=cobble
+  straight 120 w=16
+  right 45 r=60
+  straight 40
+  right 90 r=40
+  straight 60
+  close
+  # the long straight: grandstands, arches, a ticket booth
+  place start_gantry x=60 z=0 rot=90
+  row grandstand at=1372.1 len=240 side=left off=4 every=40
+  row flag_pole at=1347.1 len=20 side=both off=1 every=10
+  row bulb_arch at=0 len=440 side=right off=1 every=55
+  row billboard at=260 len=180 side=left off=6 every=60
+  prop ticket_booth at=240 side=right off=2
+  lamps lamp_street every=45 side=both
+  # the hairpin at the end of the straight
+  hazard oil at=410 lat=-0.5 r=2.2
+  row tire_stack at=460 len=70 side=left off=0 every=5
+  prop clown_head at=496 side=left off=6
+  # the back straight with the dirt chicane between the rides
+  row crate_stack at=540 len=120 side=left off=3 every=40
+  hazard barrel at=685 lat=0.85
+  hazard barrel at=720 lat=-0.85
+  row tire_stack at=675 len=55 side=both off=0 every=6
+  place ferris_wheel x=300 z=80 rot=60
+  place carousel x=150 z=130 rot=0
+  # the midway zigzag (cobble) between the stalls
+  row tent_striped at=990 len=90 side=both off=3 every=22
+  row balloon_stand at=1075 len=110 side=left off=2 every=37
+  hazard barrel at=1050 lat=0.8
+  patch sand at=1110 len=25 lat=-0.4 w=6
+  row ticket_booth at=1240 len=40 side=left off=3 every=20
+
+track fair_bumper
+  title "Autoscooter des Jüngsten Gerichts" title_en "Bumper Cars of Judgement Day"
+  venue fairground
+  arena 1
+  laps 1
+  width 18
+  shoulder 3
+  start 0 0 90
+  straight 55
+  right 180 r=32
+  straight 10
+  right 30 r=50
+  left 60 r=40
+  right 30 r=50
+  straight 10
+  right 180 r=32
+  straight 55
+  close
+  # a bumper-car rink round the carousel
+  place start_gantry x=0 z=0 rot=90
+  place carousel x=0 z=30 rot=0
+  row bulb_arch at=0 len=420 side=left off=2 every=35
+  row grandstand at=60 len=90 side=left off=5 every=45
+  row grandstand at=270 len=90 side=left off=5 every=45
+  lamps lamp_street every=40 side=left
+  obstacle stack at=110 lat=0 r=1.6 model=tire_stack
+  obstacle stack at=320 lat=0 r=1.6 model=tire_stack
+  obstacle clown at=212 lat=0.35 r=2.0 model=clown_head
+  hazard oil at=20 lat=0 r=2.5
+  hazard barrel at=165 lat=-0.85
+  hazard barrel at=270 lat=-0.85

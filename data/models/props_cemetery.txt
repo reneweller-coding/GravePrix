@@ -1,0 +1,293 @@
+# Cemetery props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_junk_cem.py.
+
+# a 1.2 m headstone with its grave
+model gravestone
+  part box w=0.78 h=0.15 d=0.38 y=0.075 color=#6a6860
+  part fin h=0.75 root=0.62 tip=0.62 sweep=0 thick=0.15 rot=90 y=0.15 color=#7c7a72
+  part disc r=0.31 h=0.15 pitch=90 y=0.9 color=#7c7a72 seg=10
+  part box w=0.36 h=0.05 d=0.02 y=0.685 z=-0.085 color=#3a3a36
+  part box w=0.26 h=0.04 d=0.02 y=0.58 z=-0.085 color=#3a3a36
+  part box w=0.2 h=0.3 d=0.02 x=0.18 y=0.35 z=-0.085 color=#4a5a32
+  part box w=0.78 h=0.22 d=1.7 y=0.11 z=-1.05 color=#3a2e22 taper=0.4
+  part sphere r=0.07 x=0.182 y=0.24 z=-0.602 color=#b01818 seg=6
+  part sphere r=0.07 x=-0.177 y=0.24 z=-1.465 color=#e8e4d8 seg=6
+  part sphere r=0.07 x=0.134 y=0.24 z=-0.814 color=#d8b020 seg=6
+
+# a weathered Celtic stone cross with its grave
+model gravestone_cross
+  part box w=0.7 h=0.2 d=0.6 y=0.1 color=#6a6860
+  part box w=0.5 h=0.2 d=0.42 y=0.3 color=#74726a
+  part box w=0.16 h=1.35 d=0.16 y=1.075 color=#8e8c84
+  part box w=0.74 h=0.16 d=0.16 y=1.38 color=#8e8c84
+  part ring r=0.22 thick=0.045 y=1.38 color=#8e8c84 pitch=90 seg=12
+  part box w=0.17 h=0.35 d=0.02 y=0.725 z=-0.085 color=#4a5a32
+  part box w=0.78 h=0.22 d=1.7 y=0.11 z=-1.2 color=#3a2e22 taper=0.4
+  part sphere r=0.07 x=-0.105 y=0.24 z=-1.156 color=#b01818 seg=6
+  part sphere r=0.07 x=-0.052 y=0.24 z=-1.096 color=#e8e4d8 seg=6
+  part sphere r=0.07 x=0.05 y=0.24 z=-1.634 color=#d8b020 seg=6
+
+# a mourning angel on a pedestal, ~2.3 m
+model gravestone_angel
+  part box w=1 h=0.15 d=1 y=0.075 color=#6a6860
+  part box w=0.8 h=0.85 d=0.8 y=0.575 color=#7c7a72
+  part box w=0.9 h=0.12 d=0.9 y=1.06 color=#86847c
+  part box w=0.5 h=0.2 d=0.02 y=0.65 z=-0.41 color=#3a3a36
+  part disc r=0.3 r2=0.17 h=0.85 y=1.545 seg=10 color=#a6a49c   # the robe
+  part disc r=0.17 r2=0.14 h=0.32 y=2.13 seg=8 color=#a6a49c
+  part sphere r=0.13 y=2.38 z=-0.06 color=#a6a49c seg=8   # the bowed head
+  part box w=0.12 h=0.3 d=0.12 y=2.1 z=-0.18 color=#a6a49c pitch=-35   # folded hands
+  part fin h=0.95 root=0.55 tip=0.14 sweep=0.5 thick=0.06 x=0.2 y=1.55 z=0.2 rot=-40 color=#b2b0a8 mirror=1   # the wings
+  part box w=0.3 h=0.5 d=0.03 x=0.2 y=0.55 z=-0.41 color=#4a5a32
+
+# a family crypt 4.6 x 5.6 m, iron door, portico, slate roof
+model crypt
+  part box w=4.6 h=0.3 d=6.4 y=0.15 z=-0.3 color=#6a675f
+  part box w=4 h=3 d=5 y=1.8 color=#7e7a70
+  part wing span=2.35 root=5.5 tip=5.5 sweep=0 thick=0.25 dihedral=-1.2 y=4.55 color=#46444a
+  part plate pts="-2.05,0;2.05,0;0,1.22" thick=0.12 pitch=-90 y=3.3 z=-2.52 color=#7e7a70
+  part plate pts="-2.05,0;2.05,0;0,1.22" thick=0.12 pitch=-90 y=3.3 z=2.52 color=#7e7a70
+  part disc r=0.18 h=2.8 x=-1.3 y=1.7 z=-2.95 seg=8 color=#8a867c
+  part disc r=0.18 h=2.8 x=1.3 y=1.7 z=-2.95 seg=8 color=#8a867c
+  part box w=3.2 h=0.32 d=0.7 y=3.26 z=-2.85 color=#86827a
+  part plate pts="-1.6,0;1.6,0;0,0.6" thick=0.14 pitch=-90 y=3.42 z=-3.15 color=#86827a
+  part box w=1.25 h=2.1 d=0.08 y=1.35 z=-2.54 color=#1c2022
+  part box w=0.04 h=2 d=0.1 x=-0.48 y=1.35 z=-2.56 color=#2e3438
+  part box w=0.04 h=2 d=0.1 x=-0.24 y=1.35 z=-2.56 color=#2e3438
+  part box w=0.04 h=2 d=0.1 y=1.35 z=-2.56 color=#2e3438
+  part box w=0.04 h=2 d=0.1 x=0.24 y=1.35 z=-2.56 color=#2e3438
+  part box w=0.04 h=2 d=0.1 x=0.48 y=1.35 z=-2.56 color=#2e3438
+  part box w=1.4 h=0.3 d=0.04 y=2.7 z=-2.54 color=#b8b4a8
+  part box w=2.6 h=0.15 d=0.6 y=0.075 z=-3.35 color=#6a675f
+  part disc r=0.18 r2=0.12 h=0.35 y=4.775 z=-2.7 seg=8 color=#8e8c84
+  part sphere r=0.14 y=5.05 z=-2.7 color=#8e8c84 seg=8
+  part box w=0.35 h=1.8 d=0.03 x=-1.6 y=1.9 z=-2.52 color=#4a5a32
+  part box w=0.35 h=1.2 d=0.03 x=1.4 y=1 z=-2.52 color=#4a5a32
+  part box w=0.35 h=0.9 d=0.03 x=0.2 y=2.75 z=-2.52 color=#4a5a32
+  part greeble n=6 w=3.6 d=4.6 size=0.25 y=4 color=#4a5a34 seed=2
+
+# a domed mausoleum with a green copper dome and a candle-lit window
+model mausoleum
+  part box w=8 h=0.3 d=9.4 y=0.15 z=-0.4 color=#5e5c56
+  part box w=7.4 h=0.3 d=8.6 y=0.45 z=-0.3 color=#66645c
+  part box w=6 h=4 d=7 y=2.6 color=#6c6a62
+  part box w=6.5 h=0.45 d=7.5 y=4.825 color=#7a776e
+  part disc r=2.25 h=1.1 y=5.6 seg=14 color=#6c6a62
+  part dome r=2.3 ry=2 y=6.15 color=#4e7a66 seg=14
+  part disc r=0.35 h=0.6 y=8.35 seg=8 color=#4e7a66
+  part sphere r=0.25 y=8.85 color=#c8a040 seg=8
+  part disc r=0.26 h=3.8 x=-2.4 y=2.5 z=-4.15 seg=8 color=#8a877e
+  part disc r=0.26 h=3.8 x=-0.85 y=2.5 z=-4.15 seg=8 color=#8a877e
+  part disc r=0.26 h=3.8 x=0.85 y=2.5 z=-4.15 seg=8 color=#8a877e
+  part disc r=0.26 h=3.8 x=2.4 y=2.5 z=-4.15 seg=8 color=#8a877e
+  part box w=5.8 h=0.5 d=1.3 y=4.65 z=-4 color=#7a776e
+  part plate pts="-2.9,0;2.9,0;0,1.15" thick=0.25 pitch=-90 y=4.9 z=-4.5 color=#7a776e
+  part box w=1.6 h=2.7 d=0.08 y=1.95 z=-3.52 color=#3a3020
+  part box w=0.8 h=0.5 d=0.06 y=3.7 z=-3.52 color=#ffb050 emit=0.7   # candle light inside
+  part disc r=0.3 r2=0.4 h=0.6 x=-3.6 y=0.9 z=-4.5 seg=8 color=#8e8c84
+  part disc r=0.3 r2=0.4 h=0.6 x=3.6 y=0.9 z=-4.5 seg=8 color=#8e8c84
+  part box w=0.4 h=2.2 d=0.04 x=-2.9 y=1.7 z=-3.52 color=#4a5a32
+  part box w=0.4 h=1.8 d=0.04 x=2.95 y=2.5 z=-3.52 color=#4a5a32
+
+# a 10 m cemetery cypress
+model cypress
+  part gun r=0.18 r2=0.28 len=1.6 y=0.8 pitch=90 seg=6 color=#3a2a1e
+  part sphere r=1.15 y=4.4 color=#1c3020 ry=3.4 rz=1.1 seg=8
+  part sphere r=0.9 x=0.12 y=7 color=#203820 ry=2.3 seg=8
+  part sphere r=0.75 x=-0.35 y=3.2 z=0.3 color=#182a1c ry=1.5 seg=8
+  part cone r=0.5 len=1.4 x=0.1 y=9.5 pitch=90 seg=7 color=#20381f
+
+# a 7 m dead tree
+model tree_dead
+  part gun r=0.224 r2=0.32 len=3.175 x=-0.111 y=1.575 z=-0.167 pitch=82.76 rot=-33.63 seg=7 color=#3a3430
+  part gun r=0.06 r2=0.176 len=0.932 x=0.345 y=0.175 z=-0.481 pitch=-22.05 rot=35.65 seg=5 color=#3a3430
+  part gun r=0.06 r2=0.176 len=0.932 x=0.481 y=0.175 z=0.345 pitch=-22.05 rot=125.65 seg=5 color=#3a3430
+  part gun r=0.06 r2=0.176 len=0.932 x=-0.345 y=0.175 z=0.481 pitch=-22.05 rot=-144.35 seg=5 color=#3a3430
+  part gun r=0.06 r2=0.176 len=0.932 x=-0.481 y=0.175 z=-0.345 pitch=-22.05 rot=-54.35 seg=5 color=#3a3430
+  part gun r=0.115 r2=0.192 len=2.474 x=-0.471 y=3.514 z=-1.213 pitch=36.8 rot=-17.25 seg=5 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.467 x=-1.029 y=4.287 z=-1.76 pitch=45.42 rot=-57.38 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.991 x=-1.598 y=4.892 z=-2.048 pitch=58.05 rot=-51.39 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.004 x=-1.511 y=4.859 z=-2.189 pitch=59.29 rot=-20.76 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.789 x=-0.613 y=4.242 z=-2.831 pitch=36.09 rot=2.2 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.054 x=-0.987 y=4.807 z=-3.537 pitch=38.6 rot=-73.25 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.269 x=-0.629 y=4.841 z=-3.622 pitch=38.5 rot=-3.6 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.235 x=-0.52 y=4.987 z=-3.797 pitch=43.04 rot=8.36 seg=4 color=#3a3430
+  part gun r=0.115 r2=0.192 len=2.472 x=0.528 y=3.551 z=-0.492 pitch=53.19 rot=72.25 seg=5 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.806 x=1.257 y=4.709 z=-1.177 pitch=51.38 rot=17.25 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.038 x=1.436 y=5.625 z=-1.897 pitch=59.36 rot=24.05 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.342 x=1.71 y=5.554 z=-1.477 pitch=48.51 rot=69.28 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.435 x=1.154 y=4.624 z=-0.798 pitch=59.68 rot=55.97 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.046 x=1.511 y=5.274 z=-1.071 pitch=68.95 rot=45.43 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.893 x=1.531 y=5.183 z=-1.138 pitch=52.84 rot=40.16 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.915 x=1.664 y=5.621 z=-0.929 pitch=55.84 rot=90.53 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.654 x=1.07 y=4.554 z=-0.682 pitch=65.95 rot=88 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.186 x=1.542 y=5.434 z=-0.742 pitch=64.62 rot=77.1 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.055 x=1.437 y=5.338 z=-0.684 pitch=76.34 rot=91.26 seg=4 color=#3a3430
+  part gun r=0.115 r2=0.192 len=2.323 x=-0.171 y=3.56 z=0.611 pitch=40.91 rot=179.6 seg=5 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.374 x=-0.063 y=4.37 z=1.412 pitch=47.11 rot=166.76 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.788 x=0.16 y=5.108 z=1.835 pitch=44.97 rot=141.46 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.767 x=-0.018 y=5.164 z=1.934 pitch=63.2 rot=-168.95 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.354 x=-0.091 y=4.542 z=1.919 pitch=45.33 rot=171.04 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.922 x=0.103 y=5.342 z=2.413 pitch=57.8 rot=144.97 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.008 x=-0.054 y=5.357 z=2.403 pitch=43.99 rot=-174.82 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.007 x=-0.338 y=5.394 z=2.189 pitch=54.39 rot=-115.86 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.624 x=-0.676 y=4.573 z=1.607 pitch=35.72 rot=-129.7 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.931 x=-1.089 y=4.911 z=2.381 pitch=30.85 rot=170.91 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.959 x=-1.423 y=5.249 z=2.071 pitch=51.12 rot=-106.15 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=1.064 x=-1.543 y=5.298 z=1.769 pitch=39.36 rot=-78.66 seg=4 color=#3a3430
+  part gun r=0.115 r2=0.192 len=2.234 x=-1.006 y=3.55 z=0.097 pitch=35.92 rot=-113.68 seg=5 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.233 x=-1.714 y=4.433 z=0.729 pitch=34.51 rot=-143.46 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.755 x=-2.033 y=4.81 z=1.361 pitch=32.19 rot=-156.57 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.831 x=-2.094 y=4.811 z=1.142 pitch=42.63 rot=-163.7 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.695 x=-2.125 y=4.98 z=1.004 pitch=43.3 rot=-76.18 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.585 x=-2.01 y=4.585 z=0.233 pitch=35.99 rot=-84.7 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.954 x=-2.857 y=5.075 z=0.335 pitch=35.18 rot=-113.46 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.907 x=-2.417 y=5.154 z=-0.122 pitch=31.07 rot=-29.69 seg=4 color=#3a3430
+  part gun r=0.069 r2=0.115 len=1.36 x=-1.898 y=4.447 z=0.013 pitch=46.53 rot=-53.93 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.833 x=-2.311 y=5.185 z=-0.289 pitch=63.42 rot=-52.66 seg=4 color=#3a3430
+  part gun r=0.041 r2=0.069 len=0.962 x=-2.269 y=5.034 z=-0.542 pitch=49.93 rot=-3.56 seg=4 color=#3a3430
+
+# a 3.6 m cast-iron cemetery lantern
+model lamp_old lamp=1
+  part box w=0.42 h=0.3 d=0.42 y=0.15 color=#3a3a38
+  part disc r=0.14 r2=0.08 h=0.5 y=0.55 seg=8 color=#1e2022
+  part gun r=0.05 r2=0.07 len=2.2 y=1.9 pitch=90 seg=6 color=#1e2022
+  part ring r=0.1 thick=0.03 y=2 color=#1e2022 seg=8
+  part box w=0.3 h=0.06 d=0.3 y=3.01 color=#1e2022
+  part box w=0.36 h=0.5 d=0.36 y=3.27 color=#ffd890 emit=0.85
+  part box w=0.04 h=0.52 d=0.04 x=-0.18 y=3.28 z=-0.18 color=#1e2022
+  part box w=0.04 h=0.52 d=0.04 x=0.18 y=3.28 z=-0.18 color=#1e2022
+  part box w=0.04 h=0.52 d=0.04 x=-0.18 y=3.28 z=0.18 color=#1e2022
+  part box w=0.04 h=0.52 d=0.04 x=0.18 y=3.28 z=0.18 color=#1e2022
+  part disc r=0.32 r2=0.04 h=0.26 y=3.65 seg=4 color=#1e2022 rot=45
+  part sphere r=0.05 y=3.84 color=#1e2022 seg=6
+  part light r=0.1 y=3.27 color=#ffcf80
+
+# the cemetery chapel: nave, bell tower with a slate spire, glowing stained windows
+model chapel lamp=1
+  part box w=7 h=6 d=11 y=3 z=1.5 color=#6e6a60
+  part wing span=3.95 root=11.4 tip=11.4 sweep=0 thick=0.3 dihedral=-3 y=9 z=1.5 color=#3e3c40
+  part plate pts="-3.5,0;3.5,0;0,3" thick=0.1 pitch=-90 y=6 z=7.02 color=#6e6a60
+  part box w=3.8 h=10 d=3.8 y=5 z=-5.5 color=#726e64
+  part box w=4.1 h=0.4 d=4.1 y=10.2 z=-5.5 color=#7e7a70
+  part box w=1 h=1.6 d=0.1 y=8.6 z=-7.42 color=#121214
+  part box w=1 h=1.6 d=0.1 y=8.6 z=-3.58 color=#121214
+  part box w=0.1 h=1.6 d=1 x=-1.92 y=8.6 z=-5.5 color=#121214
+  part box w=0.1 h=1.6 d=1 x=1.92 y=8.6 z=-5.5 color=#121214
+  part disc r=2.9 r2=0.05 h=6.5 y=13.65 z=-5.5 seg=4 color=#3a3a3e rot=45
+  part sphere r=0.22 y=17 z=-5.5 color=#c8a040 seg=6
+  part box w=1.5 h=2.6 d=0.1 y=1.3 z=-7.44 color=#3a2a1c
+  part disc r=0.75 h=0.1 pitch=90 y=2.6 z=-7.44 color=#3a2a1c seg=10
+  part disc r=0.75 h=0.1 pitch=90 y=5.6 z=-7.45 color=#c05a80 emit=0.7 seg=12
+  part disc r=0.4 h=0.12 pitch=90 y=5.6 z=-7.46 color=#5a70d0 emit=0.8 seg=10
+  part box w=0.7 h=4.2 d=1.1 x=3.75 y=2.1 z=-2.6 color=#66625a taper=0.2 mirror=1   # buttresses
+  part box w=0.1 h=2.8 d=1 x=3.53 y=3.6 z=-1.2 color=#b04080 emit=0.6 mirror=1
+  part disc r=0.5 h=0.1 roll=90 x=3.53 y=5 z=-1.2 color=#b04080 emit=0.6 seg=8 mirror=1
+  part box w=0.7 h=4.2 d=1.1 x=3.75 y=2.1 z=0.2 color=#66625a taper=0.2 mirror=1
+  part box w=0.1 h=2.8 d=1 x=3.53 y=3.6 z=1.6 color=#4060c0 emit=0.6 mirror=1
+  part disc r=0.5 h=0.1 roll=90 x=3.53 y=5 z=1.6 color=#4060c0 emit=0.6 seg=8 mirror=1
+  part box w=0.7 h=4.2 d=1.1 x=3.75 y=2.1 z=3 color=#66625a taper=0.2 mirror=1
+  part box w=0.1 h=2.8 d=1 x=3.53 y=3.6 z=4.4 color=#c09030 emit=0.6 mirror=1
+  part disc r=0.5 h=0.1 roll=90 x=3.53 y=5 z=4.4 color=#c09030 emit=0.6 seg=8 mirror=1
+  part box w=0.7 h=4.2 d=1.1 x=3.75 y=2.1 z=5.8 color=#66625a taper=0.2 mirror=1
+  part box w=2 h=0.15 d=1.2 y=0.075 z=-8 color=#5e5c56
+  part box w=0.3 h=0.2 d=0.25 y=3.3 z=-7.6 color=#ffe0a0 emit=0.9
+  part light r=0.12 y=3 z=-7.9 color=#ffd49a
+
+# a park bench, wood on iron
+model bench
+  part box w=0.08 h=0.45 d=0.5 x=-0.78 y=0.225 color=#1e1e20
+  part box w=0.07 h=0.07 d=0.514 x=-0.78 y=0.7 z=0.26 pitch=76.5 rot=180 color=#1e1e20
+  part box w=0.08 h=0.45 d=0.5 x=0.78 y=0.225 color=#1e1e20
+  part box w=0.07 h=0.07 d=0.514 x=0.78 y=0.7 z=0.26 pitch=76.5 rot=180 color=#1e1e20
+  part box w=1.85 h=0.05 d=0.13 y=0.475 z=-0.18 color=#6a4a2c
+  part box w=1.85 h=0.05 d=0.13 y=0.475 z=-0.03 color=#6a4a2c
+  part box w=1.85 h=0.05 d=0.13 y=0.475 z=0.12 color=#6a4a2c
+  part box w=1.85 h=0.12 d=0.04 y=0.66 z=0.27 color=#6a4a2c pitch=12
+  part box w=1.85 h=0.12 d=0.04 y=0.84 z=0.3 color=#6a4a2c pitch=12
+
+# a funeral wreath on an easel, with a purple sash
+model wreath
+  part box w=0.04 h=0.04 d=1.496 x=-0.16 y=0.725 z=-0.01 pitch=75.79 rot=119.36 color=#3a2a1c
+  part box w=0.04 h=0.04 d=1.496 x=0.16 y=0.725 z=-0.01 pitch=75.79 rot=-119.36 color=#3a2a1c
+  part box w=0.04 h=0.04 d=1.471 y=0.7 z=0.325 pitch=72.18 color=#3a2a1c
+  part ring r=0.42 thick=0.13 y=1 z=-0.02 color=#264a24 pitch=78 seg=14
+  part sphere r=0.075 y=1.42 z=-0.13 color=#c01818 seg=6
+  part sphere r=0.075 x=0.215 y=1.364 z=-0.13 color=#ece6da seg=6
+  part sphere r=0.075 x=0.372 y=1.21 z=-0.13 color=#d8b020 seg=6
+  part sphere r=0.075 x=0.43 y=1 z=-0.13 color=#c01818 seg=6
+  part sphere r=0.075 x=0.372 y=0.79 z=-0.13 color=#ece6da seg=6
+  part sphere r=0.075 x=0.215 y=0.636 z=-0.13 color=#d8b020 seg=6
+  part sphere r=0.075 x=0 y=0.58 z=-0.13 color=#c01818 seg=6
+  part sphere r=0.075 x=-0.215 y=0.636 z=-0.13 color=#ece6da seg=6
+  part sphere r=0.075 x=-0.372 y=0.79 z=-0.13 color=#d8b020 seg=6
+  part sphere r=0.075 x=-0.43 y=1 z=-0.13 color=#c01818 seg=6
+  part sphere r=0.075 x=-0.372 y=1.21 z=-0.13 color=#ece6da seg=6
+  part sphere r=0.075 x=-0.215 y=1.364 z=-0.13 color=#d8b020 seg=6
+  part box w=0.02 h=0.12 d=0.817 x=0.01 y=1.015 z=-0.175 pitch=40.43 rot=85.39 color=#6a2a7a
+  part box w=0.12 h=0.5 d=0.02 x=-0.12 y=0.5 z=-0.16 color=#6a2a7a roll=8
+  part box w=0.12 h=0.45 d=0.02 x=0.1 y=0.52 z=-0.16 color=#6a2a7a roll=-10
+
+# a freshly dug grave, the earth heaped beside it, a shovel, a coffin waiting
+model open_grave
+  part box w=1.15 h=0.02 d=2.3 y=0.015 color=#0b0907
+  part box w=1.5 h=0.06 d=0.2 y=0.03 z=-1.25 color=#6a5232
+  part box w=1.5 h=0.06 d=0.2 y=0.03 z=1.25 color=#6a5232
+  part box w=0.2 h=0.06 d=2.3 x=-0.68 y=0.03 color=#6a5232
+  part box w=0.2 h=0.06 d=2.3 x=0.68 y=0.03 color=#6a5232
+  part dome r=1 rx=0.9 rz=1.5 ry=0.75 x=1.65 color=#3e3024 seg=10
+  part dome r=0.6 ry=0.45 x=1.4 z=1.3 color=#46362a seg=8
+  part gun r=0.04 len=1.396 x=1.375 y=0.975 z=-0.425 pitch=75.32 rot=-45 seg=5 color=#6a4a2a
+  part box w=0.25 h=0.32 d=0.04 x=1.55 y=0.2 z=-0.25 color=#5a5a5c pitch=8 rot=-10
+  part plate pts="-0.26,-0.95;0.26,-0.95;0.38,-0.5;0.26,0.95;-0.26,0.95;-0.38,-0.5" thick=0.42 x=-1.65 y=0.22 color=#4a2a18   # the coffin
+  part plate pts="-0.27,-0.97;0.27,-0.97;0.4,-0.5;0.27,0.97;-0.27,0.97;-0.4,-0.5" thick=0.06 x=-1.65 y=0.46 color=#6a3a20
+  part box w=1.9 h=0.02 d=0.08 y=0.03 z=-0.6 color=#8a7a5a   # lowering straps
+  part box w=1.9 h=0.02 d=0.08 y=0.03 z=0.6 color=#8a7a5a
+
+# extra: a 5 m memorial obelisk
+model obelisk
+  part box w=1.5 h=0.35 d=1.5 y=0.175 color=#5e5c56
+  part box w=1.15 h=0.55 d=1.15 y=0.625 color=#6e6c66
+  part box w=0.62 h=3.6 d=0.62 y=2.7 color=#7a7870 taper=0.3
+  part disc r=0.31 r2=0.01 h=0.45 y=4.725 seg=4 color=#7a7870 rot=45
+  part box w=0.5 h=0.35 d=0.02 y=1.475 z=-0.32 color=#b8a870
+  part box w=0.3 h=1.4 d=0.03 x=0.12 y=1.6 z=-0.31 color=#4a5a32
+
+# extra: a 7 x 5 m family plot: a stone kerb, gravel, six graves, red grave lights, a small cypress
+model grave_plot
+  part box w=7.2 h=0.25 d=0.25 y=0.125 z=-2.5 color=#6a6860
+  part box w=7.2 h=0.25 d=0.25 y=0.125 z=2.5 color=#6a6860
+  part box w=0.25 h=0.25 d=5 x=-3.5 y=0.125 color=#6a6860
+  part box w=0.25 h=0.25 d=5 x=3.5 y=0.125 color=#6a6860
+  part box w=6.8 h=0.04 d=4.8 y=0.02 color=#6e6a62
+  part box w=0.7 h=0.12 d=0.3 x=-2.2 y=0.06 z=-0.7 color=#5e5c56
+  part fin h=0.933 root=0.56 tip=0.5 sweep=0.03 thick=0.14 rot=93.68 x=-2.2 y=0.12 z=-0.7 color=#7c7a72
+  part box w=0.7 h=0.18 d=1.3 x=-2.2 y=0.09 z=-1.55 color=#3a2e22 taper=0.35
+  part disc r=0.08 h=0.2 x=-1.98 y=0.28 z=-1.2 seg=6 color=#d01a14 emit=0.9
+  part box w=0.7 h=0.12 d=0.3 y=0.06 z=-0.7 color=#5e5c56
+  part fin h=1.086 root=0.56 tip=0.5 sweep=0.03 thick=0.14 rot=87.476 x=0 y=0.12 z=-0.7 color=#8e8c84
+  part box w=0.7 h=0.18 d=1.3 y=0.09 z=-1.55 color=#3a2e22 taper=0.35
+  part box w=0.7 h=0.12 d=0.3 x=2.2 y=0.06 z=-0.7 color=#5e5c56
+  part fin h=1.018 root=0.56 tip=0.5 sweep=0.03 thick=0.14 rot=92.451 x=2.2 y=0.12 z=-0.7 color=#6e6c66
+  part box w=0.7 h=0.18 d=1.3 x=2.2 y=0.09 z=-1.55 color=#3a2e22 taper=0.35
+  part disc r=0.08 h=0.2 x=2.42 y=0.28 z=-1.2 seg=6 color=#d01a14 emit=0.9
+  part box w=0.7 h=0.12 d=0.3 x=-2.2 y=0.06 z=1.8 color=#5e5c56
+  part fin h=0.981 root=0.56 tip=0.5 sweep=0.03 thick=0.14 rot=85.322 x=-2.2 y=0.12 z=1.8 color=#7c7a72
+  part box w=0.7 h=0.18 d=1.3 x=-2.2 y=0.09 z=0.95 color=#3a2e22 taper=0.35
+  part box w=0.7 h=0.12 d=0.3 y=0.06 z=1.8 color=#5e5c56
+  part fin h=0.759 root=0.56 tip=0.5 sweep=0.03 thick=0.14 rot=88.61 x=0 y=0.12 z=1.8 color=#8e8c84
+  part box w=0.7 h=0.18 d=1.3 y=0.09 z=0.95 color=#3a2e22 taper=0.35
+  part disc r=0.08 h=0.2 x=0.22 y=0.28 z=1.3 seg=6 color=#d01a14 emit=0.9
+  part box w=0.7 h=0.12 d=0.3 x=2.2 y=0.06 z=1.8 color=#5e5c56
+  part fin h=1.011 root=0.56 tip=0.5 sweep=0.03 thick=0.14 rot=87.029 x=2.2 y=0.12 z=1.8 color=#6e6c66
+  part box w=0.7 h=0.18 d=1.3 x=2.2 y=0.09 z=0.95 color=#3a2e22 taper=0.35
+  part gun r=0.1 r2=0.15 len=1 x=3 y=0.5 z=2.1 pitch=90 seg=5 color=#3a2a1e
+  part sphere r=0.7 x=3 y=3 z=2.1 color=#1c3020 ry=2.2 seg=7
+
+# extra: a ledger stone with a red grave light
+model gravestone_candle
+  part box w=0.95 h=0.22 d=1.95 y=0.11 z=-0.3 color=#5e5c56 taper=0.06
+  part box w=0.8 h=0.7 d=0.18 y=0.35 z=0.75 color=#7c7a72
+  part box w=0.5 h=0.04 d=0.02 y=0.47 z=0.65 color=#3a3a36
+  part box w=0.9 h=0.03 d=1.2 y=0.235 z=-0.4 color=#4a5a32
+  part disc r=0.09 h=0.22 x=0.25 y=0.33 z=0.4 seg=6 color=#d01a14 emit=0.9
+  part disc r=0.07 r2=0.03 h=0.06 x=0.25 y=0.47 z=0.4 seg=6 color=#c8a040

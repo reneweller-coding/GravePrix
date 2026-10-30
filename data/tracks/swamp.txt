@@ -1,0 +1,256 @@
+# Swamp tracks (venue swamp, league 3): a bayou at dawn, mud, plank bridges, shallow water, stilt huts.
+# Designed with the turtle path (docs/DESIGN.md "Tracks"); the "#free" straights were solved so each path closes.
+
+# Flowing: a long, narrow loop whose two sides meander in step through the bog - fast S-bends up, a plank
+# bridge and S-bends down, a ford on the way up and a wide U at the bottom.
+track swp_moor
+  title "Moorleichenpfad" title_en "Bog Body Trail"
+  venue swamp
+  laps 5
+  width 13
+  shoulder 3
+  reverse 1
+  start 0 0 0
+  straight 60.0 #free
+  right 30 r=90
+  left 60 r=90
+  right 60 r=90
+  left 60 r=90
+  right 30 r=90
+  straight 60
+  right 90 r=28
+  straight 14.0 #free
+  right 90 r=28 w=11
+  straight 40 surface=wood
+  left 30 r=90 w=13
+  right 60 r=90
+  left 60 r=90
+  right 60 r=90
+  left 30 r=90
+  straight 110
+  right 180 r=35
+  straight 30
+  close
+  patch water at=235 len=30
+  patch mud at=1040 len=45 lat=0.5 w=6
+  hazard barrel at=525 lat=-0.86
+  hazard barrel at=545 lat=-0.86
+  obstacle wreck at=1095 lat=-0.5 r=2 model=wreck_car rot=30
+  lamps lantern every=55 side=both
+  place start_gantry x=0 z=0 rot=0
+  prop grandstand at=12 side=left off=4
+  prop billboard at=50 side=left off=3
+  row tree_swamp at=70 len=420 side=left every=24 off=4
+  row reeds at=40 len=440 side=right every=12 off=1
+  row tree_swamp at=640 len=470 side=left every=24 off=4
+  row reeds at=640 len=440 side=right every=12 off=1
+  prop dock_wood at=603 side=both off=1
+  prop dock_wood at=632 side=both off=1
+  prop gator at=250 side=left off=2 rot=30
+  prop gator at=830 side=left off=3 rot=-40
+  prop gator at=1180 side=left off=2 rot=10
+  prop billboard at=1110 side=left off=3
+  place stilt_hut x=47 z=-150
+  place stilt_hut x=35 z=-240
+  place stilt_hut x=47 z=-330
+  place stilt_hut x=35 z=-420
+  place boat_wreck x=35 z=38 rot=60
+  place stilt_hut x=-60 z=-280
+  place boat_wreck x=150 z=-200 rot=-20
+  place stilt_hut x=150 z=-420
+
+# Figure eight with a wooden bridge: a hairpin start loop, the bridge over the crossing, a plank causeway
+# round the pond and the long run back down.
+track swp_grab
+  title "Nasses Grab" title_en "Watery Grave"
+  venue swamp
+  laps 6
+  width 12
+  shoulder 3
+  reverse 1
+  start 0 0 210
+  straight 70
+  right 150 r=25
+  straight 80
+  right 90 r=40
+  straight 115.4 #free
+  left 90 r=40
+  straight 80
+  left 120 r=30 w=11
+  straight 70 surface=wood
+  left 90 r=45 w=12
+  straight 46.7 #free
+  right 60 r=55
+  straight 30
+  close
+  bridge at=318 len=46
+  patch wood at=318 len=46
+  patch water at=150 len=40 lat=-0.4 w=7
+  patch mud at=470 len=50 lat=0.5 w=6
+  hazard barrel at=95 lat=-0.88
+  hazard barrel at=110 lat=-0.88
+  pickup nitro at=20 lat=0.3
+  pickup cash at=100 lat=0.5
+  pickup ammo at=190 lat=0
+  pickup mystery at=341 lat=0
+  pickup wrench at=500 lat=-0.4
+  pickup rocket at=630 lat=0
+  pickup cash at=700 lat=0.5
+  pickup mine at=820 lat=-0.3
+  lamps lantern every=45 side=both
+  place start_gantry x=0 z=0 rot=210
+  prop grandstand at=10 side=right off=4
+  row tree_swamp at=140 len=80 side=left every=22 off=4
+  row reeds at=140 len=70 side=right every=10 off=1
+  row tree_swamp at=400 len=140 side=right every=22 off=4
+  row reeds at=460 len=70 side=left every=10 off=1
+  row dock_wood at=605 len=60 side=both every=20 off=0
+  prop gator at=640 side=left off=2 rot=80
+  prop billboard at=760 side=right off=3
+  place stilt_hut x=-45 z=10
+  place boat_wreck x=60 z=-140 rot=35
+  place stilt_hut x=80 z=-170
+  place boat_wreck x=-150 z=-60 rot=-30
+  place stilt_hut x=180 z=-120
+
+# Narrow and technical: a serpentine of three hairpins through the stilt village (a plank boardwalk, a mud
+# hole), a chicane and the short way back; lanterns all round like will-o'-the-wisps.
+track swp_irrlicht
+  title "Irrlichterhatz" title_en "Will-o'-the-Wisp Chase"
+  venue swamp
+  laps 6
+  width 11
+  shoulder 2
+  reverse 1
+  start 0 0 90
+  straight 110.0 #free
+  right 180 r=14
+  straight 110 surface=wood
+  left 180 r=16
+  straight 110
+  right 180 r=18
+  straight 50
+  left 30 r=20
+  right 60 r=20
+  left 30 r=20
+  straight 60
+  right 90 r=25
+  straight 46.0 #free
+  right 90 r=25
+  straight 40
+  close
+  patch mud at=335 len=40
+  patch water at=585 len=25 lat=0.3 w=7
+  hazard barrel at=445 lat=-0.86
+  hazard barrel at=460 lat=-0.86
+  pickup nitro at=40 lat=0.4
+  pickup cash at=132 lat=0.5
+  pickup ammo at=210 lat=0
+  pickup mystery at=290 lat=-0.5
+  pickup wrench at=380 lat=0
+  pickup rocket at=552 lat=0
+  pickup cash at=650 lat=0.5
+  pickup mine at=700 lat=0
+  lamps lantern every=30 side=both
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=8 side=left off=3
+  row dock_wood at=160 len=100 side=both every=20 off=0
+  row reeds at=320 len=100 side=right every=10 off=0
+  row reeds at=490 len=130 side=left every=10 off=1
+  prop gator at=600 side=left off=2 rot=20
+  prop gator at=690 side=left off=3 rot=-70
+  row tree_swamp at=640 len=140 side=left every=20 off=3
+  place stilt_hut x=30 z=-30
+  place stilt_hut x=85 z=-32
+  place stilt_hut x=155 z=50
+  place stilt_hut x=-40 z=45
+  place boat_wreck x=60 z=135 rot=10
+  place stilt_hut x=-100 z=120
+
+# Long straights round a triangle: a wide mud-flat start straight, a tight corner onto an 11 m plank causeway
+# 360 m long, a fast sweeper, a jink and a sunken car on the widest straight.
+track swp_gator
+  title "Krokodilstränen" title_en "Crocodile Tears"
+  venue swamp
+  laps 4
+  width 16
+  shoulder 3
+  reverse 1
+  start 0 0 90
+  straight 372.0 #free
+  right 120 r=25
+  straight 25 w=11
+  straight 310 surface=wood
+  straight 25 w=16
+  right 120 r=70
+  straight 166.4 #free
+  left 25 r=40
+  right 50 r=40
+  left 25 r=40
+  straight 100 w=18
+  right 120 r=40 w=16
+  straight 40
+  close
+  patch water at=150 len=40 lat=0.5 w=7
+  patch mud at=260 len=40 lat=-0.5 w=7
+  patch water at=960 len=30 lat=-0.4 w=8
+  patch mud at=1180 len=60 lat=-0.5 w=8
+  obstacle wreck at=1215 lat=0.35 r=2 model=wreck_car rot=20
+  hazard barrel at=385 lat=-0.85
+  hazard barrel at=400 lat=-0.85
+  hazard barrel at=1290 lat=-0.85
+  lamps lantern every=60 side=both
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=15 side=left off=4
+  prop grandstand at=70 side=left off=4
+  row tree_swamp at=100 len=260 side=left every=26 off=4
+  row reeds at=430 len=350 side=both every=11 off=0
+  prop gator at=500 side=right off=2 rot=200
+  prop gator at=600 side=left off=2 rot=10
+  prop gator at=700 side=right off=1 rot=150
+  row dock_wood at=430 len=350 side=left every=70 off=0
+  row tree_swamp at=800 len=140 side=left every=24 off=4
+  prop billboard at=1000 side=left off=3
+  row reeds at=1170 len=100 side=right every=10 off=1
+  place stilt_hut x=180 z=120
+  place boat_wreck x=150 z=200 rot=40
+  place stilt_hut x=230 z=60
+  place boat_wreck x=-80 z=160 rot=-60
+  place stilt_hut x=420 z=-60
+
+# Derby arena: a wide peanut of mud and water round a stilt hut; the waist pinches the cars together.
+track swp_schlamm
+  title "Schlammschlacht" title_en "Mud Bath Brawl"
+  venue swamp
+  arena 1
+  laps 1
+  width 18
+  shoulder 4
+  start 0 0 90
+  straight 30
+  left 25 r=50
+  right 230 r=34
+  left 25 r=50
+  straight 30
+  left 25 r=50
+  right 230 r=34
+  left 25 r=50
+  close
+  patch mud at=60 len=60 lat=0.4 w=8
+  patch water at=270 len=50 lat=-0.3 w=9
+  patch mud at=360 len=40 lat=-0.5 w=7
+  hazard barrel at=100 lat=0.85
+  hazard barrel at=310 lat=0.85
+  pickup cash at=15 lat=0.4
+  pickup nitro at=70 lat=-0.5
+  pickup mystery at=120 lat=0
+  pickup wrench at=170 lat=0.4
+  pickup ammo at=225 lat=-0.4
+  pickup rocket at=280 lat=0.4
+  pickup mine at=330 lat=0
+  pickup cash at=395 lat=-0.3
+  lamps lantern every=35 side=both
+  place stilt_hut x=15 z=26
+  place boat_wreck x=65.5 z=26 rot=30
+  place dock_wood x=-35.5 z=26 rot=90
+  row tree_swamp at=0 len=420 side=left every=30 off=5

@@ -1,0 +1,244 @@
+# The career's story: the intro, every league's start, the showdowns, the champions, the boss, the endings.
+# "story" carries the German prose and both titles, "story_en" the English prose. One paragraph per line.
+
+# ------------------------------------------------------------------------------------------------ the intro
+
+story intro
+  title "Auffahrunfall"
+  title_en "Rear-Ended by Fate"
+> Es regnete an dem Abend, an dem dein Leben eine scharfe Kurve nahm – genauer gesagt: eine scharfe Kurve direkt ins Heck eines Leichenwagens. Die Bremsen deiner Rostlaube hatten schon länger gekündigt, sie hatten es dir nur nicht gesagt.
+> Der Fahrer stieg aus, betrachtete die Delle in seiner Stoßstange, dann dich, und nickte anerkennend. „Gute Reflexe“, sagte er. „Schlechte Bremsen. Der Herr hinten hat sich übrigens nicht beschwert.“ Der Herr hinten lag in einem Eichensarg und hatte sich seit Dienstag über nichts mehr beschwert.
+> Du hattest an diesem Abend schon deinen Job als Kurierfahrer verloren, deine Miete war seit drei Monaten überfällig, und dein Auto war weniger wert als die Tankfüllung darin. Eine Versicherung hattest du nicht. Der Fahrer schien das zu ahnen. Statt nach deinen Papieren zu fragen, reichte er dir eine schwarze Karte mit Silberrand: GRAVE PRIX – Preisgeld in bar. Beerdigung inklusive. Auf der Rückseite: der Schrottplatz am Stadtrand, Mitternacht.
+> Um Mitternacht standen auf dem Schrottplatz Autos mit Kanonen auf der Motorhaube, Fahrer mit Spitznamen statt Vornamen und eine johlende Menge mit Wettscheinen in der Hand. Und mittendrin ein großer, hagerer Herr im Gehrock, der dich mit einem Maßband vom Scheitel bis zur Sohle vermaß, bevor er dir die Hand gab. „Mortimer Graves“, sagte er. „Graves & Sons. Wer bei uns gewinnt, wird reich. Wer verliert, wird Kunde. Beides ist mir recht.“
+> Du hast unterschrieben. Mit einem Füller, der, wie du zu spät bemerkt hast, sonst nur für Totenscheine benutzt wird. Ein alter Mechaniker namens Lazarus schraubte dir eine Bordkanone auf die Haube, eine freundliche Oma bot dir Plätzchen und Landminen an, und eine Dame vom Sensenblatt machte ein Foto von dir. „Fürs Archiv“, sagte sie. „Und für später.“
+> Willkommen im Armengrab, der untersten der fünf Ligen. Hier fängt jeder an. Die meisten bleiben auch hier – nur eben etwas tiefer.
+
+story_en intro
+> It was raining the night your life took a sharp turn – a sharp turn, to be precise, straight into the back of a hearse. The brakes on your rust bucket had resigned some time ago; they just hadn't told you.
+> The driver got out, inspected the dent in his bumper, then inspected you, and nodded with approval. "Good reflexes," he said. "Terrible brakes. The gentleman in the back didn't complain, by the way." The gentleman in the back was lying in an oak casket and hadn't complained about anything since Tuesday.
+> You had already lost your courier job that evening, your rent was three months overdue, and your car was worth less than the petrol in it. Insurance was something that happened to other people. The driver seemed to sense this. Instead of asking for your details, he handed you a black card with a silver edge: GRAVE PRIX – cash prizes. Funeral included. On the back: the scrap yard on the edge of town, midnight.
+> At midnight the scrap yard was full of cars with cannons bolted to their bonnets, drivers with nicknames instead of first names and a roaring crowd waving betting slips. In the middle of it all stood a tall, gaunt gentleman in a frock coat, who measured you from head to toe with a tape measure before he shook your hand. "Mortimer Graves," he said. "Graves & Sons. Win with us and you get rich. Lose and you become a customer. Either suits me perfectly."
+> You signed. With a fountain pen that, as you noticed a moment too late, is normally reserved for death certificates. An old mechanic called Lazarus bolted a chain gun to your bonnet, a sweet old lady offered you cookies and landmines, and a woman from The Grim Reader took your photograph. "For the archive," she said. "And for later."
+> Welcome to the Pauper's Grave, the lowest of five leagues. Everyone starts down here. Most of them stay down here, too – just a little deeper.
+
+# ------------------------------------------------------------------------------------------------ the leagues
+
+story league_5
+  title "Ganz unten"
+  title_en "Rock Bottom"
+> Das Armengrab fährt auf dem Schrottplatz und auf dem alten Friedhof Ewige Ruh: Schlamm, Nebel, Grabsteine als Leitplanken. Die Autos sind rostig, die Waffen geliehen, die Fahrer pleite. Wer hier gewinnt, kann sich eine Reparatur leisten. Wer verliert, bekommt eine Kiste aus Paletten.
+> Der Champion heißt Barry D. Alive, ein Totengräber, der sich einmal selbst wieder ausgegraben hat und seitdem ein Glöckchen am Handgelenk trägt. Um ihn herum: Tetanus Tess, die Königin des Schrottplatzes, die alles rammt, was glänzt; Kalle Kühlfach in seinem Eiswagen; der ewig verängstigte Vic Timm und Nine-Lives Nina, die bereits acht ihrer neun Leben verbraucht hat.
+> Sammle Punkte. Mit vierzig Punkten und dem ersten Platz in der Tabelle darfst du Barry zum Duell fordern. Gewinnst du, geht es eine Liga höher. Verlierst du, geht es eine Etage tiefer – Barry kennt sich mit Löchern aus.
+
+story_en league_5
+> The Pauper's Grave races on the scrap yard and in the old Eternal Rest cemetery: mud, fog, headstones for crash barriers. The cars are rusty, the weapons borrowed, the drivers broke. Win down here and you can afford a repair. Lose and you get a box made of pallets.
+> The champion is Barry D. Alive, a gravedigger who once dug himself back out of his own grave and has worn a little bell on his wrist ever since. Around him: Tetanus Tess, queen of the scrap yard, who rams anything shiny; Kalle Kühlfach in his ice-cream van; the permanently terrified Vic Timm; and Nine-Lives Nina, who has already used up eight of her nine.
+> Collect points. With forty points and first place in the table you may challenge Barry to a duel. Win, and you move up a league. Lose, and you move down a floor – Barry knows all about holes.
+
+story league_4
+  title "In Reih und Glied"
+  title_en "Death Row"
+> Willkommen im Reihengrab. Hier stehen die Gräber in ordentlichen Reihen, die Container im Hafen auch, und in der Wüste stehen die Geier Schlange. Zum ersten Mal kostet das große Rennen Startgeld, und zum ersten Mal fliegen echte Raketen. Dolores Kaboom hat ihr Sortiment erweitert und dafür extra eine Strickjacke mit größeren Taschen gekauft.
+> Der Champion ist Jack Knife, ein Fernfahrer, der Kurven grundsätzlich geradeaus nimmt. Mina Field legt Minen in Reih und Glied, Anita Hearse fährt tagsüber für Graves & Sons und nachts gegen dich, No-Claims Clyde will unbedingt, dass du ihm hinten drauffährst, und Vince Vulture wartet geduldig darauf, dass du es bei jemand anderem tust.
+> Mortimer Graves hat dir zur Beförderung einen Kranz geschickt. Auf der Schleife steht: „Bis bald.“ Es ist nicht ganz klar, ob das ein Gruß oder eine Prognose ist.
+
+story_en league_4
+> Welcome to Death Row. The graves here stand in neat rows, so do the containers down at the docks, and out in the desert the vultures form an orderly queue. For the first time the big race costs an entry fee, and for the first time real rockets are flying. Dolores Kaboom has expanded her range and bought a cardigan with bigger pockets specially.
+> The champion is Jack Knife, a trucker who takes every corner in a straight line. Mina Field lays her mines in tidy rows, Anita Hearse drives for Graves & Sons by day and against you by night, No-Claims Clyde is desperate for you to rear-end him, and Vince Vulture waits patiently for you to do it to somebody else.
+> Mortimer Graves has sent you a wreath to celebrate your promotion. The ribbon says: "See you soon." It is not entirely clear whether that is a greeting or a forecast.
+
+story league_3
+  title "Familienangelegenheiten"
+  title_en "All in the Family"
+> Die Familiengruft fährt zwischen den Fackeltürmen der Raffinerie und durch den Sumpf, in dem die Autos der Vorgänger langsam versinken. Das Geld ist ernst, die Waffen sind ernst, und Hedda Epitaph vom Sensenblatt hat dir zum ersten Mal eine ganze Seite gewidmet. Die Überschrift lautet: „Wie lange noch?“
+> Petra Leum führt die Liga an, eine Ölbaronin, die drei Raffinerien und mehrere Ehemänner überlebt hat. Wilbur Widower hat fünf Ehefrauen überlebt und hält das für Zufall. Doc Flatline stellt Totenscheine direkt an der Strecke aus, Cinder Ella hüllt alles in Rauch, und Marsh Mallow legt Minen in den Schlamm wie andere Leute Kartoffeln.
+> In dieser Liga geht es um mehr als Geld. Wer hier oben mitfährt, bekommt einen Platz in der Familiengruft von Graves & Sons – auf Lebenszeit, und danach erst recht.
+
+story_en league_3
+> The Family Plot races between the refinery's flare stacks and through the swamp where the cars of previous contestants are slowly sinking. The money is serious, the weapons are serious, and Hedda Epitaph of The Grim Reader has given you a whole page for the first time. The headline reads: "How Much Longer?"
+> Petra Leum leads the league, an oil baroness who has outlived three refineries' worth of business partners and several husbands. Wilbur Widower has outlived five wives and calls it coincidence. Doc Flatline signs death certificates trackside, Cinder Ella wraps everything in smoke, and Marsh Mallow plants mines in the mud the way other people plant potatoes.
+> This league is about more than money. Anyone racing at this level gets a place in the Graves & Sons family plot – for life, and very much afterwards.
+
+story league_2
+  title "Mit allen Ehren"
+  title_en "Full Honours"
+> Im Staatsbegräbnis fährst du nachts durch die Innenstadt, zwischen Neonreklamen und roten Ampeln, die hier niemand beachtet, und über einen vereisten Pass, auf dem Lawinenzäune mehr Fahrer aufgehalten haben als jede Polizei. Radio Requiem überträgt live. Ricky Rattle spricht deinen Namen inzwischen richtig aus.
+> Gloria Mundy ist der Champion, ein Schlagerstar, der seine Raketen wie Feuerwerk über die Stadt schießt. Sally Cophagus verwandelt die Strecke in eine Grabkammer voller Fallen, Audrey Audit prüft jeden Fehler, den du machst, der Baron von Bremsspur rammt dich, weil du nicht adelig bist, und Dirk Dirge spielt dir schon mal den Trauermarsch vor.
+> Mortimer Graves hat dich zum Tee eingeladen. Er hat dir eine Tasse Earl Grey eingeschenkt, dich lange angesehen und gesagt: „Sie erinnern mich an jemanden.“ An wen, hat er nicht verraten. Auf dem Kaminsims stand ein Foto von einem leeren Stuhl.
+
+story_en league_2
+> In Lying in State you race by night through downtown, between neon signs and red lights that nobody here takes any notice of, and over an icy pass where the avalanche fences have stopped more drivers than any police force. Radio Requiem broadcasts live. Ricky Rattle has finally learned to pronounce your name.
+> Gloria Mundy is the champion, a fading pop star who fires her rockets over the city like fireworks. Sally Cophagus turns the track into a booby-trapped tomb, Audrey Audit audits every mistake you make, Baron von Bremsspur rams you for being a commoner, and Dirk Dirge is already playing your funeral march as a warm-up.
+> Mortimer Graves invited you to tea. He poured you a cup, studied you for a long while and said, "You remind me of someone." He didn't say who. On the mantelpiece stood a framed photograph of an empty chair.
+
+story league_1
+  title "Die Spitze der Pyramide"
+  title_en "The Tip of the Pyramid"
+> Das Pharaonengrab: die oberste Liga. Gefahren wird auf einem verlassenen Rummelplatz, auf dem die Achterbahn nachts von selbst anläuft, und auf einem Truppenübungsplatz, auf dem noch Blindgänger aus drei Kriegen liegen. Wer hier stirbt, wird nicht beerdigt, sondern beigesetzt – mit Grabbeigaben, Weihrauch und Ehrensalut.
+> Major Casualty ist der Champion, ein Offizier, der sieben Feldzüge verloren und dabei sämtliche Munitionsvorräte verbraucht hat. Reverend Ash Wednesday segnet seine Minen, Mister Mirthless hat seit Jahren nicht gelacht, Lady Molly Toff serviert brennende Cocktails, und Dee Ceased ist offiziell schon seit sechs Jahren tot und fährt trotzdem schneller als alle Lebenden.
+> Hinter dem Pharaonengrab gibt es nur noch eines: das Anwesen von Mortimer Graves. Dort gibt es keine Liga, keine Punkte und keine zweite Chance – nur ein Rennen, ein offenes Grab und einen sehr höflichen Gastgeber.
+
+story_en league_1
+> The Pharaoh's Tomb: the top league. The races run through an abandoned fairground where the roller coaster starts up by itself at night, and across a military proving ground still littered with duds from three wars. Die up here and you aren't buried, you're entombed – with grave goods, incense and a gun salute.
+> Major Casualty is the champion, an officer who lost seven campaigns and used up every round of ammunition in the process. Reverend Ash Wednesday blesses his mines, Mister Mirthless hasn't laughed in years, Lady Molly Toff serves cocktails that are on fire, and Dee Ceased has been officially dead for six years and still drives faster than anyone alive.
+> Beyond the Pharaoh's Tomb there is only one thing left: Mortimer Graves' estate. No league, no points, no second chance – just one race, one open grave and one very polite host.
+
+# ------------------------------------------------------------------------------------------------ the showdowns
+
+story showdown_5
+  title "Duell im Nebel"
+  title_en "Duel in the Fog"
+> Barry D. Alive wartet am Friedhofstor, auf die Schaufel gestützt. „Ich hab dir schon mal ein Loch gegraben“, sagt er freundlich. „Nur für den Fall.“ Das Glöckchen an seinem Handgelenk bimmelt leise im Wind.
+> Nur ihr beide, eine Strecke und der Nebel. Gewinnst du, gehört dir das Armengrab. Verlierst du, gehört dir ein Loch.
+
+story_en showdown_5
+> Barry D. Alive is waiting at the cemetery gate, leaning on his shovel. "Dug you a hole already," he says kindly. "Just in case." The little bell on his wrist tinkles in the wind.
+> Just the two of you, one track and the fog. Win, and the Pauper's Grave is yours. Lose, and so is the hole.
+
+story showdown_4
+  title "Gegenverkehr"
+  title_en "Oncoming Traffic"
+> Jack Knife hat seinen Truck quer vor die Startlinie gestellt und kaut auf einem Zahnstocher. „Breaker, breaker“, knistert es aus deinem Funkgerät. „Ich fahr dich nicht um, Kleines. Ich fahr nur da lang, wo du gerade bist.“
+> Ricky Rattle nennt es das Duell des Jahres. Die Wettbüros nennen es eine sichere Sache. Für Jack.
+
+story_en showdown_4
+> Jack Knife has parked his rig sideways across the start line and is chewing on a toothpick. "Breaker, breaker," crackles your radio. "I ain't gonna run you over, kid. I'm just gonna drive where you happen to be."
+> Ricky Rattle calls it the duel of the year. The bookmakers call it a sure thing. For Jack.
+
+story showdown_3
+  title "Ölwechsel"
+  title_en "Oil Change"
+> Petra Leum empfängt dich in einem Pelz, der nach Rohöl riecht, und einem Lächeln, das nach Erbschaft riecht. „Ich habe die Strecke frisch ölen lassen“, sagt sie. „Für dich, Schätzchen. Ich weiß ja, wo die Pfützen sind.“
+> Hinter ihr brennen die Fackeltürme der Raffinerie. Einer davon, wird gemunkelt, brennt seit dem Tod ihres zweiten Mannes ununterbrochen.
+
+story_en showdown_3
+> Petra Leum greets you in a fur that smells of crude oil and a smile that smells of inheritance. "I've had the track freshly oiled," she says. "For you, darling. I do know where all the puddles are."
+> Behind her the refinery's flare stacks are burning. One of them, people whisper, has been burning non-stop since her second husband passed away.
+
+story showdown_2
+  title "Die letzte Vorstellung"
+  title_en "Final Performance"
+> Gloria Mundy hat Scheinwerfer an der Strecke aufstellen lassen, ein Kamerateam bestellt und für sich selbst einen roten Teppich bis zum Fahrersitz ausgerollt. „Darling“, sagt sie und rückt die Sonnenbrille zurecht, „ich bin der Star. Du bist die Statistik.“
+> Die Stadt schaut zu. Radio Requiem sendet live. Und irgendwo in der Menge steht Mortimer Graves mit einem Notizbuch und schreibt etwas auf. Vermutlich deine Maße.
+
+story_en showdown_2
+> Gloria Mundy has had floodlights set up along the track, booked a camera crew and rolled out a red carpet for herself all the way to the driver's seat. "Darling," she says, adjusting her sunglasses, "I'm the star. You're the statistic."
+> The whole city is watching. Radio Requiem is live. And somewhere in the crowd Mortimer Graves stands with a notebook, writing something down. Your measurements, presumably.
+
+story showdown_1
+  title "Manöver"
+  title_en "Manoeuvres"
+> Major Casualty hat auf dem Übungsplatz eine Lagekarte ausgerollt, auf der dein Auto bereits mit einem roten Kreuz markiert ist. „Rekrut“, bellt er, „ich habe sieben Feldzüge verloren. Einen achten verliere ich nicht. Erst recht nicht gegen jemanden ohne Orden.“
+> Das hier ist das letzte Duell vor dem Anwesen. Wer gewinnt, bekommt eine Einladung von Mortimer Graves. Wer verliert, bekommt einen Ehrensalut. Mit scharfer Munition, fürchtet man.
+
+story_en showdown_1
+> On the proving ground Major Casualty has unrolled a field map on which your car is already marked with a red cross. "Recruit," he barks, "I have lost seven campaigns. I shall not lose an eighth. Least of all to someone without a single medal."
+> This is the last duel before the estate. Win, and you receive an invitation from Mortimer Graves. Lose, and you receive a gun salute. With live rounds, one fears.
+
+# ------------------------------------------------------------------------------------------------ the champions
+
+story champion_5
+  title "Barry bimmelt"
+  title_en "Saved by the Bell"
+> Barry D. Alive klettert aus seinem Wrack, klopft sich die Erde von der Weste und schüttelt dir die Hand. „Gut gefahren“, sagt er. „Ich komm schon wieder raus. Ich komm immer wieder raus.“ Dann bimmelt er mit seinem Glöckchen, für den Fall, dass jemand vergessen hat, wo er liegt.
+> Das Armengrab gehört dir. Mortimer Graves schickt eine Karte mit Trauerrand: „Herzlichen Glückwunsch zur Beförderung. Ihre Grabstelle wurde aufgewertet.“ Im Reihengrab wartet die nächste Liga – und echtes Startgeld.
+
+story_en champion_5
+> Barry D. Alive climbs out of his wreck, brushes the soil off his waistcoat and shakes your hand. "Good driving," he says. "I'll get out of this one. I always get out." Then he rings his little bell, in case anyone has forgotten where he is.
+> The Pauper's Grave is yours. Mortimer Graves sends a black-edged card: "Congratulations on your promotion. Your burial plot has been upgraded accordingly." Death Row awaits – and real entry fees.
+
+story champion_4
+  title "Zehn-vier"
+  title_en "Ten-Four"
+> Jack Knifes Truck liegt auf der Seite wie ein müder Wal. Jack selbst sitzt daneben im Staub, schiebt die Sonnenbrille hoch und lacht so laut, dass die Geier auffliegen. „Zehn-vier, Kleines“, sagt er. „Du hast mich überholt. Das hat noch keiner geschafft, der danach noch laufen konnte.“
+> Er schenkt dir sein Funkgerät. „Falls du da oben mal Hilfe brauchst.“ Dann ruft er seine Kumpels an, damit sie den Truck wieder auf die Räder stellen. Die Familiengruft ruft.
+
+story_en champion_4
+> Jack Knife's rig lies on its side like a tired whale. Jack himself sits beside it in the dust, pushes up his sunglasses and laughs so loudly the vultures take off. "Ten-four, kid," he says. "You passed me. Nobody's done that and still been able to walk afterwards."
+> He gives you his CB radio. "In case you ever need a hand up there." Then he calls his buddies to come and put the rig back on its wheels. The Family Plot is calling.
+
+story champion_3
+  title "Trockengelegt"
+  title_en "Drained Dry"
+> Petra Leum steigt aus ihrem qualmenden Wagen, ohne dass ihr Pelz auch nur einen Fleck abbekommt. Sie mustert dich lange und sagt dann: „Du bist der erste Mensch, der mich geschlagen hat, ohne vorher mit mir verheiratet gewesen zu sein. Ich bin beeindruckt. Und ein bisschen erleichtert, dass du nicht um meine Hand anhältst.“
+> Hedda Epitaph widmet dir die Titelseite des Sensenblatts. Die Überschrift ist nicht mehr „Wie lange noch?“, sondern „Wer ist das eigentlich?“. In der Staatsbegräbnis-Liga wird man es herausfinden wollen.
+
+story_en champion_3
+> Petra Leum steps out of her smoking car without a single spot on her fur. She studies you for a long time, then says, "You're the first person who ever beat me without being married to me first. I'm impressed. And slightly relieved you're not proposing."
+> Hedda Epitaph gives you the front page of The Grim Reader. The headline is no longer "How Much Longer?" but "Who Is This, Anyway?". Lying in State will want to find out.
+
+story champion_2
+  title "Vorhang"
+  title_en "Curtain Call"
+> Gloria Mundys Wagen ist eine Ruine aus Pailletten und Funken, aber sie steigt aus, als würde sie eine Bühne betreten. Sie wirft der Menge Kusshände zu, dreht sich zu dir um und flüstert: „Genieß es, Darling. Ruhm ist wie Feuerwerk – laut, hell und hinterher riecht alles verbrannt.“
+> Am nächsten Morgen liegt ein Brief mit schwarzem Siegel vor deiner Tür. Mortimer Graves gratuliert und lädt dich ins Pharaonengrab ein, „wo die Fahrer nicht mehr beerdigt, sondern beigesetzt werden“. Unterschrieben mit „Ihr ergebener M. G.“, darunter in kleinerer Schrift: „Maße liegen vor.“
+
+story_en champion_2
+> Gloria Mundy's car is a ruin of sequins and sparks, but she steps out as if walking onto a stage. She blows kisses to the crowd, turns to you and whispers, "Enjoy it, darling. Fame is like fireworks – loud, bright, and afterwards everything smells burnt."
+> The next morning a letter with a black seal is waiting on your doorstep. Mortimer Graves congratulates you and invites you to the Pharaoh's Tomb, "where drivers are no longer buried but entombed". It is signed "Your humble servant, M. G.", and below, in smaller writing: "Measurements on file."
+
+story champion_1
+  title "Rührt euch"
+  title_en "At Ease"
+> Major Casualty kriecht aus seinem brennenden Panzerwagen, nimmt Haltung an und salutiert. „Rekrut“, sagt er, und seine Stimme bricht ein wenig, „das war die schönste Niederlage meiner Laufbahn. Und ich hatte viele.“ Er heftet dir einen seiner Orden an die Brust. Was er bedeutet, weiß niemand, nicht einmal der Major.
+> Dann senkt er die Stimme. „Graves erwartet Sie auf seinem Anwesen. Er fährt selbst. Seien Sie vorsichtig – ich habe ihn einmal überholt. Seitdem liegt mein Bruder in seiner Kapelle.“ Ein Gewitter zieht auf. Es ist Zeit.
+
+story_en champion_1
+> Major Casualty crawls out of his burning armoured car, stands to attention and salutes. "Recruit," he says, and his voice cracks a little, "that was the finest defeat of my career. And I've had a great many." He pins one of his medals to your chest. Nobody knows what it's for, not even the Major.
+> Then he lowers his voice. "Graves expects you at his estate. He drives himself. Be careful – I overtook him once. My brother has been lying in his chapel ever since." A thunderstorm is gathering. It's time.
+
+# ------------------------------------------------------------------------------------------------ the boss
+
+story boss
+  title "Das letzte Geleit"
+  title_en "The Last Procession"
+> Das Anwesen von Mortimer Graves liegt hinter einem schmiedeeisernen Tor, über dem in verschnörkelten Buchstaben GRAVES & SONS steht. Dahinter: Mausoleen, so groß wie Wohnhäuser, eine Privatkapelle mit Orgelmusik vom Band und ein gotisches Herrenhaus, in dem in jedem Fenster eine Kerze brennt. Es donnert. Natürlich donnert es.
+> Graves erwartet dich vor seinem Leichenwagen, einer gepanzerten Limousine mit getönten Scheiben, Rammsporn und einem Kofferraum, in den genau ein Sarg passt. „Wie schön, dass Sie es einrichten konnten“, sagt er und zieht die weißen Handschuhe straff. „Ich habe vierzig Jahre lang jede Beerdigung dieser Liga ausgerichtet. Alle Fahrer, die mich herausgefordert haben, liegen hier. Sie werden sie gleich sehen – in den Kurven.“
+> Das Grab hinter der Kapelle ist frisch ausgehoben. Auf dem Grabstein fehlt nur noch der Name. „Ich bin nicht abergläubisch“, sagt Graves, „aber ich bin gern vorbereitet.“ Dann steigt er ein, und die Totenglocke gibt das Startsignal.
+
+story_en boss
+> Mortimer Graves' estate lies behind a wrought-iron gate crowned with the words GRAVES & SONS in curling letters. Beyond it: mausoleums the size of houses, a private chapel with organ music on a loop and a gothic manor with a candle burning in every window. There is thunder. Of course there is thunder.
+> Graves is waiting beside his hearse, an armoured limousine with tinted windows, a ram on the front and a boot that fits exactly one coffin. "How lovely that you could make it," he says, pulling his white gloves taut. "For forty years I have arranged every funeral this league produced. Every driver who ever challenged me lies here. You'll see them in a moment – on the corners."
+> The grave behind the chapel has been freshly dug. The headstone lacks only a name. "I am not superstitious," says Graves, "but I do like to be prepared." Then he gets in, and the death knell tolls the start.
+
+# ------------------------------------------------------------------------------------------------ the endings
+
+story ending
+  title "Graves & Sons"
+  title_en "Graves & Sons"
+> Der gepanzerte Leichenwagen liegt qualmend im Familiengrab der Graves, halb in der frisch ausgehobenen Grube, die eigentlich für dich gedacht war. Mortimer Graves steigt aus, unverletzt bis auf einen Knick im Zylinder. Er klopft sich den Staub vom Gehrock, betrachtet den Grabstein ohne Namen und lacht – zum ersten Mal, seit irgendwer zurückdenken kann.
+> „Wissen Sie“, sagt er, „Graves & Sons hatte nie Söhne. Ich habe vierzig Jahre lang einen Nachfolger gesucht. Jemanden, der schnell ist, gnadenlos und ein Herz fürs Geschäft hat. Alle, die ich dafür in Betracht zog, liegen hier.“ Er deutet mit dem Spazierstock über die Mausoleen. „Sie sind der Erste, der übrig geblieben ist.“
+> Am nächsten Morgen unterschreibst du in seinem Arbeitszimmer die Übernahme der Firma, mit demselben Füller wie damals. Graves überreicht dir das Maßband, die Schlüssel zum Leichenwagen und eine Mappe mit der Aufschrift „Laufende Verträge“. Dann sagt er, er wolle sich ein wenig ausruhen, und probiert in der Kapelle einen der neuen Mahagonisärge aus. „Nur zur Qualitätskontrolle.“
+> Er ist nicht wieder aufgestanden. Man fand ihn friedlich lächelnd, die Hände gefaltet, das Maßband noch in der Hand: Er hatte sich selbst ausgemessen, und der Sarg passte auf den Millimeter. Die Beerdigung richtest du aus, natürlich mit dem üblichen Fahrerrabatt von zehn Prozent. Ricky Rattle kommentiert den Trauerzug live, Dolores Kaboom backt Plätzchen, Lazarus poliert den Leichenwagen, und Barnaby Fin schickt einen Kranz mit der Schleife „Schulden erlassen“ – die erste Lüge seines Lebens, die man ihm nicht übel nimmt.
+> Das Sensenblatt titelt: „Der Tod hat einen neuen Chef“. Über dem Tor des Anwesens hängt seit gestern ein neues Schild. Es heißt immer noch Graves & Sons. Endlich mit Sohn – oder Tochter, das Schild ist da großzügig.
+> Und als am Abend das Telefon klingelt und eine nervöse Stimme fragt, ob man beim Grave Prix noch mitfahren könne, greifst du nach dem Maßband und sagst: „Willkommen im Grave Prix. Was immer passiert – ich kümmere mich um alles Weitere.“
+
+story_en ending
+> The armoured hearse lies smoking in the Graves family plot, half in the freshly dug grave that was meant for you. Mortimer Graves climbs out, unhurt apart from a dent in his top hat. He brushes the dust off his frock coat, looks at the nameless headstone and laughs – for the first time in living memory.
+> "You know," he says, "Graves & Sons never had any sons. For forty years I've been looking for a successor. Someone fast, merciless and with a real feel for the business. Everyone I ever considered for the position is lying here." He sweeps his cane across the mausoleums. "You are the first one left standing."
+> The next morning, in his study, you sign the papers that hand you the firm – with the very same fountain pen as before. Graves gives you the tape measure, the keys to the hearse and a folder marked "Current Contracts". Then he says he would like a little rest and goes off to the chapel to try out one of the new mahogany caskets. "Quality control, you understand."
+> He never got up again. They found him smiling peacefully, hands folded, the tape measure still between his fingers: he had measured himself, and the casket fitted to the millimetre. You handle the funeral, naturally with the customary ten percent driver's discount. Ricky Rattle commentates the procession live, Dolores Kaboom bakes cookies, Lazarus polishes the hearse, and Barnaby Fin sends a wreath whose ribbon reads "Debt Forgiven" – the first lie of his life that nobody holds against him.
+> The Grim Reader's headline: "Death Under New Management". Since yesterday a new sign hangs over the estate's gate. It still says Graves & Sons. Only now there finally is one – or a daughter; the sign isn't fussy.
+> And when the telephone rings that evening and a nervous voice asks whether there's still a place in the Grave Prix, you reach for the tape measure and say: "Welcome to the Grave Prix. Whatever happens – I'll handle the arrangements."
+
+story bankrupt
+  title "Zahlungsunfähig"
+  title_en "Insolvent"
+> Dein Auto ist ein Wrack, dein Konto ist leer, und Lazarus schüttelt nur den Kopf: „Kein Geld, kein Wunder.“ Dolores Kaboom schenkt dir zum Abschied ein Plätzchen – eins ohne Füllung, aus Mitleid. Barnaby Fins Inkasso-Zwillinge Soll und Haben nehmen mit, was noch übrig ist: das Lenkrad, die Radkappen und deinen letzten Funken Würde.
+> Mortimer Graves kommt persönlich vorbei, nimmt noch einmal Maß und schüttelt bedauernd den Kopf. „Kommen Sie wieder, wenn Sie tot sind“, sagt er freundlich. „Dann sind Sie wenigstens wieder kreditwürdig.“
+> Das Sensenblatt widmet dir eine Meldung in Schriftgröße sechs, zwischen einem Sargangebot und der Suchanzeige für einen linken Arm. Du gehst zu Fuß nach Hause. Es ist ein weiter Weg. Pass an der Ampel auf Leichenwagen auf.
+
+story_en bankrupt
+> Your car is a wreck, your account is empty, and Lazarus just shakes his head: "No cash, no miracle." Dolores Kaboom gives you a farewell cookie – one without a filling, out of pity. Barnaby Fin's twin collectors, Debit and Credit, take whatever is left: the steering wheel, the hubcaps and your last shred of dignity.
+> Mortimer Graves comes by in person, takes your measurements one last time and shakes his head regretfully. "Do come back when you're dead," he says kindly. "At least then you'll be creditworthy again."
+> The Grim Reader gives you a notice in six-point type, between a casket offer and a lost-and-found ad for a left arm. You walk home. It's a long way. Watch out for hearses at the traffic lights.
+
+story retire
+  title "Ruhestand"
+  title_en "Retirement"
+> Du hängst den Helm an den Nagel, verkaufst, was vom Auto übrig ist, und suchst dir eine Arbeit, bei der niemand auf dich schießt. Mortimer Graves schickt dir eine Karte mit Trauerrand: „Wir halten Ihre Grabstelle frei. Die Anzahlung ist nicht erstattungsfähig.“ Das Sensenblatt fragt in einer kleinen Meldung: „Feigling oder Genie?“
+> Viele Jahre später stirbst du mit vierundneunzig friedlich in deinem Bett, an Altersschwäche – die seltenste Todesursache in der Geschichte des Grave Prix. Graves & Sons richtet die Beerdigung trotzdem aus, mit zehn Prozent Fahrerrabatt. Ricky Rattle ist zu alt zum Kommentieren, kommt aber vorbei und murmelt am Grab: „Zielflagge.“
+
+story_en retire
+> You hang up your helmet, sell whatever is left of the car and find a job where nobody shoots at you. Mortimer Graves sends a black-edged card: "We shall keep your plot reserved. The deposit is non-refundable." The Grim Reader runs a small item asking: "Coward or Genius?"
+> Many years later you die peacefully in your bed at ninety-four, of old age – the rarest cause of death in the history of the Grave Prix. Graves & Sons handles the funeral all the same, with ten percent driver's discount. Ricky Rattle is too old to commentate any more, but he comes along and murmurs at the graveside: "Chequered flag."

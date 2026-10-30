@@ -1,0 +1,68 @@
+# The front guns (docs/DESIGN.md "Guns, gear and upgrades"). price 0: fitted to cars; the others are bought in the
+# garage and fitted instead. Ranges a..b run from gun level 0 to the car's top gun level.
+# Yardstick: a fully upgraded Eulogist empties a scrap car (80-140 HP) in about three to four seconds of hits.
+
+gun mg
+  title "Grabredner" title_en "The Eulogist"
+  desc "Ein Maschinengewehr wie eine Trauerrede: viele kurze Worte, und am Ende ist trotzdem jemand tot."
+  desc_en "A machine gun like a eulogy: lots of short words, and somebody still ends up dead."
+  price 0
+  damage 1.2..3
+  rate 8..10
+  ammo 100..200
+  speed 170
+  spread 2
+  range 70
+  heat 0
+  kind bullet
+  sound mg
+  color #ffd070
+
+gun twinmg
+  title "Doppelgrab" title_en "Twin Plot"
+  desc "Zwei Läufe, ein Ziel. Für Paare, die alles gemeinsam machen – bis zuletzt. Streut ein wenig, aber Blumen streut man ja auch."
+  desc_en "Two barrels, one target. For couples who do everything together – right to the end. It scatters a bit, but so do the flowers."
+  price 9000
+  damage 1..2.6
+  rate 12..16
+  ammo 160..320
+  speed 175
+  spread 2.8
+  range 65
+  heat 0
+  kind bullet
+  sound twinmg
+  color #ffe090
+
+gun cannon
+  title "Totenglocke" title_en "Death Knell"
+  desc "Schwer, langsam, endgültig. Jeder Schuss läutet für irgendwen – und schiebt ihn ein Stück näher an die Mauer."
+  desc_en "Heavy, slow, final. Every shot tolls for somebody – and shoves them a little closer to the wall."
+  price 24000
+  damage 9..22
+  rate 1.2..1.7
+  ammo 24..50
+  speed 120
+  spread 0.5
+  range 90
+  heat 0
+  kind shell
+  sound cannon
+  color #ffa040
+
+# Flames: no ammo, it overheats instead. heat is the seconds of fire that would fill the gauge without cooling; it
+# cools at 0.35 a second, so 1.6 gives about 3.5 s of fire before it chokes.
+gun flamer
+  title "Krematorium" title_en "Crematorium"
+  desc "Einäscherung vor Ort, ohne Wartezeit. Die Urne ist nicht im Preis enthalten."
+  desc_en "Cremation on the spot, no waiting list. Urn not included."
+  price 16000
+  damage 1..2.2
+  rate 18..24
+  speed 90
+  spread 7
+  range 30
+  heat 1.6
+  kind flame
+  sound flamer
+  color #ff8030

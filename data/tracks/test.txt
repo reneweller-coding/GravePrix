@@ -1,0 +1,13 @@
+# Test tracks of the engine (not raced in the career).
+track test_oval
+  title "Testoval" title_en "Test Oval"
+  venue cemetery
+  laps 3
+  width 14
+  shoulder 3
+  start 0 0 90
+  straight 120
+  right 180 r=40
+  straight 120
+  right 180 r=40
+  close

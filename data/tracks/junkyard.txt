@@ -1,0 +1,223 @@
+# The junkyard's tracks (venue junkyard, league 5): Tin Graveyard Scrapyard.
+# League 5: wide and friendly; one technical track (Tetanus Alley), one figure-eight (Write-Off Eight).
+
+# A wide, flowing loop: the paved yard apron, a gravel-edged carousel round the crusher hall, then the press -- a
+# chute narrowed to 11 m between two car crushers -- an S into the 18 m wreck plaza and a kink home.
+track junk_squeeze
+  title "Die Letzte Presse" title_en "The Last Squeeze"
+  venue junkyard
+  laps 5
+  width 15
+  shoulder 3
+  reverse 1
+  start 0 0 90
+  straight 160 surface=concrete
+  right 20 r=100
+  straight 80
+  right 160 r=55
+  straight 60 w=11
+  left 60 r=35
+  right 60 r=35 w=16
+  straight 115.7 w=18
+  right 90 r=30 w=15
+  straight 9.4
+  left 45 r=50
+  right 45 r=50
+  straight 30
+  right 90 r=35
+  straight 10 surface=concrete
+  close
+  patch gravel at=300 len=110 lat=-0.75 w=5
+  patch mud at=525 len=30 lat=0.4 w=8
+  hazard barrel at=432 lat=-0.85
+  hazard barrel at=436 lat=-0.9
+  hazard oil at=720 lat=0.3 r=2.5
+  obstacle wreck at=615 lat=0 r=2.2 model=wreck_car rot=30
+  pickup mystery at=80 lat=0
+  pickup ammo at=230 lat=-0.4
+  pickup mine at=340 lat=0.5
+  pickup cash at=458 lat=0
+  pickup wrench at=590 lat=-0.5
+  pickup nitro at=640 lat=0.6
+  pickup cash at=790 lat=0.75
+  pickup rocket at=870 lat=-0.3
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=60 side=left off=3
+  prop billboard at=120 side=left off=2
+  prop shack_tin at=20 side=right off=3 rot=0
+  row tire_stack at=0 len=150 side=right off=0 every=6
+  row tire_pile at=290 len=120 side=left off=2 every=14
+  prop car_crusher at=450 side=left off=1
+  prop car_crusher at=466 side=right off=1
+  row wreck_stack at=435 len=50 side=both off=0 every=8
+  row scrap_pile at=560 len=110 side=left off=4 every=16
+  prop oil_tank_small at=650 side=right off=3
+  row scrap_pile at=730 len=110 side=left off=4 every=18
+  place crane_magnet x=130 z=95 rot=20
+  place wreck_stack x=90 z=60 rot=10
+  place scrap_pile x=170 z=70 rot=0
+  place wreck_stack x=200 z=110 rot=60
+
+# Figure-eight round the magnet crane: a tight north loop, the long diagonal across the cross (bridge), a gravel
+# hairpin in the south loop and the second diagonal under the crane back home.
+track junk_writeoff
+  title "Totalschaden-Acht" title_en "Write-Off Eight"
+  venue junkyard
+  laps 5
+  width 14
+  shoulder 3
+  reverse 1
+  start -125.4 -4.6 135
+  straight 137.3
+  right 90 r=40
+  straight 40
+  right 135 r=18 surface=gravel
+  straight 40
+  right 45 r=40
+  straight 86.2
+  left 45 r=50
+  straight 60
+  left 90 r=40
+  straight 60
+  left 90 r=40
+  straight 20
+  left 45 r=50
+  close
+  bridge at=365 len=50
+  patch mud at=729 len=25 lat=0.4 w=7
+  hazard oil at=75 lat=-0.3 r=2.5
+  hazard barrel at=287 lat=0.85
+  hazard barrel at=291 lat=0.9
+  pickup cash at=107 lat=0
+  pickup mystery at=569 lat=-0.3
+  pickup ammo at=679 lat=-0.4
+  pickup wrench at=305 lat=0.2
+  pickup nitro at=155 lat=0.5
+  pickup rocket at=779 lat=0.4
+  pickup mine at=435 lat=-0.3
+  place start_gantry x=-125.4 z=-4.6 rot=135
+  prop grandstand at=20 side=left off=3
+  place crane_magnet x=-15 z=71 rot=45
+  place car_crusher x=-90 z=71 rot=45
+  row wreck_stack at=539 len=190 side=right off=2 every=12
+  row tire_pile at=240 len=45 side=left off=1 every=7
+  row scrap_pile at=165 len=120 side=right off=4 every=16
+  place scrap_pile x=-70 z=-50 rot=0
+  place oil_tank_small x=-60 z=135 rot=0
+  prop shack_tin at=455 side=right off=3
+
+# The technical one: narrow alleys stepping up between wreck stacks like stairs (11 m), a hairpin-ish corner at the
+# top, then the wide haul road -- a 245 m diagonal for guns and nitro -- and a sharp left onto the paved apron.
+track junk_tetanus
+  title "Tetanusgasse" title_en "Tetanus Alley"
+  venue junkyard
+  laps 5
+  width 15
+  shoulder 2
+  reverse 1
+  start 159.1 -207.4 225
+  straight 235.3
+  left 135 r=24 w=13
+  straight 80 surface=concrete
+  left 90 r=20
+  straight 30 w=12
+  right 90 r=20
+  straight 30
+  left 90 r=20
+  straight 30
+  right 90 r=20
+  straight 30
+  left 90 r=20
+  straight 40
+  left 90 r=22
+  straight 33.2
+  left 45 r=50 w=15
+  close
+  patch mud at=528 len=24
+  patch oil at=592 len=8 lat=0.3 w=5
+  patch gravel at=692 len=32 lat=0.6 w=5
+  hazard barrel at=468 lat=-0.85
+  hazard barrel at=590 lat=-0.85
+  hazard barrel at=728 lat=0.85
+  hazard oil at=125 lat=0.4 r=2.5
+  obstacle wreck at=354 lat=-0.5 r=2.2 model=wreck_car rot=100
+  pickup cash at=542 lat=0
+  pickup ammo at=412 lat=0.3
+  pickup wrench at=737 lat=-0.3
+  pickup mystery at=105 lat=0
+  pickup nitro at=25 lat=-0.5
+  pickup rocket at=195 lat=0.5
+  pickup mine at=652 lat=0
+  place start_gantry x=159.1 z=-207.4 rot=225
+  prop shack_tin at=322 side=right off=3 rot=0
+  prop grandstand at=20 side=right off=4
+  row wreck_stack at=372 len=320 side=both off=0 every=7
+  row tire_pile at=689 len=40 side=right off=1 every=6
+  row billboard at=5 len=220 side=right off=4 every=55
+  row scrap_pile at=5 len=230 side=left off=3 every=20
+  place car_crusher x=140 z=-150 rot=0
+  place crane_magnet x=90 z=-95 rot=30
+  place oil_tank_small x=40 z=-40 rot=0
+
+# The long one: a 300 m concrete runway (a pillar in the middle), a hairpin at its end with barrels at the exit, gravel
+# sweepers round the crusher, a mud bath, a kink and a chicane on the way home.
+track junk_scrappage
+  title "Abwrackprämie" title_en "Scrappage Bonus"
+  venue junkyard
+  laps 4
+  width 16
+  shoulder 3
+  reverse 1
+  start 0 0 90
+  straight 300 surface=concrete
+  right 180 r=18
+  straight 70 w=13
+  left 90 r=30
+  straight 40
+  left 60 r=60 surface=gravel
+  right 150 r=40 surface=gravel
+  straight 90 w=15
+  right 30 r=80
+  left 30 r=80
+  straight 60
+  right 90 r=40
+  straight 40
+  right 25 r=40
+  left 50 r=40
+  right 25 r=40
+  straight 23.6 w=16
+  right 90 r=40
+  straight 20 surface=concrete
+  close
+  patch mud at=700 len=45 lat=0.35 w=9
+  patch oil at=1040 len=10 lat=-0.2 w=5
+  hazard barrel at=362 lat=0.85
+  hazard barrel at=366 lat=0.9
+  hazard barrel at=476 lat=-0.85
+  hazard oil at=860 lat=-0.3 r=2.5
+  obstacle pillar at=210 lat=0 r=1.4 model=pillar_concrete
+  pickup nitro at=40 lat=0.3
+  pickup mystery at=150 lat=0
+  pickup cash at=255 lat=-0.65
+  pickup cash at=358 lat=-0.6
+  pickup ammo at=440 lat=0
+  pickup wrench at=690 lat=-0.5
+  pickup rocket at=800 lat=0.3
+  pickup mine at=950 lat=0
+  pickup wrench at=1100 lat=0.3
+  pickup mystery at=1150 lat=-0.3
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=40 side=left off=3
+  prop grandstand at=100 side=left off=3
+  row billboard at=130 len=150 side=left off=3 every=50
+  row tire_stack at=150 len=150 side=right off=0 every=8
+  prop car_crusher at=330 side=right off=4
+  row tire_pile at=300 len=60 side=left off=1 every=6
+  row scrap_pile at=480 len=200 side=left off=4 every=18
+  row wreck_stack at=700 len=150 side=right off=2 every=10
+  prop oil_tank_small at=1000 side=left off=3
+  prop shack_tin at=1150 side=left off=3
+  place crane_magnet x=120 z=120 rot=0
+  place wreck_stack x=80 z=90 rot=30
+  place scrap_pile x=150 z=170 rot=0
+  place car_crusher x=60 z=160 rot=90

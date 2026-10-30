@@ -1,0 +1,28 @@
+{
+ "name": "Grave Prix calm",
+ "style": "instrumental video game background music, relaxed, constant mood, no intro, no ending, darkly humorous",
+ "key": "A minor",
+ "bpm": 92,
+ "timesig": "4",
+ "takes": 2,
+ "format": "flac",
+ "seed": 6662,
+ "cues": [
+  {
+   "id": "garage",
+   "type": "loop",
+   "bars": 16,
+   "bpm": 92,
+   "key": "A minor",
+   "style": "sleazy lounge blues in a grimy garage behind a funeral parlour, walking upright bass, brushed drums, smoky Hammond organ, lazy tremolo guitar, cheeky and gloomy"
+  },
+  {
+   "id": "results",
+   "type": "loop",
+   "bars": 16,
+   "bpm": 84,
+   "key": "D minor",
+   "style": "slow dark blues rock after the race, heavy shuffle drums, moaning slide guitar, warm bass, a funeral organ in the background, tired and sardonic"
+  }
+ ]
+}
