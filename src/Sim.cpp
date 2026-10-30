@@ -153,7 +153,7 @@ void World::init( const Track &track, const std::vector<CarSetup> &cars, ModeE m
         c.m_len = c.m_def->m_length;
         c.m_wid = c.m_def->m_width;
         c.m_inertia = c.m_mass * ( c.m_len * c.m_len + c.m_wid * c.m_wid ) / 12.0f;
-        if ( c.m_setup.m_human )
+        if ( c.m_setup.m_player )
         {
             c.m_dmgTaken = dif.m_damageTaken;
             c.m_dmgDealt = dif.m_damageDealt;

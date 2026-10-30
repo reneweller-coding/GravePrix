@@ -416,6 +416,11 @@ ideal pace), `ai_skill`, `ai_aggression`, `ai_weapons`, `damage_taken`, `damage_
 `repair`, `rubber` (how much the field waits for and chases the player), `deaths` (how often a wrecked rival dies),
 `growth` (how fast rivals upgrade), `interest` (the loan shark's rate).
 
+The `ai_*` factors and `rubber` act on the rivals only; `damage_taken`, `damage_dealt` and the economy act on the
+player's car (`CarSetup::m_player`), also when a computer drives it in `--careersim`. Measured with
+`tools/careersweep.py` (5 seeds, 30.10.2026): Schonfrist ~30 race days, Blechschaden ~35-47, Totalschaden 47-134,
+Sargnagel 3 of 5 careers won (80-88), Totentanz 1 of 5 (123), the others bankrupt or stuck in league 4.
+
 ## News, story, sponsors (`data/news/*.txt`, `data/story/*.txt`, `data/sponsors.txt`)
 
 ```
@@ -457,6 +462,8 @@ scraping, gravel, flamer, fire, rain, wind and one ambience per venue) and engin
 - `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place.
 - `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window.
 - `--careersim [--days N] [--seed N] [--skill 0..1]` — a career played by the computer (the economy's test).
+- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..]` — `--careersim` for every difficulty and seed,
+  three at a time at low priority, one line per career.
 - `--apptest SCRIPT` — the screens played by a script (tools/apptest_*.txt; a hidden window; set GRAVE_HOME).
 - `--shot` refuses while G:/Tools/Games/GPU_BELEGT.txt exists (another session's GPU job).
 - `.\build.ps1` builds into bin\msvc; `.\build.ps1 -Dir <name>` into build\<name> (for a second worker).

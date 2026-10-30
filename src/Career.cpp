@@ -234,6 +234,7 @@ CarSetup Career::playerSetup() const
     s.m_driver = m_name;
     s.m_paint = m_paint;
     s.m_human = true;
+    s.m_player = true;
     s.m_engine = m_up[(int)UpE::ENGINE];
     s.m_tires = m_up[(int)UpE::TIRES];
     s.m_armor = m_up[(int)UpE::ARMOR];

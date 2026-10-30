@@ -786,6 +786,7 @@ void App::quick()
         me.m_driver = m_inCareer ? m_career.m_name : T( "Du" );
         me.m_paint = scheme( m_qColor );
         me.m_human = true;
+        me.m_player = true;
         me.m_engine = me.m_tires = me.m_armor = me.m_gunLv = 3;
         me.m_rear[(int)RearE::MINE] = 4;
         me.m_rear[(int)RearE::OIL] = 2;

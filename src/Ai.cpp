@@ -41,9 +41,11 @@ CarInput World::ai( int i )
     const Track         &T = *m_track;
     const DifficultyDef &dif = g_data.difficulty( m_difficulty );
     int                  n = (int)T.m_s.size();
-    float skill = clampf( ( 0.35f + 0.65f * c.m_setup.m_skill ) * ( 0.55f + 0.45f * dif.m_aiSkill ), 0.1f, 1.0f );
-    float temper = clampf( c.m_setup.m_aggression * dif.m_aiAggression, 0, 1 );
-    float trigger = clampf( c.m_setup.m_weapons * dif.m_aiWeapons, 0, 1 );
+    // The player's car (a computer driving for the player in tests) drives by its own skill, whatever the difficulty.
+    bool  own = c.m_setup.m_player;
+    float skill = clampf( ( 0.35f + 0.65f * c.m_setup.m_skill ) * ( own ? 1.0f : 0.55f + 0.45f * dif.m_aiSkill ), 0.1f, 1.0f );
+    float temper = clampf( c.m_setup.m_aggression * ( own ? 1.0f : dif.m_aiAggression ), 0, 1 );
+    float trigger = clampf( c.m_setup.m_weapons * ( own ? 1.0f : dif.m_aiWeapons ), 0, 1 );
     bool  calm = c.m_finished;   // a lap of honour after the flag (also for the humans' cars)
     if ( calm ) skill = std::max( skill, 0.7f );
     float    v = c.speed();
@@ -63,7 +65,7 @@ CarInput World::ai( int i )
             for ( size_t k = 0; k < m_cars.size(); ++k )
             {
                 if ( (int)k == i || m_cars[k].m_wrecked ) continue;
-                float d = len( sub( m_cars[k].m_pos, c.m_pos ) ) * ( m_cars[k].m_setup.m_human ? 1.0f - 0.4f * temper : 1.0f );
+                float d = len( sub( m_cars[k].m_pos, c.m_pos ) ) * ( m_cars[k].m_setup.m_player ? 1.0f - 0.4f * temper : 1.0f );
                 if ( d < best )
                 {
                     best = d;
@@ -174,7 +176,7 @@ CarInput World::ai( int i )
                 if ( (int)k == i || o.m_wrecked ) continue;
                 float ds = T.delta( c.m_s, o.m_s );
                 if ( ds < -4 || ds > 16 ) continue;
-                if ( !o.m_setup.m_human && m_rng.chance( 0.6f ) ) continue;
+                if ( !o.m_setup.m_player && m_rng.chance( 0.6f ) ) continue;
                 a.m_ram = 1.5f;
                 a.m_target = (int)k;
                 break;
@@ -258,7 +260,7 @@ CarInput World::ai( int i )
     if ( off > 3 ) want *= clampf( 1.0f - ( off - 3 ) * 0.04f, 0.6f, 1.0f );
     // The field waits for the human a little, and chases them a little.
     for ( const Car &h : m_cars )
-        if ( h.m_setup.m_human && h.racing() && !calm )
+        if ( h.m_setup.m_player && h.racing() && !calm )
         {
             float gap = c.m_dist - h.m_dist;
             want *= 1.0f - dif.m_rubber * clampf( gap / 160.0f, -1, 1 ) * 0.14f;
