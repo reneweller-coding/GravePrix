@@ -22,7 +22,7 @@ namespace
 
 void hiddenWindow( int w, int h )
 {
-    SetConfigFlags( FLAG_WINDOW_HIDDEN );
+    SetConfigFlags( FLAG_WINDOW_HIDDEN | FLAG_WINDOW_UNFOCUSED );
     InitWindow( w, h, "Grave Prix tool" );
 }
 

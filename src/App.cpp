@@ -119,7 +119,7 @@ bool App::init( const Options &o )
         }
     }
     unsigned flags = FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT;
-    if ( m_test ) flags = FLAG_WINDOW_HIDDEN;
+    if ( m_test ) flags = FLAG_WINDOW_HIDDEN | FLAG_WINDOW_UNFOCUSED;   // a test runs silent, unseen, never in front
     if ( m_set.m_vsync ) flags |= FLAG_VSYNC_HINT;
     SetConfigFlags( flags );
     InitWindow( w, h, "Grave Prix" );
@@ -132,7 +132,8 @@ bool App::init( const Options &o )
         UnloadImage( icon );
     }
     SetWindowMinSize( 640, 400 );
-    bool full = o.has( "--fullscreen" ) || ( !o.has( "--window" ) && ( m_set.m_fullscreen || ( m_deck && m_set.m_width == 0 ) ) );
+    bool full = !m_test && ( o.has( "--fullscreen" ) ||
+                             ( !o.has( "--window" ) && ( m_set.m_fullscreen || ( m_deck && m_set.m_width == 0 ) ) ) );
     if ( full ) ToggleBorderlessWindowed();
     SetTargetFPS( m_test ? 0 : m_set.m_fps );
     bool mute = o.has( "--mute" ) || m_test;
