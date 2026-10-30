@@ -166,6 +166,8 @@ track swp_irrlicht
   place stilt_hut x=-40 z=45
   place boat_wreck x=60 z=135 rot=10
   place stilt_hut x=-100 z=120
+  # The marsh breathes out its fog.
+  weather fog lap=3
 
 # Long straights round a triangle: a wide mud-flat start straight, a tight corner onto an 11 m plank causeway
 # 360 m long, a fast sweeper, a jink and a sunken car on the widest straight.

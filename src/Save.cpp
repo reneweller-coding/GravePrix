@@ -36,6 +36,9 @@ void Settings::load( const std::string &path )
         else if ( k == "shake" ) ss >> m_shake;
         else if ( k == "zoom" ) ss >> m_zoom;
         else if ( k == "speech" ) ss >> m_speech;
+        else if ( k == "hud" ) ss >> m_hud;
+        else if ( k == "palette" ) ss >> m_palette;
+        else if ( k == "tags" ) ss >> m_tags;
         else if ( k == "bind" ) m_binds.push_back( line );
     }
 }
@@ -49,6 +52,7 @@ bool Settings::save( const std::string &path ) const
     if ( !m_language.empty() ) fprintf( f, "language %s\n", m_language.c_str() );
     fprintf( f, "textsize %.2f\nrumble %d\nshake %.2f\nzoom %.2f\nspeech %d\n", m_textSize, m_rumble ? 1 : 0, m_shake, m_zoom,
              m_speech ? 1 : 0 );
+    fprintf( f, "hud %.2f\npalette %d\ntags %d\n", m_hud, m_palette, m_tags ? 1 : 0 );
     for ( const std::string &b : m_binds ) fprintf( f, "%s\n", b.c_str() );
     return endWrite( f, path );
 }
@@ -70,6 +74,7 @@ void Records::load( const std::string &path )
             if ( s > 0 ) m_bestLap[t] = s;
         }
         else if ( k == "wins" ) ss >> m_quickWins >> m_derbyWins >> m_careersWon;
+        else if ( k == "tour" ) ss >> m_tourBest;
     }
 }
 
@@ -77,7 +82,7 @@ bool Records::save( const std::string &path ) const
 {
     FILE *f = beginWrite( path );
     if ( !f ) return false;
-    fprintf( f, "wins %d %d %d\n", m_quickWins, m_derbyWins, m_careersWon );
+    fprintf( f, "wins %d %d %d\ntour %d\n", m_quickWins, m_derbyWins, m_careersWon, m_tourBest );
     for ( const auto &[t, s] : m_bestLap ) fprintf( f, "lap %s %.3f\n", t.c_str(), s );
     return endWrite( f, path );
 }

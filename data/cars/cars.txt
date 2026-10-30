@@ -478,3 +478,147 @@ car undertaker
   mount_roof 0 1.45 -0.5
   mount_rear 0 0.5 3.15
   perk ramproof=0.5 regen=1.0
+
+# ---------------------------------------------------------------------------------------------------------------
+# The league bosses: each champion's showdown car (class 6: never for sale; quick races may use them)
+# ---------------------------------------------------------------------------------------------------------------
+
+car crusher
+  title "Die Schrottpresse" title_en "The Scrap Press"
+  desc "Barry D. Alives Abschleppwagen mit hydraulischer Pressplatte vorn und dem, was vom letzten Herausforderer übrig ist, als Würfel auf der Ladefläche."
+  desc_en "Barry D. Alive's tow truck with a hydraulic press plate up front and what is left of the last challenger, cubed, on the bed."
+  model boss_crusher
+  class 6
+  price 0
+  league 5
+  upgrades engine=4 tires=4 armor=4 gun=4
+  upgrade_cost 1.0
+  mass 1900
+  power 11.5
+  top 36
+  grip 0.95
+  brake 0.9
+  steer 0.85
+  offroad 1.1
+  armor 170
+  length 5.2
+  width 2.3
+  engine diesel
+  horn truck
+  gun mg
+  mount_front 0 1.0 -1.7
+  mount_roof 0 1.95 -0.6
+  mount_rear 0 0.6 2.45
+  perk ramproof=0.6
+
+car jackknife
+  title "Das Klappmesser" title_en "The Jackknife"
+  desc "Jack Knifes Sattelzugmaschine: drei Achsen, Chromschlote und Sensen an den Naben. Wer neben ihm fährt, fährt nicht mehr lange neben ihm."
+  desc_en "Jack Knife's tractor unit: three axles, chrome stacks and scythes on the hubs. Whoever drives beside him won't be beside him for long."
+  model boss_jackknife
+  class 6
+  price 0
+  league 4
+  upgrades engine=4 tires=4 armor=5 gun=4
+  upgrade_cost 1.0
+  mass 3000
+  power 13.5
+  top 40
+  grip 1.0
+  brake 0.85
+  steer 0.8
+  offroad 1.2
+  armor 220
+  length 6.0
+  width 2.4
+  engine diesel
+  horn truck
+  gun twinmg
+  mount_front 0 1.1 -2.9
+  mount_roof 0 2.0 -1.6
+  mount_rear 0 0.7 2.95
+  perk ramproof=0.6 mines=2
+
+car inferno
+  title "Höllenfeuer" title_en "Hellfire"
+  desc "Petra Leums Tanklaster, voll bis zum Rand und mit einer Flammendüse am Kühler. Die Versicherung hat aufgehört, Briefe zu schicken."
+  desc_en "Petra Leum's tanker, full to the brim, with a flame nozzle on the radiator. The insurers have stopped writing letters."
+  model boss_inferno
+  class 6
+  price 0
+  league 3
+  upgrades engine=5 tires=5 armor=5 gun=5
+  upgrade_cost 1.0
+  mass 2900
+  power 15.5
+  top 45
+  grip 1.05
+  brake 0.95
+  steer 0.9
+  offroad 1.0
+  armor 210
+  length 6.4
+  width 2.3
+  engine diesel
+  horn truck
+  gun flamer
+  mount_front 0 0.85 -3.2
+  mount_roof 0 2.45 0.9
+  mount_rear 0 0.6 3.1
+  perk slick=1 regen=0.5
+
+car sictransit
+  title "Sic Transit" title_en "Sic Transit"
+  desc "Gloria Mundys weiß-goldene Stretchlimousine, mit Champagner auf dem Dach und scheppernden Dosen am Heck. Ruhm ist vergänglich, die Limousine ist schneller."
+  desc_en "Gloria Mundy's white and gold stretch limousine, champagne on the roof and cans rattling behind. Glory fades; the limousine is quicker."
+  model boss_sictransit
+  class 6
+  price 0
+  league 2
+  upgrades engine=6 tires=6 armor=5 gun=6
+  upgrade_cost 1.0
+  mass 2100
+  power 18.5
+  top 53
+  grip 1.12
+  brake 1.05
+  steer 0.95
+  offroad 0.9
+  armor 185
+  length 6.7
+  width 2.0
+  engine v12
+  horn dixie
+  gun twinmg
+  mount_front 0 0.85 -2.8
+  mount_roof 0 1.35 0.0
+  mount_rear 0 0.45 3.3
+  perk nitro=2 regen=0.6
+
+car triage
+  title "Triage" title_en "Triage"
+  desc "Major Casualtys gepanzerter Sanitätswagen mit Kettenantrieb, Blaulicht und Geschützturm. Er sortiert seine Patienten selbst: die schnellen und die anderen."
+  desc_en "Major Casualty's armoured half-track ambulance with blue lights and a gun turret. He sorts his own patients: the quick and the rest."
+  model boss_triage
+  class 6
+  price 0
+  league 1
+  upgrades engine=6 tires=6 armor=6 gun=6
+  upgrade_cost 1.0
+  mass 3500
+  power 20
+  top 53
+  grip 1.12
+  brake 0.95
+  steer 0.9
+  offroad 1.2
+  armor 300
+  length 6.1
+  width 2.4
+  engine turbine
+  horn siren
+  gun cannon
+  mount_front 0 2.45 -1.0
+  mount_roof 0 2.45 0.9
+  mount_rear 0 0.8 2.8
+  perk ramproof=0.5 regen=0.8 mines=2

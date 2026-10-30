@@ -1,0 +1,100 @@
+{
+ "name": "Grave Prix final laps",
+ "style": "1990s PC combat racing soundtrack reimagined with modern production, instrumental heavy rock and industrial metal, distorted guitar riffs, pounding live drums, driving bass, dark synths, sardonic gothic undertone, high energy",
+ "key": "E minor",
+ "bpm": 140,
+ "timesig": "4",
+ "takes": 1,
+ "format": "flac",
+ "seed": 6663,
+ "cues": [
+  {
+   "id": "junkyard_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 158,
+   "key": "E minor",
+   "style": "rusty industrial metal race in a scrapyard, clanging scrap metal percussion, crunchy chugging guitars, grinding bass, hammering drums, mechanical and gritty, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "cemetery_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 150,
+   "key": "A minor",
+   "style": "gothic metal race through a foggy cemetery at night, eerie organ melody, harpsichord stabs, tremolo guitars, double bass drum gallop, haunting and fast, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "docks_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 144,
+   "key": "D minor",
+   "style": "dark grunge rock race in a rainy harbour at dusk, heavy sludgy riffs, foghorn-like bass swells, crashing cymbals, brooding and powerful, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "desert_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 162,
+   "key": "E phrygian",
+   "style": "fast desert stoner rock race at high noon, fuzzy baritone guitar riffs, surf twang lead, spaghetti western whistle melody, driving tom-heavy drums, scorching heat, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "refinery_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 164,
+   "key": "C minor",
+   "style": "pounding industrial metal race in a burning oil refinery at night, machine-gun kick drums, distorted synth bass, hissing steam noises, aggressive guitar stabs, relentless, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "swamp_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 140,
+   "key": "G minor",
+   "style": "dark swamp rock race through a bayou at dawn, heavy slide guitar riff, stomping blues drums, dirty bass, eerie banjo picking, sweaty and menacing, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "downtown_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 156,
+   "key": "F minor",
+   "style": "neon city night race, cyber industrial metal, pulsing synth arpeggios over chugging guitars, gated snares, sirens in the distance, sleek and dangerous, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "pass_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 172,
+   "key": "B minor",
+   "style": "icy mountain pass race in a blizzard, fast melodic metal with tremolo picked guitars, blast-free driving double bass drums, cold synth strings, epic and frantic, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "fairground_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 152,
+   "key": "D minor",
+   "style": "twisted circus metal race through an abandoned funfair, out-of-tune calliope melody over heavy guitars, oompah bass turned sinister, manic drums, creepy and fun, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "proving_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 160,
+   "key": "E minor",
+   "style": "military metal race on an army proving ground, marching snare rolls, battle horn synths, tank-heavy chugging riffs, war drums, relentless and martial, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  },
+  {
+   "id": "estate_hot",
+   "type": "loop",
+   "bars": 24,
+   "bpm": 162,
+   "key": "C minor",
+   "style": "final race on a gothic estate in a thunderstorm, symphonic metal with pipe organ, choir, thundering timpani and double bass drums, soaring evil lead guitar, apocalyptic and grand, the final lap: faster and denser, double-time drums, a soaring lead guitar, maximum intensity, no breakdown"
+  }
+ ]
+}

@@ -128,6 +128,8 @@ track ref_rohr
   place tank_oil x=60 z=-45
   place flare_stack x=30 z=-180
   place flare_stack x=330 z=-40
+  # An oily rain.
+  weather rain lap=3
 
 # Figure eight with a steel bridge: a broad upper loop with a kink and a tight teardrop hairpin below; the
 # road narrows from 15 m to 12 m on the way down.

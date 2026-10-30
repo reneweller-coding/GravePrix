@@ -1,0 +1,101 @@
+# Cemetery scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene cemetery_spectators
+  venue cemetery
+  size 9
+  near 2
+  weight 1.6
+  put crowd_mourners x=-3 z=1
+  put crowd_small x=3 z=0.5
+  put gravestone x=-6 z=0
+  put gravestone_cross x=6 z=0
+  put lamp_old x=0 z=3
+
+scene cemetery_start
+  venue cemetery
+  size 14
+  near 3
+  put crowd_block x=-9 z=1
+  put crowd_block x=9 z=1
+  put crowd_mourners x=0 z=4
+  put fig_marshal x=-3 z=-2.5 rot=20
+  put flag_pole x=13 z=-1
+  put lamp_old x=-13 z=0
+  put gravestone_angel x=4 z=7
+
+scene cemetery_funeral
+  venue cemetery
+  size 12
+  near 4
+  weight 1.2
+  put open_grave x=0 z=3
+  put crowd_mourners x=0 z=6.5 rot=180
+  car pallbearer x=-8 z=1 rot=90
+  put fig_undertaker x=-4 z=0.5 rot=30
+  put wreath x=2.5 z=2
+  put wreath x=-2 z=2.2
+  put gravestone x=4 z=7
+  put gravestone_cross x=-4 z=8
+
+scene cemetery_crypt
+  venue cemetery
+  size 11
+  near 4
+  weight 0.7
+  put crypt x=0 z=4
+  put gravestone_angel x=-6 z=2
+  put cypress x=6 z=5
+  put cypress x=-7 z=7
+  put lamp_old x=4 z=0
+  put gravestone_candle x=-2 z=0.5
+
+scene cemetery_rows
+  venue cemetery
+  size 11
+  near 3
+  put gravestone x=-6 z=1
+  put gravestone_cross x=-3 z=1
+  put gravestone_candle x=0 z=1
+  put gravestone x=3 z=1
+  put gravestone_cross x=6 z=1
+  put gravestone_cross x=-6 z=4.5
+  put gravestone x=-3 z=4.5
+  put gravestone_angel x=0 z=4.5
+  put gravestone_candle x=3 z=4.5
+  put gravestone x=6 z=4.5
+  put fig_widow x=1.5 z=2.7 rot=160
+
+scene cemetery_chapel
+  venue cemetery
+  size 12
+  near 4
+  weight 0.4
+  put chapel x=0 z=6
+  put bench x=-5 z=1
+  put fig_widow x=-5 z=0.2 rot=10
+  put cypress x=7 z=2
+  put cypress x=-8 z=5
+  put lamp_old x=3 z=0
+
+scene cemetery_digger
+  venue cemetery
+  size 10
+  near 3
+  put open_grave x=-3 z=2
+  put fig_worker x=-0.5 z=1.2 rot=-60
+  put grave_plot x=3 z=3
+  put grave_plot x=6 z=3
+  put obelisk x=-7 z=4
+  put tree_dead x=5 z=7
+
+scene cemetery_wreck
+  venue cemetery
+  size 10
+  near 3
+  wreck any x=0 z=2 rot=60
+  put gravestone_cross x=3 z=0.5
+  put gravestone x=4 z=3
+  put fig_undertaker x=-3 z=0 rot=40
+  put wreath x=-1 z=-0.5
+  put tree_dead x=-6 z=5

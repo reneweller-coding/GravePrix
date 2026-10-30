@@ -568,3 +568,114 @@ model car_undertaker
   part box w=0.1 h=0.08 d=0.12 x=1.04 y=1.0 z=-1.45 color=paint mirror=1
   part wheel r=0.4 w=0.28 x=0.98 z=-2.0 front=1 hub=#b8962e
   part wheel r=0.4 w=0.28 x=0.98 z=1.95 hub=#b8962e
+
+# ---------------------------------------------------------------------------------------------------------------
+# The league bosses' showdown cars
+# ---------------------------------------------------------------------------------------------------------------
+
+# The Scrap Press: a stubby tow truck, a hydraulic press plate with spikes in front, a cubed car on the bed.
+model boss_crusher
+  part body len=4.8 wid=1.96 hgt=0.7 y=0.58 round=2 nose=0.08 tail=0.04 drop=0.2 pinch=0.04 color=paint
+  part cabin len=1.5 wid=1.86 hgt=0.6 y=1.23 z=-0.85 front=0.2 back=0.05 top=0.9 color=paint glass=#1a2430
+  part box w=1.9 h=0.08 d=2.1 y=0.98 z=1.15 color=#3a3a3c                               # the bed
+  part box w=1.2 h=0.7 d=1.2 y=1.38 z=1.2 color=#7a4a2a                                 # a car, cubed
+  part greeble n=24 w=1.2 d=1.2 size=0.06 seed=3 y=1.74 z=1.2 color=#8a5a3a
+  part box w=1.24 h=0.06 d=0.08 y=1.4 z=0.75 color=#9a9a9a                              # straps
+  part box w=1.24 h=0.06 d=0.08 y=1.4 z=1.65 color=#9a9a9a
+  part box w=2.3 h=0.9 d=0.18 y=0.75 z=-2.62 color=#5a5c60                              # the press plate
+  part box w=2.3 h=0.1 d=0.22 y=1.22 z=-2.62 color=#d0a020                              # its warning edge
+  part cone r=0.07 len=0.3 x=0.8 y=0.75 z=-2.85 color=#d8dce4 mirror=1                  # spikes
+  part cone r=0.07 len=0.3 x=0.3 y=0.95 z=-2.85 color=#d8dce4 mirror=1
+  part box w=0.12 h=0.12 d=0.7 x=0.6 y=0.8 z=-2.2 color=#c8ccd4 mirror=1                # hydraulic rams
+  part box w=0.07 h=0.07 d=0.5 x=0.6 y=0.8 z=-1.85 color=#18181c mirror=1
+  part box w=0.24 h=0.1 d=0.04 x=0.7 y=0.98 z=-1.62 color=#fff4d0 emit=1 mirror=1
+  part disc r=0.1 h=0.9 x=0.8 y=1.75 z=-0.2 color=#2a2a2a                               # exhaust stack
+  part box w=0.04 h=0.5 d=0.04 x=1.0 y=0.9 z=-0.2 color=#8a8a8a mirror=1                # chains
+  part box w=0.12 h=1.0 d=0.12 y=1.5 z=2.3 color=#d0a020                                # tow boom
+  part box w=0.12 h=0.12 d=0.6 y=1.95 z=2.55 color=#d0a020
+  part box w=0.2 h=0.1 d=0.04 x=0.8 y=0.7 z=2.42 color=#ff2414 emit=0.9 mirror=1
+  part box w=0.14 h=0.1 d=0.14 x=0.5 y=1.58 z=-0.85 color=#ffa020 emit=1 mirror=1       # beacons
+  part wheel r=0.42 w=0.3 x=0.95 z=-1.5 front=1 hub=paint3
+  part wheel r=0.42 w=0.3 x=0.95 z=1.55 hub=paint3
+
+# The Jackknife: a cab-over tractor unit, chrome stacks, a knife blade along the roof, scythes on the hubs.
+model boss_jackknife
+  part body len=5.8 wid=2.2 hgt=0.55 y=0.62 round=3 nose=0.05 tail=0.03 drop=0.1 pinch=0.03 color=paint
+  part cabin len=1.9 wid=2.1 hgt=1.0 y=1.4 z=-1.7 front=0.08 back=0.02 top=0.95 color=paint glass=#1a2430
+  part box w=2.1 h=0.32 d=0.2 y=0.78 z=-2.92 color=#c8ccd4                              # chrome grille
+  part box w=0.3 h=0.12 d=0.04 x=0.75 y=0.98 z=-2.95 color=#fff4d0 emit=1 mirror=1
+  part box w=0.08 h=0.06 d=0.06 x=0.3 y=1.93 z=-2.55 color=#ffa020 emit=1 mirror=1      # marker lights
+  part box w=0.08 h=0.06 d=0.06 x=0.7 y=1.93 z=-2.55 color=#ffa020 emit=1 mirror=1
+  part disc r=0.11 h=1.6 x=1.0 y=1.9 z=-0.55 color=#c8ccd4 mirror=1                    # stacks
+  part box w=0.05 h=0.28 d=1.7 y=2.02 z=-1.6 taper=0.2 color=#e8ecf2                    # the knife on the roof
+  part box w=0.1 h=0.16 d=0.5 y=2.0 z=-0.55 color=#3a2a1a                               # its handle
+  part box w=2.0 h=0.12 d=2.7 y=1.0 z=1.3 color=#2a2a2c                                 # the deck
+  part disc r=0.5 h=0.08 y=1.1 z=1.4 color=#18181c                                      # fifth wheel
+  part box w=2.2 h=0.5 d=0.08 y=0.95 z=2.9 color=#18181c                                # mud flaps
+  part cone r=0.05 len=0.75 rot=90 x=1.45 y=0.48 z=-1.8 color=#e8ecf2 mirror=1          # scythes
+  part cone r=0.05 len=0.75 rot=90 x=1.45 y=0.48 z=0.9 color=#e8ecf2 mirror=1
+  part cone r=0.05 len=0.75 rot=90 x=1.45 y=0.48 z=2.1 color=#e8ecf2 mirror=1
+  part box w=0.18 h=0.12 d=0.04 x=0.9 y=0.8 z=2.95 color=#ff2414 emit=0.9 mirror=1
+  part wheel r=0.48 w=0.32 x=1.0 z=-1.8 front=1 hub=#c8ccd4
+  part wheel r=0.48 w=0.32 x=1.0 z=0.9 hub=#c8ccd4
+  part wheel r=0.48 w=0.32 x=1.0 z=2.1 hub=#c8ccd4
+
+# Hellfire: a rigid fuel tanker, a chrome tank with painted bands, a flame nozzle with a pilot light up front.
+model boss_inferno
+  part body len=6.2 wid=2.2 hgt=0.5 y=0.6 round=3 nose=0.08 tail=0.03 drop=0.12 pinch=0.03 color=paint
+  part cabin len=1.7 wid=2.1 hgt=0.85 y=1.32 z=-2.0 front=0.25 back=0.02 top=0.9 color=paint glass=#1a2430
+  part disc r=0.85 h=3.7 pitch=90 y=1.6 z=1.0 color=#c8ccd4                             # the tank
+  part disc r=0.87 h=0.1 pitch=90 y=1.6 z=-0.6 color=paint2
+  part disc r=0.87 h=0.1 pitch=90 y=1.6 z=1.0 color=paint2
+  part disc r=0.87 h=0.1 pitch=90 y=1.6 z=2.6 color=paint2
+  part box w=0.02 h=0.36 d=0.36 x=0.87 y=1.6 z=1.8 color=#d02020 mirror=1               # danger signs
+  part box w=0.6 h=0.06 d=0.5 y=2.47 z=1.0 color=#3a3a3c                                # the hatch
+  part cone r=0.13 len=0.5 x=0 y=0.8 z=-3.3 color=#3a3a3c                               # the nozzle
+  part light r=0.07 x=0 y=0.8 z=-3.58 color=#ff6020                                     # its pilot flame
+  part box w=0.08 h=0.08 d=2.4 x=0.25 y=0.95 z=-1.9 color=#8a6a3a mirror=1              # fuel lines
+  part box w=0.3 h=0.12 d=0.04 x=0.75 y=0.9 z=-2.88 color=#fff4d0 emit=1 mirror=1
+  part box w=2.2 h=0.14 d=0.16 y=0.5 z=-3.05 color=#d8dce4
+  part box w=0.18 h=0.12 d=0.04 x=0.9 y=0.75 z=3.12 color=#ff2414 emit=0.9 mirror=1
+  part engine r=0.08 len=0.3 x=0.8 y=0.35 z=3.1 color=#c8ccd4 glow=#ff8030
+  part wheel r=0.46 w=0.3 x=1.0 z=-2.0 front=1 hub=paint3
+  part wheel r=0.46 w=0.3 x=1.0 z=1.0 hub=paint3
+  part wheel r=0.46 w=0.3 x=1.0 z=2.2 hub=paint3
+
+# Sic Transit: a white and gold stretch limousine, champagne on the roof, tin cans on strings behind.
+model boss_sictransit
+  part body len=6.6 wid=1.98 hgt=0.6 y=0.52 round=6 nose=0.18 tail=0.08 drop=0.3 pinch=0.05 color=paint
+  part cabin len=4.4 wid=1.84 hgt=0.5 y=1.07 z=0.4 front=0.35 back=0.15 top=0.88 color=paint glass=#0c1014
+  part box w=0.04 h=0.06 d=6.4 x=0.99 y=0.78 color=#d4af37 mirror=1                     # gold lines
+  part box w=0.9 h=0.26 d=0.06 y=0.62 z=-3.3 color=#d4af37                              # gold grille
+  part box w=0.04 h=0.2 d=0.03 y=1.02 z=-2.95 color=#d4af37                             # the ornament
+  part sphere r=0.07 y=1.14 z=-2.95 color=#d4af37
+  part box w=0.26 h=0.08 d=0.04 x=0.72 y=0.66 z=-3.28 color=#fff4d0 emit=1 mirror=1
+  part disc r=0.08 h=0.36 x=0.35 y=1.5 z=1.6 color=#1a4a2a mirror=1                     # champagne
+  part disc r=0.03 h=0.08 x=0.35 y=1.72 z=1.6 color=#d4af37 mirror=1
+  part disc r=0.08 h=0.36 x=0.35 y=1.5 z=2.2 color=#1a4a2a mirror=1
+  part disc r=0.03 h=0.08 x=0.35 y=1.72 z=2.2 color=#d4af37 mirror=1
+  part box w=0.22 h=0.1 d=0.04 x=0.82 y=0.7 z=3.3 color=#ff2414 emit=0.9 mirror=1
+  part box w=0.01 h=0.01 d=0.6 x=0.4 y=0.3 z=3.6 color=#e0e0e0 mirror=1                 # strings
+  part disc r=0.06 h=0.12 pitch=90 x=0.4 y=0.15 z=3.95 color=#c8ccd4 mirror=1           # cans
+  part disc r=0.06 h=0.12 pitch=90 x=0.15 y=0.15 z=4.05 color=#c8ccd4
+  part wheel r=0.36 w=0.26 x=0.88 z=-2.25 front=1 hub=#d4af37
+  part wheel r=0.36 w=0.26 x=0.88 z=2.3 hub=#d4af37
+
+# Triage: an armoured half-track ambulance, a box body with skulls, blue lights and a gun turret.
+model boss_triage
+  part body len=6.0 wid=2.3 hgt=0.75 y=0.7 round=2 nose=0.1 tail=0.02 drop=0.15 pinch=0.03 color=paint
+  part cabin len=1.6 wid=2.1 hgt=0.6 y=1.42 z=-1.6 front=0.35 back=0.03 top=0.9 color=paint glass=#1a2430
+  part box w=2.2 h=1.2 d=3.2 y=1.65 z=1.1 color=paint2                                  # the ward
+  part sphere r=0.18 x=1.11 y=1.75 z=1.1 color=#e8e8e0 mirror=1                         # skulls
+  part box w=0.04 h=0.05 d=0.3 x=1.12 y=1.55 z=1.1 color=#e8e8e0 mirror=1
+  part disc r=0.55 h=0.3 y=2.4 z=0.9 color=paint                                        # the turret
+  part box w=0.12 h=0.12 d=1.6 y=2.45 z=-0.25 color=#2a2a2c                             # its barrel
+  part box w=0.16 h=0.1 d=0.16 x=0.6 y=2.3 z=-0.45 color=#3060ff emit=1 mirror=1        # blue lights
+  part light r=0.08 x=0.6 y=2.4 z=-0.45 color=#3060ff mirror=1
+  part greeble n=20 w=2.0 d=1.0 size=0.07 seed=9 y=2.26 z=2.2 color=#6a6a5a             # kit on the roof
+  part box w=2.3 h=0.5 d=0.12 y=0.7 z=-3.05 color=#3a3c40                               # bull bar
+  part box w=0.28 h=0.12 d=0.04 x=0.8 y=0.98 z=-3.0 color=#fff4d0 emit=1 mirror=1
+  part box w=0.42 h=0.6 d=2.6 x=1.0 y=0.38 z=1.4 color=#202022 mirror=1                 # tracks
+  part box w=0.2 h=0.12 d=0.04 x=1.0 y=0.92 z=2.72 color=#ff2414 emit=0.9 mirror=1
+  part wheel r=0.45 w=0.3 x=1.0 z=-1.9 front=1 hub=paint3
+  part wheel r=0.45 w=0.3 x=1.0 z=1.4 hub=#202022

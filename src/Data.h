@@ -123,6 +123,27 @@ float surfaceDrag( SurfaceE s );
 /** @return whether it is loose (dirt, sand, snow: rally cars like it, dust flies) */
 bool surfaceLoose( SurfaceE s );
 
+/** @brief One thing of a scene: a model, a real car (whole or a wreck) or a figure, in the scene's frame. */
+struct ScenePiece
+{
+    enum KindE : int { MODEL, CAR, WRECK } m_kind = MODEL;
+    std::string m_what;            ///< a model, or a car key ("any": one of the venue's league or below)
+    float       m_x = 0, m_z = 0;  ///< metres: x along the road, z away from it
+    float       m_rot = 0;         ///< degrees; 0: its nose towards the road
+    float       m_scale = 1.0f;
+    float       m_tilt = 0;        ///< degrees of roll (a wreck on its side)
+};
+
+/** @brief A composed set piece by the road (data/scenes/<venue>.txt): placed whole, facing the track. */
+struct SceneDef
+{
+    std::string             m_name, m_venue;
+    float                   m_weight = 1.0f;
+    float                   m_size = 12.0f;   ///< its radius on the ground
+    float                   m_near = 4.0f;    ///< metres between the road's edge and its front
+    std::vector<ScenePiece> m_pieces;
+};
+
 /** @brief A place with its own look (data/venues.txt). */
 struct VenueDef
 {
@@ -142,6 +163,7 @@ struct VenueDef
     Color       m_shoulderColor = { 90, 84, 70, 255 };
     std::string m_wall = "concrete";
     std::vector<std::pair<std::string, float>> m_props;   ///< model, weight
+    std::vector<std::pair<std::string, float>> m_litter;  ///< small things in a band by the road: model, weight
     float       m_density = 1.0f;
     std::string m_music, m_ambience;
     std::vector<Line> m_extra;   ///< other lines (the renderer's own values)
@@ -187,6 +209,8 @@ struct TrackDef
     bool                    m_reverse = false, m_mirror = false, m_arena = false;
     float                   m_density = 1.0f;   ///< the venue's scattered props
     std::string             m_where;
+    std::string             m_weatherTo;      ///< the weather turns to (rain, fog) ...
+    int                     m_weatherLap = 0; ///< ... when the leader starts this lap (0 never)
 };
 
 /** @brief Lines said on events: event -> lines. */
@@ -203,6 +227,7 @@ struct RivalDef
     float       m_skill = 0.5f, m_aggression = 0.5f, m_weapons = 0.5f;
     std::string m_likes = "mine";
     bool        m_champion = false, m_rookie = false;
+    std::string m_boss;          ///< a champion's showdown car ("" their own)
     std::string m_portrait;
     Text        m_bio, m_obit;
     Says        m_say, m_sayEn;
@@ -285,6 +310,14 @@ public:
     /** @brief Checks the references between the data (adds warnings and errors). */
     void check();
 
+    /**
+     * @brief Reads a track made in code (a random track) into the catalogue, outside the track order.
+     * @param[in]  b       its lines
+     * @param[out] errors  messages (appended)
+     * @return the track (nullptr: it had errors and is gone again)
+     */
+    TrackDef *addTrack( const Block &b, std::vector<std::string> &errors );
+
     const ModelDef     *model( const std::string &n ) const;
     const CarDef       *car( const std::string &n ) const;
     const GunDef       *gun( const std::string &n ) const;
@@ -312,6 +345,7 @@ public:
     std::map<std::string, VenueDef>     m_venues;
     std::map<std::string, TrackDef>     m_tracks;
     std::map<std::string, RivalDef>     m_rivals;
+    std::map<std::string, SceneDef>     m_scenes;
     std::map<std::string, CharacterDef> m_characters;
     std::map<int, LeagueDef>            m_leagues;
     std::map<std::string, StoryDef>     m_stories;

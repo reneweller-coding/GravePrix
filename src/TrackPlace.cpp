@@ -60,6 +60,8 @@ void drawNumber( Image &img, int x, int y, int value, int px, Color c )
 
 void Track::place( const TrackDef &def, const Catalog &cat )
 {
+    m_weatherTo = def.m_weatherTo;
+    m_weatherLap = def.m_weatherLap;
     float latSign = ( m_reverse != m_mirror ) ? -1.0f : 1.0f;
     auto  S = [&]( float s ) { return m_reverse ? wrap( m_length - s ) : wrap( s ); };
     for ( const TrackItem &it : def.m_items )
@@ -72,6 +74,22 @@ void Track::place( const TrackDef &def, const Catalog &cat )
             m_pickups.push_back( { it.m_what, pointAt( s, lat ), s } );
         else if ( it.m_type == "hazard" )
             m_hazards.push_back( { it.m_what, pointAt( s, lat ), l.num( "r", it.m_what == "barrel" ? 0.6f : 2.5f ) } );
+        else if ( it.m_type == "train" || it.m_type == "drawbridge" || it.m_type == "rockfall" )
+        {
+            MoverSpot m;
+            m.m_kind = it.m_type;
+            m.m_len = l.num( "len", it.m_type == "rockfall" ? 60.0f : 24.0f );
+            m.m_period = l.num( "period", it.m_type == "train" ? 42.0f : it.m_type == "drawbridge" ? 50.0f : 7.0f );
+            m.m_offset = l.num( "offset", 0.0f );
+            // A rockfall runs forwards from its start, in either direction of travel.
+            m.m_s = it.m_type == "rockfall" && m_reverse ? wrap( s - m.m_len ) : s;
+            const TrackSample &ms = sampleAt( m.m_s );
+            m.m_pos = ms.m_pos;
+            m.m_dir = ms.m_dir;
+            m.m_right = ms.m_right;
+            m.m_half = ms.m_half;
+            m_movers.push_back( m );
+        }
         else if ( it.m_type == "obstacle" )
             m_obstacles.push_back( { pointAt( s, lat ), l.num( "r", 1.0f ), l.str( "model", "" ), l.num( "rot", 0 ) } );
         else if ( it.m_type == "patch" )
@@ -158,6 +176,105 @@ void Track::place( const TrackDef &def, const Catalog &cat )
     }
 }
 
+void Track::scenes( const Catalog &cat )
+{
+    // The venue's composed set pieces along the road, every 70 to 140 metres, on alternating sides, facing the track.
+    if ( !m_venue || m_arena ) return;
+    std::vector<const SceneDef *> pool;
+    float                         total = 0;
+    for ( const auto &[n, s] : cat.m_scenes )
+        if ( s.m_venue == m_venue->m_name && s.m_weight > 0 && n != m_venue->m_name + "_start" )
+        {
+            pool.push_back( &s );
+            total += s.m_weight;
+        }
+    if ( pool.empty() ) return;
+    Rng      rng;
+    uint32_t h = 2166136261u;
+    for ( char c : m_name ) h = ( h ^ (unsigned char)c ) * 16777619u;
+    rng.seed( h ^ 0x2545f491u );
+    // Cars for the scenes: the venue's league and the ones below (the wrecks of better days).
+    std::vector<std::string> cars;
+    for ( const std::string &k : cat.m_carOrder )
+    {
+        const CarDef &d = cat.m_cars.at( k );
+        if ( d.m_class < 6 && d.m_league >= m_venue->m_league ) cars.push_back( k );
+    }
+    std::vector<std::pair<Vector2, float>> taken;
+    for ( const PropSpot &p : m_props ) taken.push_back( { p.m_pos, reachOf( cat, p.m_model ) } );
+    std::vector<const SceneDef *> recent;
+    int side = rng.chance( 0.5f ) ? 1 : -1;
+    // The start: the venue's grandstand scene beside the line, the rest after it.
+    auto startScene = cat.m_scenes.find( m_venue->m_name + "_start" );
+    bool first = startScene != cat.m_scenes.end(), wasFirst = false;
+    for ( float s = first ? m_length - 15.0f : rng.range( 20.0f, 45.0f ); s < m_length - 30.0f || first;
+          s = wasFirst ? rng.range( 25.0f, 45.0f ) : s + rng.range( 25.0f, 50.0f ) )
+    {
+        // A scene not used just before.
+        wasFirst = first;
+        const SceneDef *sc = first ? &startScene->second : nullptr;
+        first = false;
+        for ( int tries = 0; tries < 6 && !sc; ++tries )
+        {
+            float pick = rng.range( 0, total );
+            for ( const SceneDef *c : pool )
+            {
+                if ( pick < c->m_weight )
+                {
+                    sc = c;
+                    break;
+                }
+                pick -= c->m_weight;
+            }
+            if ( sc && pool.size() > 2 && std::find( recent.begin(), recent.end(), sc ) != recent.end() ) sc = nullptr;
+        }
+        if ( !sc ) continue;
+        side = -side;
+        bool done = false;
+        for ( int flip = 0; flip < 2 && !done; ++flip, side = -side )
+        {
+            const TrackSample &ts = sampleAt( s );
+            // Its middle a few metres behind its front row (the pieces nearest the road stand at about z -3).
+            float   off = ts.m_half + ts.m_shoulder + sc->m_near + 3.5f;
+            Vector2 c = pointAt( s, side * off );
+            Vector2 push;
+            if ( outside( c, push ) < sc->m_near + 3.0f ) continue;
+            bool free = true;
+            for ( const auto &tk : taken )
+                if ( len( sub( tk.first, c ) ) < ( tk.second + sc->m_size ) * 0.75f ) free = false;
+            if ( !free ) continue;
+            // The frame: x along the road, z away from it.
+            Vector2 along = ts.m_dir, away = mul( ts.m_right, (float)side );
+            float   face = std::atan2( -away.x, away.y ) / Deg;   // the heading towards the road
+            for ( const ScenePiece &pc : sc->m_pieces )
+            {
+                PropSpot p;
+                p.m_pos = add( add( c, mul( along, pc.m_x ) ), mul( away, pc.m_z - 0.0f ) );
+                p.m_rot = face + pc.m_rot;
+                p.m_scale = pc.m_scale;
+                p.m_tilt = pc.m_tilt;
+                p.m_seed = (uint32_t)rng.below( 1 << 30 );
+                if ( pc.m_kind == ScenePiece::MODEL )
+                {
+                    if ( !cat.model( pc.m_what ) ) continue;
+                    p.m_model = pc.m_what;
+                }
+                else
+                {
+                    p.m_model = pc.m_what == "any" && !cars.empty() ? cars[(size_t)rng.below( (int)cars.size() )] : pc.m_what;
+                    if ( !cat.car( p.m_model ) ) continue;
+                    p.m_car = pc.m_kind == ScenePiece::CAR ? 1 : 2;
+                }
+                m_props.push_back( p );
+            }
+            taken.push_back( { c, sc->m_size } );
+            recent.push_back( sc );
+            if ( recent.size() > 3 ) recent.erase( recent.begin() );
+            done = true;
+        }
+    }
+}
+
 void Track::scatter( const Catalog &cat )
 {
     if ( !m_venue || m_venue->m_props.empty() ) return;
@@ -172,8 +289,8 @@ void Track::scatter( const Catalog &cat )
     rng.seed( h ^ 0x51ed270bu );
     const float margin = 70.0f;
     Rectangle   area = { m_bounds.x - margin, m_bounds.y - margin, m_bounds.width + 2 * margin, m_bounds.height + 2 * margin };
-    int         want = (int)( area.width * area.height * 0.0011f * density );
-    want = std::min( want, 1400 );
+    int         want = (int)( area.width * area.height * 0.0016f * density );
+    want = std::min( want, 1800 );
     // Fixed props first: nothing may stand on them.
     std::vector<std::pair<Vector2, float>> taken;
     for ( const PropSpot &p : m_props ) taken.push_back( { p.m_pos, reachOf( cat, p.m_model ) } );
@@ -208,7 +325,9 @@ void Track::scatter( const Catalog &cat )
         float   r = reachOf( cat, *model );
         Vector2 p = { rng.range( area.x, area.x + area.width ), rng.range( area.y, area.y + area.height ) };
         Vector2 push;
-        if ( outside( p, push ) < r + 2.2f ) continue;
+        float   away = outside( p, push );
+        if ( away < r + 2.2f ) continue;
+        if ( away > 20.0f && rng.chance( std::min( 0.9f, ( away - 20.0f ) / 35.0f ) ) ) continue;   // thinner far out
         int  cx, cy;
         bool free = true;
         cellOf( p, cx, cy );
@@ -222,10 +341,54 @@ void Track::scatter( const Catalog &cat )
                         break;
                     }
         if ( !free ) continue;
-        m_props.push_back( { *model, p, rng.range( 0, 360 ), rng.range( 0.85f, 1.15f ) } );
+        // Made things stand square to the road (or across it); grown things and loose junk any way.
+        static const char *wild[] = { "tree", "cactus", "rock", "reeds", "stump", "tumbleweed", "fir", "bush", "crater", "pile",
+                                      "skull", "ribcage", "gator", "bog", "snow_bank", "oil_puddle", "wreath" };
+        bool natural = false;
+        for ( const char *w : wild ) natural = natural || model->find( w ) != std::string::npos;
+        float rot = rng.range( 0, 360 );
+        if ( !natural )
+        {
+            const TrackSample &near = m_s[(size_t)locate( p, -1 ).m_i];
+            rot = std::atan2( near.m_dir.x, -near.m_dir.y ) / Deg + 90.0f * rng.below( 4 ) + rng.range( -6.0f, 6.0f );
+        }
+        m_props.push_back( { *model, p, rot, rng.range( 0.9f, 1.1f ) } );
         taken.push_back( { p, r } );
         grid[(size_t)cy * gw + cx].push_back( (int)taken.size() - 1 );
         ++placed;
+    }
+}
+
+void Track::litter( const Catalog &cat )
+{
+    // Small things in a band one to nine metres beyond the road's edge: about one every four metres a side.
+    if ( !m_venue || m_venue->m_litter.empty() ) return;
+    float total = 0;
+    for ( const auto &p : m_venue->m_litter ) total += p.second;
+    Rng      rng;
+    uint32_t h = 2166136261u;
+    for ( char c : m_name ) h = ( h ^ (unsigned char)c ) * 16777619u;
+    rng.seed( h ^ 0x7f4a7c15u );
+    for ( float s = 0; s < m_length; s += rng.range( 1.5f, 3.0f ) )
+    {
+        const TrackSample &ts = sampleAt( s );
+        int     side = rng.chance( 0.5f ) ? 1 : -1;
+        Vector2 p = pointAt( s, side * ( ts.m_half + ts.m_shoulder + rng.range( 1.0f, 9.0f ) ) );
+        Vector2 push;
+        if ( outside( p, push ) < 1.0f ) continue;
+        float pick = rng.range( 0, total );
+        const std::string *model = &m_venue->m_litter.back().first;
+        for ( const auto &q : m_venue->m_litter )
+        {
+            if ( pick < q.second )
+            {
+                model = &q.first;
+                break;
+            }
+            pick -= q.second;
+        }
+        if ( !cat.model( *model ) ) continue;
+        m_props.push_back( { *model, p, rng.range( 0, 360 ), rng.range( 0.85f, 1.15f ) } );
     }
 }
 

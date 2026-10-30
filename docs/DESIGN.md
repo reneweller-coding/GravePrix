@@ -263,6 +263,7 @@ venue cemetery
   wall stone                 # the default wall style
   props gravestone*8 cypress*2 crypt angel lamp_old  # props scattered beside the track (*n: weight)
   density 1.0                # how many of them
+  litter flowers*4 wreath gravestone*2   # small things in a band 1-9 m beyond the road's edge
   music cemetery             # assets/music/<name>.ogg (several pieces: cemetery, cemetery_2 ...)
   ambience cemetery          # the background loop (Audio)
 ```
@@ -328,9 +329,54 @@ travel). Outside the road, `side=left|right|both` and `off=` metres beyond the w
 - `reverse 1` in a track's block lets the career offer it the other way round as well; `mirror 1` mirrored.
 - Lengths 600–1800 m; tight hairpins r ≥ 12, ordinary corners r 20–60, sweepers r 80+.
 
+The track's clockwork (`src/Movers.cpp`, all by the race clock, so a race replays the same way):
+
+```
+  train at=374 period=40 offset=12          # a level crossing: 5 s of bells, then a goods train across the road
+  drawbridge at=695 len=24 period=50        # a bascule bridge: bells, 3 s up, 8 s up, 3 s down (a wall while up)
+  rockfall at=300 len=120 period=10         # a rock falls somewhere on these 120 m every 10 s, lies there 12 s
+  weather rain lap=2                        # rain (grip -16 % on hard roads) or fog comes when the leader starts lap 2
+```
+
+The AI stops short of a train or a raised bridge, goes through when it is already too close to stop, and steers
+round rocks. Random tracks (`src/RandomTrack.cpp`): `randomTrack( venue, seed )` turns dice into straights and
+corners that close with `close`, checks them like a hand-made track (both directions, no warnings) and registers
+"rnd_<venue>_<seed>" outside the track order; the tools take such names (`--sim rnd_cemetery_7`).
+
 Check a track with `GravePrix --trackshot <name> work/maps/<name>.png` (a map: road, walls, start, numbers every
 100 m, pickups and props, warnings drawn in red) and `GravePrix --sim <name>` (six computer drivers race it; prints
 lap times and where cars got stuck). `--validate` must report 0 errors for every track.
+
+## Turning props and the ground
+
+A model's parts with `group=spin` turn while the race runs (Ferris wheel, carousel, radar dish): the first of them
+names `spin=<degrees a second> spin_axis=x|y|z spin_at=x,y,z`. The land beside the track gets a detail layer by
+venue in the surface shader (`landStyle`): tyre tracks and specks everywhere; oil pools with a sheen (junkyard),
+cracked hardpan (desert), gravel paths (cemetery, estate, whose lawn is also mown in stripes), concrete slabs with
+stains and yellow lines (docks, refinery), drifts (pass), black water (swamp), pavement tiles and manholes (downtown),
+sawdust paths and confetti (fairground), craters (proving ground).
+
+## Scenes (`data/scenes/<venue>.txt`)
+
+Composed set pieces by the road, so a venue reads as a place and not as scattered props: every 70–140 m on
+alternating sides a scene of the venue (weighted, not one of the last three), placed whole where it fits, turned to
+face the track; `<venue>_start` stands beside the start line. Random filler props come after, mostly within 25 m of
+the road.
+
+```
+scene cemetery_funeral
+  venue cemetery
+  size 12                # its radius on the ground
+  near 4                 # metres between the road's edge and its front
+  put open_grave x=0 z=3                 # a model; x along the road, z away from it
+  put crowd_mourners x=0 z=6.5 rot=180   # rot 0: its nose (-z) to the road
+  car pallbearer x=-8 z=1 rot=90         # a real car in some paint ("any": one of the venue's league or below)
+  wreck any x=4 z=2 rot=60 tilt=80       # rusted, sunk on its rims, tilt= degrees on its side
+```
+
+People (`data/models/props_people.txt`, written by `tools/props_people.py`): marshal, mechanic, worker, undertaker,
+tramp, widow, crowds of spectators and mourners, a fire barrel; scenes are written by `tools/make_scenes.py` (the
+junkyard by hand).
 
 ## Prop catalogue
 
@@ -352,6 +398,12 @@ they exist — `--validate` warns until they do). Lamps carry `lamp=1`.
 | fairground | `ferris_wheel carousel coaster_segment clown_head ticket_booth tent_striped bulb_arch balloon_stand ghost_train` |
 | proving | `bunker tank_wreck tank_trap sandbag_wall watchtower crater radar_dish target_board barbed_post` |
 | estate | `mausoleum_large gargoyle manor_wall chapel_gothic hedge_block tree_dead_big iron_gate fountain_skull lamp_gothic` |
+
+## Bosses
+
+Each league champion drives a car of their own in the showdown (`boss <car>` in data/rivals.txt; class 6, never
+for sale; quick races offer the class-6 cars once a career has been won): Barry's Scrap Press, Jack Knife's
+Jackknife, Petra Leum's Hellfire tanker, Gloria Mundy's Sic Transit limousine, Major Casualty's Triage half-track.
 
 ## Arenas (derby)
 
@@ -418,8 +470,21 @@ ideal pace), `ai_skill`, `ai_aggression`, `ai_weapons`, `damage_taken`, `damage_
 
 The `ai_*` factors and `rubber` act on the rivals only; `damage_taken`, `damage_dealt` and the economy act on the
 player's car (`CarSetup::m_player`), also when a computer drives it in `--careersim`. Measured with
-`tools/careersweep.py` (5 seeds, 30.10.2026): Schonfrist ~30 race days, Blechschaden ~35-47, Totalschaden 47-134,
-Sargnagel 3 of 5 careers won (80-88), Totentanz 1 of 5 (123), the others bankrupt or stuck in league 4.
+`tools/careersweep.py` (5-6 seeds, 30.10.2026, with used cars, the promotion bonus and the bosses): Schonfrist
+~30 race days, Blechschaden 34-50, Totalschaden 4 of 5 careers won (56-65), Sargnagel 3 of 5 (50-65), Totentanz 2 of
+6 (60-67), the others bankrupt. A beginner (`--novice 0.8`) wins Schonfrist and Blechschaden and goes bankrupt on
+Totalschaden.
+
+## Graves, feuds, used cars
+
+Whether a wrecked rival dies is decided at the wreck (`Career::dies`, the same answer during and after the race):
+the band plays a few bars of Chopin's funeral march (1837, free) over the lowered music and the rival's last
+words appear. The grave keeps the cause (gun, explosion, crash, wall, spikes, other), the killer, the track and the
+words; the hub's "Ehrenfriedhof" shows the stones. A rival the player wrecks twice without killing starts a feud
+(news "feud"): more temper and lead, and the player is the one they ram and hunt; seasons cool feuds by one step.
+Dolores sells a used car on two days of three (about half price, a third broken, from a dead rival's estate when
+there is one); every car is worth at least its scrap bonus (500 + 500 per class) when traded in; Graves pays the
+new league's purse on promotion.
 
 ## News, story, sponsors (`data/news/*.txt`, `data/story/*.txt`, `data/sponsors.txt`)
 
@@ -453,6 +518,15 @@ scraping, gravel, flamer, fire, rain, wind and one ambience per venue) and engin
 `EngineE` kinds as in the car list, pitch and timbre following rpm and load). Music is streamed from
 `assets/music/<name>.ogg`. `GraveSfx <dir>` writes every effect, loop and engine sample as WAV.
 
+## Voice and pictures
+
+Ricky Rattle speaks his own name-free lines (`character announcer_voice` in data/characters.txt) at the player's
+moments; `tools/make_announcer.py` designs his voice once per language with Qwen3-TTS (G:\Tools\VoiceLab) and
+clones every line into assets/voice/<lang>/ricky_<event>_<n>.ogg. The tabloid's front page shows a press photo
+by the news event (assets/news/<kind>_<n>.jpg, `tools/make_news_photos.py`, FLUX.2 locally in WSL). The final lap
+switches to the venue's hot take (`tools/music_hot.json`). All three run on the GPU: start them through
+`tools/gpu_queue.py`.
+
 ## Programs and tests
 
 - `GravePrix` — the game. `--mute` (no audio device: every automated run uses it), `--data DIR`.
@@ -462,7 +536,8 @@ scraping, gravel, flamer, fire, rain, wind and one ambience per venue) and engin
 - `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place.
 - `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window.
 - `--careersim [--days N] [--seed N] [--skill 0..1]` — a career played by the computer (the economy's test).
-- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..]` — `--careersim` for every difficulty and seed,
+- `--deckcheck [TRACK] [--frames N]` — frame times at the Steam Deck's 1280 x 800 and quality 0 and 1 (hidden window).
+- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1]` — `--careersim` for every difficulty and seed,
   three at a time at low priority, one line per career.
 - `--apptest SCRIPT` — the screens played by a script (tools/apptest_*.txt; a hidden window; set GRAVE_HOME).
 - `--shot` refuses while G:/Tools/Games/GPU_BELEGT.txt exists (another session's GPU job).

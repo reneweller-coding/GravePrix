@@ -145,6 +145,7 @@ int toolSim( const Options &opt )
     int bad = 0;
     for ( const std::string &name : names )
     {
+        ensureTrack( name );
         const TrackDef *def = g_data.track( name );
         if ( !def )
         {

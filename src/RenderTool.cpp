@@ -1,13 +1,15 @@
 /**
  * @file RenderTool.cpp
- * @brief The tool that needs a (hidden) window: --shot (a picture of a race). It refuses while another session
- *        holds the graphics card (G:/Tools/Games/GPU_BELEGT.txt).
+ * @brief The tools that need a (hidden) window: --shot (a picture of a race) and --deckcheck (frame times at the
+ *        Steam Deck's resolution). They refuse while another session holds the graphics card
+ *        (G:/Tools/Games/GPU_BELEGT.txt).
  * @author Rene Weller
  */
 #include "Render.h"
 #include "Tools.h"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstdio>
 #include <filesystem>
@@ -37,17 +39,109 @@ Paint paintOf( int k )
     return p;
 }
 
+/** @return whether another session holds the graphics card (then the tools wait for later) */
+bool gpuBusy( const Options &opt )
+{
+    std::string flag = ( fs::path( opt.m_root ).parent_path() / "GPU_BELEGT.txt" ).string();
+    if ( fs::exists( flag ) && !opt.has( "--force" ) )
+    {
+        printf( "GPU busy (%s): try again later\n", flag.c_str() );
+        return true;
+    }
+    return false;
+}
+
+std::vector<CarSetup> testField( const std::string &only )
+{
+    std::vector<CarSetup>    field;
+    std::vector<std::string> cars;
+    for ( const std::string &c : g_data.m_carOrder )
+        if ( only.empty() || c == only ) cars.push_back( c );
+    for ( int k = 0; k < 6; ++k )
+    {
+        CarSetup s;
+        s.m_car = cars.empty() ? "?" : cars[(size_t)k % cars.size()];
+        s.m_driver = "AI";
+        s.m_paint = paintOf( k );
+        s.m_skill = 0.7f;
+        s.m_weapons = 0.8f;
+        s.m_aggression = 0.6f;
+        s.m_rear[0] = 3;
+        s.m_rockets = 2;
+        field.push_back( s );
+    }
+    return field;
+}
+
 }   // namespace
+
+int toolDeckCheck( const Options &opt )
+{
+    if ( gpuBusy( opt ) ) return 2;
+    // The Deck: 1280 x 800, the game's automatic quality there (0), and the next one up for comparison. Tracks with
+    // night, rain, neon and the most props, the hardest pictures.
+    std::vector<std::string> tracks = { "dwn_welle", "cem_overcoat", "ref_oelung", "fair_lastride", "est_finale" };
+    if ( opt.has( "--deckcheck" ) && !opt.value( "--deckcheck" ).empty() ) tracks = { opt.value( "--deckcheck" ) };
+    static const float scale[] = { 0.67f, 0.85f, 1.0f };   // App.cpp's QualityScale
+    int                frames = (int)opt.num( "--frames", 600 );
+    hiddenWindow( 1280, 800 );
+    SetTargetFPS( 0 );
+    printf( "track            quality  cpu ms (avg/p99)   frame ms (avg/p99)\n" );
+    for ( const std::string &name : tracks )
+    {
+        const TrackDef *def = g_data.track( name );
+        if ( !def ) continue;
+        std::vector<std::string> errors, warnings;
+        Track                    t;
+        if ( !t.build( *def, g_data.venue( def->m_venue ), false, false, errors, warnings ) ) continue;
+        for ( int q = 0; q <= 1; ++q )
+        {
+            Renderer r;
+            r.init( (int)( 1280 * scale[q] ), (int)( 800 * scale[q] ), q );
+            r.setTrack( t );
+            World                 world;
+            std::vector<CarSetup> field = testField( "" );
+            world.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, 2, 11 );
+            std::vector<CarInput> none( field.size() );
+            std::vector<double>   cpu, frame;
+            using Clock = std::chrono::steady_clock;
+            for ( int f = 0; f < frames + 60; ++f )
+            {
+                auto t0 = Clock::now();
+                world.step( none );
+                r.events( world );
+                r.update( world, Dt );
+                View v;
+                v.m_focus = world.m_cars[world.m_leader].m_pos;
+                r.render( world, v );
+                auto t1 = Clock::now();
+                BeginDrawing();
+                DrawTexturePro( r.texture(), { 0, 0, (float)r.m_w, -(float)r.m_h }, { 0, 0, 1280, 800 }, { 0, 0 }, 0, WHITE );
+                EndDrawing();
+                auto t2 = Clock::now();
+                if ( f < 60 ) continue;   // the first second: shaders and chunks being made
+                cpu.push_back( std::chrono::duration<double, std::milli>( t1 - t0 ).count() );
+                frame.push_back( std::chrono::duration<double, std::milli>( t2 - t0 ).count() );
+            }
+            auto stat = []( std::vector<double> v ) {
+                std::sort( v.begin(), v.end() );
+                double sum = 0;
+                for ( double x : v ) sum += x;
+                return std::pair<double, double>( sum / std::max<size_t>( 1, v.size() ), v.empty() ? 0.0 : v[v.size() * 99 / 100] );
+            };
+            auto c = stat( cpu ), fr = stat( frame );
+            printf( "%-16s %7d  %6.2f / %6.2f    %6.2f / %6.2f\n", name.c_str(), q, c.first, c.second, fr.first, fr.second );
+            r.shutdown();
+        }
+    }
+    CloseWindow();
+    return 0;
+}
 
 int toolShot( const Options &opt )
 {
     // One GPU user at a time across all sessions: while another session's GPU job runs, no picture.
-    std::string flag = ( fs::path( opt.m_root ).parent_path() / "GPU_BELEGT.txt" ).string();
-    if ( fs::exists( flag ) && !opt.has( "--force" ) )
-    {
-        printf( "GPU busy (%s): no picture now, try again later\n", flag.c_str() );
-        return 2;
-    }
+    if ( gpuBusy( opt ) ) return 2;
     std::string name = opt.value( "--shot" ), file = opt.value2( "--shot", "work/shot.png" );
     const TrackDef *def = g_data.track( name );
     if ( !def )
@@ -68,24 +162,7 @@ int toolShot( const Options &opt )
     r.init( w, h, (int)opt.num( "--quality", 2 ) );
     r.setTrack( t );
     World                 world;
-    std::vector<CarSetup> field;
-    std::vector<std::string> cars;
-    std::string only = opt.value( "--car" );
-    for ( const std::string &c : g_data.m_carOrder )
-        if ( only.empty() || c == only ) cars.push_back( c );
-    for ( int k = 0; k < 6; ++k )
-    {
-        CarSetup s;
-        s.m_car = cars.empty() ? "?" : cars[(size_t)k % cars.size()];
-        s.m_driver = "AI";
-        s.m_paint = paintOf( k );
-        s.m_skill = 0.7f;
-        s.m_weapons = 0.8f;
-        s.m_aggression = 0.6f;
-        s.m_rear[0] = 3;
-        s.m_rockets = 2;
-        field.push_back( s );
-    }
+    std::vector<CarSetup> field = testField( opt.value( "--car" ) );
     world.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, 2, 11 );
     float seconds = opt.num( "--time", 6.0f );
     std::vector<CarInput> none( field.size() );

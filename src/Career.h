@@ -35,6 +35,11 @@ struct RivalState
     int         m_points = 0;
     int         m_wins = 0, m_races = 0, m_wrecks = 0;
     int         m_died = 0;         ///< the day they died
+    int         m_cause = -1;       ///< what killed them (Car::m_lastSource)
+    std::string m_killer;           ///< "_player", a rival's key or "" (nobody in particular)
+    std::string m_where;            ///< the track
+    std::string m_words;            ///< their last words
+    int         m_grudge = 0;       ///< 0..3: a feud with the player
 };
 
 /** @brief A race on offer. */
@@ -69,6 +74,7 @@ struct RaceReport
     int                      m_total = 0;            ///< all the money it brought
     std::vector<std::string> m_dead;                 ///< rivals who died
     bool                     m_promoted = false;
+    int                      m_promoBonus = 0;      ///< Graves' money for the move up
     bool                     m_seasonOver = false;   ///< the table was reset after this race
     bool                     m_won = false;          ///< the career is won
     std::string              m_story;                ///< a story to show now ("" none)
@@ -79,6 +85,7 @@ struct NewsItem
 {
     std::string m_head, m_text;
     bool        m_ad = false;
+    std::string m_event;   ///< what it reports (the photo goes by it)
 };
 
 /** @brief The upgrades. */
@@ -150,6 +157,13 @@ public:
     int  gearMax( const std::string &gear ) const;
     bool buyGear( const std::string &gear );
     int  sabotagePrice() const;
+    /** @brief Buys today's used car (cheap, a third broken, from a dead rival's estate when there is one). */
+    bool buyUsed();
+
+    /** @return whether a rival wrecked today dies of it (the same answer in the race and after it) */
+    bool dies( const std::string &rival, bool byPlayer ) const;
+    /** @return a rival's last words for today ("" none) */
+    std::string lastWords( const std::string &rival ) const;
     bool sabotage( const std::string &rival );
 
     // The loan shark.
@@ -194,6 +208,9 @@ public:
     int         m_loanDue = 0;         ///< the day it must be paid back
     std::string m_sponsor;
     std::string m_sabotaged;           ///< a rival of the next race
+    std::string m_used;                ///< today's used car at the dealer ("" none)
+    int         m_usedPrice = 0;
+    std::string m_usedFrom;            ///< whose estate it comes from (a rival's key)
     std::vector<RivalState> m_rivals;
     std::vector<Offer>      m_offers;
     std::vector<NewsItem>   m_news;

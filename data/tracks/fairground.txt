@@ -245,6 +245,8 @@ track fair_freeride
   hazard barrel at=1050 lat=0.8
   patch sand at=1110 len=25 lat=-0.4 w=6
   row ticket_booth at=1240 len=40 side=left off=3 every=20
+  # Rain on the fair: everyone runs, the race goes on.
+  weather rain lap=3
 
 track fair_bumper
   title "Autoscooter des Jüngsten Gerichts" title_en "Bumper Cars of Judgement Day"

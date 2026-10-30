@@ -1,0 +1,71 @@
+# Swamp scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene swamp_spectators
+  venue swamp
+  size 9
+  near 2
+  weight 1.6
+  put crowd_small x=-2 z=1
+  put crowd_small x=3 z=1.5
+  put dock_wood x=0 z=4
+  put lantern x=-5 z=0
+  put reeds x=6 z=0
+
+scene swamp_start
+  venue swamp
+  size 14
+  near 3
+  put dock_wood x=0 z=3
+  put crowd_block x=-9 z=1
+  put crowd_block x=9 z=1
+  put lantern x=-4 z=-1
+  put lantern x=4 z=-1
+  put fig_marshal x=0 z=-2.5
+  put flag_pole x=12 z=-1
+
+scene swamp_hut
+  venue swamp
+  size 12
+  near 4
+  weight 0.7
+  put stilt_hut x=0 z=5
+  put dock_wood x=-6 z=2
+  put boat_wreck x=6 z=4
+  put lantern x=-2 z=0
+  put fig_tramp x=2 z=0.5 rot=200
+
+scene swamp_gators
+  venue swamp
+  size 10
+  near 3
+  put bog_pool x=0 z=3
+  put gator x=-1 z=2 rot=40
+  put gator x=2 z=4 rot=-60
+  put gator x=4 z=1 rot=200
+  put reeds x=-5 z=1
+  put reeds x=6 z=5
+  put sunken_car x=-3 z=5
+
+scene swamp_trees
+  venue swamp
+  size 11
+  near 4
+  put tree_swamp x=-5 z=3
+  put tree_swamp x=4 z=5
+  put tree_swamp x=0 z=8
+  put stump x=1 z=1
+  put reeds x=-2 z=0
+  put reeds x=6 z=1
+  put lantern x=3 z=0
+
+scene swamp_wreck
+  venue swamp
+  size 10
+  near 3
+  put sunken_car x=0 z=3
+  wreck any x=-5 z=1 rot=70 tilt=15
+  put reeds x=4 z=1
+  put reeds x=5 z=4
+  put fig_tramp x=2 z=0 rot=200
+  put stump x=-2 z=5

@@ -33,15 +33,29 @@ Screenshot          F12
 Modes
 -----
 Career       five leagues, race days with three offers, garage, black market, loan shark, sponsors, the tabloid
-Quick race   any track and car; race, derby (last car driving wins) or time trial
+Quick race   any track and car; race, derby (last car driving wins) or time trial; or a random track
+Endless tournament   a new random track every round; finish in the top three to race on
+Daily challenge      the same random track and car for everyone today, a time trial against your ghost
 
 Difficulties
 ------------
 Five, from gentle to merciless: they change the computer drivers' pace, skill, temper and love of weapons, the
 damage you take and deal, prize money, prices, repairs, how often wrecked rivals die, and the loan shark's rate.
 
+Options for everyone
+--------------------
+Text size, race display size, colour vision (red-green or blue-yellow: other colours for good and bad), names
+above the cars, frame rate (30, 40, 60 or unlimited; 40 saves battery on the Deck), vibration, camera height,
+screen shake, the announcer's lines. With a pad the hints show its buttons.
+
 Tips
 ----
+- Level crossings ring before the train comes. The train does not brake. Drawbridges rise for the ships.
+- On the pass, rocks fall where the ground glows. The weather can turn in the middle of a race.
+- Wreck a rival twice and you have a feud: they will come for you. Kill them and they get a stone in the
+  Graveyard of Honour, with their last words.
+- Dolores sells a used car most days, cheap and a third broken. Graves pays for the move up a league.
+- Each league's champion brings their own monster to the showdown.
 - Wrecks stay on the track and burn. Do not drive into them.
 - Rivals who are wrecked may die. Their seat goes to a newcomer. Champions are harder to kill.
 - Cash, wrenches, ammo, nitro, mines, rockets and coffins (anything can be inside) lie on the track.

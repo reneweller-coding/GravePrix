@@ -258,6 +258,7 @@ void World::step( const std::vector<CarInput> &inputs )
     rockets();
     hazards();
     pickups();
+    movers();
     for ( size_t i = 0; i < m_cars.size(); ++i ) progress( (int)i );
     places();
     if ( m_phase == PhaseE::RACE )
@@ -337,6 +338,7 @@ void World::physics( Car &c, const CarInput &in, float dt )
     float   vl = dot( c.m_vel, f ), vlat = dot( c.m_vel, r );
     float   gS = surfaceGrip( c.m_surface );
     if ( surfaceLoose( c.m_surface ) ) gS = std::min( 1.05f, gS * c.m_offroad );
+    else gS *= 1.0f - 0.16f * m_wetness;   // rain that came during the race
     if ( c.m_oilSlip > 0 ) gS *= 0.18f;
     if ( c.m_spiked > 0 ) gS *= 0.55f;
     float drag = surfaceDrag( c.m_surface ) + ( c.m_spiked > 0 ? 0.12f : 0.0f );
@@ -486,6 +488,8 @@ void World::obstacles( Car &c, int i )
         return hit;
     };
     for ( const ObstacleSpot &o : m_track->m_obstacles ) resolve( o.m_pos, o.m_r );
+    for ( const Rock &rock : m_rocks )
+        if ( rock.m_age >= 0 ) resolve( rock.m_pos, rock.m_r );
     for ( Barrel &b : m_barrels )
         if ( !b.m_gone && resolve( b.m_pos, 0.6f ) && !c.m_wrecked )
         {
@@ -573,6 +577,10 @@ void World::collide( int ia, int ib )
     if ( !A.m_wrecked ) damage( ia, toA, B.m_wrecked ? -1 : ib, cp );
     m_source = 2;
     if ( !B.m_wrecked ) damage( ib, toB, A.m_wrecked ? -1 : ia, cp );
+    // A wreck still burning: the fire jumps over.
+    m_source = 5;
+    if ( A.m_wrecked && A.m_wreckTime < 25.0f && !B.m_wrecked ) damage( ib, 4.0f, -1, cp );
+    if ( B.m_wrecked && B.m_wreckTime < 25.0f && !A.m_wrecked ) damage( ia, 4.0f, -1, cp );
     event( EvE::CRASH, ia, cp, impact, 0, ib );
 }
 
@@ -600,7 +608,7 @@ void World::weapons( int i, const CarInput &in )
             float side = ( g.m_name.find( "twin" ) != std::string::npos ) ? ( ( c.m_shots % 2 ) ? 0.5f : -0.5f ) : 0.0f;
             Vector2 muzzle = add( add( c.m_pos, mul( c.fwd(), c.m_len * 0.5f + 0.3f ) ), mul( c.right(), side ) );
             // Computer drivers aim worse the less skilled they are.
-            float aimErr = c.m_setup.m_human ? 0.0f : ( 1.0f - c.m_setup.m_skill ) * 4.0f + 1.0f;
+            float aimErr = c.m_setup.m_human ? 0.0f : ( 1.0f - c.m_setup.m_skill ) * 4.0f + 1.0f + c.m_setup.m_novice * 6.0f;
             float ang = c.m_head + ( m_rng.range( -g.m_spread, g.m_spread ) + m_rng.range( -aimErr, aimErr ) ) * Deg;
             float   speed = g.m_speed * ( b.m_kind == 1 ? m_rng.range( 0.8f, 1.1f ) : 1.0f );
             b.m_pos = muzzle;
@@ -1048,6 +1056,7 @@ void World::damage( int victim, float amount, int by, Vector2 at )
     c.m_hp -= amount;
     c.m_damage += amount;
     m_dmgBy[std::clamp( m_source, 0, 5 )] += amount;
+    c.m_lastSource = std::clamp( m_source, 0, 5 );
     c.m_hitFlash = 1.0f;
     if ( by >= 0 && by != victim )
     {

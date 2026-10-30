@@ -1,0 +1,78 @@
+# Refinery scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene refinery_spectators
+  venue refinery
+  size 9
+  near 2
+  weight 1.6
+  put crowd_row x=0 z=1
+  put crowd_small x=-6 z=1
+  put barrel_stack x=6 z=2
+  put lamp_sodium x=-8 z=0
+
+scene refinery_start
+  venue refinery
+  size 14
+  near 3
+  put grandstand x=0 z=4
+  put crowd_block x=-10 z=1
+  put crowd_block x=10 z=1
+  put fig_marshal x=3 z=-2.5 rot=-20
+  put flag_pole x=-13 z=-1
+  put lamp_sodium x=13 z=0
+
+scene refinery_tanks
+  venue refinery
+  size 13
+  near 5
+  weight 0.6
+  put tank_oil x=-5 z=6
+  put tank_oil x=6 z=7
+  put catwalk x=0 z=2 rot=90
+  put pipe_rack x=0 z=-1 rot=90
+  put fig_worker x=3 z=0 rot=-30
+
+scene refinery_flare
+  venue refinery
+  size 12
+  near 5
+  weight 0.6
+  put flare_stack x=0 z=6
+  put distill_column x=-6 z=4
+  put barrel_stack x=5 z=1
+  put fig_worker x=-2 z=0 rot=20
+  put valve x=2 z=0.5
+
+scene refinery_spill
+  venue refinery
+  size 10
+  near 3
+  put oil_puddle x=0 z=1
+  put oil_puddle x=3 z=2.5
+  wreck any x=-4 z=2 rot=60
+  put barrel_oil x=2 z=-0.5
+  put barrel_oil x=5 z=0.5
+  put fig_worker x=6 z=2 rot=-100
+
+scene refinery_valves
+  venue refinery
+  size 11
+  near 3
+  put valve x=-4 z=1
+  put valve x=0 z=1
+  put valve x=4 z=1
+  put pipe_rack x=0 z=4 rot=90
+  put lamp_sodium x=7 z=0
+  put crowd_small x=-6 z=3
+
+scene refinery_parking
+  venue refinery
+  size 12
+  near 3
+  car any x=-6 z=1 rot=0
+  car any x=-3 z=1 rot=10
+  car any x=0 z=1 rot=-5
+  wreck any x=3.5 z=1 rot=0
+  put barrel_stack x=7 z=2
+  put lamp_sodium x=-8.5 z=0.5

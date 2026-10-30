@@ -176,6 +176,8 @@ private:
     std::vector<Vector4>    m_spotPos, m_spotDir, m_spotCol;
     bool                    m_dark = false;
     float                   m_wet = 0.0f;
+    float                   m_wetRace = 0.0f, m_fogRace = 0.0f;   ///< weather that came during the race
+    std::vector<std::pair<std::string, Matrix>> m_turning;          ///< props whose spin group turns (wheels, carousels)
     float                   m_flash = 0.0f;      ///< lightning
     float                   m_flashTimer = 8.0f;
     View                    m_view;

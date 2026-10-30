@@ -90,9 +90,18 @@ void App::hub()
     moneyBox();
     bool                     sd = m_career.showdownReady();
     std::vector<std::string> items;
-    if ( sd ) items.push_back( m_career.m_league == 0 ? T( "FINALE gegen Mortimer Graves" ) : T( "SHOWDOWN gegen den Ligachampion" ) );
+    if ( sd )
+    {
+        Offer           duel = m_career.showdown();
+        const RivalDef *boss = duel.m_rivals.empty() ? nullptr : g_data.rival( duel.m_rivals[0] );
+        const CarDef   *bc = boss ? g_data.car( boss->m_boss ) : nullptr;
+        items.push_back( m_career.m_league == 0 ? std::string( T( "FINALE gegen Mortimer Graves" ) )
+                         : boss && bc       ? tf( T( "SHOWDOWN gegen %s in %s" ), boss->m_name.c_str(), bc->m_title.get().c_str() )
+                                            : std::string( T( "SHOWDOWN gegen den Ligachampion" ) ) );
+    }
     if ( m_career.m_league > 0 ) items.push_back( T( "Renntag: die Angebote" ) );
-    for ( const char *s : { "Werkstatt", "Schwarzmarkt", "Kredithai", "Sponsor", "Das Sensenblatt", "Tabelle", "Speichern und Hauptmenü" } )
+    for ( const char *s : { "Werkstatt", "Schwarzmarkt", "Kredithai", "Sponsor", "Das Sensenblatt", "Tabelle", "Ehrenfriedhof",
+                            "Speichern und Hauptmenü" } )
         items.push_back( T( s ) );
     int pick = menu( items, m_sel[(int)ScreenE::HUB], { 96 * k, 220 * k, 760 * k, 700 * k }, 44 );
     carCard( { GetScreenWidth() - 760 * k, 200 * k, 700 * k, 760 * k } );
@@ -151,7 +160,8 @@ void App::hub()
         go( ScreenE::NEWS );
         break;
     case 7: go( ScreenE::TABLE ); break;
-    case 8:
+    case 8: go( ScreenE::GRAVEYARD ); break;
+    case 9:
         saveCareer();
         m_inCareer = false;
         m_audio.music( "title" );
@@ -159,6 +169,85 @@ void App::hub()
         break;
     default: break;
     }
+}
+
+// ---------------------------------------------------------------------------------------------------- the graveyard
+
+void App::graveyard()
+{
+    backdrop();
+    float k = ui::k();
+    header( T( "Ehrenfriedhof" ), T( "Graves & Sons pflegen jedes Grab. Gegen Gebühr." ) );
+    std::vector<const RivalState *> dead;
+    for ( const RivalState &s : m_career.m_rivals )
+        if ( !s.m_alive && s.m_died > 0 && g_data.rival( s.m_key ) ) dead.push_back( &s );
+    std::sort( dead.begin(), dead.end(), []( const RivalState *a, const RivalState *b ) { return a->m_died > b->m_died; } );
+    int &sel = m_sel[(int)ScreenE::GRAVEYARD];
+    if ( dead.empty() )
+    {
+        ui::text( T( "Noch keine Gräber. Das wird sich ändern." ), 96 * k, 260 * k, 40, ui::Dim );
+        sel = 0;
+    }
+    else
+    {
+        int n = (int)dead.size();
+        sel = std::clamp( sel, 0, n - 1 );
+        if ( m_in.left() || m_in.up() ) sel = ( sel + n - 1 ) % n;
+        if ( m_in.right() || m_in.down() ) sel = ( sel + 1 ) % n;
+        // A row of stones, the chosen one in the middle.
+        static const char *causes[] = { "durchsiebt", "in die Luft gesprengt", "zerquetscht", "an einer Mauer zerschellt",
+                                        "auf Krähenfüßen ausgeblutet", "verunglückt" };
+        float cx = GetScreenWidth() * 0.5f, base = 640 * k, w = 300 * k, h = 380 * k, gap = 60 * k;
+        for ( int i = std::max( 0, sel - 3 ); i <= std::min( n - 1, sel + 3 ); ++i )
+        {
+            float     x = cx + ( i - sel ) * ( w + gap ) - w * 0.5f;
+            float     s = i == sel ? 1.0f : 0.82f;
+            Rectangle r = { x + w * ( 1 - s ) * 0.5f, base - h * s, w * s, h * s };
+            Color     stone = i == sel ? Color{ 128, 124, 120, 255 } : Color{ 82, 80, 80, 255 };
+            DrawRectangleRec( { r.x, r.y + r.width * 0.5f, r.width, r.height - r.width * 0.5f }, stone );
+            DrawCircleSector( { r.x + r.width * 0.5f, r.y + r.width * 0.5f }, r.width * 0.5f, 180, 360, 32, stone );
+            DrawRectangleRec( { r.x - 12 * k, base, r.width + 24 * k, 18 * k }, { 48, 40, 34, 255 } );
+            const RivalDef *d = g_data.rival( dead[i]->m_key );
+            Color           ink = { 34, 30, 30, 255 };
+            float           ty = r.y + r.width * 0.3f;
+            ui::text( "\xE2\x80\xA0", r.x + r.width * 0.5f, ty - 30 * k * s, 56 * s, ink, ui::AlignE::CENTER );
+            ty += 50 * k * s;
+            for ( const std::string &l : ui::wrap( d->m_name, r.width - 30 * k, 30 * s ) )
+            {
+                ui::text( l, r.x + r.width * 0.5f, ty, 30 * s, ink, ui::AlignE::CENTER );
+                ty += 34 * k * s;
+            }
+            ui::text( tf( "Renntag %d", dead[i]->m_died ), r.x + r.width * 0.5f, ty + 8 * k * s, 22 * s, ink, ui::AlignE::CENTER );
+        }
+        // The chosen one's story.
+        const RivalState *g = dead[sel];
+        const RivalDef   *d = g_data.rival( g->m_key );
+        std::string       how = T( causes[std::clamp( g->m_cause, 0, 5 )] );
+        std::string       by = g->m_killer == "_player" ? m_career.m_name
+                             : g_data.rival( g->m_killer ) ? g_data.rival( g->m_killer )->m_name : "";
+        const TrackDef   *td = g_data.track( g->m_where );
+        std::string       line = tf( T( "Gestorben an Renntag %d" ), g->m_died ) + ( td ? std::string( T( " auf " ) ) + td->m_title.get() : "" ) +
+                           ": " + how + ( by.empty() ? "" : std::string( T( ", besorgt von " ) ) + by ) + ".";
+        Rectangle box = { 96 * k, base + 50 * k, GetScreenWidth() - 192 * k, 300 * k };
+        ui::panel( box, 0.75f );
+        float y = box.y + 18 * k;
+        ui::text( line, box.x + 24 * k, y, 30, g->m_killer == "_player" ? ui::Warn : ui::Ink );
+        y += 46 * k;
+        if ( !g->m_words.empty() )
+        {
+            ui::text( T( "Letzte Worte: " ) + quote( g->m_words ), box.x + 24 * k, y, 28, ui::Gold );
+            y += 42 * k;
+        }
+        for ( const std::string &l : ui::wrap( d->m_obit.get(), box.width - 48 * k, 26 ) )
+        {
+            if ( y > box.y + box.height - 34 * k ) break;
+            ui::text( l, box.x + 24 * k, y, 26, ui::Dim );
+            y += 32 * k;
+        }
+        ui::text( tf( T( "%d Gräber" ), n ), GetScreenWidth() - 96 * k, 200 * k, 28, ui::Dim, ui::AlignE::RIGHT );
+    }
+    hints( m_in.padUsed() ? T( "Links/Rechts blättern   ·   B zurück" ) : T( "Links/Rechts blättern   ·   Esc zurück" ) );
+    if ( m_in.back() || m_in.accept() ) go( ScreenE::HUB );
 }
 
 // ---------------------------------------------------------------------------------------------------- offers
@@ -282,6 +371,12 @@ void App::garage()
         items.push_back( T( "Eintauschwert deines Wagens: " ) + formatMoney( m_career.sellValue() ) );
         on.push_back( false );
         keys.push_back( "" );
+        if ( const CarDef *u = g_data.car( m_career.m_used ) )
+        {
+            items.push_back( std::string( T( "Gebraucht: " ) ) + u->m_title.get() + "   ·   " + formatMoney( m_career.m_usedPrice ) );
+            on.push_back( m_career.m_usedPrice <= m_career.m_money + m_career.sellValue() );
+            keys.push_back( "_used" );
+        }
         for ( const std::string &c : g_data.m_carOrder )
         {
             const CarDef &d = g_data.m_cars.at( c );
@@ -293,7 +388,8 @@ void App::garage()
         }
         sel = std::clamp( sel, 0, (int)items.size() - 1 );
         if ( sel == 0 && items.size() > 1 ) sel = 1;
-        if ( sel < (int)keys.size() && !keys[sel].empty() ) showModel = g_data.m_cars.at( keys[sel] ).m_model;
+        if ( sel < (int)keys.size() && keys[sel] == "_used" ) showModel = g_data.m_cars.at( m_career.m_used ).m_model;
+        else if ( sel < (int)keys.size() && !keys[sel].empty() ) showModel = g_data.m_cars.at( keys[sel] ).m_model;
     }
     else if ( m_tab == 3 )
     {
@@ -314,7 +410,16 @@ void App::garage()
     int pick = menu( items, sel, area, 36, &on );
     // The description of what is selected.
     std::string desc;
-    if ( m_tab == 2 && sel < (int)keys.size() && !keys[sel].empty() )
+    if ( m_tab == 2 && sel < (int)keys.size() && keys[sel] == "_used" )
+    {
+        const RivalDef *from = g_data.rival( m_career.m_usedFrom );
+        const RivalState *st = m_career.rival( m_career.m_usedFrom );
+        desc = from && st && !st->m_alive
+                   ? tf( T( "Aus dem Nachlass von %s. Nur einmal gefahren, und zwar zu Ende. Ein Drittel Schrott, ohne Tuning, ohne Garantie." ), from->m_name.c_str() )
+                   : from ? tf( T( "Von %s, der Geld für Raketen brauchte. Ein Drittel Schrott, ohne Tuning, ohne Garantie." ), from->m_name.c_str() )
+                          : std::string( T( "Herkunft unbekannt, Fragen unerwünscht. Ein Drittel Schrott, ohne Tuning, ohne Garantie." ) );
+    }
+    else if ( m_tab == 2 && sel < (int)keys.size() && !keys[sel].empty() )
     {
         const CarDef &d = g_data.m_cars.at( keys[sel] );
         CarSetup      s;
@@ -387,7 +492,7 @@ void App::garage()
     }
     else if ( m_tab == 2 && pick < (int)keys.size() && !keys[pick].empty() )
     {
-        ok = m_career.buyCar( keys[pick] );
+        ok = keys[pick] == "_used" ? m_career.buyUsed() : m_career.buyCar( keys[pick] );
         if ( ok ) m_greeting = greet( "mechanic", "buy" );
     }
     else if ( m_tab == 3 && pick < (int)keys.size() )
@@ -580,6 +685,31 @@ void App::sponsor()
 
 // ---------------------------------------------------------------------------------------------------- the tabloid
 
+const Texture2D *App::photo( const std::string &event, uint32_t pick )
+{
+    // The event's kind of picture (assets/news/<kind>_<n>.jpg), one of its takes.
+    static const std::map<std::string, std::string> kinds = {
+        { "player_wrecked", "crash" },  { "rival_dead", "funeral" },  { "feud_end", "funeral" },   { "player_win", "victory" },
+        { "showdown_won", "victory" },  { "boss_won", "victory" },    { "player_podium", "victory" }, { "record", "victory" },
+        { "player_spree", "victory" },  { "player_clean", "victory" }, { "player_lose", "defeat" },  { "showdown_lost", "defeat" },
+        { "loan_overdue", "shark" },    { "loan_paid", "shark" },     { "bought_car", "dealer" },   { "bought_used", "dealer" },
+        { "sabotage_done", "sabotage" }, { "sabotage_caught", "sabotage" }, { "feud", "feud" },     { "league_up", "league" },
+        { "rookie", "league" },         { "day", "crowd" } };
+    auto k = kinds.find( event );
+    if ( k == kinds.end() ) return nullptr;
+    for ( int n : { (int)( pick % 2 ) + 1, 1 } )
+    {
+        std::string file = m_opt.m_root + "/assets/news/" + k->second + "_" + std::to_string( n ) + ".jpg";
+        auto        it = m_photos.find( file );
+        if ( it != m_photos.end() ) return it->second.id ? &it->second : nullptr;
+        Texture2D t = FileExists( file.c_str() ) ? LoadTexture( file.c_str() ) : Texture2D{};
+        if ( t.id ) SetTextureFilter( t, TEXTURE_FILTER_BILINEAR );
+        m_photos[file] = t;
+        if ( t.id ) return &m_photos[file];
+    }
+    return nullptr;
+}
+
 void App::newsScreen()
 {
     float k = ui::k();
@@ -599,12 +729,23 @@ void App::newsScreen()
     for ( size_t i = 0; i < heads.size() && y < H - 160 * k; ++i )
     {
         float size = i == 0 ? 52 : 34;
-        for ( const std::string &l : ui::wrap( heads[i]->m_head, colW, size ) )
+        // The front page's photo beside its text.
+        float textW = colW;
+        if ( i == 0 )
+            if ( const Texture2D *p = photo( heads[0]->m_event, (uint32_t)heads[0]->m_head.size() ) )
+            {
+                float pw = colW * 0.36f, ph = pw * p->height / std::max( 1, p->width );
+                Rectangle at = { 80 * k + colW - pw, y + 8 * k, pw, ph };
+                DrawTexturePro( *p, { 0, 0, (float)p->width, (float)p->height }, at, { 0, 0 }, 0, { 236, 226, 206, 255 } );
+                DrawRectangleLinesEx( at, 2, ink );
+                textW = colW - pw - 24 * k;
+            }
+        for ( const std::string &l : ui::wrap( heads[i]->m_head, textW, size ) )
         {
             ui::text( l, 80 * k, y, size, i == 0 ? red : ink );
             y += size * 1.15f * k;
         }
-        for ( const std::string &l : ui::wrap( heads[i]->m_text, colW, 26 ) )
+        for ( const std::string &l : ui::wrap( heads[i]->m_text, textW, 26 ) )
         {
             ui::text( l, 80 * k, y, 26, ink );
             y += 31 * k;

@@ -1,0 +1,74 @@
+# Pass scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene pass_spectators
+  venue pass
+  size 9
+  near 2
+  weight 1.6
+  put crowd_row x=0 z=1
+  put crowd_small x=6 z=2
+  put fir_snow x=-7 z=3
+  put snow_bank x=0 z=-0.5
+
+scene pass_start
+  venue pass
+  size 14
+  near 3
+  put cabin_wood x=0 z=5
+  put crowd_block x=-9 z=1
+  put crowd_block x=9 z=1
+  put fig_marshal x=-3 z=-2.5 rot=20
+  put flag_pole x=13 z=-1
+  put fir_snow x=-14 z=3
+
+scene pass_cabin
+  venue pass
+  size 12
+  near 4
+  put cabin_wood x=0 z=5
+  put snowman x=-5 z=1
+  put fir_snow x=6 z=3
+  put fir_snow x=-8 z=6
+  car any x=4 z=0.5 rot=90
+  put snow_bank x=-2 z=-0.5
+
+scene pass_lift
+  venue pass
+  size 11
+  near 4
+  weight 0.6
+  put lift_pylon x=0 z=4
+  put fir_snow x=-5 z=2
+  put fir_snow x=5 z=6
+  put fir_snow x=-2 z=8
+  put crowd_small x=3 z=1
+
+scene pass_plow
+  venue pass
+  size 11
+  near 3
+  put snow_plow x=0 z=2 rot=90
+  put snow_bank x=-5 z=1
+  put snow_bank x=5 z=1
+  put fig_worker x=-2 z=-0.5 rot=30
+  put sign_curve x=6 z=-0.5
+
+scene pass_rocks
+  venue pass
+  size 10
+  near 3
+  put rock_snow x=-3 z=2
+  put rock_snow x=2 z=3
+  put rock_snow x=5 z=1
+  put avalanche_fence x=0 z=6 rot=90
+  put fir_tree x=-6 z=5
+
+scene pass_crash
+  venue pass
+  size 10
+  near 3
+  wreck any x=0 z=2 rot=30 tilt=70
+  put snow_bank x=-3 z=0
+  put fir_snow x=5 z=4
+  put fig_tramp x=-4 z=1 rot=120

@@ -84,17 +84,18 @@ int toolValidate( const Options &opt )
     print( warnings, "warning" );
     print( errors, "error" );
     printf( "%zu models, %zu cars, %zu guns, %zu gear, %zu venues, %d/%zu tracks (%.1f km), %zu rivals, %zu news, %zu ads, "
-            "%zu stories, %zu sponsors, %zu leagues, %zu difficulties: %zu errors, %zu warnings\n",
+            "%zu stories, %zu sponsors, %zu leagues, %zu difficulties, %zu scenes: %zu errors, %zu warnings\n",
             g_data.m_models.size(), g_data.m_cars.size(), g_data.m_guns.size(), g_data.m_gear.size(), g_data.m_venues.size(),
             built, g_data.m_tracks.size(), total / 1000.0f, g_data.m_rivals.size(), g_data.m_news.size(), g_data.m_ads.size(),
             g_data.m_stories.size(), g_data.m_sponsors.size(), g_data.m_leagues.size(), g_data.m_difficulties.size(),
-            errors.size(), warnings.size() );
+            g_data.m_scenes.size(), errors.size(), warnings.size() );
     return errors.empty() ? 0 : 1;
 }
 
 int toolTrackshot( const Options &opt )
 {
     std::string name = opt.value( "--trackshot" ), file = opt.value2( "--trackshot", "work/maps/" + name + ".png" );
+    ensureTrack( name );
     const TrackDef *def = g_data.track( name );
     if ( !def )
     {
@@ -107,6 +108,14 @@ int toolTrackshot( const Options &opt )
     print( warnings, "warning" );
     print( errors, "error" );
     if ( !ok ) return 1;
+    // --find MODEL: where along the track such props stand (for --shot --at).
+    if ( opt.has( "--find" ) )
+        for ( const PropSpot &p : t.m_props )
+            if ( p.m_model == opt.value( "--find" ) )
+            {
+                TrackPos tp = t.locate( p.m_pos, -1 );
+                printf( "%s at s %.0f, %.0f m from the centre line\n", p.m_model.c_str(), tp.m_s, tp.m_lat );
+            }
     std::error_code ec;
     fs::create_directories( fs::path( file ).parent_path(), ec );
     t.map( file, g_data );

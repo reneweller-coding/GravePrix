@@ -1,0 +1,374 @@
+# The people by the road (docs/DESIGN.md "Bosses" and the scenes). Written by tools/props_people.py.
+# Height about 1.8 m; they face -z; from above their hats and umbrellas tell them apart.
+
+# a race marshal in an orange coat, a flag raised
+model fig_marshal
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-0.11 y=0.43 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=0.11 y=0.43 z=0.00
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#e06a10 x=0.00 y=1.17 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#e06a10 x=-0.31 y=1.15 z=0.00
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#e06a10 x=0.31 y=1.62 z=0.00
+  part sphere r=0.06 color=#e0b89a x=0.34 y=1.95 z=0.00
+  part sphere r=0.13 color=#e0b89a x=0.00 y=1.62 z=0.00
+  part dome r=0.14 ry=0.08 seg=8 color=#e06a10 x=0.00 y=1.71 z=0.00
+
+
+# a mechanic in blue overalls
+model fig_mechanic
+  part box w=0.15 h=0.86 d=0.18 color=#2a4a8a x=-0.11 y=0.43 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#2a4a8a x=0.11 y=0.43 z=0.00
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#2a4a8a x=0.00 y=1.17 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#2a4a8a x=-0.31 y=1.15 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#2a4a8a x=0.31 y=1.15 z=0.00
+  part sphere r=0.13 color=#c89070 x=0.00 y=1.62 z=0.00
+  part dome r=0.14 ry=0.08 seg=8 color=#c02020 x=0.00 y=1.71 z=0.00
+
+
+# a scrapyard worker in a high-visibility vest and a hard hat
+model fig_worker
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=-0.11 y=0.43 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=0.11 y=0.43 z=0.00
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#e0c010 x=0.00 y=1.17 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#e0c010 x=-0.31 y=1.15 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#e0c010 x=0.31 y=1.15 z=0.00
+  part sphere r=0.13 color=#9a6a4a x=0.00 y=1.62 z=0.00
+  part dome r=0.16 ry=0.12 seg=8 color=#e8b820 x=0.00 y=1.71 z=0.00
+
+
+# an undertaker in black with a top hat
+model fig_undertaker
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-0.11 y=0.43 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=0.11 y=0.43 z=0.00
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#141416 x=0.00 y=1.17 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=-0.31 y=1.15 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=0.31 y=1.15 z=0.00
+  part sphere r=0.13 color=#f0ccb0 x=0.00 y=1.62 z=0.00
+  part disc r=0.19 h=0.02 seg=10 color=#101012 x=0.00 y=1.75 z=0.00
+  part disc r=0.11 h=0.22 seg=10 color=#101012 x=0.00 y=1.86 z=0.00
+
+
+# a tramp in a long brown coat
+model fig_tramp
+  part box w=0.15 h=0.86 d=0.18 color=#3a3226 x=-0.11 y=0.43 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#3a3226 x=0.11 y=0.43 z=0.00
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#5a4a32 x=0.00 y=1.17 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a32 x=-0.31 y=1.15 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a32 x=0.31 y=1.15 z=0.00
+  part sphere r=0.13 color=#c89070 x=0.00 y=1.62 z=0.00
+  part dome r=0.16 ry=0.16 seg=8 color=#5a4a32 x=0.00 y=1.68 z=0.00
+
+
+# a widow in black under a black umbrella
+model fig_widow
+  part box w=0.15 h=0.86 d=0.18 color=#18161a x=-0.11 y=0.43 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#18161a x=0.11 y=0.43 z=0.00
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#18161a x=0.00 y=1.17 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#18161a x=-0.31 y=1.15 z=0.00
+  part box w=0.12 h=0.58 d=0.13 color=#18161a x=0.31 y=1.15 z=0.00
+  part sphere r=0.13 color=#f0ccb0 x=0.00 y=1.62 z=0.00
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=0.18 y=1.75 z=-0.05
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#0e0e10 x=0.18 y=2.12 z=-0.05
+
+
+# three spectators
+model crowd_small
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.77 y=0.43 z=0.13 rot=-22
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.56 y=0.43 z=0.05 rot=-22
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#2a3a5a x=-0.66 y=1.17 z=0.09 rot=-22
+  part box w=0.12 h=0.58 d=0.13 color=#2a3a5a x=-0.95 y=1.15 z=0.21 rot=-22
+  part box w=0.12 h=0.58 d=0.13 color=#2a3a5a x=-0.38 y=1.15 z=-0.03 rot=-22
+  part sphere r=0.13 color=#c89070 x=-0.66 y=1.62 z=0.09
+  part dome r=0.16 ry=0.16 seg=8 color=#2a3a5a x=-0.66 y=1.68 z=0.09
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=-0.52 y=1.75 z=-0.02
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#2a3a6a x=-0.52 y=2.12 z=-0.02
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.24 y=0.43 z=-0.01 rot=25
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.04 y=0.43 z=0.08 rot=25
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#2a4a3a x=-0.14 y=1.17 z=0.04 rot=25
+  part box w=0.12 h=0.58 d=0.13 color=#2a4a3a x=-0.42 y=1.15 z=-0.09 rot=25
+  part box w=0.12 h=0.58 d=0.13 color=#2a4a3a x=0.14 y=1.15 z=0.17 rot=25
+  part sphere r=0.13 color=#f0ccb0 x=-0.14 y=1.62 z=0.04
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=0.66 y=0.43 z=0.05 rot=20
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=0.86 y=0.43 z=0.12 rot=20
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#2a4a3a x=0.76 y=1.17 z=0.09 rot=20
+  part box w=0.12 h=0.58 d=0.13 color=#2a4a3a x=0.47 y=1.15 z=-0.02 rot=20
+  part box w=0.12 h=0.58 d=0.13 color=#2a4a3a x=1.05 y=1.15 z=0.19 rot=20
+  part sphere r=0.13 color=#f0ccb0 x=0.76 y=1.62 z=0.09
+  part dome r=0.14 ry=0.1 seg=8 color=#8a6a3a x=0.76 y=1.68 z=0.09
+
+
+# a row of eight spectators, some cheering
+model crowd_row
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-2.81 y=0.43 z=0.02 rot=-7
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-2.59 y=0.43 z=-0.00 rot=-7
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#5a4a6a x=-2.70 y=1.17 z=0.01 rot=-7
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a6a x=-3.01 y=1.15 z=0.04 rot=-7
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a6a x=-2.40 y=1.15 z=-0.03 rot=-7
+  part sphere r=0.13 color=#f0ccb0 x=-2.70 y=1.62 z=0.01
+  part dome r=0.14 ry=0.08 seg=8 color=#202020 x=-2.70 y=1.71 z=0.01
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=-1.83 y=0.43 z=-0.04 rot=17
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=-1.62 y=0.43 z=0.03 rot=17
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#5a4a6a x=-1.73 y=1.17 z=-0.01 rot=17
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a6a x=-2.02 y=1.15 z=-0.10 rot=17
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a6a x=-1.43 y=1.15 z=0.08 rot=17
+  part sphere r=0.13 color=#c89070 x=-1.73 y=1.62 z=-0.01
+  part dome r=0.14 ry=0.1 seg=8 color=#8a6a3a x=-1.73 y=1.68 z=-0.01
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=-1.54 y=1.75 z=-0.00
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#2a3a6a x=-1.54 y=2.12 z=-0.00
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-1.26 y=0.43 z=-0.12 rot=14
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-1.05 y=0.43 z=-0.07 rot=14
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#4a4a3a x=-1.16 y=1.17 z=-0.10 rot=14
+  part box w=0.12 h=0.58 d=0.13 color=#4a4a3a x=-1.46 y=1.15 z=-0.17 rot=14
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#4a4a3a x=-0.86 y=1.62 z=-0.02 rot=14
+  part sphere r=0.06 color=#9a6a4a x=-0.83 y=1.95 z=-0.02
+  part sphere r=0.13 color=#9a6a4a x=-1.16 y=1.62 z=-0.10
+  part dome r=0.14 ry=0.08 seg=8 color=#c02020 x=-1.16 y=1.71 z=-0.10
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=-0.42 y=0.43 z=0.09 rot=-5
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=-0.20 y=0.43 z=0.07 rot=-5
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#5a4a6a x=-0.31 y=1.17 z=0.08 rot=-5
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a6a x=-0.62 y=1.15 z=0.11 rot=-5
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a6a x=-0.00 y=1.15 z=0.06 rot=-5
+  part sphere r=0.13 color=#9a6a4a x=-0.31 y=1.62 z=0.08
+  part dome r=0.14 ry=0.08 seg=8 color=#3a2a1a x=-0.31 y=1.71 z=0.08
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=0.41 y=0.43 z=-0.02 rot=6
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=0.62 y=0.43 z=-0.00 rot=6
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#3a3a3a x=0.51 y=1.17 z=-0.01 rot=6
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a3a x=0.21 y=1.15 z=-0.05 rot=6
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#3a3a3a x=0.82 y=1.62 z=0.02 rot=6
+  part sphere r=0.06 color=#f0ccb0 x=0.85 y=1.95 z=0.02
+  part sphere r=0.13 color=#f0ccb0 x=0.51 y=1.62 z=-0.01
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=1.04 y=0.43 z=0.06 rot=9
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=1.26 y=0.43 z=0.10 rot=9
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#5a2a2a x=1.15 y=1.17 z=0.08 rot=9
+  part box w=0.12 h=0.58 d=0.13 color=#5a2a2a x=0.84 y=1.15 z=0.03 rot=9
+  part box w=0.12 h=0.58 d=0.13 color=#5a2a2a x=1.46 y=1.15 z=0.13 rot=9
+  part sphere r=0.13 color=#f0ccb0 x=1.15 y=1.62 z=0.08
+  part dome r=0.14 ry=0.1 seg=8 color=#c02020 x=1.15 y=1.68 z=0.08
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=1.34 y=1.75 z=0.06
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#2a3a6a x=1.34 y=2.12 z=0.06
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=1.79 y=0.43 z=0.07 rot=-14
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=2.00 y=0.43 z=0.02 rot=-14
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#3a3a3a x=1.90 y=1.17 z=0.04 rot=-14
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a3a x=1.60 y=1.15 z=0.12 rot=-14
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a3a x=2.20 y=1.15 z=-0.03 rot=-14
+  part sphere r=0.13 color=#e0b89a x=1.90 y=1.62 z=0.04
+  part dome r=0.14 ry=0.08 seg=8 color=#202020 x=1.90 y=1.71 z=0.04
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=2.39 y=0.43 z=0.07 rot=-4
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=2.61 y=0.43 z=0.05 rot=-4
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#4a4a3a x=2.50 y=1.17 z=0.06 rot=-4
+  part box w=0.12 h=0.58 d=0.13 color=#4a4a3a x=2.19 y=1.15 z=0.08 rot=-4
+  part box w=0.12 h=0.58 d=0.13 color=#4a4a3a x=2.81 y=1.15 z=0.04 rot=-4
+  part sphere r=0.13 color=#9a6a4a x=2.50 y=1.62 z=0.06
+
+
+# a block of spectators, two rows of seven
+model crowd_block
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-2.44 y=0.43 z=-0.07 rot=-5
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-2.22 y=0.43 z=-0.09 rot=-5
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#4a4a3a x=-2.33 y=1.17 z=-0.08 rot=-5
+  part box w=0.12 h=0.6 d=0.13 roll=12 color=#4a4a3a x=-2.64 y=1.62 z=-0.05 rot=-5
+  part sphere r=0.06 color=#e0b89a x=-2.67 y=1.95 z=-0.05
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#4a4a3a x=-2.02 y=1.62 z=-0.11 rot=-5
+  part sphere r=0.06 color=#e0b89a x=-1.99 y=1.95 z=-0.11
+  part sphere r=0.13 color=#e0b89a x=-2.33 y=1.62 z=-0.08
+  part dome r=0.14 ry=0.08 seg=8 color=#202020 x=-2.33 y=1.71 z=-0.08
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-1.69 y=0.43 z=0.03 rot=-11
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-1.48 y=0.43 z=-0.01 rot=-11
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#4a4a3a x=-1.58 y=1.17 z=0.01 rot=-11
+  part box w=0.12 h=0.58 d=0.13 color=#4a4a3a x=-1.89 y=1.15 z=0.07 rot=-11
+  part box w=0.12 h=0.58 d=0.13 color=#4a4a3a x=-1.28 y=1.15 z=-0.05 rot=-11
+  part sphere r=0.13 color=#9a6a4a x=-1.58 y=1.62 z=0.01
+  part dome r=0.14 ry=0.1 seg=8 color=#3a2a1a x=-1.58 y=1.68 z=0.01
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-0.77 y=0.43 z=-0.04 rot=-10
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-0.55 y=0.43 z=-0.08 rot=-10
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#7a3a1a x=-0.66 y=1.17 z=-0.06 rot=-10
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=-0.97 y=1.15 z=-0.01 rot=-10
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=-0.35 y=1.15 z=-0.11 rot=-10
+  part sphere r=0.13 color=#f0ccb0 x=-0.66 y=1.62 z=-0.06
+  part dome r=0.16 ry=0.16 seg=8 color=#7a3a1a x=-0.66 y=1.68 z=-0.06
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.11 y=0.43 z=-0.12 rot=22
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=0.09 y=0.43 z=-0.04 rot=22
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#8a7a5a x=-0.01 y=1.17 z=-0.08 rot=22
+  part box w=0.12 h=0.58 d=0.13 color=#8a7a5a x=-0.30 y=1.15 z=-0.20 rot=22
+  part box w=0.12 h=0.58 d=0.13 color=#8a7a5a x=0.28 y=1.15 z=0.03 rot=22
+  part sphere r=0.13 color=#e0b89a x=-0.01 y=1.62 z=-0.08
+  part dome r=0.16 ry=0.16 seg=8 color=#8a7a5a x=-0.01 y=1.68 z=-0.08
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=0.74 y=0.43 z=0.01 rot=-4
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=0.96 y=0.43 z=-0.01 rot=-4
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#3a3a3a x=0.85 y=1.17 z=0.00 rot=-4
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a3a x=0.55 y=1.15 z=0.02 rot=-4
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a3a x=1.16 y=1.15 z=-0.02 rot=-4
+  part sphere r=0.13 color=#6a4a32 x=0.85 y=1.62 z=0.00
+  part dome r=0.14 ry=0.1 seg=8 color=#8a6a3a x=0.85 y=1.68 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=1.26 y=0.43 z=0.05 rot=-11
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=1.47 y=0.43 z=0.00 rot=-11
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#8a7a5a x=1.36 y=1.17 z=0.03 rot=-11
+  part box w=0.12 h=0.58 d=0.13 color=#8a7a5a x=1.06 y=1.15 z=0.08 rot=-11
+  part box w=0.12 h=0.58 d=0.13 color=#8a7a5a x=1.67 y=1.15 z=-0.03 rot=-11
+  part sphere r=0.13 color=#9a6a4a x=1.36 y=1.62 z=0.03
+  part dome r=0.14 ry=0.1 seg=8 color=#8a6a3a x=1.36 y=1.68 z=0.03
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=1.53 y=1.75 z=-0.06
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#7a1a1a x=1.53 y=2.12 z=-0.06
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=2.18 y=0.43 z=-0.03 rot=-7
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=2.40 y=0.43 z=-0.06 rot=-7
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#7a3a1a x=2.29 y=1.17 z=-0.04 rot=-7
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=1.98 y=1.15 z=-0.01 rot=-7
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=2.60 y=1.15 z=-0.08 rot=-7
+  part sphere r=0.13 color=#9a6a4a x=2.29 y=1.62 z=-0.04
+  part dome r=0.14 ry=0.08 seg=8 color=#3a2a1a x=2.29 y=1.71 z=-0.04
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=-1.88 y=0.43 z=0.95 rot=-13
+  part box w=0.15 h=0.86 d=0.18 color=#3a3a40 x=-1.66 y=0.43 z=0.90 rot=-13
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#7a3a1a x=-1.77 y=1.17 z=0.92 rot=-13
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=-2.07 y=1.15 z=0.99 rot=-13
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#7a3a1a x=-1.47 y=1.62 z=0.85 rot=-13
+  part sphere r=0.06 color=#9a6a4a x=-1.44 y=1.95 z=0.85
+  part sphere r=0.13 color=#9a6a4a x=-1.77 y=1.62 z=0.92
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-1.09 y=0.43 z=0.97 rot=12
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=-0.87 y=0.43 z=1.01 rot=12
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#7a3a1a x=-0.98 y=1.17 z=0.99 rot=12
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=-1.28 y=1.15 z=0.93 rot=12
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=-0.68 y=1.15 z=1.05 rot=12
+  part sphere r=0.13 color=#9a6a4a x=-0.98 y=1.62 z=0.99
+  part dome r=0.16 ry=0.16 seg=8 color=#7a3a1a x=-0.98 y=1.68 z=0.99
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=-0.79 y=1.75 z=0.98
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#7a1a1a x=-0.79 y=2.12 z=0.98
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.49 y=0.43 z=0.98 rot=6
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a3a x=-0.27 y=0.43 z=1.00 rot=6
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#2a3a5a x=-0.38 y=1.17 z=0.99 rot=6
+  part box w=0.12 h=0.6 d=0.13 roll=12 color=#2a3a5a x=-0.69 y=1.62 z=0.96 rot=6
+  part sphere r=0.06 color=#f0ccb0 x=-0.71 y=1.95 z=0.95
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#2a3a5a x=-0.07 y=1.62 z=1.02 rot=6
+  part sphere r=0.06 color=#f0ccb0 x=-0.04 y=1.95 z=1.02
+  part sphere r=0.13 color=#f0ccb0 x=-0.38 y=1.62 z=0.99
+  part dome r=0.14 ry=0.1 seg=8 color=#202020 x=-0.38 y=1.68 z=0.99
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=0.32 y=0.43 z=0.82 rot=4
+  part box w=0.15 h=0.86 d=0.18 color=#222226 x=0.54 y=0.43 z=0.84 rot=4
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#7a3a1a x=0.43 y=1.17 z=0.83 rot=4
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=0.12 y=1.15 z=0.81 rot=4
+  part box w=0.12 h=0.58 d=0.13 color=#7a3a1a x=0.74 y=1.15 z=0.85 rot=4
+  part sphere r=0.13 color=#6a4a32 x=0.43 y=1.62 z=0.83
+  part dome r=0.14 ry=0.1 seg=8 color=#c02020 x=0.43 y=1.68 z=0.83
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=1.19 y=0.43 z=0.92 rot=-3
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=1.41 y=0.43 z=0.91 rot=-3
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#6a5a3a x=1.30 y=1.17 z=0.91 rot=-3
+  part box w=0.12 h=0.58 d=0.13 color=#6a5a3a x=0.99 y=1.15 z=0.93 rot=-3
+  part box w=0.12 h=0.6 d=0.13 roll=-12 color=#6a5a3a x=1.61 y=1.62 z=0.90 rot=-3
+  part sphere r=0.06 color=#c89070 x=1.64 y=1.95 z=0.90
+  part sphere r=0.13 color=#c89070 x=1.30 y=1.62 z=0.91
+  part dome r=0.14 ry=0.08 seg=8 color=#3a2a1a x=1.30 y=1.71 z=0.91
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=1.82 y=0.43 z=0.98 rot=5
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=2.04 y=0.43 z=1.00 rot=5
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#8a7a5a x=1.93 y=1.17 z=0.99 rot=5
+  part box w=0.12 h=0.58 d=0.13 color=#8a7a5a x=1.62 y=1.15 z=0.97 rot=5
+  part box w=0.12 h=0.58 d=0.13 color=#8a7a5a x=2.24 y=1.15 z=1.02 rot=5
+  part sphere r=0.13 color=#f0ccb0 x=1.93 y=1.62 z=0.99
+  part dome r=0.14 ry=0.1 seg=8 color=#c02020 x=1.93 y=1.68 z=0.99
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=2.65 y=0.43 z=0.81 rot=25
+  part box w=0.15 h=0.86 d=0.18 color=#4a3a2a x=2.85 y=0.43 z=0.90 rot=25
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#6a5a3a x=2.75 y=1.17 z=0.86 rot=25
+  part box w=0.12 h=0.58 d=0.13 color=#6a5a3a x=2.47 y=1.15 z=0.73 rot=25
+  part box w=0.12 h=0.58 d=0.13 color=#6a5a3a x=3.03 y=1.15 z=0.99 rot=25
+  part sphere r=0.13 color=#c89070 x=2.75 y=1.62 z=0.86
+  part dome r=0.14 ry=0.1 seg=8 color=#202020 x=2.75 y=1.68 z=0.86
+
+
+# mourners round a grave, black umbrellas
+model crowd_mourners
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-1.42 y=0.43 z=0.02 rot=15
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-1.21 y=0.43 z=0.08 rot=15
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#222024 x=-1.31 y=1.17 z=0.05 rot=15
+  part box w=0.12 h=0.58 d=0.13 color=#222024 x=-1.61 y=1.15 z=-0.03 rot=15
+  part box w=0.12 h=0.58 d=0.13 color=#222024 x=-1.01 y=1.15 z=0.13 rot=15
+  part sphere r=0.13 color=#f0ccb0 x=-1.31 y=1.62 z=0.05
+  part disc r=0.19 h=0.02 seg=10 color=#101012 x=-1.31 y=1.75 z=0.05
+  part disc r=0.11 h=0.22 seg=10 color=#101012 x=-1.31 y=1.86 z=0.05
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-0.47 y=0.43 z=-0.01 rot=-22
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-0.27 y=0.43 z=-0.09 rot=-22
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#141416 x=-0.37 y=1.17 z=-0.05 rot=-22
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=-0.65 y=1.15 z=0.07 rot=-22
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=-0.08 y=1.15 z=-0.17 rot=-22
+  part sphere r=0.13 color=#e0b89a x=-0.37 y=1.62 z=-0.05
+  part dome r=0.14 ry=0.1 seg=8 color=#3a2a1a x=-0.37 y=1.68 z=-0.05
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=0.46 y=0.43 z=0.01 rot=-20
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=0.66 y=0.43 z=-0.06 rot=-20
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#141416 x=0.56 y=1.17 z=-0.02 rot=-20
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=0.27 y=1.15 z=0.08 rot=-20
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=0.85 y=1.15 z=-0.13 rot=-20
+  part sphere r=0.13 color=#e0b89a x=0.56 y=1.62 z=-0.02
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=0.71 y=1.75 z=-0.13
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#16141a x=0.71 y=2.12 z=-0.13
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=1.22 y=0.43 z=-0.10 rot=18
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=1.43 y=0.43 z=-0.03 rot=18
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#1c1a20 x=1.32 y=1.17 z=-0.06 rot=18
+  part box w=0.12 h=0.58 d=0.13 color=#1c1a20 x=1.03 y=1.15 z=-0.16 rot=18
+  part box w=0.12 h=0.58 d=0.13 color=#1c1a20 x=1.62 y=1.15 z=0.03 rot=18
+  part sphere r=0.13 color=#c89070 x=1.32 y=1.62 z=-0.06
+  part disc r=0.19 h=0.02 seg=10 color=#101012 x=1.32 y=1.75 z=-0.06
+  part disc r=0.11 h=0.22 seg=10 color=#101012 x=1.32 y=1.86 z=-0.06
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=1.51 y=1.75 z=-0.05
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#16141a x=1.51 y=2.12 z=-0.05
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-1.02 y=0.43 z=0.92 rot=-18
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-0.81 y=0.43 z=0.85 rot=-18
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#141416 x=-0.91 y=1.17 z=0.89 rot=-18
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=-1.21 y=1.15 z=0.99 rot=-18
+  part box w=0.12 h=0.58 d=0.13 color=#141416 x=-0.62 y=1.15 z=0.79 rot=-18
+  part sphere r=0.13 color=#c89070 x=-0.91 y=1.62 z=0.89
+  part disc r=0.19 h=0.02 seg=10 color=#101012 x=-0.91 y=1.75 z=0.89
+  part disc r=0.11 h=0.22 seg=10 color=#101012 x=-0.91 y=1.86 z=0.89
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=-0.76 y=1.75 z=0.78
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#16141a x=-0.76 y=2.12 z=0.78
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=-0.04 y=0.43 z=0.81 rot=23
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=0.16 y=0.43 z=0.90 rot=23
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#222024 x=0.06 y=1.17 z=0.86 rot=23
+  part box w=0.12 h=0.58 d=0.13 color=#222024 x=-0.22 y=1.15 z=0.74 rot=23
+  part box w=0.12 h=0.58 d=0.13 color=#222024 x=0.35 y=1.15 z=0.98 rot=23
+  part sphere r=0.13 color=#c89070 x=0.06 y=1.62 z=0.86
+  part disc r=0.19 h=0.02 seg=10 color=#101012 x=0.06 y=1.75 z=0.86
+  part disc r=0.11 h=0.22 seg=10 color=#101012 x=0.06 y=1.86 z=0.86
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=0.25 y=1.75 z=0.88
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#16141a x=0.25 y=2.12 z=0.88
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=0.88 y=0.43 z=1.00 rot=-10
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=1.10 y=0.43 z=0.96 rot=-10
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#1c1a20 x=0.99 y=1.17 z=0.98 rot=-10
+  part box w=0.12 h=0.58 d=0.13 color=#1c1a20 x=0.68 y=1.15 z=1.03 rot=-10
+  part box w=0.12 h=0.58 d=0.13 color=#1c1a20 x=1.30 y=1.15 z=0.92 rot=-10
+  part sphere r=0.13 color=#6a4a32 x=0.99 y=1.62 z=0.98
+  part disc r=0.19 h=0.02 seg=10 color=#101012 x=0.99 y=1.75 z=0.98
+  part disc r=0.11 h=0.22 seg=10 color=#101012 x=0.99 y=1.86 z=0.98
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=1.16 y=1.75 z=0.90
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#16141a x=1.16 y=2.12 z=0.90
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=1.57 y=0.43 z=0.84 rot=16
+  part box w=0.15 h=0.86 d=0.18 color=#141416 x=1.78 y=0.43 z=0.90 rot=16
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#222024 x=1.68 y=1.17 z=0.87 rot=16
+  part box w=0.12 h=0.58 d=0.13 color=#222024 x=1.38 y=1.15 z=0.78 rot=16
+  part box w=0.12 h=0.58 d=0.13 color=#222024 x=1.98 y=1.15 z=0.95 rot=16
+  part sphere r=0.13 color=#e0b89a x=1.68 y=1.62 z=0.87
+  part box w=0.03 h=0.75 d=0.03 color=#202020 x=1.87 y=1.75 z=0.87
+  part cone r=0.62 len=0.3 pitch=-90 seg=10 color=#0e0e10 x=1.87 y=2.12 z=0.87
+
+
+# an oil drum with a fire in it
+model fire_barrel
+  part disc r=0.3 h=0.9 seg=10 color=#5a3a26 x=0.00 y=0.45 z=0.00
+  part disc r=0.26 h=0.06 seg=10 color=#ff7020 emit=1 x=0.00 y=0.92 z=0.00
+  part light r=0.1 color=#ff8030 x=0.00 y=1.20 z=0.00
+
+
+# two tramps at a fire barrel
+model tramps_fire
+  part disc r=0.3 h=0.9 seg=10 color=#5a3a26 x=0.00 y=0.45 z=0.00
+  part disc r=0.26 h=0.06 seg=10 color=#ff7020 emit=1 x=0.00 y=0.92 z=0.00
+  part light r=0.1 color=#ff8030 x=0.00 y=1.20 z=0.00
+  part box w=0.15 h=0.86 d=0.18 color=#3a3226 x=0.79 y=0.43 z=0.30 rot=-110
+  part box w=0.15 h=0.86 d=0.18 color=#3a3226 x=0.71 y=0.43 z=0.10 rot=-110
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#5a4a32 x=0.75 y=1.17 z=0.20 rot=-110
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a32 x=0.86 y=1.15 z=0.49 rot=-110
+  part box w=0.12 h=0.58 d=0.13 color=#5a4a32 x=0.64 y=1.15 z=-0.09 rot=-110
+  part sphere r=0.13 color=#c89070 x=0.75 y=1.62 z=0.20
+  part dome r=0.16 ry=0.16 seg=8 color=#5a4a32 x=0.75 y=1.68 z=0.20
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a22 x=-0.74 y=0.43 z=-0.40 rot=70
+  part box w=0.15 h=0.86 d=0.18 color=#2a2a22 x=-0.66 y=0.43 z=-0.20 rot=70
+  part box w=0.48 h=0.62 d=0.28 taper=0.15 color=#3a3a2a x=-0.70 y=1.17 z=-0.30 rot=70
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a2a x=-0.81 y=1.15 z=-0.59 rot=70
+  part box w=0.12 h=0.58 d=0.13 color=#3a3a2a x=-0.59 y=1.15 z=-0.01 rot=70
+  part sphere r=0.13 color=#6a4a32 x=-0.70 y=1.62 z=-0.30
+  part dome r=0.14 ry=0.08 seg=8 color=#4a2a1a x=-0.70 y=1.71 z=-0.30

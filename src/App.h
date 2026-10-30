@@ -15,6 +15,7 @@
 #include "Tools.h"
 #include "Track.h"
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -25,7 +26,7 @@ namespace grave
 enum class ScreenE : int
 {
     TITLE, NEWGAME, HUB, OFFERS, GARAGE, MARKET, SHARK, SPONSOR, NEWS, TABLE, STORY, RACE, RESULTS, QUICK, OPTIONS,
-    CONTROLS, COUNT
+    CONTROLS, GRAVEYARD, COUNT
 };
 
 /** @brief The game. */
@@ -66,11 +67,16 @@ private:
     void raceEvents();
     void raceSound( float dt );
     void raceHud();
+    void raceHudPanels();
     void racePause();
     void endRace();
     void results();
     void bubble( const std::string &who, const std::string &text, Color c );
     void announce( const std::string &event, const std::string &name );
+    bool speak( const std::string &event );   ///< Ricky Rattle says a line of his own (false: no recording)
+    bool m_saidTrain = false, m_saidBridge = false;
+    std::map<std::string, Texture2D> m_photos;   ///< the tabloid's pictures, loaded when first shown
+    const Texture2D *photo( const std::string &event, uint32_t pick );
 
     // AppCareer.cpp: between the races.
     void hub();
@@ -81,6 +87,7 @@ private:
     void sponsor();
     void newsScreen();
     void tableScreen();
+    void graveyard();
     void saveCareer();
     void carCard( Rectangle r );
 
@@ -169,7 +176,13 @@ private:
     // Quick race and new game.
     int  m_qVenue = 0, m_qTrack = 0, m_qCar = 0, m_qLaps = 3, m_qCars = 6, m_qDiff = 2, m_qColor = 0;
     bool m_qReverse = false;
-    int  m_qMode = 0;   ///< 0 race, 1 derby, 2 trial
+    int  m_qMode = 0;   ///< 0 race, 1 derby, 2 trial, 3 endless tournament, 4 daily challenge
+    uint32_t m_qSeed = 1;           ///< the random track's number
+    int      m_tour = 0;            ///< the endless tournament's round (0: none running)
+    uint32_t m_tourSeed = 1;
+    void     startTourRound();
+    std::vector<CarSetup> quickField( const VenueDef *vd, const std::string &car, int opponents, int level );
+    static uint32_t dailySeed();
     std::string m_newName;
     int         m_newDiff = 2, m_newColor = 0;
     bool        m_naming = false;

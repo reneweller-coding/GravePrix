@@ -65,7 +65,8 @@ CarInput World::ai( int i )
             for ( size_t k = 0; k < m_cars.size(); ++k )
             {
                 if ( (int)k == i || m_cars[k].m_wrecked ) continue;
-                float d = len( sub( m_cars[k].m_pos, c.m_pos ) ) * ( m_cars[k].m_setup.m_player ? 1.0f - 0.4f * temper : 1.0f );
+                float d = len( sub( m_cars[k].m_pos, c.m_pos ) ) *
+                          ( m_cars[k].m_setup.m_player ? 1.0f - 0.4f * temper - 0.15f * c.m_setup.m_grudge : 1.0f );
                 if ( d < best )
                 {
                     best = d;
@@ -159,6 +160,15 @@ CarInput World::ai( int i )
                 goal = ( std::fabs( left - lineLat ) < std::fabs( right - lineLat ) ? left : right ) - here.m_line;
             }
         }
+        for ( const Rock &r : m_rocks )
+        {
+            TrackPos rp = T.locate( r.m_pos, c.m_hint );
+            float    ds = T.delta( c.m_s, rp.m_s );
+            if ( ds < 0 || ds > 45 ) continue;
+            float lineLat = here.m_line + a.m_lane;
+            if ( std::fabs( rp.m_lat - lineLat ) < r.m_r + 2.5f )
+                goal = ( rp.m_lat > 0 ? rp.m_lat - r.m_r - 3.0f : rp.m_lat + r.m_r + 3.0f ) - here.m_line;
+        }
         for ( const ObstacleSpot &o : T.m_obstacles )
         {
             TrackPos op = T.locate( o.m_pos, c.m_hint );
@@ -176,7 +186,7 @@ CarInput World::ai( int i )
                 if ( (int)k == i || o.m_wrecked ) continue;
                 float ds = T.delta( c.m_s, o.m_s );
                 if ( ds < -4 || ds > 16 ) continue;
-                if ( !o.m_setup.m_player && m_rng.chance( 0.6f ) ) continue;
+                if ( !o.m_setup.m_player && ( c.m_setup.m_grudge > 0 || m_rng.chance( 0.6f ) ) ) continue;   // a feud rams only the player
                 a.m_ram = 1.5f;
                 a.m_target = (int)k;
                 break;
@@ -189,19 +199,20 @@ CarInput World::ai( int i )
         }
         a.m_laneGoal = goal;
         // Low skill: now and then a wobble or a late brake.
-        if ( m_rng.chance( ( 1.0f - skill ) * 0.04f ) )
+        float nov = c.m_setup.m_novice;
+        if ( m_rng.chance( ( 1.0f - skill ) * 0.04f + nov * 0.06f ) )
         {
-            a.m_wobble = m_rng.range( -0.5f, 0.5f ) * ( 1.0f - skill );
+            a.m_wobble = m_rng.range( -0.5f, 0.5f ) * ( 1.0f - skill + nov * 0.6f );
             a.m_wobbleTime = m_rng.range( 0.3f, 0.9f );
         }
-        if ( m_rng.chance( ( 1.0f - skill ) * 0.02f ) ) a.m_mistake = m_rng.range( 0.4f, 1.0f );
+        if ( m_rng.chance( ( 1.0f - skill ) * 0.02f + nov * 0.03f ) ) a.m_mistake = m_rng.range( 0.4f, 1.0f + nov );
     }
     a.m_ram = std::max( 0.0f, a.m_ram - Dt );
     a.m_wobbleTime = std::max( 0.0f, a.m_wobbleTime - Dt );
     a.m_mistake = std::max( 0.0f, a.m_mistake - Dt );
     float limit = std::max( 0.0f, here.m_half - 1.6f );
     a.m_laneGoal = clampf( a.m_laneGoal, -limit - here.m_line, limit - here.m_line );
-    a.m_lane += ( a.m_laneGoal - a.m_lane ) * std::min( 1.0f, Dt * 1.6f );
+    a.m_lane += ( a.m_laneGoal - a.m_lane ) * std::min( 1.0f, Dt * 1.6f * ( 1.0f - 0.6f * c.m_setup.m_novice ) );
 
     // Steering at a point ahead on its lane.
     float   look = 6.0f + std::fabs( v ) * 0.42f;
@@ -222,7 +233,7 @@ CarInput World::ai( int i )
     float gMin = gripOf( c.m_surface, 1.0f );
     float decelFull = BrakeAccel * c.m_brakeF * 0.82f;
     float decel = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
-    float corner = 0.8f + 0.2f * skill;
+    float corner = ( 0.8f + 0.2f * skill ) * ( 1.0f - 0.14f * c.m_setup.m_novice );
     float want = c.m_top * 1.2f;
     float reach = v * v / ( 2 * decel ) + 25.0f;
     int   steps = std::min( n, (int)( reach / T.m_step ) + 2 );
@@ -230,13 +241,27 @@ CarInput World::ai( int i )
     for ( int k = 0; k < steps; ++k )
     {
         const TrackSample &s = T.m_s[( tp.m_i + k ) % n];
-        float g = gripOf( s.m_surface, s.m_lineGrip );
+        float g = gripOf( s.m_surface, s.m_lineGrip ) * ( surfaceLoose( s.m_surface ) ? 1.0f : 1.0f - 0.16f * m_wetness );
         gMin = std::min( gMin, g );
         float dec = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
         float vmax = std::sqrt( LatAccel * c.m_grip * g * corner / std::max( s.m_lineCurv, 1e-4f ) );
         float allowed = std::sqrt( vmax * vmax + 2 * dec * d );
         want = std::min( want, allowed );
         d += T.m_step;
+    }
+    // Trains and raised bridges ahead: stop short of them (a beginner a little late).
+    for ( const MoverSpot &m : T.m_movers )
+    {
+        if ( m.m_kind == "rockfall" ) continue;
+        float before = m.m_kind == "drawbridge" ? m.m_len * 0.5f + c.m_len * 0.5f + 2.0f : 5.5f + c.m_len * 0.5f;
+        float ds = T.delta( c.m_s, m.m_s ) - before;
+        if ( ds < -1.0f || ds > 140.0f ) continue;
+        if ( !moverBlocks( m, ds / std::max( std::fabs( v ), 6.0f ) ) && !moverBlocks( m, 0.0f ) ) continue;
+        // Too close to stop while the bells ring: through, before the train or the leaf comes.
+        float amount;
+        if ( v * v / ( 2.0f * decel ) > ds + 1.0f && moverState( m, amount ) == 1 ) continue;
+        float stop = std::sqrt( 2.0f * decel * std::max( 0.0f, ds - 3.0f * c.m_setup.m_novice ) );
+        want = std::min( want, stop );
     }
     // The car in front on its lane (wrecks too): slow enough to stop behind it, unless there is room beside it.
     {

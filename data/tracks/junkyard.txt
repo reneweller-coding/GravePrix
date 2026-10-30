@@ -105,6 +105,8 @@ track junk_writeoff
   place scrap_pile x=-70 z=-50 rot=0
   place oil_tank_small x=-60 z=135 rot=0
   prop shack_tin at=455 side=right off=3
+  # Rain on rust.
+  weather rain lap=3
 
 # The technical one: narrow alleys stepping up between wreck stacks like stairs (11 m), a hairpin-ish corner at the
 # top, then the wide haul road -- a 245 m diagonal for guns and nitro -- and a sharp left onto the paved apron.

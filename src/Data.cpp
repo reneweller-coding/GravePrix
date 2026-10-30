@@ -101,7 +101,7 @@ std::string pickLine( const Says &de, const Says &en, const std::string &event, 
 
 const std::vector<std::string> BlockTypes = { "model",  "car",       "gun",   "gear",       "upgrade", "venue",
                                               "track",  "rival",     "character", "league", "difficulty",
-                                              "news",   "ad",        "story", "story_en",   "sponsor" };
+                                              "news",   "ad",        "story", "story_en",   "sponsor", "scene" };
 
 }   // namespace
 
@@ -278,15 +278,16 @@ void readVenue( const Block &b, VenueDef &v, std::vector<std::string> &warnings 
             }
         }
         else if ( k == "wall" ) v.m_wall = l.arg( 0, v.m_wall );
-        else if ( k == "props" )
+        else if ( k == "props" || k == "litter" )
         {
+            auto &list = k == "props" ? v.m_props : v.m_litter;
             for ( const std::string &w : l.m_args )
             {
                 size_t star = w.find( '*' );
                 if ( star == std::string::npos )
-                    v.m_props.push_back( { w, 1.0f } );
+                    list.push_back( { w, 1.0f } );
                 else
-                    v.m_props.push_back( { w.substr( 0, star ), toNumber( w.substr( star + 1 ), 1.0f ) } );
+                    list.push_back( { w.substr( 0, star ), toNumber( w.substr( star + 1 ), 1.0f ) } );
             }
         }
         else if ( k == "density" ) v.m_density = l.argNum( 0, 1.0f );
@@ -297,6 +298,31 @@ void readVenue( const Block &b, VenueDef &v, std::vector<std::string> &warnings 
     }
     if ( v.m_music.empty() ) v.m_music = v.m_name;
     if ( v.m_ambience.empty() ) v.m_ambience = v.m_name;
+}
+
+void readScene( const Block &b, SceneDef &s, std::vector<std::string> &warnings )
+{
+    Props p( b );
+    s.m_name = b.m_name;
+    s.m_venue = p.str( "venue" );
+    s.m_weight = p.num( "weight", 1.0f );
+    s.m_size = p.num( "size", 12.0f );
+    s.m_near = p.num( "near", 4.0f );
+    for ( const Line &l : b.m_lines )
+    {
+        const std::string &k = l.m_key;
+        if ( k != "put" && k != "car" && k != "wreck" ) continue;
+        ScenePiece sp;
+        sp.m_kind = k == "put" ? ScenePiece::MODEL : k == "car" ? ScenePiece::CAR : ScenePiece::WRECK;
+        sp.m_what = l.arg( 0 );
+        sp.m_x = l.num( "x", 0 );
+        sp.m_z = l.num( "z", 0 );
+        sp.m_rot = l.num( "rot", 0 );
+        sp.m_scale = l.num( "scale", 1.0f );
+        sp.m_tilt = l.num( "tilt", 0 );
+        if ( sp.m_what.empty() ) warnings.push_back( l.where() + ": a scene piece without a name" );
+        s.m_pieces.push_back( sp );
+    }
 }
 
 void readTrack( const Block &b, TrackDef &t, std::vector<std::string> &errors )
@@ -360,8 +386,13 @@ void readTrack( const Block &b, TrackDef &t, std::vector<std::string> &errors )
         else if ( k == "arena" ) t.m_arena = l.argNum( 0, 1 ) != 0;
         else if ( k == "density" ) t.m_density = l.argNum( 0, 1 );
         else if ( k == "pickup" || k == "hazard" || k == "obstacle" || k == "patch" || k == "prop" || k == "row" ||
-                  k == "place" || k == "lamps" || k == "bridge" )
+                  k == "place" || k == "lamps" || k == "bridge" || k == "train" || k == "drawbridge" || k == "rockfall" )
             t.m_items.push_back( { k, l.arg( 0 ), l } );
+        else if ( k == "weather" )
+        {
+            t.m_weatherTo = l.arg( 0 );
+            t.m_weatherLap = (int)l.num( "lap", 2 );
+        }
         else if ( k == "desc" || k == "desc_en" )
             ;
         else
@@ -386,6 +417,7 @@ void readRival( const Block &b, RivalDef &r )
     r.m_weapons = clampf( p.num( "weapons", 0.5f ), 0, 1 );
     r.m_likes = p.str( "likes", "mine" );
     r.m_champion = p.integer( "champion", 0 ) != 0;
+    r.m_boss = p.str( "boss" );
     r.m_rookie = p.integer( "rookie", 0 ) != 0;
     r.m_portrait = p.str( "portrait" );
     r.m_bio = p.text( "bio" );
@@ -516,6 +548,11 @@ bool Catalog::load( const std::string &dir )
             readVenue( b, m_venues[b.m_name], m_warnings );
             m_venueOrder.push_back( b.m_name );
         }
+        else if ( t == "scene" )
+        {
+            dup( b, m_scenes.count( b.m_name ) > 0 );
+            readScene( b, m_scenes[b.m_name], m_warnings );
+        }
         else if ( t == "track" )
         {
             dup( b, m_tracks.count( b.m_name ) > 0 );
@@ -624,6 +661,18 @@ bool Catalog::load( const std::string &dir )
     return m_errors.empty();
 }
 
+TrackDef *Catalog::addTrack( const Block &b, std::vector<std::string> &errors )
+{
+    size_t before = errors.size();
+    readTrack( b, m_tracks[b.m_name], errors );
+    if ( errors.size() > before )
+    {
+        m_tracks.erase( b.m_name );
+        return nullptr;
+    }
+    return &m_tracks[b.m_name];
+}
+
 void Catalog::check()
 {
     for ( const auto &[n, c] : m_cars )
@@ -648,11 +697,26 @@ void Catalog::check()
         }
     }
     for ( const auto &[n, v] : m_venues )
+    {
+        for ( const auto &pr : v.m_litter )
+            if ( !m_models.count( pr.first ) ) m_warnings.push_back( "venue " + n + ": no litter model \"" + pr.first + "\"" );
         for ( const auto &pr : v.m_props )
             if ( !m_models.count( pr.first ) ) m_warnings.push_back( "venue " + n + ": no prop model \"" + pr.first + "\"" );
+    }
     for ( const auto &[n, r] : m_rivals )
+    {
         if ( !m_cars.empty() && !m_cars.count( r.m_car ) )
             m_warnings.push_back( "rival " + n + ": no car \"" + r.m_car + "\"" );
+        if ( !r.m_boss.empty() && !m_cars.count( r.m_boss ) )
+            m_warnings.push_back( "rival " + n + ": no boss car \"" + r.m_boss + "\"" );
+    }
+    for ( const auto &[n, s] : m_scenes )
+    {
+        if ( !m_venues.count( s.m_venue ) ) m_warnings.push_back( "scene " + n + ": no venue \"" + s.m_venue + "\"" );
+        for ( const ScenePiece &p : s.m_pieces )
+            if ( p.m_kind == ScenePiece::MODEL ? !m_models.count( p.m_what ) : p.m_what != "any" && !m_cars.count( p.m_what ) )
+                m_warnings.push_back( "scene " + n + ": no " + ( p.m_kind == ScenePiece::MODEL ? "model" : "car" ) + " \"" + p.m_what + "\"" );
+    }
     for ( const auto &[id, l] : m_leagues )
         for ( const std::string &v : l.m_venues )
             if ( !m_venues.empty() && !m_venues.count( v ) )

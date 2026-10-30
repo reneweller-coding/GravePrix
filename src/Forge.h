@@ -82,6 +82,8 @@ struct ModelMesh
     bool                   m_hasSpin = false;
     Vector3                m_pivot = { 0, 0, 0 };   ///< where the head turns
     float                  m_spinSpeed = 90.0f;     ///< degrees a second
+    Vector3                m_spinAxis = { 0, 1, 0 }; ///< what the spin group turns round (spin_axis=x|y|z)
+    Vector3                m_spinAt = { 0, 0, 0 };   ///< and where (spin_at=x,y,z)
     float                  m_radius = 1.0f;         ///< how far it reaches from its middle on the ground
     float                  m_height = 1.0f;         ///< its top
     bool                   m_lamp = false;          ///< its lights shine at night

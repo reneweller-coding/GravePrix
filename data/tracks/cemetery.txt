@@ -114,6 +114,8 @@ track cem_plot
   row cypress at=271 len=200 side=right off=2 every=16
   row wreath at=700 len=60 side=right off=1 every=12
   lamps lamp_old every=45 side=both
+  # Ground fog creeps over the graves.
+  weather fog lap=3
 
 # The slalom: four headstones in the road between wavy rows of graves (13 m), a cobbled loop round the crypts, then
 # a fast S-sweep under the cypresses and a square run home.

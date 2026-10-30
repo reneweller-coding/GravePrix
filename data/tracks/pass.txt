@@ -66,6 +66,8 @@ track pas_serpentin
   place fir_snow x=-40 z=-60
   place fir_snow x=-45 z=-120
   place rock_snow x=330 z=40
+  # Loose rock over the last hairpins' approach.
+  rockfall at=1150 len=160 period=11
 
 # Figure eight like a tied ribbon: a slow teardrop hairpin at the top, an icy bridge over the crossing and a
 # broad lower loop with a gritted hairpin and a boulder on the long straight.
@@ -120,6 +122,8 @@ track pas_frost
   place lift_pylon x=-260 z=-120
   place lift_pylon x=-260 z=-40
   place lift_pylon x=-260 z=40
+  # Cloud falls into the valley.
+  weather fog lap=2
 
 # Fast and flowing: an S down the valley - two long 100 m sweepers, two medium bends and a hairpin at each end
 # of the S; ice on the outside of the first sweeper, a cleared asphalt run round the lower bowl.
@@ -238,6 +242,8 @@ track pas_abgang
   place rock_snow x=0 z=200
   place fir_snow x=-85 z=220
   place fir_snow x=-85 z=300
+  # Rockfall above the long ledge.
+  rockfall at=300 len=120 period=10
 
 # Derby arena: a frozen lake - a wide tri-oval whose three straights are bare ice, with a fishing hut in the
 # middle and holes in the ice.

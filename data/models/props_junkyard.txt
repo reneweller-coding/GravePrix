@@ -1,45 +1,5 @@
 # Junkyard props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_junk_cem.py.
 
-# a heap of junk ~9 m across with car bodies sticking out
-model scrap_pile
-  part dome r=4.6 ry=2.2 color=#4a3a2c seg=10
-  part dome r=2.8 ry=1.9 x=1.8 z=1.3 color=#54402e seg=9
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=0 y=1.85 z=0 color=#6a4a32 seed=155
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=1.025 y=1.615 z=-1.799 color=#58606a seed=156
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=2.069 y=1.615 z=0.065 color=#8a5228 seed=157
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=0.786 y=1.615 z=1.915 color=#6a6e62 seed=158
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-1.022 y=1.615 z=1.8 color=#3a4a5a seed=159
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-2.055 y=1.615 z=-0.248 color=#7a2a1e seed=160
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-1.771 y=1.615 z=-1.071 color=#6a4a32 seed=161
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=1.175 y=0.97 z=-3.487 color=#58606a seed=162
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=3.533 y=0.97 z=-1.031 color=#8a5228 seed=163
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=3.645 y=0.97 z=0.51 color=#6a6e62 seed=164
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=2.161 y=0.97 z=2.979 color=#3a4a5a seed=165
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=1.921 y=0.97 z=3.139 color=#7a2a1e seed=166
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-1.184 y=0.97 z=3.484 color=#6a4a32 seed=167
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-2.641 y=0.97 z=2.563 color=#58606a seed=168
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-3.672 y=0.97 z=-0.241 color=#8a5228 seed=169
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-2.779 y=0.97 z=-2.412 color=#6a6e62 seed=170
-  part greeble n=6 w=2.53 d=2.53 size=0.75 x=-2.136 y=0.97 z=-2.997 color=#3a4a5a seed=171
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=1.8 y=1.55 z=1.3 color=#6a4a32 seed=279
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=2.161 y=1.295 z=-0.053 color=#58606a seed=280
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=3.074 y=1.295 z=0.72 color=#8a5228 seed=281
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=2.399 y=1.295 z=2.565 color=#6a4a32 seed=282
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=1.794 y=1.295 z=2.7 color=#58606a seed=283
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=0.421 y=1.295 z=1.54 color=#8a5228 seed=284
-  part greeble n=6 w=1.54 d=1.54 size=0.75 x=1.229 y=1.295 z=0.022 color=#6a4a32 seed=285
-  part body len=4.4 wid=1.8 hgt=0.62 x=-1.3 y=1.45 z=0.3 round=5 nose=0.22 tail=0.14 drop=0.35 rot=30 roll=14 pitch=24 color=#5a6a7a
-  part cabin len=2.05 wid=1.6 hgt=0.5 x=-1.425 y=2 z=0.517 front=0.4 back=0.25 top=0.86 rot=30 roll=14 pitch=24 color=#5a6a7a glass=#16202a
-  part body len=4.4 wid=1.8 hgt=0.62 x=2.2 y=0.95 z=-1.7 round=5 nose=0.22 tail=0.14 drop=0.35 rot=-58 roll=-48 pitch=-12 color=#8a3020
-  part cabin len=2.05 wid=1.6 hgt=0.5 x=2.412 y=1.5 z=-1.568 front=0.4 back=0.25 top=0.86 rot=-58 roll=-48 pitch=-12 color=#8a3020 glass=#16202a
-  part box w=0.8 h=1.6 d=0.7 x=0.6 y=2.2 z=1.6 color=#c8c4b8 roll=24 pitch=-15   # a fridge
-  part box w=1.6 h=0.6 d=0.8 x=-2.6 y=0.8 z=-1.6 color=#d8d4c8 rot=40 roll=-12   # a bathtub
-  part box w=1.4 h=0.5 d=0.7 x=-2.6 y=0.92 z=-1.6 color=#3a3632 rot=40 roll=-12
-  part ring r=0.32 thick=0.14 x=3.4 y=0.35 z=1.8 color=#1c1c1e roll=70 rot=68 seg=10
-  part ring r=0.32 thick=0.14 x=-3.6 y=0.2 z=1.2 color=#1c1c1e roll=10 rot=-72 seg=10
-  part ring r=0.32 thick=0.14 x=0.5 y=2.4 z=-0.6 color=#1c1c1e roll=55 rot=10 seg=10
-  part gun r=0.12 len=3.212 x=0.5 y=2.1 z=-2 pitch=18.14 rot=58.39 seg=6 color=#7a3a1c   # a pipe
-  part box w=0.05 h=1.1 d=1 x=-3.9 y=0.55 z=-0.4 color=#3a5a7a rot=70 roll=-18   # a door
 
 # a hydraulic car press, a car inside, two finished bales beside it
 model car_crusher
@@ -261,3 +221,84 @@ model wreck_bus
   part disc r=0.42 h=0.3 roll=90 x=1.15 y=0.42 z=-4.6 color=#2a2826 seg=8 mirror=1
   part disc r=0.42 h=0.3 roll=90 x=1.15 y=0.42 z=3.4 color=#2a2826 seg=8 mirror=1
   part box w=2.2 h=0.3 d=0.1 y=0.9 z=-6.62 color=#2a2420
+
+
+# the yard's office: a portable trailer on blocks, a door with steps, dark windows, a dish, a skull painted on a board
+model junk_office
+  part box w=6.4 h=2.5 d=2.6 y=1.55 color=#c8c2b0
+  part box w=6.5 h=0.12 d=2.7 y=2.86 color=#8a8478
+  part box w=1.4 h=0.7 d=0.06 x=-1.8 y=1.9 z=-1.31 color=#1a2028
+  part box w=1.4 h=0.7 d=0.06 x=1.8 y=1.9 z=-1.31 color=#1a2028
+  part box w=0.9 h=1.9 d=0.06 y=1.25 z=-1.31 color=#5a4a3a
+  part box w=1.2 h=0.3 d=0.8 y=0.15 z=-1.7 color=#6a6a66
+  part box w=1.2 h=0.3 d=0.5 y=0.45 z=-1.55 color=#6a6a66
+  part box w=0.5 h=0.3 d=0.5 x=-2.8 y=0.15 z=0.9 color=#5a5a56
+  part box w=0.5 h=0.3 d=0.5 x=2.8 y=0.15 z=0.9 color=#5a5a56
+  part disc r=0.45 h=0.06 x=2.4 y=3.25 z=0.4 pitch=50 seg=10 color=#d8d8d0
+  part box w=1.6 h=1.0 d=0.08 x=-1.6 y=3.5 z=-0.9 color=#d8c8a0
+  part sphere r=0.24 x=-1.6 y=3.55 z=-0.96 color=#f0f0e8
+  part box w=0.3 h=0.06 d=0.04 x=-1.6 y=3.22 z=-0.97 color=#f0f0e8
+  part box w=0.08 h=0.06 d=0.03 x=-1.68 y=3.58 z=-1.17 color=#101010
+  part box w=0.08 h=0.06 d=0.03 x=-1.52 y=3.58 z=-1.17 color=#101010
+  part light r=0.06 x=0 y=2.5 z=-1.5 color=#ffd890
+
+# a dog's kennel with the dog on its chain
+model dog_kennel
+  part box w=1.2 h=0.8 d=1.0 y=0.4 color=#7a5a3a
+  part box w=1.3 h=0.45 d=1.1 y=1.02 taper=0.9 color=#5a3a26
+  part box w=0.45 h=0.5 d=0.04 y=0.3 z=-0.51 color=#1a1410
+  part box w=0.3 h=0.32 d=0.7 x=0.2 y=0.36 z=-1.2 color=#3a2a1e
+  part sphere r=0.18 x=0.2 y=0.6 z=-1.6 color=#3a2a1e
+  part box w=0.1 h=0.1 d=0.18 x=0.2 y=0.56 z=-1.78 color=#2a1e16
+  part box w=0.06 h=0.3 d=0.06 x=0.08 y=0.15 z=-0.95 color=#3a2a1e
+  part box w=0.06 h=0.3 d=0.06 x=0.32 y=0.15 z=-0.95 color=#3a2a1e
+  part box w=0.06 h=0.3 d=0.06 x=0.08 y=0.15 z=-1.45 color=#3a2a1e
+  part box w=0.06 h=0.3 d=0.06 x=0.32 y=0.15 z=-1.45 color=#3a2a1e
+  part box w=0.02 h=0.02 d=0.6 x=0.2 y=0.35 z=-0.65 color=#9a9a9a
+  part disc r=0.16 h=0.06 x=-0.5 y=0.03 z=-0.9 seg=8 color=#a02020
+
+# eight metres of chain-link fence with barbed wire on top
+model fence_chain
+  part box w=0.08 h=2.2 d=0.08 x=-4 y=1.1 color=#8a8a86
+  part box w=0.08 h=2.2 d=0.08 y=1.1 color=#8a8a86
+  part box w=0.08 h=2.2 d=0.08 x=4 y=1.1 color=#8a8a86
+  part box w=8.0 h=0.04 d=0.04 y=2.1 color=#9a9a96
+  part box w=8.0 h=0.04 d=0.04 y=1.4 color=#9a9a96
+  part box w=8.0 h=0.04 d=0.04 y=0.7 color=#9a9a96
+  part box w=8.0 h=0.03 d=0.03 y=0.15 color=#9a9a96
+  part box w=8.0 h=1.95 d=0.01 y=1.12 color=#5a5a58
+  part box w=8.0 h=0.03 d=0.03 y=2.3 z=0.15 color=#6a6a66
+  part box w=8.0 h=0.03 d=0.03 y=2.45 z=0.3 color=#6a6a66
+
+# a heap of junk ~9 m across: rusted car bodies, tyres, doors, a fridge, a bathtub, drums on a mound of dirt
+model scrap_pile
+  part dome r=4.6 ry=0.9 color=#3e3226 seg=12
+  part dome r=2.6 ry=0.5 x=1.6 z=1.2 color=#463828 seg=10
+  part body len=4.2 wid=1.75 hgt=0.6 x=-1.6 y=1.24 z=0.2 round=4 nose=0.2 tail=0.12 drop=0.3 rot=30 roll=10 pitch=12 color=#7a6a50
+  part cabin len=2.0 wid=1.55 hgt=0.45 x=-1.6 y=1.74 z=0.2 front=0.4 back=0.25 top=0.8 rot=30 roll=10 pitch=12 color=#7a6a50 glass=#1a1e22
+  part body len=4.2 wid=1.75 hgt=0.6 x=1.9 y=1.16 z=-1.6 round=4 nose=0.2 tail=0.12 drop=0.3 rot=-58 roll=-30 pitch=-8 color=#7a6a50
+  part cabin len=2.0 wid=1.55 hgt=0.45 x=1.9 y=1.66 z=-1.6 front=0.4 back=0.25 top=0.8 rot=-58 roll=-30 pitch=-8 color=#7a6a50 glass=#1a1e22
+  part body len=4.2 wid=1.75 hgt=0.6 x=0.4 y=1.22 z=1.9 round=4 nose=0.2 tail=0.12 drop=0.3 rot=100 roll=6 pitch=-12 color=#7a6a50
+  part cabin len=2.0 wid=1.55 hgt=0.45 x=0.4 y=1.72 z=1.9 front=0.4 back=0.25 top=0.8 rot=100 roll=6 pitch=-12 color=#7a6a50 glass=#1a1e22
+  part body len=4.2 wid=1.75 hgt=0.6 x=-2.6 y=1.01 z=-2.2 round=4 nose=0.2 tail=0.12 drop=0.3 rot=160 roll=45 pitch=6 color=#8a5a30
+  part cabin len=2.0 wid=1.55 hgt=0.45 x=-2.6 y=1.51 z=-2.2 front=0.4 back=0.25 top=0.8 rot=160 roll=45 pitch=6 color=#8a5a30 glass=#1a1e22
+  part ring r=0.32 thick=0.14 x=1.1 y=0.89 z=2.4 color=#1a1a1c roll=80 rot=157 seg=10
+  part ring r=0.32 thick=0.14 x=0.3 y=1.01 z=-1.3 color=#1a1a1c roll=38 rot=36 seg=10
+  part ring r=0.32 thick=0.14 x=3.0 y=0.71 z=1.9 color=#1a1a1c roll=5 rot=152 seg=10
+  part ring r=0.32 thick=0.14 x=4.1 y=0.56 z=-0.5 color=#1a1a1c roll=78 rot=166 seg=10
+  part ring r=0.32 thick=0.14 x=0.6 y=1.03 z=0.9 color=#1a1a1c roll=67 rot=16 seg=10
+  part ring r=0.32 thick=0.14 x=1.5 y=0.99 z=0.6 color=#1a1a1c roll=30 rot=153 seg=10
+  part ring r=0.32 thick=0.14 x=2.4 y=0.91 z=0.5 color=#1a1a1c roll=56 rot=151 seg=10
+  part ring r=0.32 thick=0.14 x=1.5 y=0.88 z=-2.2 color=#1a1a1c roll=37 rot=127 seg=10
+  part ring r=0.32 thick=0.14 x=1.3 y=1.01 z=0.0 color=#1a1a1c roll=35 rot=104 seg=10
+  part box w=1.1 h=0.06 d=0.9 x=3.6 y=0.76 z=-0.1 rot=21 roll=-8 pitch=-10 color=#8a5a30
+  part box w=1.1 h=0.06 d=0.9 x=-1.1 y=1.08 z=-0.1 rot=144 roll=-27 pitch=-5 color=#6a5040
+  part box w=1.1 h=0.06 d=0.9 x=1.1 y=1.01 z=-1.7 rot=4 roll=-40 pitch=-17 color=#8a5a30
+  part box w=0.75 h=1.5 d=0.7 x=0.9 y=1.5 z=-0.4 roll=18 pitch=-12 color=#d8d4c8   # a fridge
+  part box w=0.05 h=1.3 d=0.02 x=1.24 y=1.56 z=-0.76 roll=18 pitch=-12 color=#8a8a8a
+  part box w=1.6 h=0.55 d=0.8 x=-0.4 y=1.1 z=-1.2 rot=40 roll=-10 color=#e8e4d8   # a bathtub
+  part box w=1.4 h=0.45 d=0.62 x=-0.4 y=1.22 z=-1.2 rot=40 roll=-10 color=#4a4640
+  part disc r=0.3 h=0.88 x=3.6 y=0.44 z=-1.2 seg=10 color=#2a4a8a   # drums
+  part disc r=0.3 h=0.88 x=3.4 y=0.44 z=-0.5 seg=10 color=#8a2a1a
+  part disc r=0.3 h=0.88 x=-3.9 y=0.3 z=1.4 seg=10 roll=80 color=#6a6a3a
+  part disc r=0.22 h=0.04 x=-1.0 y=1.0 z=0.6 seg=10 pitch=60 color=#c8ccd4   # a hubcap

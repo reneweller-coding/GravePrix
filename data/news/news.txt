@@ -200,6 +200,26 @@ news player_clean pclean_5
   text "Bei „{track}“ fuhr {player} wie auf rohen Eiern – und kam an, ohne ein einziges zu zerbrechen. Platz {place}. Die Thanatokosmetik Rosig fragt an, ob {player} Modell sitzen möchte. Zu Lebzeiten, versteht sich."
   text_en "{player} drove at {track} as if on eggshells – and didn't crack a single one. P{place}. Rosy Cheeks Post-Mortem Beauty has asked whether {player} would sit as a model. While still alive, naturally."
 
+# ------------------------------------------------------------------------------------------------ feud
+
+news feud feud_1
+  head "Blutfehde: {rival} gegen {player}"
+  head_en "Blood Feud: {rival} vs {player}"
+  text "Zweimal hat {player} {rival} verschrottet, zuletzt auf „{track}“. {rival} hat daraufhin beim Bestatter angerufen und eine zweite Grabstelle reserviert, „für den Fall, dass ich verliere, und für den Fall, dass ich gewinne“."
+  text_en "Twice now {player} has scrapped {rival}, most recently at {track}. {rival} then phoned the undertaker and reserved a second plot, ‘in case I lose, and in case I win’."
+
+news feud feud_2
+  head "{rival} schwört Rache"
+  head_en "{rival} Swears Revenge"
+  text "„Ich fahre nicht mehr um den Sieg, ich fahre um {player}“, ließ {rival} nach dem Rennen auf „{track}“ verlauten. Graves & Sons begrüßen das Engagement und weisen auf ihre Gruppentarife hin."
+  text_en "‘I'm not racing for the win any more, I'm racing for {player},’ {rival} announced after the race at {track}. Graves & Sons welcome the commitment and point to their group rates."
+
+news feud_end feudend_1
+  head "Fehde beigelegt. Endgültig."
+  head_en "Feud Settled. Permanently."
+  text "Die Fehde zwischen {player} und {rival} ist auf „{track}“ zu Ende gegangen, und zwar für {rival}. Die Hinterbliebenen bitten von Blumen abzusehen und stattdessen auf {player} zu zielen."
+  text_en "The feud between {player} and {rival} ended at {track}, mostly for {rival}. In lieu of flowers, the bereaved ask that you aim at {player}."
+
 # ------------------------------------------------------------------------------------------------ rival_dead
 # The rival's own obituary line is added after the text.
 
@@ -552,6 +572,19 @@ news record rec_4
   text_en "{player} has broken the lap record at {track}. The competition mostly broke axles, fenders and hearts."
 
 # ------------------------------------------------------------------------------------------------ bought_car
+
+news bought_used used_1
+  head "Erbstück auf Rädern"
+  head_en "An Heirloom on Wheels"
+  text "{player} fährt ab sofort einen {car} aus dem Nachlass von {rival}, für schlanke {money}. Dolores Kaboom versichert, die Flecken auf dem Fahrersitz seien „überwiegend Kaffee“."
+  text_en "{player} now drives a {car} from the estate of {rival}, for a slim {money}. Dolores Kaboom insists the stains on the driver's seat are ‘mostly coffee’."
+
+news bought_used used_2
+  head "Gebraucht, aber nicht verbraucht"
+  head_en "Used, Not Used Up"
+  text "Für {money} wechselt ein {car} den Besitzer. Vorbesitzer {rival} war für eine Stellungnahme nicht zu erreichen, was Graves & Sons auf Nachfrage bestätigen konnte."
+  text_en "A {car} changes hands for {money}. Previous owner {rival} could not be reached for comment, as Graves & Sons were able to confirm on request."
+
 
 news bought_car car_1
   head "Neuer Wagen für {player}: {car}"

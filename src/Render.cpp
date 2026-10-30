@@ -132,11 +132,29 @@ in vec4 fragColor;
 uniform vec4 tint;
 uniform float emitBoost;
 uniform float specular;
+uniform float dent;        // 0 whole .. 1 a wreck: dented panels and soot
+uniform vec4 dentFrame;    // the car's x, z and the cosine and sine of its turn (the dents stay on the car)
 out vec4 finalColor;
+vec3 hash33( vec3 p )
+{
+    p = fract( p * vec3( 0.1031, 0.1030, 0.0973 ) );
+    p += dot( p, p.yxz + 33.33 );
+    return fract( ( p.xxy + p.yxx ) * p.zyx );
+}
 void main()
 {
     vec3 n = normalize( fragNormal );
     vec3 albedo = fragColor.rgb * tint.rgb;
+    if ( dent > 0.0 && fragColor.a < 0.5 )
+    {
+        vec2 d2 = fragPos.xz - dentFrame.xy;
+        vec3 lp = vec3( d2.x * dentFrame.z + d2.y * dentFrame.w, fragPos.y, -d2.x * dentFrame.w + d2.y * dentFrame.z );
+        vec3 h = hash33( floor( lp * 2.6 ) + 3.1 );
+        float amt = dent * step( 1.0 - dent * 0.85, h.x );
+        n = normalize( n + ( h - 0.5 ) * amt * 1.3 );
+        float soot = smoothstep( 0.45, 0.9, hash33( floor( lp * 1.4 ) + 7.7 ).y ) * dent;
+        albedo *= 1.0 - soot * 0.65;
+    }
     float em = fragColor.a;
     vec3 col = lighting( fragPos, n, albedo, specular, 40.0 );
     col += fragColor.rgb * em * emitBoost;
@@ -157,6 +175,7 @@ uniform vec3 lineColor;
 uniform vec3 groundA;
 uniform vec3 groundB;
 uniform float wet;
+uniform float landStyle;   // the venue's ground: 1 junk, 2 desert, 3 cemetery, 4 docks, 5 snow, 6 swamp, 7 refinery, 8 city, 9 fair, 10 proving, 11 estate
 uniform float time;
 out vec4 finalColor;
 // A hash without sin(): stays smooth far from the origin (the sin hash turns blocky at large world coordinates).
@@ -333,6 +352,89 @@ void main()
     {
         // The land: larger patches, a darker line along the track's edge where the wall stands.
         col *= 0.88 + 0.24 * big;
+        // Its own life, by venue (landStyle): tyre tracks wandering off, specks of stone, worn patches, and what each
+        // place leaves on the ground.
+        int   st = int( landStyle + 0.5 );
+        float speck = hash( floor( w * 3.0 ) );
+        col *= 1.0 - 0.18 * step( 0.965, speck ) + 0.12 * step( speck, 0.02 );
+        float ruts = abs( fbm( w * 0.021 + 17.0 ) - 0.5 );
+        float rut = smoothstep( 0.005, 0.0, abs( ruts - 0.013 ) ) + smoothstep( 0.005, 0.0, abs( ruts - 0.026 ) );
+        float rutsOn = smoothstep( 0.45, 0.6, noise( w * 0.012 + 3.0 ) );
+        col *= 1.0 - 0.2 * rut * rutsOn * ( st == 2 || st == 4 || st == 7 || st == 8 ? 0.4 : 1.0 );
+        if ( st == 1 )   // junkyard: oil pools with a sheen, bits of metal glinting
+        {
+            float oil = smoothstep( 0.66, 0.72, fbm( w * 0.07 + 31.0 ) );
+            col = mix( col, vec3( 0.03, 0.025, 0.02 ) + 0.05 * vec3( sin( w.x * 2.0 ), sin( w.y * 2.3 + 1.0 ), sin( w.x * 1.7 + 2.0 ) ), oil * 0.9 );
+            spec = max( spec, oil * 0.6 );
+            rough = mix( rough, 90.0, oil );
+            col += vec3( 0.25 ) * step( 0.992, hash( floor( w * 5.0 ) + 7.0 ) );
+        }
+        else if ( st == 2 )   // desert: cracked hardpan in the hollows
+        {
+            float pan = smoothstep( 0.55, 0.65, fbm( w * 0.03 + 5.0 ) );
+            vec2  c = cells( w * 0.55 );
+            col = mix( col, col * vec3( 1.08, 1.0, 0.9 ), pan );
+            col *= 1.0 - 0.35 * pan * smoothstep( 0.06, 0.0, c.y - c.x );
+        }
+        else if ( st == 3 || st == 11 )   // cemetery, estate: gravel paths between the graves; the estate's lawn mown in stripes
+        {
+            float path = smoothstep( 0.012, 0.004, abs( fbm( w * 0.016 + 9.0 ) - 0.5 ) );
+            vec3  gravel = vec3( 0.42, 0.4, 0.37 ) * ( 0.8 + 0.4 * hash( floor( w * 8.0 ) ) );
+            col = mix( col, gravel, path * 0.85 );
+            if ( st == 11 ) col *= 0.93 + 0.1 * step( 0.5, fract( ( w.x + w.y ) * 0.125 ) ) * ( 1.0 - path );
+        }
+        else if ( st == 4 || st == 7 )   // docks, refinery: concrete slabs, oil stains, faded yellow lines
+        {
+            vec2  g = abs( fract( w / 4.0 ) - 0.5 );
+            float joint = smoothstep( 0.49, 0.5, max( g.x, g.y ) );
+            float slab = hash( floor( w / 4.0 ) );
+            vec3  conc = vec3( 0.36, 0.36, 0.35 ) * ( 0.85 + 0.25 * slab ) * ( 0.85 + 0.2 * mid );
+            float paved = smoothstep( 0.35, 0.45, noise( w * 0.02 + 11.0 ) );
+            col = mix( col, conc * ( 1.0 - 0.35 * joint ), paved );
+            float stain = smoothstep( 0.7, 0.76, fbm( w * 0.11 + 13.0 ) );
+            col *= 1.0 - 0.55 * stain;
+            float line = smoothstep( 0.06, 0.0, abs( fract( w.x / 12.0 + 0.5 * noise( w * 0.01 ) ) - 0.5 ) - 0.47 ) * paved;
+            col = mix( col, vec3( 0.55, 0.45, 0.12 ), line * 0.6 * step( 0.5, noise( w * 0.03 ) ) );
+        }
+        else if ( st == 5 )   // pass: snow drifts, blue in the hollows, sparkling
+        {
+            col *= 0.94 + 0.1 * smoothstep( 0.4, 0.6, fbm( w * 0.08 ) );
+            col = mix( col, col * vec3( 0.86, 0.92, 1.05 ), smoothstep( 0.55, 0.3, mid ) * 0.6 );
+            col += vec3( 0.4 ) * step( 0.996, hash( floor( w * 9.0 ) ) );
+        }
+        else if ( st == 6 )   // swamp: black water in the mud, shining
+        {
+            float pool = smoothstep( 0.6, 0.66, fbm( w * 0.05 + 21.0 ) );
+            col = mix( col, vec3( 0.04, 0.06, 0.05 ), pool * 0.85 );
+            spec = max( spec, pool * 0.9 );
+            rough = mix( rough, 160.0, pool );
+        }
+        else if ( st == 8 )   // downtown: pavement tiles, kerbs, a manhole now and then
+        {
+            vec2  g = abs( fract( w / 1.2 ) - 0.5 );
+            float joint = smoothstep( 0.47, 0.5, max( g.x, g.y ) );
+            col = mix( col, vec3( 0.3, 0.3, 0.32 ) * ( 0.9 + 0.2 * hash( floor( w / 1.2 ) ) ), 0.8 );
+            col *= 1.0 - 0.3 * joint;
+            vec2 m = fract( w / 9.0 ) - 0.5;
+            float hole = step( length( m * 9.0 ), 0.35 ) * step( 0.7, hash( floor( w / 9.0 ) ) );
+            col = mix( col, vec3( 0.12, 0.12, 0.13 ), hole );
+        }
+        else if ( st == 9 )   // fairground: sawdust paths, trampled grass, confetti
+        {
+            float path = smoothstep( 0.02, 0.008, abs( fbm( w * 0.02 + 4.0 ) - 0.5 ) );
+            col = mix( col, vec3( 0.55, 0.42, 0.26 ) * ( 0.85 + 0.3 * fine ), path * 0.9 );
+            float h = hash( floor( w * 6.0 ) + 3.0 );
+            vec3  conf = h > 0.995 ? vec3( 0.9, 0.2, 0.3 ) : h > 0.99 ? vec3( 0.2, 0.5, 0.9 ) : h > 0.985 ? vec3( 0.95, 0.85, 0.2 ) : col;
+            col = conf;
+        }
+        else if ( st == 10 )   // proving ground: shell craters, scorched
+        {
+            vec2  c = cells( w * 0.06 );
+            float crater = smoothstep( 0.22, 0.12, c.x ) * step( 0.6, hash( floor( w * 0.06 ) ) );
+            float rim = smoothstep( 0.04, 0.0, abs( c.x - 0.24 ) ) * step( 0.6, hash( floor( w * 0.06 ) ) );
+            col *= 1.0 - 0.45 * crater;
+            col *= 1.0 + 0.15 * rim;
+        }
     }
     if ( role == 0 && ( kind == 0 || kind == 1 ) )
     {
@@ -1135,16 +1237,26 @@ void Renderer::buildWalls()
                     mb.box( { q.x, 0.8f, q.y }, { 0.5f, 0.8f, 0.12f }, hd, { 60, 60, 64, 0 } );
                 } );
             }
-            else   // scrap: piled wrecks
+            else   // scrap: flattened cars stacked two to four high, as in every junkyard
             {
-                static const Color cols[] = { { 120, 64, 40, 0 }, { 90, 80, 70, 0 }, { 70, 60, 54, 0 }, { 140, 90, 50, 0 }, { 60, 70, 80, 0 } };
-                along( 2.2f, [&]( Vector2 at, Vector2 out, float hd ) {
-                    int pile = 1 + rng.below( 3 );
+                static const Color cols[] = { { 132, 46, 38, 0 },  { 46, 76, 120, 0 }, { 176, 170, 156, 0 }, { 60, 92, 62, 0 },
+                                              { 150, 120, 60, 0 }, { 40, 40, 44, 0 }, { 120, 70, 40, 0 },  { 96, 96, 104, 0 } };
+                along( 4.3f, [&]( Vector2 at, Vector2 out, float hd ) {
+                    int pile = 2 + rng.below( 3 );
                     for ( int h = 0; h < pile; ++h )
                     {
-                        Vector2 q = add( at, mul( out, 0.8f + rng.range( -0.4f, 0.6f ) ) );
-                        float   w = rng.range( 0.7f, 1.0f ), l = rng.range( 1.4f, 2.2f ), hh = rng.range( 0.35f, 0.6f );
-                        mb.box( { q.x, 0.3f + h * 0.7f, q.y }, { w, hh, l }, hd + rng.range( -0.6f, 0.6f ), cols[rng.below( 5 )], 0.2f );
+                        Vector2 q = add( at, mul( out, 1.0f + rng.range( -0.15f, 0.25f ) ) );
+                        float   y = 0.26f + h * 0.5f, yaw = hd + rng.range( -0.12f, 0.12f );
+                        Color   c = cols[rng.below( 8 )];
+                        mb.box( { q.x, y, q.y }, { 0.88f, 0.23f, 2.0f }, yaw, c, 0.04f );                    // the body
+                        mb.box( { q.x, y + 0.05f, q.y }, { 0.9f, 0.08f, 1.15f }, yaw, { 26, 30, 36, 0 } );   // its windows
+                        mb.box( { q.x, y - 0.14f, q.y }, { 0.86f, 0.05f, 2.04f }, yaw, { 150, 150, 150, 0 } ); // bumpers, trim
+                    }
+                    // Now and then a tyre leaning against the stack.
+                    if ( rng.chance( 0.35f ) )
+                    {
+                        Vector2 q = add( add( at, mul( out, -0.05f ) ), mul( perp( out ), rng.range( -1.2f, 1.2f ) ) );
+                        mb.box( { q.x, 0.34f, q.y }, { 0.12f, 0.34f, 0.34f }, hd, { 22, 22, 24, 0 } );
                     }
                 } );
             }
@@ -1177,13 +1289,47 @@ void Renderer::buildWalls()
 
 void Renderer::buildProps()
 {
+    m_turning.clear();
     const Track &t = *m_track;
     const float  cell = 64.0f;
     std::map<std::pair<int, int>, MeshBuilder> cells;
     std::map<std::string, ModelMesh>           cpu;
     for ( const PropSpot &p : t.m_props )
     {
-        auto it = cpu.find( p.m_model );
+        // Cars by the road: a car's own model in a paint of its own; wrecks rusted, sunk on their rims, sometimes
+        // on their side.
+        std::string meshKey = p.m_model;
+        Paint       paint;
+        if ( p.m_car )
+        {
+            const CarDef *cd = g_data.car( p.m_model );
+            if ( !cd ) continue;
+            static const Color parked[] = { { 150, 40, 36, 255 }, { 40, 70, 120, 255 }, { 200, 196, 184, 255 }, { 30, 32, 36, 255 },
+                                            { 60, 96, 60, 255 },  { 170, 140, 70, 255 }, { 110, 110, 116, 255 }, { 120, 60, 110, 255 } };
+            static const Color rust[] = { { 112, 58, 34, 255 }, { 92, 70, 52, 255 }, { 70, 60, 54, 255 }, { 128, 82, 44, 255 },
+                                          { 84, 54, 40, 255 }, { 66, 72, 70, 255 } };
+            uint32_t r = p.m_seed;
+            if ( p.m_car == 1 )
+            {
+                paint.m_c[0] = parked[r % 8];
+                paint.m_c[1] = parked[( r / 8 ) % 8];
+            }
+            else
+            {
+                paint.m_c[0] = rust[r % 6];
+                paint.m_c[1] = rust[( r / 6 ) % 6];
+                paint.m_c[2] = { 60, 54, 50, 255 };
+            }
+            meshKey = cd->m_model + "#" + std::to_string( p.m_car ) + "_" + std::to_string( r % 48 );
+            if ( !cpu.count( meshKey ) )
+            {
+                const ModelDef *d = g_data.model( cd->m_model );
+                ModelMesh       m;
+                if ( d ) m = Forge::build( *d, false, paint );
+                cpu.emplace( meshKey, m );
+            }
+        }
+        auto it = cpu.find( meshKey );
         if ( it == cpu.end() )
         {
             const ModelDef *d = g_data.model( p.m_model );
@@ -1192,13 +1338,28 @@ void Renderer::buildProps()
             it = cpu.emplace( p.m_model, m ).first;
         }
         const ModelMesh &m = it->second;
-        Matrix           xf = place( p.m_pos, p.m_rot * Deg, 0.0f, p.m_scale );
+        float  sink = p.m_car == 2 ? -0.22f : 0.0f;
+        Matrix xf = place( p.m_pos, p.m_rot * Deg, sink, p.m_scale );
+        if ( p.m_tilt != 0.0f || p.m_car == 2 )
+        {
+            float roll = p.m_tilt * Deg + ( p.m_car == 2 ? ( ( p.m_seed >> 8 ) % 9 - 4 ) * 0.025f : 0.0f );
+            float pitch = p.m_car == 2 ? ( ( p.m_seed >> 12 ) % 7 - 3 ) * 0.03f : 0.0f;
+            xf = MatrixMultiply( MatrixMultiply( MatrixRotateZ( roll ), MatrixRotateX( pitch ) ), xf );
+        }
         std::pair<int, int> key = { (int)std::floor( p.m_pos.x / cell ), (int)std::floor( p.m_pos.y / cell ) };
         MeshBuilder &mb = cells[key];
         mb.m_noise = 0;
         for ( const Mesh *mesh : { &m.m_base, &m.m_head, &m.m_spin } )
-            if ( mesh->vertexCount ) mb.append( *mesh, xf );
-        if ( m.m_lamp )
+            if ( mesh->vertexCount && !( mesh == &m.m_spin && !p.m_car ) ) mb.append( *mesh, xf );
+        if ( m.m_hasSpin && !p.m_car ) m_turning.push_back( { p.m_model, xf } );   // drawn turning every frame
+        // A parked car's tyres (a wreck sits on its rims, mostly out of sight).
+        if ( p.m_car == 1 )
+            for ( const WheelSpot &ws : m.m_wheels )
+            {
+                Vector3 c = Vector3Transform( ws.m_pos, xf );
+                mb.box( c, { ws.m_w * 0.5f, ws.m_r, ws.m_r * 0.9f }, p.m_rot * Deg, { 22, 22, 24, 0 } );
+            }
+        if ( m.m_lamp && !p.m_car )
             for ( const LightSpot &l : m.m_lights )
             {
                 Vector3 w = Vector3Transform( l.m_pos, xf );
@@ -1297,10 +1458,26 @@ void Renderer::events( const World &w )
             int n = (int)clampf( e.m_power * 0.6f, 2, 14 );
             puff( at, n, 6.0f + e.m_power * 0.3f, 0.35f, { 255, 220, 140, 255 }, { 255, 80, 10, 0 }, 0.4f, T_SPARK, true );
             if ( e.m_power > 12 ) puff( at, 3, 2.0f, 1.2f, { 90, 86, 80, 150 }, { 90, 86, 80, 0 }, 1.2f, T_SMOKE, false );
+            // Chips of paint from both cars and a spray of glass.
+            if ( e.m_power > 10 && e.m_car >= 0 && e.m_car < (int)w.m_cars.size() )
+            {
+                int chips = (int)clampf( e.m_power * 0.25f, 2, 8 );
+                for ( int who : { e.m_car, e.m_other } )
+                    if ( who >= 0 && who < (int)w.m_cars.size() )
+                    {
+                        Color p = w.m_cars[who].m_setup.m_paint.m_c[0];
+                        puff( { at.x, 0.9f, at.z }, chips, 7.0f, 0.22f, p, { p.r, p.g, p.b, 0 }, 0.9f, T_SOFT, false );
+                    }
+                puff( { at.x, 1.0f, at.z }, chips, 5.0f, 0.12f, { 220, 240, 255, 220 }, { 220, 240, 255, 0 }, 0.6f, T_SPARK, true );
+            }
             break;
         }
         case EvE::SCRAPE:
             puff( at, 2, 6.0f, 0.3f, { 255, 220, 140, 255 }, { 255, 90, 10, 0 }, 0.3f, T_SPARK, true );
+            break;
+        case EvE::ROCK:
+            if ( e.m_kind == 1 )
+                puff( { at.x, 0.8f, at.z }, 16, 5.0f, 2.2f, { 150, 140, 125, 230 }, { 170, 160, 145, 0 }, 2.2f, T_SMOKE, false );
             break;
         case EvE::EXPLODE:
         {
@@ -1329,6 +1506,11 @@ void Renderer::events( const World &w )
         }
         case EvE::WRECK:
             puff( { at.x, 1.2f, at.z }, 14, 8.0f, 1.0f, { 140, 130, 120, 255 }, { 60, 60, 60, 0 }, 0.8f, T_SPARK, true );
+            if ( e.m_car >= 0 && e.m_car < (int)w.m_cars.size() )
+            {
+                Color p = w.m_cars[e.m_car].m_setup.m_paint.m_c[0];
+                puff( { at.x, 1.2f, at.z }, 10, 9.0f, 0.35f, p, { p.r, p.g, p.b, 0 }, 1.4f, T_SOFT, false );   // the bonnet and doors
+            }
             break;
         case EvE::PICKUP:
         {
@@ -1368,6 +1550,26 @@ void Renderer::events( const World &w )
 void Renderer::update( const World &w, float dt )
 {
     m_time += dt;
+    m_wetRace = w.m_wetness;
+    m_fogRace = w.m_fogAdd;
+    // The bells of crossings and bridges, and where a rock is about to land: blinking lights.
+    bool blink = std::fmod( w.m_time, 0.9f ) < 0.45f;
+    if ( m_track )
+        for ( const MoverSpot &mv : m_track->m_movers )
+        {
+            float amount = 0.0f;
+            int   st = mv.m_kind == "rockfall" ? 0 : w.moverState( mv, amount );
+            if ( st == 0 ) continue;
+            Color c = mv.m_kind == "train" ? Color{ 255, 40, 30, 255 } : Color{ 255, 160, 30, 255 };
+            for ( int side = -1; side <= 1; side += 2 )
+            {
+                Vector2 p = add( add( mv.m_pos, mul( mv.m_right, side * ( mv.m_half + 1.2f ) ) ),
+                                 mul( mv.m_dir, -side * ( mv.m_kind == "train" ? 4.0f : mv.m_len * 0.5f + 3.0f ) ) );
+                if ( blink == ( side < 0 ) ) m_glows.push_back( { { p.x, 2.8f, p.y }, c, 9.0f, 3.0f, 0, dt * 1.5f } );
+            }
+        }
+    for ( const Rock &r : w.m_rocks )
+        if ( r.m_age < 0 && blink ) m_glows.push_back( { { r.m_pos.x, 0.5f, r.m_pos.y }, { 255, 120, 30, 255 }, 5.0f, 2.0f, 0, dt * 1.5f } );
     for ( Particle &p : m_parts )
     {
         p.m_age += dt;
@@ -1500,11 +1702,13 @@ void Renderer::update( const World &w, float dt )
     // Weather.
     if ( m_venue )
     {
-        const std::string &we = m_venue->m_weather;
+        std::string we = m_venue->m_weather;
+        if ( m_wetRace > 0.02f && we != "storm" ) we = "rain";
         Vector2 f = m_view.m_focus;
         float   area = m_view.m_height * 0.9f;
         int     n = 0;
-        if ( we == "rain" || we == "storm" ) n = m_quality == 0 ? 6 : 14;
+        if ( we == "rain" || we == "storm" )
+            n = (int)std::ceil( ( m_quality == 0 ? 6 : 14 ) * ( m_venue->m_weather == "rain" || m_venue->m_weather == "storm" ? 1.0f : m_wetRace ) );
         else if ( we == "snow" ) n = m_quality == 0 ? 3 : 6;
         else if ( we == "dust" || we == "fog" ) n = m_rng.chance( 0.3f ) ? 1 : 0;
         for ( int k = 0; k < n; ++k )
@@ -1645,7 +1849,7 @@ void Renderer::setLookUniforms()
         setVec3( s, "ambient", v3( amb, ambP * 1.3f ) );
         setVec3( s, "camPos", m_cam.position );
         setVec3( s, "fogColor", v3( fog ) );
-        setFloat( s, "fogDensity", fogD );
+        setFloat( s, "fogDensity", fogD + m_fogRace );
         setVec2( s, "focus", m_view.m_focus );
         int lc = (int)m_frameLights.size(), sc = (int)m_spotPos.size();
         setInt( s, "lightCount", lc );
@@ -1670,8 +1874,16 @@ void Renderer::setLookUniforms()
     setVec3( g.m_surface, "lineColor", v3( v ? v->m_lineColor : Color{ 210, 210, 190, 255 } ) );
     setVec3( g.m_surface, "groundA", v3( v ? v->m_groundColor : Color{ 60, 80, 50, 255 } ) );
     setVec3( g.m_surface, "groundB", v3( v ? v->m_groundColor2 : Color{ 80, 70, 50, 255 } ) );
-    setFloat( g.m_surface, "wet", m_wet );
+    setFloat( g.m_surface, "wet", std::max( m_wet, m_wetRace ) );
     setFloat( g.m_surface, "time", m_time );
+    {
+        static const char *styles[] = { "", "junkyard", "desert", "cemetery", "docks", "pass", "swamp", "refinery", "downtown",
+                                         "fairground", "proving", "estate" };
+        float style = 0;
+        for ( int k = 1; k < 12; ++k )
+            if ( v && v->m_name == styles[k] ) style = (float)k;
+        setFloat( g.m_surface, "landStyle", style );
+    }
     setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
     setFloat( g.m_lit, "emitBoost", m_dark ? 3.0f : 2.0f );
     setFloat( g.m_lit, "specular", 0.25f );
@@ -1690,8 +1902,8 @@ void Renderer::shadowPass( const World &w )
     BeginTextureMode( m_shadow );
     rlViewport( 0, 0, m_shadowSize, m_shadowSize );
     ClearBackground( WHITE );
+    rlSetClipPlanes( 1.0, 400.0 );   // before BeginMode3D: it builds the projection from them
     BeginMode3D( lc );
-    rlSetClipPlanes( 1.0, 400.0 );
     m_lightVP = MatrixMultiply( rlGetMatrixModelview(), rlGetMatrixProjection() );
     rlDisableBackfaceCulling();
     drawScene( w, true );
@@ -1704,22 +1916,32 @@ void Renderer::drawCar( const World &w, int i, bool shadow )
 {
     const Car       &c = w.m_cars[i];
     const ModelMesh &m = g.m_forge.get( g_data, c.m_def->m_model, c.m_setup.m_paint );
-    Matrix base = MatrixMultiply( MatrixMultiply( MatrixRotateZ( c.m_lean * 0.07f ), MatrixRotateX( c.m_pitch * 0.04f ) ),
-                                  place( c.m_pos, c.m_head ) );
+    Matrix base = MatrixMultiply( MatrixMultiply( MatrixRotateZ( c.m_lean * 0.07f + ( c.m_wrecked ? 0.12f : 0.0f ) ),
+                                                  MatrixRotateX( c.m_pitch * 0.04f + ( c.m_wrecked ? 0.05f : 0.0f ) ) ),
+                                  place( c.m_pos, c.m_head, c.m_wrecked ? -0.08f : 0.0f ) );
     Material &mat = shadow ? g.m_depthMat : g.m_litMat;
     float     hp = c.m_maxHp > 0 ? clampf( c.m_hp / c.m_maxHp, 0, 1 ) : 1.0f;
     if ( !shadow )
     {
         float k = c.m_wrecked ? 0.22f : 0.55f + 0.45f * std::sqrt( hp );
         setVec4( g.m_lit, "tint", { k, k * ( c.m_wrecked ? 0.9f : 1.0f ), k * ( c.m_wrecked ? 0.85f : 1.0f ), c.m_hitFlash * 0.35f } );
-        setFloat( g.m_lit, "specular", c.m_wrecked ? 0.05f : 0.6f );
+        setFloat( g.m_lit, "specular", c.m_wrecked ? 0.05f : 0.6f * ( 0.4f + 0.6f * hp ) );
+        setFloat( g.m_lit, "dent", c.m_wrecked ? 1.0f : clampf( ( 1.0f - hp ) * 1.15f, 0, 1 ) );
+        setVec4( g.m_lit, "dentFrame", { c.m_pos.x, c.m_pos.y, std::cos( c.m_head ), std::sin( c.m_head ) } );
     }
     if ( m.m_hasBase ) DrawMesh( m.m_base, mat, base );
     if ( m.m_hasHead ) DrawMesh( m.m_head, mat, base );
     if ( m.m_hasSpin ) DrawMesh( m.m_spin, mat, base );
+    if ( !shadow ) setFloat( g.m_lit, "dent", 0.0f );
     const Mesh &wheel = g.m_forge.wheel();
+    bool lost = false;   // a wreck has lost its front left wheel
     for ( const WheelSpot &ws : m.m_wheels )
     {
+        if ( c.m_wrecked && !lost && ws.m_front && ws.m_pos.x < 0 )
+        {
+            lost = true;
+            continue;
+        }
         float  steer = ws.m_front ? -c.m_steerVis * 0.45f : 0.0f;
         Matrix wm = MatrixMultiply( MatrixScale( ws.m_w, ws.m_r, ws.m_r ), MatrixRotateX( -c.m_wheelTurn ) );
         wm = MatrixMultiply( wm, MatrixRotateY( steer ) );
@@ -1773,6 +1995,68 @@ void Renderer::drawScene( const World &w, bool shadow )
             const ModelMesh &m = modelOf( o.m_model );
             if ( m.m_hasBase ) DrawMesh( m.m_base, lit, place( o.m_pos, o.m_rot * Deg ) );
         }
+    // What turns: Ferris wheels, carousels, radar dishes.
+    for ( const auto &[name, xf] : m_turning )
+    {
+        const ModelMesh &tm = modelOf( name );
+        if ( !tm.m_hasSpin ) continue;
+        Matrix spin = MatrixMultiply( MatrixMultiply( MatrixTranslate( -tm.m_spinAt.x, -tm.m_spinAt.y, -tm.m_spinAt.z ),
+                                                      MatrixRotate( tm.m_spinAxis, m_time * tm.m_spinSpeed * Deg ) ),
+                                      MatrixTranslate( tm.m_spinAt.x, tm.m_spinAt.y, tm.m_spinAt.z ) );
+        DrawMesh( tm.m_spin, lit, MatrixMultiply( spin, xf ) );
+    }
+    // The track's clockwork: rails and posts, a passing train, drawbridge leaves, rocks.
+    for ( const MoverSpot &mv : m_track->m_movers )
+    {
+        float head = std::atan2( mv.m_dir.x, -mv.m_dir.y ), back = std::atan2( -mv.m_dir.x, mv.m_dir.y );
+        float amount = 0.0f;
+        int   st = mv.m_kind == "rockfall" ? 0 : w.moverState( mv, amount );
+        if ( mv.m_kind == "train" )
+        {
+            const ModelMesh &rail = modelOf( "rail_piece" );
+            for ( float v = -( mv.m_half + 30.0f ); v <= mv.m_half + 30.0f; v += 10.0f )
+                if ( rail.m_hasBase ) DrawMesh( rail.m_base, lit, place( add( mv.m_pos, mul( mv.m_right, v ) ), head ) );
+            const ModelMesh &post = modelOf( "crossing_post" );
+            if ( post.m_hasBase )
+            {
+                DrawMesh( post.m_base, lit, place( add( add( mv.m_pos, mul( mv.m_right, mv.m_half + 1.2f ) ), mul( mv.m_dir, -4.0f ) ), back ) );
+                DrawMesh( post.m_base, lit, place( add( add( mv.m_pos, mul( mv.m_right, -mv.m_half - 1.2f ) ), mul( mv.m_dir, 4.0f ) ), head ) );
+            }
+            if ( st == 2 )
+            {
+                float            across = std::atan2( mv.m_right.x, -mv.m_right.y ), front = w.trainFront( mv );
+                const ModelMesh &loco = modelOf( "train_loco" ), &wagon = modelOf( "train_wagon" );
+                if ( loco.m_hasBase ) DrawMesh( loco.m_base, lit, place( add( mv.m_pos, mul( mv.m_right, front - 7.5f ) ), across ) );
+                for ( int k = 0; k < 3; ++k )
+                    if ( wagon.m_hasBase )
+                        DrawMesh( wagon.m_base, lit, place( add( mv.m_pos, mul( mv.m_right, front - 22.5f - 14.5f * k ) ), across ) );
+            }
+        }
+        else if ( mv.m_kind == "drawbridge" )
+        {
+            const ModelMesh &leaf = modelOf( "bridge_leaf" ), &gap = modelOf( "bridge_gap" );
+            float            sx = ( 2.0f * mv.m_half + 2.0f ) / 20.0f, sz = mv.m_len / 24.0f, ang = ( st == 2 ? amount : 0.0f ) * 70.0f * Deg;
+            if ( ang > 0.01f && gap.m_hasBase && !shadow )
+                DrawMesh( gap.m_base, lit, MatrixMultiply( MatrixScale( ( 2.0f * mv.m_half + 4.0f ) / 24.0f, 1, sz ), place( mv.m_pos, head ) ) );
+            for ( int side = -1; side <= 1; side += 2 )
+            {
+                Vector2 hinge = add( mv.m_pos, mul( mv.m_dir, side * mv.m_len * 0.5f ) );
+                Matrix  m = MatrixMultiply( MatrixMultiply( MatrixScale( sx, 1, sz ), MatrixRotateX( ang ) ),
+                                            place( hinge, side < 0 ? head : back, 0.02f ) );
+                if ( leaf.m_hasBase ) DrawMesh( leaf.m_base, lit, m );
+            }
+        }
+    }
+    {
+        std::string rockModel = g_data.model( "rock_snow" ) && m_venue && m_venue->m_name == "pass" ? "rock_snow"
+                                : g_data.model( "rock_red" ) ? "rock_red" : "_barrel";
+        const ModelMesh &rm = modelOf( rockModel );
+        for ( const Rock &r : w.m_rocks )
+        {
+            float y = r.m_age < 0 ? 30.0f * ( r.m_age / -1.8f ) * ( r.m_age / -1.8f ) : 0.0f;
+            if ( rm.m_hasBase ) DrawMesh( rm.m_base, lit, place( r.m_pos, r.m_r * 2.3f, y, r.m_r / 1.3f ) );
+        }
+    }
     for ( const Barrel &b : w.m_barrels )
         if ( !b.m_gone )
         {
@@ -2016,8 +2300,10 @@ void Renderer::render( const World &w, const View &v )
     BeginTextureMode( m_hdr );
     Color fog = m_venue ? m_venue->m_fog : Color{ 30, 30, 36, 255 };
     ClearBackground( fog );
+    // The near plane well away from the eye: raylib's 0.01 m left ~3 cm depth steps at 70 m, and the road's layers
+    // (road, patches, decals, a centimetre apart) flickered through each other.
+    rlSetClipPlanes( std::max( 1.0, h * 0.25 ), 1200.0 );
     BeginMode3D( m_cam );
-    rlSetClipPlanes( 0.5, 900.0 );
     setLookUniforms();
     rlActiveTextureSlot( 10 );
     rlEnableTexture( m_shadow.depth.id );
@@ -2055,6 +2341,7 @@ void Renderer::showroom( const std::string &model, const Paint &paint, float yaw
     m_cam.fovy = 35.0f;
     BeginTextureMode( m_hdr );
     ClearBackground( { 12, 12, 16, 255 } );
+    rlSetClipPlanes( 0.3, 200.0 );
     BeginMode3D( m_cam );
     setLookUniforms();
     for ( Shader s : { g.m_lit, g.m_surface } )

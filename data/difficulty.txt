@@ -82,10 +82,10 @@ difficulty 4
   desc "Keine Gnade, kein Gummiband, kein Mitleid. Die Blaskapelle probt bereits. Für Leute, die ihren Grabstein selbst entwerfen wollen."
   desc_en "No mercy, no rubber band, no pity. The brass band is already rehearsing. For people who want to design their own headstone."
   ai_speed 0.975
-  ai_skill 0.9
+  ai_skill 0.88
   ai_aggression 0.95
   ai_weapons 0.85
-  damage_taken 1.1
+  damage_taken 1.05
   damage_dealt 0.9
   prize 0.95
   prices 1.05

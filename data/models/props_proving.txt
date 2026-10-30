@@ -134,9 +134,9 @@ model radar_dish
   part box w=2.2 h=1.8 d=2 y=2.5 z=1.4 color=#525238
   part box w=1 h=0.5 d=0.05 x=0.3 y=2.55 z=0.38 color=#1a2024
   part gun r=0.3 len=3 y=3.1 z=-1.2 pitch=90 seg=8 color=#6a6a5a
-  part dome r=2.2 ry=0.9 y=5 z=-1.2 pitch=125 color=#b8b8b0 seg=12   # the dish
-  part gun r=0.06 len=1.844 y=5.6 z=-1.9 pitch=40.6 seg=4 color=#8a8a84
-  part box w=0.25 h=0.25 d=0.3 y=6.225 z=-2.7 color=#3a3a3a
+  part dome r=2.2 ry=0.9 y=5 z=-1.2 pitch=125 color=#b8b8b0 seg=12 group=spin spin=40 spin_axis=y spin_at=0,0,-1.2   # the dish
+  part gun r=0.06 len=1.844 y=5.6 z=-1.9 pitch=40.6 seg=4 color=#8a8a84 group=spin
+  part box w=0.25 h=0.25 d=0.3 y=6.225 z=-2.7 color=#3a3a3a group=spin
   part box w=0.12 h=0.12 d=0.906 x=1.15 y=0.15 z=-3 pitch=-19.35 rot=-20.56 color=#4a4a32
 
 # a shooting target: a car's silhouette with a bullseye, riddled

@@ -1,0 +1,81 @@
+# Downtown scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene downtown_spectators
+  venue downtown
+  size 9
+  near 2
+  weight 1.6
+  put crowd_row x=0 z=1
+  put crowd_small x=-6 z=1
+  put newsstand x=6 z=2
+  put lamp_city x=-8 z=0
+  put hydrant x=4 z=-0.5
+
+scene downtown_start
+  venue downtown
+  size 14
+  near 3
+  put crowd_block x=-9 z=1
+  put crowd_block x=9 z=1
+  put bus_stop x=0 z=2
+  put lamp_city x=-13 z=0
+  put lamp_city x=13 z=0
+  put newsstand x=-4 z=3
+  put fig_marshal x=3 z=-2.5 rot=-20
+
+scene downtown_block
+  venue downtown
+  size 14
+  near 5
+  weight 0.8
+  put building_a x=-6 z=8
+  put building_b x=6 z=8
+  car any x=-6 z=1 rot=90
+  car any x=1 z=1 rot=90
+  put hydrant x=4 z=0
+  put dumpster x=8 z=2
+  put lamp_city x=-1 z=0
+
+scene downtown_tower
+  venue downtown
+  size 13
+  near 5
+  weight 0.6
+  put building_tall x=0 z=8
+  put neon_sign x=-6 z=2
+  car any x=5 z=1 rot=90
+  put crowd_small x=-2 z=1
+  put lamp_city x=7 z=0
+
+scene downtown_busstop
+  venue downtown
+  size 11
+  near 3
+  put bus_stop x=0 z=1.5
+  put crowd_row x=0 z=3
+  put newsstand x=-6 z=1
+  put lamp_city x=5 z=0
+  put parked_van x=8 z=3 rot=90
+
+scene downtown_alley
+  venue downtown
+  size 10
+  near 3
+  put dumpster x=-3 z=2
+  put dumpster x=0 z=2.5
+  put tramps_fire x=4 z=1
+  wreck any x=-6 z=4 rot=80
+  put hydrant x=6 z=-0.5
+
+scene downtown_parking
+  venue downtown
+  size 12
+  near 3
+  car any x=-7.5 z=1 rot=0
+  car any x=-4.5 z=1 rot=180
+  car any x=-1.5 z=1 rot=0
+  car any x=1.5 z=1 rot=0
+  car any x=4.5 z=1 rot=180
+  put lamp_city x=7.5 z=0
+  put parked_van x=0 z=6 rot=90

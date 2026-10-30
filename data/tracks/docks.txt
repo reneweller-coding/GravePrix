@@ -69,6 +69,8 @@ track dock_overboard
   place container_stack x=150 z=-70 rot=0
   place forklift x=100 z=-75 rot=30
   place container x=50 z=-70 rot=90
+  # The swing of the harbour: a drawbridge on the back straight.
+  drawbridge at=1002 len=24 period=48 offset=30
 
 # The container maze: the start on a long tail, then a double spiral -- in along one lane of 12 m between container
 # walls, round the steel hairpin at the core and out along the lane beside it -- and back down the tail.
@@ -199,6 +201,8 @@ track dock_keelhaul
   row barrel_oil at=840 len=60 side=left off=1 every=12
   row warehouse at=1100 len=60 side=right off=4 every=30
   place ship_hull x=-60 z=-60 rot=0
+  # A squall comes in from the sea.
+  weather rain lap=2
 
 # Figure-eight in the dry dock: two long diagonals crossing at a narrow 45 degrees (the second over a steel bridge),
 # a tight triangle round the crane at the top and a wide round sweep past the wreck in the dock at the bottom.
@@ -254,6 +258,8 @@ track dock_sailorsgrave
   row bollard at=880 len=250 side=left off=0 every=14
   place crane_harbor x=150 z=-160 rot=90
   place crane_harbor x=-20 z=-160 rot=90
+  # The drawbridge over the old basin rises for the ships, not for the race.
+  drawbridge at=695 len=24 period=50 offset=25
 
 # Derby arena: a wide figure-eight between container stacks; the crossing is where most of them end.
 track dock_fishfood

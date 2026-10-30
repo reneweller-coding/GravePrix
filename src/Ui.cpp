@@ -17,12 +17,12 @@ namespace grave
 namespace ui
 {
 
-const Color Ink = { 238, 230, 214, 255 };
-const Color Dim = { 150, 140, 130, 255 };
-const Color Accent = { 214, 52, 44, 255 };
-const Color Gold = { 222, 178, 92, 255 };
-const Color Warn = { 255, 96, 72, 255 };
-const Color Good = { 130, 224, 130, 255 };
+Color Ink = { 238, 230, 214, 255 };
+Color Dim = { 150, 140, 130, 255 };
+Color Accent = { 214, 52, 44, 255 };
+Color Gold = { 222, 178, 92, 255 };
+Color Warn = { 255, 96, 72, 255 };
+Color Good = { 130, 224, 130, 255 };
 
 namespace
 {
@@ -30,6 +30,7 @@ namespace
 Font  g_font = {};
 bool  g_has = false;
 float g_textSize = 1.0f;
+float g_scale = 1.0f;
 constexpr int Base = 72;   ///< the size the font is rendered at
 
 }   // namespace
@@ -63,7 +64,54 @@ void shutdown()
 
 void setTextSize( float s ) { g_textSize = s; }
 
-float k() { return GetScreenHeight() / 1080.0f; }
+float k() { return GetScreenHeight() / 1080.0f * g_scale; }
+
+static float px( float size );
+
+void setScale( float s ) { g_scale = s; }
+
+void setPalette( int mode )
+{
+    Gold = mode == 2 ? Color{ 240, 130, 170, 255 } : Color{ 222, 178, 92, 255 };
+    Warn = mode == 1 ? Color{ 255, 150, 30, 255 } : Color{ 255, 96, 72, 255 };
+    Good = mode == 1 ? Color{ 90, 170, 255, 255 } : mode == 2 ? Color{ 90, 220, 200, 255 } : Color{ 130, 224, 130, 255 };
+}
+
+float glyph( const std::string &label, float x, float y, float size )
+{
+    // The face buttons in the colours printed on most pads (and the Deck's).
+    struct Face
+    {
+        const char *name;
+        Color       c;
+    };
+    static const Face faces[] = { { "A", { 60, 170, 80, 255 } }, { "B", { 200, 60, 50, 255 } },
+                                  { "X", { 50, 110, 200, 255 } }, { "Y", { 220, 180, 40, 255 } } };
+    float h = px( size ) * 1.15f, cy = y + h * 0.5f;
+    for ( const Face &f : faces )
+        if ( label == f.name )
+        {
+            DrawCircleV( { x + h * 0.5f, cy }, h * 0.5f, { 12, 10, 12, 255 } );
+            DrawCircleV( { x + h * 0.5f, cy }, h * 0.44f, f.c );
+            float w = width( label, size * 0.8f );
+            DrawTextEx( g_font, label.c_str(), { std::floor( x + ( h - w ) * 0.5f ), std::floor( cy - px( size * 0.8f ) * 0.55f ) },
+                        px( size * 0.8f ), px( size * 0.8f ) * 0.02f, { 250, 250, 245, 255 } );
+            return h;
+        }
+    static const char *pills[] = { "LB", "RB", "LT", "RT", "Start", "Select", "L3", "R3" };
+    for ( const char *p : pills )
+        if ( label == p )
+        {
+            float     w = width( label, size * 0.7f ) + h * 0.7f;
+            Rectangle r = { x, y + h * 0.1f, w, h * 0.8f };
+            DrawRectangleRounded( r, 0.6f, 6, { 12, 10, 12, 255 } );
+            DrawRectangleRoundedLinesEx( r, 0.6f, 6, std::max( 1.0f, k() * 1.5f ), { 200, 200, 195, 255 } );
+            DrawTextEx( g_font, label.c_str(), { std::floor( x + h * 0.35f ), std::floor( cy - px( size * 0.7f ) * 0.55f ) },
+                        px( size * 0.7f ), px( size * 0.7f ) * 0.02f, { 240, 240, 235, 255 } );
+            return w;
+        }
+    return 0.0f;
+}
 
 static float px( float size ) { return size * k() * g_textSize; }
 

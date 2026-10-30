@@ -615,7 +615,20 @@ ModelMesh Forge::build( const ModelDef &def, bool upload, const Paint &paint )
             sscanf( p.str( "pivot" ).c_str(), "%f,%f", &px, &pz );
             out.m_pivot = { px * def.m_scale, 0, pz * def.m_scale };
         }
-        if ( group == "spin" ) out.m_spinSpeed = p.num( "spin", out.m_spinSpeed );
+        if ( group == "spin" )
+        {
+            out.m_spinSpeed = p.num( "spin", out.m_spinSpeed );
+            std::string ax = p.str( "spin_axis" );
+            if ( ax == "x" ) out.m_spinAxis = { 1, 0, 0 };
+            else if ( ax == "z" ) out.m_spinAxis = { 0, 0, 1 };
+            else if ( ax == "y" ) out.m_spinAxis = { 0, 1, 0 };
+            if ( p.has( "spin_at" ) )
+            {
+                float ax3[3] = { 0, 0, 0 };
+                sscanf( p.str( "spin_at" ).c_str(), "%f,%f,%f", &ax3[0], &ax3[1], &ax3[2] );
+                out.m_spinAt = { ax3[0] * def.m_scale, ax3[1] * def.m_scale, ax3[2] * def.m_scale };
+            }
+        }
         bool autoMirror = p.m_key == "wing" || ( ( p.m_key == "engine" || p.m_key == "gun" || p.m_key == "wheel" ) &&
                                                     p.num( "x" ) != 0 );
         bool mirror = p.integer( "mirror", autoMirror ? 1 : 0 ) != 0;

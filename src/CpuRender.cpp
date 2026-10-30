@@ -190,9 +190,21 @@ Paint paintOf( int k )
 int toolGallery( const Options &opt )
 {
     std::string file = opt.value( "--gallery", "work/gallery.png" ), prefix = opt.value2( "--gallery" );
-    std::vector<std::string> names;
+    // The prefix may be several, comma-separated ("scrap_,car_cube").
+    std::vector<std::string> prefixes, names;
+    for ( size_t a = 0, b; a <= prefix.size(); a = b + 1 )
+    {
+        b = prefix.find( ',', a );
+        if ( b == std::string::npos ) b = prefix.size();
+        prefixes.push_back( prefix.substr( a, b - a ) );
+    }
     for ( const auto &[n, m] : g_data.m_models )
-        if ( prefix.empty() || n.rfind( prefix, 0 ) == 0 ) names.push_back( n );
+        for ( const std::string &pre : prefixes )
+            if ( n.rfind( pre, 0 ) == 0 )
+            {
+                names.push_back( n );
+                break;
+            }
     if ( names.empty() )
     {
         printf( "no models%s%s\n", prefix.empty() ? "" : " starting with ", prefix.c_str() );

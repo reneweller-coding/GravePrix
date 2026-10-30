@@ -14,6 +14,7 @@ rival barry
   weapons 0.55
   likes mine
   champion 1
+  boss crusher
   portrait "A broad-shouldered gravedigger in his fifties with a weathered, mud-streaked face, grey stubble and one eyebrow permanently raised; a flat cap, a patched tweed waistcoat over a collarless shirt, braces, a shovel slung across his back; soil under his fingernails; calm and grimly amused; a little brass bell on a string tied round his wrist."
   bio "Barry wurde vor zwölf Jahren versehentlich beerdigt und hat sich in einer Nacht mit einem Teelöffel wieder ausgegraben. Seitdem trägt er ein Glöckchen am Handgelenk und gräbt Minenlöcher schneller als jeder Bagger. Champion im Armengrab – weil er weiß, wie es da unten aussieht."
   bio_en "Twelve years ago Barry was buried by mistake and dug himself out overnight with a teaspoon. He has worn a little bell on his wrist ever since and digs a mine hole faster than any excavator. Champion of the Pauper's Grave – because he knows what it's like down there."
@@ -298,6 +299,7 @@ rival jack
   weapons 0.55
   likes rocket
   champion 1
+  boss jackknife
   portrait "A huge bear of a man in his fifties with a bushy black beard shot with grey, mirrored aviator sunglasses and a toothpick in the corner of his mouth; a sleeveless flannel shirt, a trucker cap with a winged skull, forearms like hams tattooed with road signs; a CB radio microphone clipped to his chest; slow-talking and unstoppable."
   bio "Jack ist vierzig Jahre lang Sattelschlepper gefahren und hat dabei drei Mautstationen, zwei Brücken und einen Kirchturm mitgenommen. Er fährt keine Kurven, er fährt durch sie hindurch. Über Funk grüßt er jeden Gegner, bevor er ihn von der Straße schiebt."
   bio_en "Jack drove eighteen-wheelers for forty years and took out three toll booths, two bridges and a church steeple along the way. He doesn't take corners, he takes them apart. He says hello to every rival over the CB before he shoves them off the road."
@@ -582,6 +584,7 @@ rival petra
   weapons 0.7
   likes oil
   champion 1
+  boss inferno
   portrait "A glamorous woman in her fifties with glossy black hair in a sculpted wave, heavy gold jewellery and a mink stole slick with crude oil; a black satin evening gown under an open hazard-orange refinery jacket, a white hard hat with a diamond tiara welded to the brim; cold and amused, a drop of oil hanging from one gloved fingertip; flare stacks burning behind her."
   bio "Petra hat eine Raffinerie geerbt, zwei weitere erheiratet und eine dritte einem Ehemann abgenommen, der mitten im Pokerspiel verstarb. Sie fährt, als gehöre ihr die Strecke, und meistens gehört ihr zumindest das Öl darauf. Champion der Familiengruft – ihre eigene Gruft hat einen Pipelineanschluss."
   bio_en "Petra inherited one refinery, married into two more and won a third off a husband who died mid-poker game. She drives as if she owns the track, and usually she at least owns the oil on it. Champion of the Family Plot – her own crypt has a pipeline connection."
@@ -866,6 +869,7 @@ rival gloria
   weapons 0.76
   likes rocket
   champion 1
+  boss sictransit
   portrait "A dazzling woman in her late thirties with a platinum-blonde screen-siren wave, huge sunglasses, scarlet lips and a beauty mark; a white sequinned racing suit with a pink feather boa, gold gloves and a diamond choker; she blows a kiss while a firework rocket rests on her shoulder like a parasol; vain, magnetic and utterly sure of her own legend."
   bio "Gloria war einmal ein Schlagerstar mit drei Hits und einem Skandal, dann ein Skandal mit drei Hits, dann nur noch ein Skandal. Der Grave Prix hat ihr die Bühne zurückgegeben: Neonlicht, Kameras und Raketen, die sie wie Feuerwerk über die Stadt schießt. Champion im Staatsbegräbnis – sie wünscht sich ein großes."
   bio_en "Gloria was once a pop star with three hits and a scandal, then a scandal with three hits, then just a scandal. The Grave Prix gave her back a stage: neon lights, cameras and rockets she fires over the city like fireworks. Champion of Lying in State – and she's hoping for a big one."
@@ -1150,6 +1154,7 @@ rival major
   weapons 0.92
   likes rocket
   champion 1
+  boss triage
   portrait "A ramrod-straight officer in his sixties with a white handlebar moustache, a jaw like a tank trap and one glass eye that never moves; a pressed olive dress uniform heavy with medals from campaigns nobody has heard of, a swagger stick under his arm and a rocket pod mounted on his shoulder like an epaulette; barking, fearless, delighted by explosions."
   bio "Der Major hat in sieben Feldzügen gedient, keinen davon gewonnen, aber in jedem am meisten Munition verbraucht. Seit seiner Pensionierung testet er auf dem Truppenübungsplatz Raketen an allem, was sich bewegt. Champion im Pharaonengrab und Mortimer Graves' zuverlässigster Kundenlieferant."
   bio_en "The Major served in seven campaigns and won none of them, but used up the most ammunition in every one. Since retiring he tests rockets on the proving ground against anything that moves. Champion of the Pharaoh's Tomb and Mortimer Graves' most reliable supplier of customers."

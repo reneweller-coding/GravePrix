@@ -1,0 +1,85 @@
+# Docks scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene docks_spectators
+  venue docks
+  size 9
+  near 2
+  weight 1.6
+  put crowd_row x=0 z=1
+  put crowd_small x=-6 z=1.5
+  put bollard x=-4 z=-1
+  put bollard x=4 z=-1
+  put container x=0 z=5 rot=90
+
+scene docks_start
+  venue docks
+  size 14
+  near 3
+  put container_stack x=-9 z=4 rot=90
+  put crowd_block x=-9 z=0.5
+  put crowd_block x=9 z=0.5
+  put crowd_row x=0 z=2
+  put fig_marshal x=3 z=-2 rot=-20
+  put flag_pole x=13 z=-1
+  put lamp_harbor x=-13 z=0
+
+scene docks_cranes
+  venue docks
+  size 13
+  near 4
+  weight 0.5
+  put crane_harbor x=0 z=7 rot=90
+  put container_stack x=-7 z=2 rot=90
+  put container_stack x=7 z=2 rot=90
+  put forklift x=2 z=-1 rot=70
+  put fig_worker x=-2 z=-1.5 rot=10
+  put container x=0 z=2 rot=90
+
+scene docks_warehouse
+  venue docks
+  size 13
+  near 4
+  weight 0.5
+  put warehouse x=0 z=7
+  put pallet_stack x=-7 z=1
+  put pallet_stack x=-5 z=2.5
+  put forklift x=4 z=0 rot=100
+  put crate_stack x=7 z=2
+  put fig_worker x=1 z=-1 rot=-20
+
+scene docks_quay
+  venue docks
+  size 11
+  near 3
+  put bollard x=-6 z=0
+  put bollard x=0 z=0
+  put bollard x=6 z=0
+  put buoy x=3 z=3
+  put crowd_small x=-3 z=2
+  put fig_tramp x=5 z=1.5 rot=200
+  put fire_barrel x=6.3 z=2.4
+
+scene docks_parking
+  venue docks
+  size 12
+  near 3
+  car any x=-7.5 z=1 rot=0
+  car any x=-4.5 z=1 rot=0
+  car any x=-1.5 z=1 rot=180
+  car any x=1.5 z=1 rot=0
+  wreck any x=4.5 z=1 rot=10
+  put lamp_harbor x=7 z=1
+  put fig_mechanic x=4.5 z=-1.5 rot=30
+
+scene docks_boxes
+  venue docks
+  size 11
+  near 3
+  put container x=-5 z=2 rot=90
+  put container x=0 z=2 rot=80
+  put container_stack x=5 z=4 rot=90
+  put crate_stack x=-6 z=-1
+  put barrel_oil x=2 z=-1
+  put barrel_oil x=2.7 z=-0.6
+  put crowd_small x=-1 z=5

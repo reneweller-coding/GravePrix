@@ -8,4 +8,8 @@ Built with
 - raylib 5.5 (zlib/libpng licence), https://www.raylib.com
 - Barlow typeface by Jeremy Tribby (SIL Open Font License 1.1, see assets/fonts/Barlow-OFL.txt)
 
-The music was generated locally with ACE-Step 1.5. Every sound effect and engine is synthesised by the game.
+The music was generated locally with ACE-Step 1.5. Every sound effect and engine is synthesised by the game; when a
+rival dies the band plays the opening bars of Frédéric Chopin's Funeral March (Piano Sonata No. 2, 1839, public
+domain), synthesised as well.
+Ricky Rattle's voice was made locally with Qwen3-TTS (voice design and cloning, an invented voice).
+The tabloid's press photos were painted locally with FLUX.2 [dev]; they show invented people only.

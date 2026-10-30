@@ -47,7 +47,7 @@ const char *const SfxNames[] = {
     "mine_drop",    "mine_arm",    "spikes_drop", "oil_drop",     "smoke_drop", "nitro",           "tire_burst",
     "crash_light",  "crash_heavy", "crash_wall",  "metal_crunch", "glass",      "explosion_small", "explosion_big",
     "wreck",        "barrel",      "count_beep",  "count_go",     "lap",        "final_lap",       "finish",
-    "wrong_way",    "bell",        "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
+    "wrong_way",    "bell",        "funeral_march", "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
     "pick_mystery", "horn_plain",  "horn_truck",  "horn_dixie",   "horn_ice",   "horn_funeral",    "horn_siren",
     "horn_klaxon",  "ui_move",     "ui_ok",       "ui_back",      "ui_buy",     "ui_deny",         "ui_cash",
     "ui_paper",     "ui_stamp"
@@ -1425,6 +1425,34 @@ std::vector<float> makeSfx( SfxE e )
         s.noise( 0, 0.35f, 0.5f, { 0.04f, 0.05f, 0.1f }, Flt::BP, 2600, 2600, 1, 0.8f );
         s.grains( 0, 0.3f, 300, 100, 0.4f, 1200, 6000, 0.001f, 0.003f );
         return s.finish( -28 );
+    }
+    case SfxE::FUNERAL_MARCH:
+    {
+        // A rival has died: the first bars of Chopin's funeral march (1837, free for all) on brass and organ over a
+        // muffled drum, slow and a little out of tune, as a village band would play it.
+        Fx          s( 6.2f, 91 );
+        float       beat = 0.62f;
+        const float mel[][2] = { { 58, 1 },    { 58, 0.75f }, { 58, 0.25f }, { 58, 2 },
+                                 { 61, 1 },    { 60, 0.75f }, { 60, 0.25f }, { 58, 0.75f },
+                                 { 58, 0.25f }, { 57, 0.75f }, { 58, 1.5f } };
+        float       t = 0;
+        for ( const auto &n : mel )
+        {
+            s.brass( t, n[1] * beat * 0.9f, midiHz( n[0] ) * 1.003f, 0.32f, 0.7f );
+            s.brass( t, n[1] * beat * 0.9f, midiHz( n[0] - 12 ) * 0.997f, 0.18f, 0.5f );
+            s.organ( t, n[1] * beat * 0.96f, n[0], 0.08f );
+            t += n[1] * beat;
+        }
+        // The low chords, B flat minor and its fifth, on every beat; the drum on one and three.
+        for ( int b = 0; b < 9; ++b )
+        {
+            s.organ( b * beat, beat * 0.9f, b % 2 ? 41 : 34, 0.12f );
+            s.organ( b * beat, beat * 0.9f, 49, 0.06f );
+            if ( b % 2 == 0 ) s.kick( b * beat, 70, 45, 0.25f, 0.5f, { 0.004f, 0.0f, 0.5f } );
+        }
+        s.trem( 4.5f, 0.1f );
+        s.filter( Flt::HP, 60 );
+        return s.finish( -20 );
     }
     case SfxE::UI_STAMP:
     {
@@ -3432,6 +3460,9 @@ struct Audio::Impl : Mixer
     float       mgain[2] = {};
     int         cur = 0;
     std::string musicName;
+    float                    duckTime = 0.0f, duckDepth = 0.0f;   ///< the music lowered for a moment
+    Sound                    voiceSnd = {};                        ///< the announcer's line playing
+    bool                     hasVoice = false;
     std::vector<std::string> takes;   ///< the playing piece's takes (<name>, <name>_2, ...)
     int                      take = 0;
 
@@ -3550,6 +3581,12 @@ void Audio::shutdown()
         UnloadAudioStream( m.stream );
         m.streamOn = false;
     }
+    if ( m.hasVoice )
+    {
+        StopSound( m.voiceSnd );
+        UnloadSound( m.voiceSnd );
+        m.hasVoice = false;
+    }
     for ( int i = 0; i < 2; ++i )
         if ( m.has[i] )
         {
@@ -3653,10 +3690,50 @@ void Audio::music( const std::string &name )
     m.playTake();
 }
 
+bool Audio::hasMusic( const std::string &name ) const
+{
+    if ( !m_impl ) return false;
+    std::error_code ec;
+    for ( const char *ext : { ".ogg", ".mp3", ".wav", ".flac" } )
+        if ( std::filesystem::exists( m_impl->assets + "/music/" + name + ext, ec ) ) return true;
+    return false;
+}
+
+bool Audio::voice( const std::string &file )
+{
+    if ( !m_on || !m_impl ) return false;
+    Impl &m = *m_impl;
+    std::error_code ec;
+    if ( !std::filesystem::exists( file, ec ) ) return false;
+    if ( m.hasVoice )
+    {
+        StopSound( m.voiceSnd );
+        UnloadSound( m.voiceSnd );
+        m.hasVoice = false;
+    }
+    m.voiceSnd = LoadSound( file.c_str() );
+    if ( !IsSoundValid( m.voiceSnd ) ) return false;
+    m.hasVoice = true;
+    SetSoundVolume( m.voiceSnd, std::min( 1.0f, m_effectVolume * 1.15f ) );
+    PlaySound( m.voiceSnd );
+    duck( (float)m.voiceSnd.frameCount / std::max( 1u, m.voiceSnd.stream.sampleRate ) + 0.3f, 0.45f );
+    return true;
+}
+
+void Audio::duck( float seconds, float depth )
+{
+    if ( !m_on || !m_impl ) return;
+    m_impl->duckTime = std::max( m_impl->duckTime, seconds );
+    m_impl->duckDepth = std::max( m_impl->duckTime > seconds ? m_impl->duckDepth : 0.0f, depth );
+}
+
 void Audio::update( float dt )
 {
     if ( !m_on || !m_impl ) return;
     Impl &m = *m_impl;
+    m.duckTime = std::max( 0.0f, m.duckTime - dt );
+    if ( m.duckTime <= 0 ) m.duckDepth = 0;
+    float duckGain = 1.0f - m.duckDepth * std::min( 1.0f, m.duckTime / 0.4f );
     m.master.store( clampf( m_effectVolume, 0.0f, 1.0f ), std::memory_order_relaxed );
 
     // engines and loops not set in this frame or the last fade out
@@ -3698,7 +3775,7 @@ void Audio::update( float dt )
         if ( !m.has[i] ) continue;
         float goal = i == m.cur ? 1.0f : 0.0f;
         m.mgain[i] += clampf( goal - m.mgain[i], -dt / 1.5f, dt / 1.5f );
-        SetMusicVolume( m.music[i], m.mgain[i] * m_musicVolume );
+        SetMusicVolume( m.music[i], m.mgain[i] * m_musicVolume * duckGain );
         UpdateMusicStream( m.music[i] );
         if ( i != m.cur && m.mgain[i] <= 0.0f )
         {

@@ -66,6 +66,8 @@ struct CarSetup
     int         m_plating = 0;         ///< armour plates
     float       m_hpShare = 1.0f;      ///< starts damaged (sabotage)
     float       m_skill = 0.6f, m_aggression = 0.5f, m_weapons = 0.5f;   ///< computer drivers
+    int         m_grudge = 0;      ///< 0..3: how much this rival wants the player dead (a feud)
+    float       m_novice = 0.0f;   ///< 0..1: a beginner's late, wide steering and misjudged corners (tests)
     std::string m_likes = "mine";
 };
 
@@ -133,6 +135,8 @@ struct Car
     int   m_lastHitBy = -1;
     float m_lastHitTime = -100.0f;
     int   m_wreckedBy = -1;
+    float m_moverHit = -100.0f;      ///< when a train last threw it
+    int   m_lastSource = -1;       ///< what did the last damage: 0 guns, 1 explosions, 2 crashes, 3 walls, 4 spikes, 5 other
     int   m_wrecks = 0;            ///< cars it wrecked
     int   m_shots = 0, m_hits = 0;
     float m_damage = 0.0f;         ///< damage taken
@@ -202,7 +206,16 @@ struct Barrel
 enum class EvE : int
 {
     SHOT, HIT, RICOCHET, FLAME, CRASH, WALL, SCRAPE, EXPLODE, WRECK, PICKUP, MINE_DROP, MINE_ARM, ROCKET, NITRO, OIL,
-    SPIKES, SMOKE, TIRE_BURST, LAP, FINAL_LAP, FINISH, OVERTAKE, BARREL, COUNTDOWN, GO, HORN, WRONG_WAY, SAY, COUNT
+    SPIKES, SMOKE, TIRE_BURST, LAP, FINAL_LAP, FINISH, OVERTAKE, BARREL, COUNTDOWN, GO, HORN, WRONG_WAY, SAY,
+    TRAIN, BRIDGE, ROCK, WEATHER, COUNT
+};
+
+/** @brief A rock from a rockfall. */
+struct Rock
+{
+    Vector2 m_pos = { 0, 0 };
+    float   m_r = 1.3f;
+    float   m_age = 0.0f;   ///< < 0: still falling (seconds to the ground)
 };
 
 /** @brief One thing that happened. */
@@ -246,6 +259,21 @@ public:
     /** @return the cars in race order (indices) */
     std::vector<int> order() const;
 
+    /** @return a mover's phase in its period at a time */
+    float moverPhase( const MoverSpot &m, float t ) const;
+    /**
+     * @brief A train's or a bridge's state.
+     * @param[in]  m       the mover
+     * @param[out] amount  how far along (a train's passage, a bridge's rise) 0..1
+     * @param[in]  ahead   seconds from now
+     * @return 0 calm, 1 the bells, 2 a train passing or a bridge up
+     */
+    int moverState( const MoverSpot &m, float &amount, float ahead = 0.0f ) const;
+    /** @return where a passing train's front is, metres along the crossing from the road's centre */
+    float trainFront( const MoverSpot &m ) const;
+    /** @return whether a driver should stop before it (seconds from now) */
+    bool moverBlocks( const MoverSpot &m, float ahead ) const;
+
     /** @return whether every human has finished or is wrecked (or the race is done) */
     bool humansDone() const;
 
@@ -263,6 +291,11 @@ public:
     std::vector<Hazard>   m_hazards;
     std::vector<Pickup>   m_pickups;
     std::vector<Barrel>   m_barrels;
+    std::vector<Rock>     m_rocks;               ///< from rockfalls: falling (age < 0) or lying on the road
+    std::vector<int>      m_moverCycle;          ///< each rockfall's last rock
+    float                 m_wetness = 0.0f;      ///< 0..1: rain that came during the race
+    float                 m_fogAdd = 0.0f;       ///< fog that came during the race (added density)
+    bool                  m_weatherTurned = false;
     std::vector<Event>    m_events;              ///< this step's
     std::vector<int>      m_finishOrder;
     int                   m_leader = 0;
@@ -285,6 +318,7 @@ private:
     void rockets();
     void hazards();
     void pickups();
+    void movers();
     void progress( int i );
     void places();
     void damage( int victim, float amount, int by, Vector2 at );

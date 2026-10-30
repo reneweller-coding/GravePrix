@@ -29,6 +29,9 @@ struct Settings
     float       m_shake = 1.0f;
     float       m_zoom = 1.0f;               ///< the camera's height
     bool        m_speech = true;             ///< the rivals' and the announcer's lines
+    float       m_hud = 1.0f;                ///< the race display's size
+    int         m_palette = 0;               ///< colour vision: 0 as made, 1 red-green, 2 blue-yellow
+    bool        m_tags = false;              ///< names over the rivals' cars
     std::vector<std::string> m_binds;        ///< Input's lines
 
     /** @brief Reads them (missing values stay at their defaults). */
@@ -42,6 +45,7 @@ struct Records
 {
     std::map<std::string, float> m_bestLap;   ///< track (with ":r" reversed) -> seconds
     int m_quickWins = 0, m_derbyWins = 0, m_careersWon = 0;
+    int m_tourBest = 0;   ///< the endless tournament: most rounds survived
 
     void load( const std::string &path );
     bool save( const std::string &path ) const;

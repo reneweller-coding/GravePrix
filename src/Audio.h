@@ -25,7 +25,7 @@ enum class SfxE : int
     CRASH_LIGHT, CRASH_HEAVY, CRASH_WALL, METAL_CRUNCH, GLASS,
     EXPLOSION_SMALL, EXPLOSION_BIG, WRECK, BARREL,
     // the race
-    COUNT_BEEP, COUNT_GO, LAP, FINAL_LAP, FINISH, WRONG_WAY, BELL,
+    COUNT_BEEP, COUNT_GO, LAP, FINAL_LAP, FINISH, WRONG_WAY, BELL, FUNERAL_MARCH,
     // pickups
     PICK_CASH, PICK_WRENCH, PICK_AMMO, PICK_NITRO, PICK_WEAPON, PICK_MYSTERY,
     // horns (one per horn kind in the car data)
@@ -118,6 +118,23 @@ public:
      * @param[in] name  a file in assets/music without its ending
      */
     void music( const std::string &name );
+
+    /**
+     * @brief Lowers the music for a moment (a big explosion, a funeral march over it).
+     * @param[in] seconds  how long it stays down
+     * @param[in] depth    0..1 how far (1 silent)
+     */
+    void duck( float seconds, float depth );
+
+    /** @return whether a piece of music exists in assets/music (any of its takes) */
+    bool hasMusic( const std::string &name ) const;
+
+    /**
+     * @brief Plays a spoken line (the announcer), the music lowered while it lasts; a new line cuts the old one.
+     * @param[in] file  the sound file
+     * @return whether it plays
+     */
+    bool voice( const std::string &file );
 
     /** @brief Keeps the music, loops and engines running (every frame). */
     void update( float dt );

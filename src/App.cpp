@@ -154,6 +154,8 @@ void App::applySettings()
     m_audio.m_musicVolume = m_set.m_music;
     m_audio.m_effectVolume = m_set.m_effects;
     ui::setTextSize( m_set.m_textSize * ( m_deck ? 1.12f : 1.0f ) );
+    ui::setPalette( m_set.m_palette );
+    if ( !m_test ) SetTargetFPS( m_set.m_fps );
     int   q = quality();
     float s = QualityScale[q];
     m_view.shutdown();
@@ -176,6 +178,9 @@ void App::shutdown()
     rumble::stop();
     m_view.shutdown();
     m_show.shutdown();
+    for ( auto &p : m_photos )
+        if ( p.second.id ) UnloadTexture( p.second );
+    m_photos.clear();
     m_audio.shutdown();
     ui::shutdown();
     if ( IsAudioDeviceReady() ) CloseAudioDevice();
@@ -215,7 +220,7 @@ void App::run()
 void App::testStep()
 {
     static const char *names[] = { "title", "newgame", "hub", "offers", "garage", "market", "shark", "sponsor", "news", "table",
-                                   "story", "race", "results", "quick", "options", "controls" };
+                                   "story", "race", "results", "quick", "options", "controls", "graveyard" };
     // A hard limit: a script that hangs ends by itself.
     if ( ++m_testFrames > 30 * 60 * 8 )
     {
@@ -304,6 +309,7 @@ void App::frame( float dt )
     case ScreenE::SPONSOR: sponsor(); break;
     case ScreenE::NEWS: newsScreen(); break;
     case ScreenE::TABLE: tableScreen(); break;
+    case ScreenE::GRAVEYARD: graveyard(); break;
     case ScreenE::STORY: story(); break;
     case ScreenE::RACE: race( dt ); break;
     case ScreenE::RESULTS: results(); break;
@@ -408,7 +414,46 @@ void App::hints( const std::string &text )
 {
     float k = ui::k();
     DrawRectangle( 0, GetScreenHeight() - (int)( 54 * k ), GetScreenWidth(), (int)( 54 * k ), { 0, 0, 0, 170 } );
-    ui::text( text, 70 * k, GetScreenHeight() - 44 * k, 26, ui::Dim );
+    float y = GetScreenHeight() - 44 * k;
+    if ( !m_in.padUsed() )
+    {
+        ui::text( text, 70 * k, y, 26, ui::Dim );
+        return;
+    }
+    // With a pad: each part's leading buttons ("A", "LB/RB", "A / B") drawn as the pad's glyphs.
+    const std::string dot = "   \xC2\xB7   ";
+    std::string       s = T( text );
+    float             x = 70 * k;
+    size_t            at = 0;
+    while ( at <= s.size() )
+    {
+        size_t      end = s.find( dot, at );
+        std::string part = s.substr( at, end == std::string::npos ? std::string::npos : end - at );
+        size_t      sp;
+        while ( ( sp = part.find( ' ' ) ) != std::string::npos )
+        {
+            std::string head = part.substr( 0, sp ), rest;
+            std::vector<std::string> buttons;
+            for ( size_t a = 0, b; a <= head.size(); a = b + 1 )
+            {
+                b = head.find( '/', a );
+                if ( b == std::string::npos ) b = head.size();
+                buttons.push_back( head.substr( a, b - a ) );
+            }
+            bool all = true;
+            for ( const std::string &b : buttons ) all = all && ( b == "A" || b == "B" || b == "X" || b == "Y" || b == "LB" || b == "RB" || b == "LT" || b == "RT" || b == "Start" || b == "Select" );
+            if ( !all ) break;
+            for ( const std::string &b : buttons ) x += ui::glyph( b, x, y - 2 * k, 26 ) + 6 * k;
+            part = part.substr( sp + 1 );
+            // "A / B": the slash between two buttons
+            if ( part.rfind( "/ ", 0 ) == 0 ) part = part.substr( 2 );
+            else break;
+        }
+        x += ui::text( part, x + 4 * k, y, 26, ui::Dim ) + 4 * k;
+        if ( end == std::string::npos ) break;
+        x += ui::text( dot, x, y, 26, ui::Dim );
+        at = end + dot.size();
+    }
 }
 
 int App::menu( const std::vector<std::string> &items, int &sel, Rectangle area, float size, const std::vector<bool> *enabled )
@@ -682,12 +727,101 @@ void App::story()
 
 // ---------------------------------------------------------------------------------------------------- quick race
 
+uint32_t App::dailySeed()
+{
+    std::time_t now = std::time( nullptr );
+    std::tm     tm = *std::localtime( &now );
+    return (uint32_t)( ( tm.tm_year + 1900 ) * 10000 + ( tm.tm_mon + 1 ) * 100 + tm.tm_mday );
+}
+
+std::vector<CarSetup> App::quickField( const VenueDef *vd, const std::string &car, int opponents, int level )
+{
+    std::vector<CarSetup> field;
+    CarSetup              me;
+    me.m_car = car;
+    me.m_driver = m_inCareer ? m_career.m_name : T( "Du" );
+    me.m_paint = scheme( m_qColor );
+    me.m_human = true;
+    me.m_player = true;
+    me.m_engine = me.m_tires = me.m_armor = me.m_gunLv = 3;
+    me.m_rear[(int)RearE::MINE] = 4;
+    me.m_rear[(int)RearE::OIL] = 2;
+    me.m_rockets = 3;
+    me.m_nitro = 3;
+    // Rivals of the venue's league, then any.
+    std::vector<std::string> pool;
+    for ( const std::string &r : g_data.m_rivalOrder )
+    {
+        const RivalDef &d = g_data.m_rivals.at( r );
+        if ( !d.m_rookie && vd && d.m_league == vd->m_league && g_data.car( d.m_car ) ) pool.push_back( r );
+    }
+    for ( const std::string &r : g_data.m_rivalOrder )
+        if ( std::find( pool.begin(), pool.end(), r ) == pool.end() && g_data.car( g_data.m_rivals.at( r ).m_car ) &&
+             r != "mortimer_graves" )
+            pool.push_back( r );
+    std::vector<std::string> cars;
+    for ( const std::string &c : g_data.m_carOrder )
+        if ( g_data.m_cars.at( c ).m_class < 6 ) cars.push_back( c );
+    for ( int i = 0; i < opponents; ++i )
+    {
+        CarSetup s;
+        if ( i < (int)pool.size() )
+        {
+            const RivalDef &d = g_data.m_rivals.at( pool[i] );
+            s.m_rival = pool[i];
+            s.m_driver = d.m_name;
+            s.m_car = d.m_car;
+            for ( int j = 0; j < 3; ++j ) s.m_paint.m_c[j] = d.m_colors[j];
+            s.m_skill = d.m_skill;
+            s.m_aggression = d.m_aggression;
+            s.m_weapons = d.m_weapons;
+            s.m_likes = d.m_likes;
+        }
+        else
+        {
+            s.m_car = cars.empty() ? car : cars[(size_t)( i + 1 ) % cars.size()];
+            s.m_driver = tf( "Fahrer %d", i + 2 );
+            s.m_paint = scheme( m_qColor + i + 1 );
+        }
+        s.m_engine = s.m_tires = s.m_armor = s.m_gunLv = level;
+        s.m_rear[(int)RearE::MINE] = 3;
+        s.m_rockets = 2;
+        s.m_nitro = 2;
+        field.push_back( s );
+    }
+    field.push_back( me );
+    return field;
+}
+
+void App::startTourRound()
+{
+    // Each round a random track at a random venue; the field grows meaner with the rounds.
+    std::vector<std::string> venues;
+    for ( const std::string &v : g_data.m_venueOrder )
+        if ( v != "proving" ) venues.push_back( v );
+    if ( venues.empty() ) return;
+    uint32_t h = m_tourSeed * 2654435761u + (uint32_t)m_tour * 40503u;
+    h ^= h >> 15;
+    std::string venue = venues[h % venues.size()], track = randomTrack( venue, h % 99991u + 1 );
+    if ( track.empty() ) return;
+    std::vector<std::string> cars;
+    for ( const std::string &c : g_data.m_carOrder )
+        if ( g_data.m_cars.at( c ).m_class < 6 || m_rec.m_careersWon > 0 ) cars.push_back( c );
+    std::string car = cars.empty() ? "rustbucket" : cars[(size_t)std::clamp( m_qCar, 0, (int)cars.size() - 1 )];
+    auto field = quickField( g_data.venue( venue ), car, std::max( 1, m_qCars - 1 ), std::min( 6, 1 + m_tour / 2 ) );
+    m_inCareer = false;
+    startRace( track, ( h >> 8 ) % 2 == 1, field, ModeE::RACE, g_data.track( track )->m_laps, (int)field.size() - 1 );
+    m_center = tf( T( "TURNIER  RUNDE %d" ), m_tour );
+    m_centerTime = 3.0f;
+}
+
 void App::quick()
 {
     backdrop();
     float k = ui::k();
     header( T( "Schnelles Rennen" ), T( "Ohne Karriere, ohne Schulden, ohne Beerdigung." ) );
     int &sel = m_sel[(int)ScreenE::QUICK];
+    bool tour = m_qMode == 3, daily = m_qMode == 4;
     // The venues in order, the tracks of the chosen one (arenas for the derby).
     // Only the venues with tracks of the chosen kind (not every venue has a derby arena).
     std::vector<std::string> venues;
@@ -709,33 +843,54 @@ void App::quick()
         const TrackDef &d = g_data.m_tracks.at( t );
         if ( d.m_venue == venues[m_qVenue] && d.m_arena == ( m_qMode == 1 ) && t.rfind( "test_", 0 ) != 0 ) tracks.push_back( t );
     }
-    m_qTrack = tracks.empty() ? 0 : std::clamp( m_qTrack, 0, (int)tracks.size() - 1 );
+    // Races and time trials: after the venue's tracks a random one.
+    bool canRandom = m_qMode == 0 || m_qMode == 2;
+    int  slots = (int)tracks.size() + ( canRandom ? 1 : 0 );
+    m_qTrack = slots == 0 ? 0 : std::clamp( m_qTrack, 0, slots - 1 );
+    bool random = canRandom && m_qTrack == (int)tracks.size();
     std::vector<std::string> cars;
     for ( const std::string &c : g_data.m_carOrder )
         if ( g_data.m_cars.at( c ).m_class < 6 || m_rec.m_careersWon > 0 ) cars.push_back( c );
     if ( cars.empty() ) cars.push_back( "?" );
     m_qCar = std::clamp( m_qCar, 0, (int)cars.size() - 1 );
-    const TrackDef *td = tracks.empty() ? nullptr : g_data.track( tracks[m_qTrack] );
-    const VenueDef *vd = g_data.venue( venues[m_qVenue] );
-    const CarDef   *cd = g_data.car( cars[m_qCar] );
-    static const char *modes[] = { "Rennen", "Derby", "Zeitfahren" };
+    // The daily challenge: today's venue, track and car, the same for everyone.
+    uint32_t    day = dailySeed();
+    std::string dailyVenue = venues[( day * 2654435761u >> 7 ) % venues.size()];
+    std::string dailyCar;
+    {
+        std::vector<std::string> plain;
+        for ( const std::string &c : g_data.m_carOrder )
+            if ( g_data.m_cars.at( c ).m_class < 6 ) plain.push_back( c );
+        dailyCar = plain.empty() ? cars[0] : plain[( day * 40503u >> 5 ) % plain.size()];
+    }
+    std::string trackName = daily ? randomTrack( dailyVenue, day ) : random ? randomTrack( venues[m_qVenue], m_qSeed )
+                          : tracks.empty() || tour ? "" : tracks[m_qTrack];
+    const TrackDef *td = trackName.empty() ? nullptr : g_data.track( trackName );
+    const VenueDef *vd = g_data.venue( daily ? dailyVenue : venues[m_qVenue] );
+    const CarDef   *cd = g_data.car( daily ? dailyCar : cars[m_qCar] );
+    static const char *modes[] = { "Rennen", "Derby", "Zeitfahren", "Endlos-Turnier", "Tagesherausforderung" };
     std::string best;
     if ( td )
     {
-        auto it = m_rec.m_bestLap.find( td->m_name + ( m_qReverse ? ":r" : "" ) );
+        auto it = m_rec.m_bestLap.find( td->m_name + ( m_qReverse && !daily ? ":r" : "" ) );
         if ( it != m_rec.m_bestLap.end() ) best = tf( "  (Rekord %.2f s)", it->second );
     }
+    std::string trackLabel = tour    ? std::string( T( "jede Runde eine neue Zufallsstrecke" ) )
+                           : daily   ? tf( T( "Tagesstrecke vom %02u.%02u." ), day % 100, day / 100 % 100 ) + best
+                           : random  ? tf( T( "Zufallsstrecke %u  (Eingabe: neu würfeln)" ), m_qSeed )
+                           : td      ? td->m_title.get() + best
+                                     : std::string( T( "keine" ) );
     std::vector<std::string> items = {
         std::string( T( "Art: " ) ) + T( modes[m_qMode] ),
-        std::string( T( "Schauplatz: " ) ) + ( vd ? vd->m_title.get() : venues[m_qVenue] ),
-        std::string( T( "Strecke: " ) ) + ( td ? td->m_title.get() : T( "keine" ) ) + best,
-        std::string( T( "Richtung: " ) ) + ( m_qReverse ? T( "rückwärts" ) : T( "vorwärts" ) ),
-        std::string( T( "Auto: " ) ) + ( cd ? cd->m_title.get() : cars[m_qCar] ),
+        std::string( T( "Schauplatz: " ) ) + ( tour ? std::string( T( "überall" ) ) : vd ? vd->m_title.get() : venues[m_qVenue] ),
+        std::string( T( "Strecke: " ) ) + trackLabel,
+        std::string( T( "Richtung: " ) ) + ( tour || daily ? std::string( "-" ) : m_qReverse ? T( "rückwärts" ) : T( "vorwärts" ) ),
+        std::string( T( "Auto: " ) ) + ( cd ? cd->m_title.get() : cars[m_qCar] ) + ( daily ? T( "  (heute für alle)" ) : "" ),
         std::string( T( "Lackierung: " ) ) + T( SchemeNames[m_qColor] ),
-        T( "Gegner: " ) + std::to_string( m_qMode == 2 ? 0 : m_qCars - 1 ),
-        std::string( T( "Runden: " ) ) + ( m_qMode == 1 ? std::string( "-" ) : std::to_string( m_qLaps ) ),
+        T( "Gegner: " ) + std::to_string( m_qMode == 2 || daily ? 0 : m_qCars - 1 ),
+        std::string( T( "Runden: " ) ) + ( m_qMode == 1 || tour || daily ? std::string( "-" ) : std::to_string( m_qLaps ) ),
         T( "Schwierigkeit: " ) + g_data.difficulty( m_qDiff ).m_title.get(),
-        T( "Start!" ),
+        tour ? tf( T( "Start!   (Rekord: %d Runden)" ), m_rec.m_tourBest ) : std::string( T( "Start!" ) ),
     };
     int pick = menu( items, sel, { 96 * k, 210 * k, 860 * k, 700 * k }, 38 );
     int dir = m_in.left() ? -1 : m_in.right() ? 1 : 0;
@@ -744,9 +899,9 @@ void App::quick()
         sound( SfxE::UI_MOVE );
         switch ( sel )
         {
-        case 0: m_qMode = ( m_qMode + dir + 3 ) % 3; m_qTrack = 0; break;
+        case 0: m_qMode = ( m_qMode + dir + 5 ) % 5; m_qTrack = 0; break;
         case 1: m_qVenue = ( m_qVenue + dir + (int)venues.size() ) % (int)venues.size(); m_qTrack = 0; break;
-        case 2: if ( !tracks.empty() ) m_qTrack = ( m_qTrack + dir + (int)tracks.size() ) % (int)tracks.size(); break;
+        case 2: if ( slots > 0 ) m_qTrack = ( m_qTrack + dir + slots ) % slots; break;
         case 3: m_qReverse = !m_qReverse; break;
         case 4: m_qCar = ( m_qCar + dir + (int)cars.size() ) % (int)cars.size(); break;
         case 5: m_qColor = ( m_qColor + dir + 10 ) % 10; break;
@@ -755,6 +910,12 @@ void App::quick()
         case 8: m_qDiff = std::clamp( m_qDiff + dir, 0, (int)g_data.m_difficulties.size() - 1 ); break;
         default: break;
         }
+    }
+    // Enter on a random track throws the dice again.
+    if ( pick == 2 && random )
+    {
+        m_qSeed = (uint32_t)GetRandomValue( 1, 99999 );
+        sound( SfxE::UI_OK );
     }
     if ( td && m_qReverse && !td->m_reverse ) m_qReverse = false;
     // The car turning on the right.
@@ -766,7 +927,10 @@ void App::quick()
     if ( cd )
     {
         float y = pic.y + pic.height + 10 * k;
-        for ( const std::string &l : ui::wrap( cd->m_desc.get(), sw, 26 ) )
+        std::string desc = tour    ? std::string( T( "Jede Runde eine neue Strecke irgendwo im Grave Prix. Wer unter die ersten drei kommt, fährt weiter. Wer nicht, bekommt einen Kranz." ) )
+                         : daily   ? std::string( T( "Heute für alle dieselbe Strecke und dasselbe Auto. Zeitfahren gegen deinen eigenen Geist." ) )
+                                   : cd->m_desc.get();
+        for ( const std::string &l : ui::wrap( desc, sw, 26 ) )
         {
             ui::text( l, pic.x, y, 26, ui::Ink );
             y += 32 * k;
@@ -779,64 +943,21 @@ void App::quick()
         go( ScreenE::TITLE );
         return;
     }
-    if ( pick == 9 && td )
+    if ( pick != 9 ) return;
+    if ( tour )
     {
-        std::vector<CarSetup> field;
-        CarSetup me;
-        me.m_car = cars[m_qCar];
-        me.m_driver = m_inCareer ? m_career.m_name : T( "Du" );
-        me.m_paint = scheme( m_qColor );
-        me.m_human = true;
-        me.m_player = true;
-        me.m_engine = me.m_tires = me.m_armor = me.m_gunLv = 3;
-        me.m_rear[(int)RearE::MINE] = 4;
-        me.m_rear[(int)RearE::OIL] = 2;
-        me.m_rockets = 3;
-        me.m_nitro = 3;
-        int opponents = m_qMode == 2 ? 0 : m_qCars - 1;
-        // Rivals of the venue's league, then any.
-        std::vector<std::string> pool;
-        for ( const std::string &r : g_data.m_rivalOrder )
-        {
-            const RivalDef &d = g_data.m_rivals.at( r );
-            if ( !d.m_rookie && vd && d.m_league == vd->m_league && g_data.car( d.m_car ) ) pool.push_back( r );
-        }
-        for ( const std::string &r : g_data.m_rivalOrder )
-            if ( std::find( pool.begin(), pool.end(), r ) == pool.end() && g_data.car( g_data.m_rivals.at( r ).m_car ) &&
-                 r != "mortimer_graves" )
-                pool.push_back( r );
-        for ( int i = 0; i < opponents; ++i )
-        {
-            CarSetup s;
-            if ( i < (int)pool.size() )
-            {
-                const RivalDef &d = g_data.m_rivals.at( pool[i] );
-                s.m_rival = pool[i];
-                s.m_driver = d.m_name;
-                s.m_car = d.m_car;
-                for ( int j = 0; j < 3; ++j ) s.m_paint.m_c[j] = d.m_colors[j];
-                s.m_skill = d.m_skill;
-                s.m_aggression = d.m_aggression;
-                s.m_weapons = d.m_weapons;
-                s.m_likes = d.m_likes;
-            }
-            else
-            {
-                s.m_car = cars[( m_qCar + i + 1 ) % cars.size()];
-                s.m_driver = tf( "Fahrer %d", i + 2 );
-                s.m_paint = scheme( m_qColor + i + 1 );
-            }
-            s.m_engine = s.m_tires = s.m_armor = s.m_gunLv = 3;
-            s.m_rear[(int)RearE::MINE] = 3;
-            s.m_rockets = 2;
-            s.m_nitro = 2;
-            field.push_back( s );
-        }
-        field.push_back( me );
-        m_inCareer = false;
-        ModeE mode = m_qMode == 1 ? ModeE::DERBY : m_qMode == 2 ? ModeE::TRIAL : ModeE::RACE;
-        startRace( td->m_name, m_qReverse, field, mode, m_qMode == 1 ? 1 : m_qLaps, (int)field.size() - 1 );
+        m_tour = 1;
+        m_tourSeed = (uint32_t)GetRandomValue( 1, 1 << 30 );
+        startTourRound();
+        return;
     }
+    if ( !td ) return;
+    m_tour = 0;
+    int  opponents = m_qMode == 2 || daily ? 0 : m_qCars - 1;
+    auto field = quickField( vd, cd ? cd->m_name : cars[m_qCar], opponents, 3 );
+    m_inCareer = false;
+    ModeE mode = m_qMode == 1 ? ModeE::DERBY : m_qMode == 2 || daily ? ModeE::TRIAL : ModeE::RACE;
+    startRace( td->m_name, m_qReverse && !daily, field, mode, m_qMode == 1 ? 1 : daily ? 3 : m_qLaps, (int)field.size() - 1 );
 }
 
 // ---------------------------------------------------------------------------------------------------- options
@@ -848,6 +969,8 @@ void App::options()
     header( T( "Optionen" ) );
     int &sel = m_sel[(int)ScreenE::OPTIONS];
     static const char *qual[] = { "Schnell", "Ausgewogen", "Fein" };
+    static const char *palettes[] = { "wie gemacht", "Rot-Grün-Schwäche", "Blau-Gelb-Schwäche" };
+    static const int   rates[] = { 30, 40, 60, 0 };
     auto pct = []( float v ) { return std::to_string( (int)std::lround( v * 100 ) ) + " %"; };
     std::vector<std::string> items = {
         T( "Sprache: " ) + std::string( english() ? "English" : "Deutsch" ),
@@ -860,6 +983,10 @@ void App::options()
         std::string( T( "Vibration: " ) ) + ( m_set.m_rumble ? T( "an" ) : T( "aus" ) ),
         std::string( T( "Sprüche im Rennen: " ) ) + ( m_set.m_speech ? T( "an" ) : T( "aus" ) ),
         T( "Schriftgröße: " ) + pct( m_set.m_textSize ),
+        T( "Anzeige im Rennen: " ) + pct( m_set.m_hud ),
+        std::string( T( "Farbsicht: " ) ) + T( palettes[std::clamp( m_set.m_palette, 0, 2 )] ),
+        std::string( T( "Namen über den Autos: " ) ) + ( m_set.m_tags ? T( "an" ) : T( "aus" ) ),
+        std::string( T( "Bildrate: " ) ) + ( m_set.m_fps > 0 ? std::to_string( m_set.m_fps ) : std::string( T( "unbegrenzt" ) ) ),
         T( "Steuerung" ),
         T( "Zurück" ),
     };
@@ -867,7 +994,7 @@ void App::options()
     int dir = m_in.left() ? -1 : m_in.right() ? 1 : 0;
     if ( dir || pick >= 0 )
     {
-        if ( pick >= 0 && pick < 10 && dir == 0 ) dir = 1;
+        if ( pick >= 0 && pick < 14 && dir == 0 ) dir = 1;
         switch ( sel )
         {
         case 0:
@@ -887,14 +1014,24 @@ void App::options()
         case 7: m_set.m_rumble = !m_set.m_rumble; break;
         case 8: m_set.m_speech = !m_set.m_speech; break;
         case 9: m_set.m_textSize = clampf( m_set.m_textSize + dir * 0.1f, 0.8f, 1.5f ); break;
+        case 10: m_set.m_hud = clampf( std::round( ( m_set.m_hud + dir * 0.1f ) * 10 ) / 10, 0.7f, 1.4f ); break;
+        case 11: m_set.m_palette = ( m_set.m_palette + dir + 3 ) % 3; break;
+        case 12: m_set.m_tags = !m_set.m_tags; break;
+        case 13:
+        {
+            int at = 0;
+            while ( at < 3 && rates[at] != m_set.m_fps ) ++at;
+            m_set.m_fps = rates[( at + dir + 4 ) % 4];
+            break;
+        }
         default: break;
         }
-        if ( sel <= 9 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 ) ) applySettings();
-        if ( sel <= 9 ) sound( SfxE::UI_MOVE );
+        if ( sel <= 13 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 || sel == 11 || sel == 13 ) ) applySettings();
+        if ( sel <= 13 ) sound( SfxE::UI_MOVE );
         saveSettings();
     }
-    if ( pick == 10 ) go( ScreenE::CONTROLS );
-    if ( pick == 11 || m_in.back() )
+    if ( pick == 14 ) go( ScreenE::CONTROLS );
+    if ( pick == 15 || m_in.back() )
     {
         saveSettings();
         go( m_racing ? ScreenE::RACE : m_inCareer ? ScreenE::HUB : ScreenE::TITLE );

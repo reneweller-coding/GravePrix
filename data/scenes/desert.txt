@@ -1,0 +1,82 @@
+# Desert scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene desert_spectators
+  venue desert
+  size 9
+  near 2
+  weight 1.6
+  put crowd_row x=0 z=1
+  car any x=-7 z=2 rot=90
+  put crowd_small x=6 z=1
+  put cactus x=9 z=3
+  put barrel_oil x=-3 z=-0.5
+
+scene desert_start
+  venue desert
+  size 14
+  near 3
+  put grandstand x=0 z=4
+  put crowd_block x=-10 z=1
+  put crowd_block x=10 z=1
+  put fig_marshal x=-3 z=-2.5 rot=20
+  put flag_pole x=13 z=-1
+  put cactus_tall x=-14 z=3
+
+scene desert_motel
+  venue desert
+  size 13
+  near 4
+  weight 0.5
+  put motel x=0 z=6
+  put motel_sign x=-8 z=1
+  car any x=5 z=1 rot=90
+  car any x=8 z=2 rot=80
+  put gas_pump x=-3 z=0.5
+  put fig_mechanic x=-1 z=-1 rot=20
+
+scene desert_bones
+  venue desert
+  size 10
+  near 3
+  put skull_cow x=-3 z=0
+  put ribcage x=1 z=1
+  put cactus x=5 z=2
+  put cactus_tall x=-6 z=4
+  put vulture_post x=3 z=5
+  wreck any x=-2 z=6 rot=70
+
+scene desert_station
+  venue desert
+  size 12
+  near 4
+  put gas_pump x=-2 z=0.5
+  put gas_pump x=2 z=0.5
+  put water_tower x=6 z=6
+  car any x=0 z=3 rot=90
+  put fig_worker x=-5 z=0 rot=40
+  put tumbleweed x=4 z=-1
+  put barrel_oil x=-6 z=2
+
+scene desert_crash
+  venue desert
+  size 10
+  near 3
+  wreck any x=0 z=2 rot=40 tilt=80
+  wreck any x=4 z=0 rot=120
+  put rock_red x=-5 z=3
+  put cactus_tall x=6 z=5
+  put fig_tramp x=-2 z=-1 rot=160
+  put tumbleweed x=2 z=4
+
+scene desert_mesa
+  venue desert
+  size 12
+  near 5
+  weight 0.6
+  put mesa_rock x=0 z=6
+  put cactus x=-6 z=1
+  put cactus x=5 z=0.5
+  put cactus_tall x=8 z=3
+  put tumbleweed x=-2 z=0
+  put skull_cow x=2 z=1.5

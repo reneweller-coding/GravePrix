@@ -1,0 +1,67 @@
+# Proving scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene proving_spectators
+  venue proving
+  size 9
+  near 2
+  weight 1.6
+  put sandbag_wall x=0 z=-0.5 rot=90
+  put crowd_row x=0 z=1.5
+  put watchtower x=8 z=4
+  put fig_marshal x=-6 z=0
+
+scene proving_start
+  venue proving
+  size 14
+  near 3
+  put bunker x=0 z=5
+  put crowd_block x=-9 z=1
+  put crowd_block x=9 z=1
+  put watchtower x=-13 z=3
+  put fig_marshal x=3 z=-2.5 rot=-20
+  put flag_pole x=12 z=-1
+
+scene proving_targets
+  venue proving
+  size 11
+  near 3
+  put target_board x=-5 z=2
+  put target_board x=0 z=3
+  put target_board x=5 z=2
+  put crater x=-2 z=6
+  put crater x=4 z=7
+  put tank_wreck x=0 z=9 rot=90
+
+scene proving_traps
+  venue proving
+  size 10
+  near 3
+  put tank_trap x=-6 z=1
+  put tank_trap x=-2 z=1.5
+  put tank_trap x=2 z=1
+  put tank_trap x=6 z=1.5
+  put sandbag_wall x=0 z=5 rot=90
+  put fig_marshal x=3 z=3.5 rot=180
+
+scene proving_radar
+  venue proving
+  size 12
+  near 4
+  weight 0.5
+  put radar_dish x=0 z=6
+  put bunker x=-6 z=3
+  put jeep_wreck x=5 z=1
+  put fig_worker x=2 z=0 rot=-20
+  put barbed_post x=-8 z=0
+
+scene proving_dummies
+  venue proving
+  size 10
+  near 3
+  put crash_dummy x=-3 z=1
+  put crash_dummy x=0 z=2 rot=40
+  put crash_dummy x=3 z=0.5 rot=-30
+  wreck any x=1 z=5 rot=70
+  put barbed_post x=6 z=0
+  put barbed_post x=-6 z=0

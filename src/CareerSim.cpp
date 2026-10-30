@@ -37,6 +37,13 @@ void shop( Career &c )
             bestClass = d.m_class;
         }
     }
+    // Today's used car when it is a class up and leaves half a purse.
+    if ( const CarDef *u = g_data.car( c.m_used ) )
+        if ( u->m_class > bestClass && c.m_usedPrice + c.purse() / 2 <= c.m_money + c.sellValue() )
+        {
+            c.buyUsed();
+            return;
+        }
     if ( !best.empty() ) c.buyCar( best );
     // An outclassed car gets no upgrades: the money goes into the next car.
     const CarDef *now = g_data.car( c.m_car );
@@ -120,6 +127,7 @@ int toolCareerSim( const Options &opt )
         auto field = c.field( o, player );
         field[player].m_human = false;   // driven by a computer driver of middling skill
         field[player].m_skill = (float)opt.num( "--skill", 0.85f );
+        field[player].m_novice = (float)opt.num( "--novice", 0.0f );
         field[player].m_aggression = 0.5f;
         field[player].m_weapons = 0.7f;
         World world;

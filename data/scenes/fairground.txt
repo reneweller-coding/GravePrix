@@ -1,0 +1,73 @@
+# Fairground scenes (written by tools/make_scenes.py; docs/DESIGN.md "Scenes").
+# Frame: x along the road, z away from it; rot 0 turns a thing's nose to the road.
+
+scene fairground_spectators
+  venue fairground
+  size 9
+  near 2
+  weight 1.6
+  put crowd_block x=0 z=1.5
+  put crowd_small x=-7 z=1
+  put balloon_stand x=7 z=1
+  put lamp_street x=-4 z=-0.5
+
+scene fairground_start
+  venue fairground
+  size 14
+  near 3
+  put ticket_booth x=0 z=3
+  put crowd_block x=-9 z=1
+  put crowd_block x=9 z=1
+  put bulb_arch x=0 z=6
+  put fig_marshal x=-3 z=-2.5 rot=20
+  put flag_pole x=13 z=-1
+
+scene fairground_wheel
+  venue fairground
+  size 14
+  near 6
+  weight 0.35
+  put ferris_wheel x=0 z=8
+  put crowd_row x=0 z=2
+  put balloon_stand x=-7 z=1
+  put ticket_booth x=7 z=2
+
+scene fairground_carousel
+  venue fairground
+  size 12
+  near 4
+  weight 0.5
+  put carousel x=0 z=6
+  put crowd_small x=-5 z=1
+  put clown_head x=6 z=2
+  put balloon_stand x=4 z=0
+
+scene fairground_stalls
+  venue fairground
+  size 12
+  near 3
+  put tent_striped x=-4 z=4
+  put high_striker x=4 z=2
+  put balloon_stand x=7 z=0
+  put crowd_small x=0 z=0.5
+  put crowd_small x=-7 z=1
+
+scene fairground_ghost
+  venue fairground
+  size 13
+  near 5
+  weight 0.4
+  put ghost_train x=0 z=6
+  put crowd_row x=0 z=1.5
+  put bulb_arch x=-6 z=2
+
+scene fairground_bumper
+  venue fairground
+  size 11
+  near 3
+  put bumper_car x=-3 z=2 rot=30
+  put bumper_car x=1 z=3 rot=-60
+  put bumper_car x=4 z=1.5 rot=140
+  put bumper_car x=-1 z=5 rot=200
+  put crowd_small x=-6 z=0.5
+  put lamp_street x=6 z=0

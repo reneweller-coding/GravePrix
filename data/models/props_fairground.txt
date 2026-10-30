@@ -6,196 +6,196 @@ model ferris_wheel lamp=1
   part box w=0.45 h=0.45 d=14.217 x=-3.25 y=6.75 z=-2.25 pitch=61.55 rot=106.29 color=#8a2a24
   part box w=0.45 h=0.45 d=14.217 x=3.25 y=6.75 z=-2.25 pitch=61.55 rot=-106.29 color=#8a2a24
   part box w=0.3 h=0.3 d=8 y=5 z=-2.4 rot=90 color=#8a2a24
-  part ring r=11 thick=0.2 y=13 z=-1 color=#c8c0b0 pitch=90 seg=32
-  part ring r=6.05 thick=0.1 y=13 z=-1 color=#c8c0b0 pitch=90 seg=20
-  part box w=0.12 h=0.12 d=11 y=18.5 z=-1 pitch=90 color=#c8c0b0   # spokes
-  part box w=0.12 h=0.12 d=11 x=2.75 y=17.763 z=-1 pitch=60 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=4.763 y=15.75 z=-1 pitch=30 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=5.5 y=13 z=-1 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=4.763 y=10.25 z=-1 pitch=-30 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=2.75 y=8.237 z=-1 pitch=-60 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=0 y=7.5 z=-1 pitch=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-2.75 y=8.237 z=-1 pitch=-60 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-4.763 y=10.25 z=-1 pitch=-30 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-5.5 y=13 z=-1 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-4.763 y=15.75 z=-1 pitch=30 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-2.75 y=17.763 z=-1 pitch=60 rot=-90 color=#c8c0b0
+  part ring r=11 thick=0.2 y=13 z=-1 color=#c8c0b0 pitch=90 seg=32 group=spin spin=10 spin_axis=z spin_at=0,13,0
+  part ring r=6.05 thick=0.1 y=13 z=-1 color=#c8c0b0 pitch=90 seg=20 group=spin
+  part box w=0.12 h=0.12 d=11 y=18.5 z=-1 pitch=90 color=#c8c0b0 group=spin   # spokes
+  part box w=0.12 h=0.12 d=11 x=2.75 y=17.763 z=-1 pitch=60 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=4.763 y=15.75 z=-1 pitch=30 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=5.5 y=13 z=-1 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=4.763 y=10.25 z=-1 pitch=-30 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=2.75 y=8.237 z=-1 pitch=-60 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=0 y=7.5 z=-1 pitch=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-2.75 y=8.237 z=-1 pitch=-60 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-4.763 y=10.25 z=-1 pitch=-30 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-5.5 y=13 z=-1 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-4.763 y=15.75 z=-1 pitch=30 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-2.75 y=17.763 z=-1 pitch=60 rot=-90 color=#c8c0b0 group=spin
   part box w=0.45 h=0.45 d=14.217 x=-3.25 y=6.75 z=2.25 pitch=61.55 rot=73.71 color=#8a2a24
   part box w=0.45 h=0.45 d=14.217 x=3.25 y=6.75 z=2.25 pitch=61.55 rot=-73.71 color=#8a2a24
   part box w=0.3 h=0.3 d=8 y=5 z=2.4 rot=90 color=#8a2a24
-  part ring r=11 thick=0.2 y=13 z=1 color=#c8c0b0 pitch=90 seg=32
-  part ring r=6.05 thick=0.1 y=13 z=1 color=#c8c0b0 pitch=90 seg=20
-  part box w=0.12 h=0.12 d=11 y=18.5 z=1 pitch=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=2.75 y=17.763 z=1 pitch=60 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=4.763 y=15.75 z=1 pitch=30 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=5.5 y=13 z=1 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=4.763 y=10.25 z=1 pitch=-30 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=2.75 y=8.237 z=1 pitch=-60 rot=90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=0 y=7.5 z=1 pitch=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-2.75 y=8.237 z=1 pitch=-60 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-4.763 y=10.25 z=1 pitch=-30 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-5.5 y=13 z=1 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-4.763 y=15.75 z=1 pitch=30 rot=-90 color=#c8c0b0
-  part box w=0.12 h=0.12 d=11 x=-2.75 y=17.763 z=1 pitch=60 rot=-90 color=#c8c0b0
+  part ring r=11 thick=0.2 y=13 z=1 color=#c8c0b0 pitch=90 seg=32 group=spin
+  part ring r=6.05 thick=0.1 y=13 z=1 color=#c8c0b0 pitch=90 seg=20 group=spin
+  part box w=0.12 h=0.12 d=11 y=18.5 z=1 pitch=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=2.75 y=17.763 z=1 pitch=60 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=4.763 y=15.75 z=1 pitch=30 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=5.5 y=13 z=1 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=4.763 y=10.25 z=1 pitch=-30 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=2.75 y=8.237 z=1 pitch=-60 rot=90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=0 y=7.5 z=1 pitch=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-2.75 y=8.237 z=1 pitch=-60 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-4.763 y=10.25 z=1 pitch=-30 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-5.5 y=13 z=1 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-4.763 y=15.75 z=1 pitch=30 rot=-90 color=#c8c0b0 group=spin
+  part box w=0.12 h=0.12 d=11 x=-2.75 y=17.763 z=1 pitch=60 rot=-90 color=#c8c0b0 group=spin
   part disc r=1.1 h=2.8 pitch=90 y=13 color=#8a2a24 seg=12
-  part box w=0.08 h=0.08 d=1.1 x=2.847 y=23.075 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=2.847 y=22.025 color=#c82a2a
-  part box w=1.8 h=0.15 d=1.6 x=2.847 y=22.65 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=7.778 y=20.228 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=7.778 y=19.178 color=#2a7ac8
-  part box w=1.8 h=0.15 d=1.6 x=7.778 y=19.803 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=10.625 y=15.297 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=10.625 y=14.247 color=#e8b020
-  part box w=1.8 h=0.15 d=1.6 x=10.625 y=14.872 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=10.625 y=9.603 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=10.625 y=8.553 color=#2aa86a roll=25
-  part box w=1.8 h=0.15 d=1.6 x=10.625 y=9.178 color=#efe8d8 roll=25
-  part box w=0.08 h=0.08 d=1.1 x=7.778 y=4.672 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=7.778 y=3.622 color=#c82a2a
-  part box w=1.8 h=0.15 d=1.6 x=7.778 y=4.247 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=2.847 y=1.825 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=2.847 y=0.775 color=#2a7ac8
-  part box w=1.8 h=0.15 d=1.6 x=2.847 y=1.4 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=-2.847 y=1.825 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=-2.847 y=0.775 color=#e8b020
-  part box w=1.8 h=0.15 d=1.6 x=-2.847 y=1.4 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=-10.625 y=9.603 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=-10.625 y=8.553 color=#c82a2a
-  part box w=1.8 h=0.15 d=1.6 x=-10.625 y=9.178 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=-10.625 y=15.297 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=-10.625 y=14.247 color=#2a7ac8
-  part box w=1.8 h=0.15 d=1.6 x=-10.625 y=14.872 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=-7.778 y=20.228 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=-7.778 y=19.178 color=#e8b020
-  part box w=1.8 h=0.15 d=1.6 x=-7.778 y=19.803 color=#efe8d8
-  part box w=0.08 h=0.08 d=1.1 x=-2.847 y=23.075 pitch=-90 color=#3a3a3a
-  part box w=1.7 h=1.2 d=1.5 x=-2.847 y=22.025 color=#2aa86a
-  part box w=1.8 h=0.15 d=1.6 x=-2.847 y=22.65 color=#efe8d8
-  part sphere r=0.18 y=24 z=-1.25 color=#fff2b0 emit=1 seg=4   # bulbs
-  part sphere r=0.18 x=2.146 y=23.789 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part sphere r=0.18 x=4.21 y=23.163 z=-1.25 color=#70e8ff emit=1 seg=4
-  part sphere r=0.18 x=6.111 y=22.146 z=-1.25 color=#ffd040 emit=1 seg=4
-  part sphere r=0.18 x=7.778 y=20.778 z=-1.25 color=#a0ff80 emit=1 seg=4
-  part sphere r=0.18 x=9.146 y=19.111 z=-1.25 color=#fff2b0 emit=1 seg=4
-  part sphere r=0.18 x=10.163 y=17.21 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part sphere r=0.18 x=10.789 y=15.146 z=-1.25 color=#70e8ff emit=1 seg=4
-  part sphere r=0.18 x=11 y=13 z=-1.25 color=#ffd040 emit=1 seg=4
-  part sphere r=0.18 x=10.789 y=10.854 z=-1.25 color=#a0ff80 emit=1 seg=4
-  part sphere r=0.18 x=10.163 y=8.79 z=-1.25 color=#fff2b0 emit=1 seg=4
-  part sphere r=0.18 x=9.146 y=6.889 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part sphere r=0.18 x=7.778 y=5.222 z=-1.25 color=#70e8ff emit=1 seg=4
-  part sphere r=0.18 x=6.111 y=3.854 z=-1.25 color=#ffd040 emit=1 seg=4
-  part sphere r=0.18 x=4.21 y=2.837 z=-1.25 color=#a0ff80 emit=1 seg=4
-  part sphere r=0.18 x=2.146 y=2.211 z=-1.25 color=#fff2b0 emit=1 seg=4
-  part sphere r=0.18 x=0 y=2 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part sphere r=0.18 x=-2.146 y=2.211 z=-1.25 color=#70e8ff emit=1 seg=4
-  part sphere r=0.18 x=-4.21 y=2.837 z=-1.25 color=#ffd040 emit=1 seg=4
-  part sphere r=0.18 x=-6.111 y=3.854 z=-1.25 color=#a0ff80 emit=1 seg=4
-  part sphere r=0.18 x=-7.778 y=5.222 z=-1.25 color=#fff2b0 emit=1 seg=4
-  part sphere r=0.18 x=-9.146 y=6.889 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part sphere r=0.18 x=-10.163 y=8.79 z=-1.25 color=#70e8ff emit=1 seg=4
-  part sphere r=0.18 x=-10.789 y=10.854 z=-1.25 color=#ffd040 emit=1 seg=4
-  part sphere r=0.18 x=-11 y=13 z=-1.25 color=#a0ff80 emit=1 seg=4
-  part sphere r=0.18 x=-10.789 y=15.146 z=-1.25 color=#fff2b0 emit=1 seg=4
-  part sphere r=0.18 x=-10.163 y=17.21 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part sphere r=0.18 x=-9.146 y=19.111 z=-1.25 color=#70e8ff emit=1 seg=4
-  part sphere r=0.18 x=-7.778 y=20.778 z=-1.25 color=#ffd040 emit=1 seg=4
-  part sphere r=0.18 x=-6.111 y=22.146 z=-1.25 color=#a0ff80 emit=1 seg=4
-  part sphere r=0.18 x=-4.21 y=23.163 z=-1.25 color=#fff2b0 emit=1 seg=4
-  part sphere r=0.18 x=-2.146 y=23.789 z=-1.25 color=#ff70c0 emit=1 seg=4
-  part box w=2.4 h=2.4 d=2 x=5.5 y=1.7 z=-2.6 color=#8a2a24   # the operator's booth
-  part box w=2.5 h=0.3 d=2.1 x=5.5 y=3.05 z=-2.6 color=#efe8d8
+  part box w=0.08 h=0.08 d=1.1 x=2.847 y=23.075 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=2.847 y=22.025 color=#c82a2a group=spin
+  part box w=1.8 h=0.15 d=1.6 x=2.847 y=22.65 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=7.778 y=20.228 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=7.778 y=19.178 color=#2a7ac8 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=7.778 y=19.803 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=10.625 y=15.297 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=10.625 y=14.247 color=#e8b020 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=10.625 y=14.872 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=10.625 y=9.603 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=10.625 y=8.553 color=#2aa86a roll=25 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=10.625 y=9.178 color=#efe8d8 roll=25 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=7.778 y=4.672 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=7.778 y=3.622 color=#c82a2a group=spin
+  part box w=1.8 h=0.15 d=1.6 x=7.778 y=4.247 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=2.847 y=1.825 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=2.847 y=0.775 color=#2a7ac8 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=2.847 y=1.4 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=-2.847 y=1.825 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=-2.847 y=0.775 color=#e8b020 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=-2.847 y=1.4 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=-10.625 y=9.603 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=-10.625 y=8.553 color=#c82a2a group=spin
+  part box w=1.8 h=0.15 d=1.6 x=-10.625 y=9.178 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=-10.625 y=15.297 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=-10.625 y=14.247 color=#2a7ac8 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=-10.625 y=14.872 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=-7.778 y=20.228 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=-7.778 y=19.178 color=#e8b020 group=spin
+  part box w=1.8 h=0.15 d=1.6 x=-7.778 y=19.803 color=#efe8d8 group=spin
+  part box w=0.08 h=0.08 d=1.1 x=-2.847 y=23.075 pitch=-90 color=#3a3a3a group=spin
+  part box w=1.7 h=1.2 d=1.5 x=-2.847 y=22.025 color=#2aa86a group=spin
+  part box w=1.8 h=0.15 d=1.6 x=-2.847 y=22.65 color=#efe8d8 group=spin
+  part sphere r=0.18 y=24 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin   # bulbs
+  part sphere r=0.18 x=2.146 y=23.789 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=4.21 y=23.163 z=-1.25 color=#70e8ff emit=1 seg=4 group=spin
+  part sphere r=0.18 x=6.111 y=22.146 z=-1.25 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=7.778 y=20.778 z=-1.25 color=#a0ff80 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=9.146 y=19.111 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=10.163 y=17.21 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=10.789 y=15.146 z=-1.25 color=#70e8ff emit=1 seg=4 group=spin
+  part sphere r=0.18 x=11 y=13 z=-1.25 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=10.789 y=10.854 z=-1.25 color=#a0ff80 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=10.163 y=8.79 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=9.146 y=6.889 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=7.778 y=5.222 z=-1.25 color=#70e8ff emit=1 seg=4 group=spin
+  part sphere r=0.18 x=6.111 y=3.854 z=-1.25 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=4.21 y=2.837 z=-1.25 color=#a0ff80 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=2.146 y=2.211 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=0 y=2 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-2.146 y=2.211 z=-1.25 color=#70e8ff emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-4.21 y=2.837 z=-1.25 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-6.111 y=3.854 z=-1.25 color=#a0ff80 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-7.778 y=5.222 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-9.146 y=6.889 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-10.163 y=8.79 z=-1.25 color=#70e8ff emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-10.789 y=10.854 z=-1.25 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-11 y=13 z=-1.25 color=#a0ff80 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-10.789 y=15.146 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-10.163 y=17.21 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-9.146 y=19.111 z=-1.25 color=#70e8ff emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-7.778 y=20.778 z=-1.25 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-6.111 y=22.146 z=-1.25 color=#a0ff80 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-4.21 y=23.163 z=-1.25 color=#fff2b0 emit=1 seg=4 group=spin
+  part sphere r=0.18 x=-2.146 y=23.789 z=-1.25 color=#ff70c0 emit=1 seg=4 group=spin
+  part box w=2.4 h=2.4 d=2 x=5.5 y=1.7 z=-2.6 color=#8a2a24 group=spin   # the operator's booth
+  part box w=2.5 h=0.3 d=2.1 x=5.5 y=3.05 z=-2.6 color=#efe8d8 group=spin
   part light r=0.05 x=5.5 y=2.2 z=-3.2 color=#ffb070
 
 # an 11 m carousel: striped roof, bulbs, horses on brass poles
 model carousel lamp=1
   part disc r=5.6 h=0.5 y=0.25 seg=16 color=#5a3a3a
-  part disc r=5.3 h=0.15 y=0.575 seg=16 color=#8a6a48
-  part disc r=0.9 h=4.2 y=2.75 seg=10 color=#d8b040 emit=0.15
-  part disc r=5.9 r2=0.4 h=2.4 y=5.9 seg=16 color=#b82a2a
-  part box w=1.1 h=0.06 d=5.595 x=0.595 y=5.93 z=-2.991 pitch=24.27 rot=-168.75 color=#efe8d8   # roof stripes
-  part box w=1.1 h=0.06 d=5.595 x=2.536 y=5.93 z=-1.694 pitch=24.27 rot=-123.75 color=#efe8d8
-  part box w=1.1 h=0.06 d=5.595 x=2.991 y=5.93 z=0.595 pitch=24.27 rot=-78.75 color=#efe8d8
-  part box w=1.1 h=0.06 d=5.595 x=1.694 y=5.93 z=2.536 pitch=24.27 rot=-33.75 color=#efe8d8
-  part box w=1.1 h=0.06 d=5.595 x=-0.595 y=5.93 z=2.991 pitch=24.27 rot=11.25 color=#efe8d8
-  part box w=1.1 h=0.06 d=5.595 x=-2.536 y=5.93 z=1.694 pitch=24.27 rot=56.25 color=#efe8d8
-  part box w=1.1 h=0.06 d=5.595 x=-2.991 y=5.93 z=-0.595 pitch=24.27 rot=101.25 color=#efe8d8
-  part box w=1.1 h=0.06 d=5.595 x=-1.694 y=5.93 z=-2.536 pitch=24.27 rot=146.25 color=#efe8d8
-  part box w=1.4 h=0.5 d=0.08 y=4.5 z=-5.85 color=#2a6ac8 rot=0   # valance
-  part sphere r=0.12 y=4.72 z=-5.95 color=#fff2b0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=1.514 y=4.5 z=-5.651 color=#e8c040 rot=15
-  part sphere r=0.12 x=1.54 y=4.72 z=-5.747 color=#ff70c0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=2.925 y=4.5 z=-5.066 color=#2a6ac8 rot=30
-  part sphere r=0.12 x=2.975 y=4.72 z=-5.153 color=#70e8ff emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=4.137 y=4.5 z=-4.137 color=#e8c040 rot=45
-  part sphere r=0.12 x=4.207 y=4.72 z=-4.207 color=#ffd040 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=5.066 y=4.5 z=-2.925 color=#2a6ac8 rot=60
-  part sphere r=0.12 x=5.153 y=4.72 z=-2.975 color=#a0ff80 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=5.651 y=4.5 z=-1.514 color=#e8c040 rot=75
-  part sphere r=0.12 x=5.747 y=4.72 z=-1.54 color=#fff2b0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=5.85 y=4.5 z=0 color=#2a6ac8 rot=90
-  part sphere r=0.12 x=5.95 y=4.72 z=0 color=#ff70c0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=5.651 y=4.5 z=1.514 color=#e8c040 rot=105
-  part sphere r=0.12 x=5.747 y=4.72 z=1.54 color=#70e8ff emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=5.066 y=4.5 z=2.925 color=#2a6ac8 rot=120
-  part sphere r=0.12 x=5.153 y=4.72 z=2.975 color=#ffd040 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=4.137 y=4.5 z=4.137 color=#e8c040 rot=135
-  part sphere r=0.12 x=4.207 y=4.72 z=4.207 color=#a0ff80 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=2.925 y=4.5 z=5.066 color=#2a6ac8 rot=150
-  part sphere r=0.12 x=2.975 y=4.72 z=5.153 color=#fff2b0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=1.514 y=4.5 z=5.651 color=#e8c040 rot=165
-  part sphere r=0.12 x=1.54 y=4.72 z=5.747 color=#ff70c0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=0 y=4.5 z=5.85 color=#2a6ac8 rot=180
-  part sphere r=0.12 x=0 y=4.72 z=5.95 color=#70e8ff emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-1.514 y=4.5 z=5.651 color=#e8c040 rot=195
-  part sphere r=0.12 x=-1.54 y=4.72 z=5.747 color=#ffd040 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-2.925 y=4.5 z=5.066 color=#2a6ac8 rot=210
-  part sphere r=0.12 x=-2.975 y=4.72 z=5.153 color=#a0ff80 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-4.137 y=4.5 z=4.137 color=#e8c040 rot=225
-  part sphere r=0.12 x=-4.207 y=4.72 z=4.207 color=#fff2b0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-5.066 y=4.5 z=2.925 color=#2a6ac8 rot=240
-  part sphere r=0.12 x=-5.153 y=4.72 z=2.975 color=#ff70c0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-5.651 y=4.5 z=1.514 color=#e8c040 rot=255
-  part sphere r=0.12 x=-5.747 y=4.72 z=1.54 color=#70e8ff emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-5.85 y=4.5 z=0 color=#2a6ac8 rot=270
-  part sphere r=0.12 x=-5.95 y=4.72 z=0 color=#ffd040 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-5.651 y=4.5 z=-1.514 color=#e8c040 rot=285
-  part sphere r=0.12 x=-5.747 y=4.72 z=-1.54 color=#a0ff80 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-5.066 y=4.5 z=-2.925 color=#2a6ac8 rot=300
-  part sphere r=0.12 x=-5.153 y=4.72 z=-2.975 color=#fff2b0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-4.137 y=4.5 z=-4.137 color=#e8c040 rot=315
-  part sphere r=0.12 x=-4.207 y=4.72 z=-4.207 color=#ff70c0 emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-2.925 y=4.5 z=-5.066 color=#2a6ac8 rot=330
-  part sphere r=0.12 x=-2.975 y=4.72 z=-5.153 color=#70e8ff emit=1 seg=4
-  part box w=1.4 h=0.5 d=0.08 x=-1.514 y=4.5 z=-5.651 color=#e8c040 rot=345
-  part sphere r=0.12 x=-1.54 y=4.72 z=-5.747 color=#ffd040 emit=1 seg=4
-  part sphere r=0.35 y=7.3 color=#d8b040 seg=6
-  part gun r=0.04 len=1.3 y=7.95 pitch=90 seg=4 color=#3a3a3a
-  part plate pts="0,0;0.9,0.25;0,0.5" thick=0.03 pitch=-90 y=8 color=#c82a2a
-  part gun r=0.05 len=4.05 y=2.675 z=-4 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 y=1.3 z=-4 color=#efe8d8 rot=90
-  part box w=0.25 h=0.5 d=0.35 x=0.6 y=1.7 z=-4 color=#efe8d8 rot=90 pitch=30
-  part gun r=0.05 len=4.05 x=2.828 y=2.675 z=-2.828 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=2.828 y=1.65 z=-2.828 color=#3a2a24 rot=135
-  part box w=0.25 h=0.5 d=0.35 x=3.253 y=2.05 z=-2.404 color=#3a2a24 rot=135 pitch=30
-  part gun r=0.05 len=4.05 x=4 y=2.675 z=0 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=4 y=1.3 z=0 color=#c8a070 rot=180
-  part box w=0.25 h=0.5 d=0.35 x=4 y=1.7 z=0.6 color=#c8a070 rot=180 pitch=30
-  part gun r=0.05 len=4.05 x=2.828 y=2.675 z=2.828 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=2.828 y=1.65 z=2.828 color=#efe8d8 rot=225
-  part box w=0.25 h=0.5 d=0.35 x=2.404 y=2.05 z=3.253 color=#efe8d8 rot=225 pitch=30
-  part gun r=0.05 len=4.05 x=0 y=2.675 z=4 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=0 y=1.3 z=4 color=#efe8d8 rot=270
-  part box w=0.25 h=0.5 d=0.35 x=-0.6 y=1.7 z=4 color=#efe8d8 rot=270 pitch=30
-  part gun r=0.05 len=4.05 x=-2.828 y=2.675 z=2.828 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=-2.828 y=1.65 z=2.828 color=#3a2a24 rot=315
-  part box w=0.25 h=0.5 d=0.35 x=-3.253 y=2.05 z=2.404 color=#3a2a24 rot=315 pitch=30
-  part gun r=0.05 len=4.05 x=-4 y=2.675 z=0 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=-4 y=1.3 z=0 color=#c8a070 rot=360
-  part box w=0.25 h=0.5 d=0.35 x=-4 y=1.7 z=-0.6 color=#c8a070 rot=360 pitch=30
-  part gun r=0.05 len=4.05 x=-2.828 y=2.675 z=-2.828 pitch=90 seg=5 color=#d8b040
-  part box w=0.35 h=0.5 d=1.2 x=-2.828 y=1.65 z=-2.828 color=#efe8d8 rot=405
-  part box w=0.25 h=0.5 d=0.35 x=-2.404 y=2.05 z=-3.253 color=#efe8d8 rot=405 pitch=30
+  part disc r=5.3 h=0.15 y=0.575 seg=16 color=#8a6a48 group=spin spin=24 spin_axis=y spin_at=0,0,0
+  part disc r=0.9 h=4.2 y=2.75 seg=10 color=#d8b040 emit=0.15 group=spin
+  part disc r=5.9 r2=0.4 h=2.4 y=5.9 seg=16 color=#b82a2a group=spin
+  part box w=1.1 h=0.06 d=5.595 x=0.595 y=5.93 z=-2.991 pitch=24.27 rot=-168.75 color=#efe8d8 group=spin   # roof stripes
+  part box w=1.1 h=0.06 d=5.595 x=2.536 y=5.93 z=-1.694 pitch=24.27 rot=-123.75 color=#efe8d8 group=spin
+  part box w=1.1 h=0.06 d=5.595 x=2.991 y=5.93 z=0.595 pitch=24.27 rot=-78.75 color=#efe8d8 group=spin
+  part box w=1.1 h=0.06 d=5.595 x=1.694 y=5.93 z=2.536 pitch=24.27 rot=-33.75 color=#efe8d8 group=spin
+  part box w=1.1 h=0.06 d=5.595 x=-0.595 y=5.93 z=2.991 pitch=24.27 rot=11.25 color=#efe8d8 group=spin
+  part box w=1.1 h=0.06 d=5.595 x=-2.536 y=5.93 z=1.694 pitch=24.27 rot=56.25 color=#efe8d8 group=spin
+  part box w=1.1 h=0.06 d=5.595 x=-2.991 y=5.93 z=-0.595 pitch=24.27 rot=101.25 color=#efe8d8 group=spin
+  part box w=1.1 h=0.06 d=5.595 x=-1.694 y=5.93 z=-2.536 pitch=24.27 rot=146.25 color=#efe8d8 group=spin
+  part box w=1.4 h=0.5 d=0.08 y=4.5 z=-5.85 color=#2a6ac8 rot=0 group=spin   # valance
+  part sphere r=0.12 y=4.72 z=-5.95 color=#fff2b0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=1.514 y=4.5 z=-5.651 color=#e8c040 rot=15 group=spin
+  part sphere r=0.12 x=1.54 y=4.72 z=-5.747 color=#ff70c0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=2.925 y=4.5 z=-5.066 color=#2a6ac8 rot=30 group=spin
+  part sphere r=0.12 x=2.975 y=4.72 z=-5.153 color=#70e8ff emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=4.137 y=4.5 z=-4.137 color=#e8c040 rot=45 group=spin
+  part sphere r=0.12 x=4.207 y=4.72 z=-4.207 color=#ffd040 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=5.066 y=4.5 z=-2.925 color=#2a6ac8 rot=60 group=spin
+  part sphere r=0.12 x=5.153 y=4.72 z=-2.975 color=#a0ff80 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=5.651 y=4.5 z=-1.514 color=#e8c040 rot=75 group=spin
+  part sphere r=0.12 x=5.747 y=4.72 z=-1.54 color=#fff2b0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=5.85 y=4.5 z=0 color=#2a6ac8 rot=90 group=spin
+  part sphere r=0.12 x=5.95 y=4.72 z=0 color=#ff70c0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=5.651 y=4.5 z=1.514 color=#e8c040 rot=105 group=spin
+  part sphere r=0.12 x=5.747 y=4.72 z=1.54 color=#70e8ff emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=5.066 y=4.5 z=2.925 color=#2a6ac8 rot=120 group=spin
+  part sphere r=0.12 x=5.153 y=4.72 z=2.975 color=#ffd040 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=4.137 y=4.5 z=4.137 color=#e8c040 rot=135 group=spin
+  part sphere r=0.12 x=4.207 y=4.72 z=4.207 color=#a0ff80 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=2.925 y=4.5 z=5.066 color=#2a6ac8 rot=150 group=spin
+  part sphere r=0.12 x=2.975 y=4.72 z=5.153 color=#fff2b0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=1.514 y=4.5 z=5.651 color=#e8c040 rot=165 group=spin
+  part sphere r=0.12 x=1.54 y=4.72 z=5.747 color=#ff70c0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=0 y=4.5 z=5.85 color=#2a6ac8 rot=180 group=spin
+  part sphere r=0.12 x=0 y=4.72 z=5.95 color=#70e8ff emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-1.514 y=4.5 z=5.651 color=#e8c040 rot=195 group=spin
+  part sphere r=0.12 x=-1.54 y=4.72 z=5.747 color=#ffd040 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-2.925 y=4.5 z=5.066 color=#2a6ac8 rot=210 group=spin
+  part sphere r=0.12 x=-2.975 y=4.72 z=5.153 color=#a0ff80 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-4.137 y=4.5 z=4.137 color=#e8c040 rot=225 group=spin
+  part sphere r=0.12 x=-4.207 y=4.72 z=4.207 color=#fff2b0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-5.066 y=4.5 z=2.925 color=#2a6ac8 rot=240 group=spin
+  part sphere r=0.12 x=-5.153 y=4.72 z=2.975 color=#ff70c0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-5.651 y=4.5 z=1.514 color=#e8c040 rot=255 group=spin
+  part sphere r=0.12 x=-5.747 y=4.72 z=1.54 color=#70e8ff emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-5.85 y=4.5 z=0 color=#2a6ac8 rot=270 group=spin
+  part sphere r=0.12 x=-5.95 y=4.72 z=0 color=#ffd040 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-5.651 y=4.5 z=-1.514 color=#e8c040 rot=285 group=spin
+  part sphere r=0.12 x=-5.747 y=4.72 z=-1.54 color=#a0ff80 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-5.066 y=4.5 z=-2.925 color=#2a6ac8 rot=300 group=spin
+  part sphere r=0.12 x=-5.153 y=4.72 z=-2.975 color=#fff2b0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-4.137 y=4.5 z=-4.137 color=#e8c040 rot=315 group=spin
+  part sphere r=0.12 x=-4.207 y=4.72 z=-4.207 color=#ff70c0 emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-2.925 y=4.5 z=-5.066 color=#2a6ac8 rot=330 group=spin
+  part sphere r=0.12 x=-2.975 y=4.72 z=-5.153 color=#70e8ff emit=1 seg=4 group=spin
+  part box w=1.4 h=0.5 d=0.08 x=-1.514 y=4.5 z=-5.651 color=#e8c040 rot=345 group=spin
+  part sphere r=0.12 x=-1.54 y=4.72 z=-5.747 color=#ffd040 emit=1 seg=4 group=spin
+  part sphere r=0.35 y=7.3 color=#d8b040 seg=6 group=spin
+  part gun r=0.04 len=1.3 y=7.95 pitch=90 seg=4 color=#3a3a3a group=spin
+  part plate pts="0,0;0.9,0.25;0,0.5" thick=0.03 pitch=-90 y=8 color=#c82a2a group=spin
+  part gun r=0.05 len=4.05 y=2.675 z=-4 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 y=1.3 z=-4 color=#efe8d8 rot=90 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=0.6 y=1.7 z=-4 color=#efe8d8 rot=90 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=2.828 y=2.675 z=-2.828 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=2.828 y=1.65 z=-2.828 color=#3a2a24 rot=135 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=3.253 y=2.05 z=-2.404 color=#3a2a24 rot=135 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=4 y=2.675 z=0 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=4 y=1.3 z=0 color=#c8a070 rot=180 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=4 y=1.7 z=0.6 color=#c8a070 rot=180 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=2.828 y=2.675 z=2.828 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=2.828 y=1.65 z=2.828 color=#efe8d8 rot=225 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=2.404 y=2.05 z=3.253 color=#efe8d8 rot=225 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=0 y=2.675 z=4 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=0 y=1.3 z=4 color=#efe8d8 rot=270 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=-0.6 y=1.7 z=4 color=#efe8d8 rot=270 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=-2.828 y=2.675 z=2.828 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=-2.828 y=1.65 z=2.828 color=#3a2a24 rot=315 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=-3.253 y=2.05 z=2.404 color=#3a2a24 rot=315 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=-4 y=2.675 z=0 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=-4 y=1.3 z=0 color=#c8a070 rot=360 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=-4 y=1.7 z=-0.6 color=#c8a070 rot=360 pitch=30 group=spin
+  part gun r=0.05 len=4.05 x=-2.828 y=2.675 z=-2.828 pitch=90 seg=5 color=#d8b040 group=spin
+  part box w=0.35 h=0.5 d=1.2 x=-2.828 y=1.65 z=-2.828 color=#efe8d8 rot=405 group=spin
+  part box w=0.25 h=0.5 d=0.35 x=-2.404 y=2.05 z=-3.253 color=#efe8d8 rot=405 pitch=30 group=spin
   part light r=0.05 y=3.5 z=-1 color=#ffd090
 
 # 40 m of roller-coaster track along z (-z ahead) over a hump; both ends at 3 m so segments join

@@ -135,6 +135,31 @@ void Career::newDay()
         news( "loan_overdue", "", "", 0, take );
     }
     if ( m_league == 0 || !l ) return;
+    // Dolores' used car of the day (two days in three): a car of this league or the next, about half the price and a
+    // third broken, preferably from the estate of someone who no longer needs it.
+    m_used.clear();
+    if ( r.chance( 0.67f ) )
+    {
+        const CarDef            *mine = g_data.car( m_car );
+        std::vector<std::string> pool;
+        for ( const std::string &k : g_data.m_carOrder )
+        {
+            const CarDef &d = g_data.m_cars.at( k );
+            if ( d.m_class >= 6 || k == m_car || d.m_league > m_league || d.m_league < m_league - 1 ) continue;
+            if ( mine && d.m_class < mine->m_class ) continue;
+            pool.push_back( k );
+        }
+        if ( !pool.empty() )
+        {
+            m_used = pool[(size_t)r.below( (int)pool.size() )];
+            m_usedPrice = (int)( carPrice( m_used ) * r.range( 0.45f, 0.6f ) / 50 ) * 50;
+            std::vector<std::string> dead, any;
+            for ( const RivalState &s : m_rivals )
+                if ( s.m_key != "_player" && s.m_key != "mortimer_graves" ) ( s.m_alive ? any : dead ).push_back( s.m_key );
+            const std::vector<std::string> &from = dead.empty() ? any : dead;
+            m_usedFrom = from.empty() ? "" : from[(size_t)r.below( (int)from.size() )];
+        }
+    }
     std::vector<std::string> races, arenas;
     for ( const std::string &t : g_data.m_trackOrder )
     {
@@ -224,6 +249,13 @@ CarSetup Career::rivalSetup( const std::string &key, int tier ) const
     s.m_ram = league <= 3 && s.m_aggression > 0.6f;
     s.m_plating = league <= 2 ? 1 : 0;
     if ( key == m_sabotaged ) s.m_hpShare = 0.5f;
+    // A feud: more temper, more lead, and the player is the one they want.
+    if ( st && st->m_grudge > 0 )
+    {
+        s.m_grudge = st->m_grudge;
+        s.m_aggression = std::min( 1.0f, s.m_aggression + 0.15f * st->m_grudge );
+        s.m_weapons = std::min( 1.0f, s.m_weapons + 0.1f * st->m_grudge );
+    }
     return s;
 }
 
@@ -259,7 +291,18 @@ std::vector<CarSetup> Career::field( const Offer &o, int &player ) const
         return pa != pb ? pa > pb : rivalStrength( a ) > rivalStrength( b );
     } );
     std::vector<CarSetup> out;
-    for ( const std::string &k : rivals ) out.push_back( rivalSetup( k, o.m_tier ) );
+    for ( const std::string &k : rivals )
+    {
+        CarSetup s = rivalSetup( k, o.m_tier );
+        // The showdown: the champion comes in their own monster.
+        const RivalDef *d = g_data.rival( k );
+        if ( o.m_showdown && d && !d->m_boss.empty() && g_data.car( d->m_boss ) )
+        {
+            s.m_car = d->m_boss;   // tuned as far as the champion's own car would be
+            s.m_gun.clear();
+        }
+        out.push_back( s );
+    }
     int pos = (int)out.size();
     if ( !o.m_showdown && !o.m_final )
     {
@@ -447,13 +490,25 @@ RaceReport Career::finish( const Offer &o, const World &w, int player )
         if ( !c.m_wrecked || c.m_setup.m_rival.empty() || (int)i == player ) continue;
         const RivalDef *d = g_data.rival( c.m_setup.m_rival );
         if ( !d || d->m_champion ) continue;   // champions have more lives than a cat
-        float chance = dif.m_deaths * 0.3f * ( c.m_wreckedBy == player ? 1.0f : 0.6f );
-        if ( !r.chance( chance ) ) continue;
+        if ( !dies( c.m_setup.m_rival, c.m_wreckedBy == player ) )
+        {
+            // Survived, and wrecked by the player: a feud grows.
+            if ( c.m_wreckedBy == player )
+                for ( RivalState &s : m_rivals )
+                    if ( s.m_key == c.m_setup.m_rival && s.m_grudge < 3 && ++s.m_grudge == 2 ) news( "feud", s.m_key, trackTitle, 0, 0 );
+            continue;
+        }
         for ( RivalState &s : m_rivals )
             if ( s.m_key == c.m_setup.m_rival && s.m_alive )
             {
+                if ( s.m_grudge >= 2 && c.m_wreckedBy == player ) news( "feud_end", s.m_key, trackTitle, 0, 0 );
                 s.m_alive = false;
                 s.m_died = m_day;
+                s.m_cause = c.m_lastSource;
+                s.m_killer = c.m_wreckedBy == player ? "_player" : c.m_wreckedBy >= 0 ? w.m_cars[c.m_wreckedBy].m_setup.m_rival : "";
+                s.m_where = o.m_track;
+                s.m_words = lastWords( s.m_key );
+                s.m_grudge = 0;
                 rep.m_dead.push_back( s.m_key );
                 for ( ResultLine &line : rep.m_lines )
                     if ( line.m_rival == s.m_key ) line.m_died = true;
@@ -531,6 +586,10 @@ RaceReport Career::finish( const Offer &o, const World &w, int player )
             news( "showdown_won", o.m_rivals.empty() ? "" : o.m_rivals[0], trackTitle, 1, rep.m_total );
             promote();
             rep.m_promoted = true;
+            // Graves pays the move up: the new league's purse (the first car of the next class should not take a
+            // whole season of scraping by).
+            rep.m_promoBonus = purse();
+            m_money += rep.m_promoBonus;
         }
         else
             news( "showdown_lost", o.m_rivals.empty() ? "" : o.m_rivals[0], trackTitle, rep.m_place, 0 );
@@ -544,7 +603,10 @@ RaceReport Career::finish( const Offer &o, const World &w, int player )
     if ( m_leagueDay % SeasonDays == 0 && !rep.m_promoted )
     {
         for ( RivalState &s : m_rivals )
+        {
             if ( s.m_league == m_league || s.m_key == "_player" ) s.m_points = 0;
+            s.m_grudge = std::max( 0, s.m_grudge - 1 );
+        }
         rep.m_seasonOver = true;
     }
     newDay();
@@ -585,7 +647,9 @@ int Career::carPrice( const std::string &car ) const
 
 int Career::sellValue() const
 {
-    float worth = m_carPaid * 0.5f + m_upPaid * 0.3f;
+    // At least the scrap bonus: Graves & Sons pay for every car they may crush (the starting heap included).
+    const CarDef *c = g_data.car( m_car );
+    float         worth = std::max( m_carPaid * 0.5f + m_upPaid * 0.3f, 500.0f + 500.0f * ( c ? c->m_class : 1 ) );
     return (int)( worth * ( 1.0f - 0.5f * m_damage ) );
 }
 
@@ -607,6 +671,46 @@ bool Career::buyCar( const std::string &car )
     m_ram = false;
     m_plating = 0;
     news( "bought_car", "", "", 0, price );
+    return true;
+}
+
+bool Career::dies( const std::string &rival, bool byPlayer ) const
+{
+    const RivalDef *d = g_data.rival( rival );
+    if ( !d || d->m_champion ) return false;   // champions have more lives than a cat
+    uint32_t h = m_seed * 2654435761u + (uint32_t)m_day * 40503u;
+    for ( char ch : rival ) h = ( h ^ (uint8_t)ch ) * 16777619u;
+    h ^= h >> 15;
+    h *= 2246822519u;
+    h ^= h >> 13;
+    float roll = ( h >> 8 ) * ( 1.0f / 16777216.0f );
+    return roll < g_data.difficulty( m_difficulty ).m_deaths * 0.3f * ( byPlayer ? 1.0f : 0.6f );
+}
+
+std::string Career::lastWords( const std::string &rival ) const
+{
+    const RivalDef *d = g_data.rival( rival );
+    return d ? d->line( "dead", (uint32_t)( rival.size() * 31 + m_day ) ) : "";
+}
+
+bool Career::buyUsed()
+{
+    const CarDef *c = g_data.car( m_used );
+    if ( !c || m_used == m_car ) return false;
+    int back = sellValue();
+    if ( m_money + back < m_usedPrice ) return false;
+    m_money += back - m_usedPrice;
+    int gunLv = m_up[(int)UpE::GUN];
+    m_car = m_used;
+    m_carPaid = m_usedPrice;
+    m_upPaid = 0;
+    for ( int &u : m_up ) u = 0;
+    m_up[(int)UpE::GUN] = std::min( gunLv, c->m_upGun );
+    m_damage = 0.35f;
+    m_ram = false;
+    m_plating = 0;
+    news( "bought_used", m_usedFrom, "", 0, m_usedPrice );
+    m_used.clear();
     return true;
 }
 
@@ -820,6 +924,7 @@ void Career::news( const std::string &event, const std::string &rivalKey, const 
     Rng            r = rng( (uint32_t)( m_news.size() * 131 + event.size() * 7 ) );
     const NewsDef *n = all[r.below( (int)all.size() )];
     NewsItem       it;
+    it.m_event = event;
     it.m_head = fill( n->m_head.get(), rivalKey, track, place, amount );
     it.m_text = fill( n->m_text.get(), rivalKey, track, place, amount );
     // An obituary line from the rival themself.
@@ -861,11 +966,17 @@ bool Career::save( const std::string &path ) const
              m_rockets, m_nitro, m_ram ? 1 : 0, m_plating );
     fprintf( f, "loan %lld %d\nsponsor %s\nsabotaged %s\n", m_loan, m_loanDue, m_sponsor.empty() ? "-" : m_sponsor.c_str(),
              m_sabotaged.empty() ? "-" : m_sabotaged.c_str() );
+    if ( !m_used.empty() ) fprintf( f, "used %s %d %s\n", m_used.c_str(), m_usedPrice, m_usedFrom.empty() ? "-" : m_usedFrom.c_str() );
     fprintf( f, "stats %d %d %d %d %d\nover %d %d\nseed %u\nstory %s\n", m_races, m_wins, m_wrecks, m_wrecked, m_earned,
              m_over ? 1 : 0, m_won ? 1 : 0, m_seed, m_story.empty() ? "-" : m_story.c_str() );
     for ( const RivalState &r : m_rivals )
-        fprintf( f, "rival %s %d %d %d %d %d %d %d %d\n", r.m_key.c_str(), r.m_active ? 1 : 0, r.m_alive ? 1 : 0, r.m_league,
-                 r.m_points, r.m_wins, r.m_races, r.m_wrecks, r.m_died );
+    {
+        fprintf( f, "rival %s %d %d %d %d %d %d %d %d %d\n", r.m_key.c_str(), r.m_active ? 1 : 0, r.m_alive ? 1 : 0, r.m_league,
+                 r.m_points, r.m_wins, r.m_races, r.m_wrecks, r.m_died, r.m_grudge );
+        if ( !r.m_alive && r.m_died > 0 )
+            fprintf( f, "grave %s %d %s %s %s\n", r.m_key.c_str(), r.m_cause, r.m_killer.empty() ? "-" : r.m_killer.c_str(),
+                     r.m_where.empty() ? "-" : r.m_where.c_str(), r.m_words.c_str() );
+    }
     for ( const NewsItem &n : m_news )
     {
         // One line each: head and text separated by a tab.
@@ -873,7 +984,7 @@ bool Career::save( const std::string &path ) const
         for ( std::string *s : { &head, &text } )
             for ( char &c : *s )
                 if ( c == '\n' || c == '\t' ) c = ' ';
-        fprintf( f, "news %d\t%s\t%s\n", n.m_ad ? 1 : 0, head.c_str(), text.c_str() );
+        fprintf( f, "news %d:%s\t%s\t%s\n", n.m_ad ? 1 : 0, n.m_event.c_str(), head.c_str(), text.c_str() );
     }
     return endWrite( f, path );
 }
@@ -934,6 +1045,11 @@ bool Career::load( const std::string &path )
             ss >> c.m_sponsor;
             if ( c.m_sponsor == "-" ) c.m_sponsor.clear();
         }
+        else if ( key == "used" )
+        {
+            ss >> c.m_used >> c.m_usedPrice >> c.m_usedFrom;
+            if ( c.m_usedFrom == "-" ) c.m_usedFrom.clear();
+        }
         else if ( key == "sabotaged" )
         {
             ss >> c.m_sabotaged;
@@ -957,10 +1073,27 @@ bool Career::load( const std::string &path )
         {
             RivalState r;
             int        active, alive;
-            ss >> r.m_key >> active >> alive >> r.m_league >> r.m_points >> r.m_wins >> r.m_races >> r.m_wrecks >> r.m_died;
+            ss >> r.m_key >> active >> alive >> r.m_league >> r.m_points >> r.m_wins >> r.m_races >> r.m_wrecks >> r.m_died >> r.m_grudge;
             r.m_active = active != 0;
             r.m_alive = alive != 0;
             c.m_rivals.push_back( r );
+        }
+        else if ( key == "grave" )
+        {
+            std::string who, killer, where;
+            int         cause = -1;
+            ss >> who >> cause >> killer >> where;
+            std::string words;
+            std::getline( ss, words );
+            size_t a = words.find_first_not_of( ' ' );
+            for ( RivalState &r : c.m_rivals )
+                if ( r.m_key == who )
+                {
+                    r.m_cause = cause;
+                    r.m_killer = killer == "-" ? "" : killer;
+                    r.m_where = where == "-" ? "" : where;
+                    r.m_words = a == std::string::npos ? "" : words.substr( a );
+                }
         }
         else if ( key == "news" )
         {
@@ -970,6 +1103,7 @@ bool Career::load( const std::string &path )
             if ( t2 != std::string::npos )
             {
                 n.m_ad = rest[0] == '1';
+                if ( rest.size() > 2 && rest[1] == ':' ) n.m_event = rest.substr( 2, t1 - 2 );
                 n.m_head = rest.substr( t1 + 1, t2 - t1 - 1 );
                 n.m_text = rest.substr( t2 + 1 );
                 c.m_news.push_back( n );

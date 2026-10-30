@@ -99,7 +99,9 @@ bool Track::build( const TrackDef &def, const VenueDef *venue, bool reverse, boo
     racingLine();
     check( warnings );
     place( def, g_data );
+    scenes( g_data );
     scatter( g_data );
+    litter( g_data );
     return true;
 }
 

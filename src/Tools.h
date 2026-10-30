@@ -39,6 +39,8 @@ int toolTrackshots( const Options &opt );
 int toolGallery( const Options &opt );
 /** @brief --shot TRACK FILE: a picture of a race. */
 int toolShot( const Options &opt );
+/** @brief --deckcheck: frame times at the Steam Deck's resolution and settings (hidden window, muted). */
+int toolDeckCheck( const Options &opt );
 /** @brief --sim TRACK / --simall: computer races. */
 int toolSim( const Options &opt );
 /** @brief --careersim: a career played by the computer. */

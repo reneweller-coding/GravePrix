@@ -64,6 +64,28 @@ struct ObstacleSpot
     float       m_rot = 0.0f;   ///< degrees
 };
 
+/**
+ * @brief Makes a random race track for a venue (RandomTrack.cpp): the same seed gives the same track. It goes into
+ *        the catalogue as "rnd_<venue>_<seed>" (not into the track order, so no career offers it).
+ * @return its name ("" when no track passed the checks)
+ */
+std::string randomTrack( const std::string &venue, uint32_t seed );
+
+/** @brief Makes a random track named "rnd_<venue>_<seed>" if it is one and not made yet (the tools take such names). */
+void ensureTrack( const std::string &name );
+
+/** @brief A thing that moves by the race clock: a train over a level crossing, a drawbridge, a rockfall. */
+struct MoverSpot
+{
+    std::string m_kind;                  ///< train, drawbridge, rockfall
+    float       m_s = 0.0f;              ///< the middle (a rockfall: its start)
+    float       m_len = 24.0f;           ///< a bridge's span, a rockfall's stretch
+    float       m_period = 45.0f, m_offset = 0.0f;
+    Vector2     m_pos = { 0, 0 };        ///< the road's centre at m_s
+    Vector2     m_dir = { 0, -1 }, m_right = { 1, 0 };
+    float       m_half = 8.0f;           ///< the road's half width there
+};
+
 /** @brief A patch of another surface on the road. */
 struct PatchSpot
 {
@@ -79,6 +101,9 @@ struct PropSpot
     Vector2     m_pos = { 0, 0 };
     float       m_rot = 0.0f;     ///< degrees
     float       m_scale = 1.0f;
+    int         m_car = 0;        ///< 0 a model; 1 a parked car, 2 a wreck (m_model then is a car key)
+    float       m_tilt = 0.0f;    ///< degrees of roll
+    uint32_t    m_seed = 0;       ///< its paint
 };
 
 /** @brief Where a point lies along the track. */
@@ -170,6 +195,9 @@ public:
     std::vector<PickupSpot>   m_pickups;
     std::vector<HazardSpot>   m_hazards;
     std::vector<ObstacleSpot> m_obstacles;
+    std::vector<MoverSpot>    m_movers;
+    std::string               m_weatherTo;      ///< the weather turns (rain, fog) ...
+    int                       m_weatherLap = 0; ///< ... at this lap of the leader (0 never)
     std::vector<PatchSpot>    m_patches;
     std::vector<PropSpot>     m_props;
     std::vector<Vector2>      m_problems;       ///< where the checks found something (drawn on the map)
@@ -186,6 +214,8 @@ private:
     void check( std::vector<std::string> &warnings );
     void place( const TrackDef &def, const Catalog &cat );
     void scatter( const Catalog &cat );
+    void scenes( const Catalog &cat );
+    void litter( const Catalog &cat );
     float segDist( int i, Vector2 p, float &t ) const;
 
     struct Raw

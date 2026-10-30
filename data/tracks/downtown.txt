@@ -160,6 +160,8 @@ track dwn_ueber
   place building_b x=-60 z=-240
   place building_a x=62 z=-15
   place neon_sign x=-95 z=-140
+  # A goods line crosses the boulevard: bells, barriers, then Graves & Sons' freight.
+  train at=374 period=40 offset=12
 
 # Narrow and technical: 11 m alleys down a staircase of right angles (three of them cobbled), round the
 # back of the block and up another staircase; walls close enough to touch.
@@ -281,6 +283,8 @@ track dwn_schmaus
   place building_b x=240 z=34
   place building_a x=360 z=34
   place building_b x=470 z=34
+  # The level crossing behind the abattoir: the trains do not brake for anyone.
+  train at=977 period=44 offset=20
 
 # Derby arena: the top deck of a multi-storey car park - a wide square ring with concrete pillars down the
 # middle, parked cars in the corners and puddles from the leaking roof.

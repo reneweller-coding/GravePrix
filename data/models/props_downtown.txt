@@ -550,3 +550,60 @@ model parked_van
   part disc r=0.36 h=0.24 roll=90 x=0.9 y=0.36 z=1.6 color=#141414 seg=8 mirror=1
   part box w=0.3 h=0.14 d=0.05 x=-0.7 y=0.92 z=-2.77 color=#d8d4c0
   part box w=0.3 h=0.14 d=0.05 x=0.7 y=0.92 z=-2.77 color=#d8d4c0
+
+# ---------------------------------------------------------------------------------------------------------------
+# Moving hazards (tracks: "train", "drawbridge"): drawn by the renderer, not scattered as props
+# ---------------------------------------------------------------------------------------------------------------
+
+# A goods train's locomotive: 15 m, nose at -z, a black funeral-company livery with a yellow warning nose.
+model train_loco
+  part box w=3.0 h=2.6 d=14.0 y=2.1 z=0.4 color=#22242a
+  part box w=3.0 h=1.2 d=1.4 y=1.4 z=-6.9 taper=0.2 color=#e0b020                       # the nose
+  part box w=2.6 h=0.9 d=0.1 y=3.0 z=-6.62 color=#1a2430                                # windscreen
+  part box w=0.5 h=0.25 d=0.08 x=0.9 y=1.2 z=-7.62 color=#fff4d0 emit=1 mirror=1        # headlights
+  part box w=3.1 h=0.08 d=13.6 y=3.42 z=0.4 color=#c8ccd4                               # roof line
+  part box w=2.6 h=0.7 d=3.0 y=0.5 z=-4.6 color=#18181c                                 # bogies
+  part box w=2.6 h=0.7 d=3.0 y=0.5 z=4.8 color=#18181c
+  part box w=0.06 h=0.5 d=10.0 x=1.53 y=2.4 z=0.4 color=#b8962e mirror=1                # gold band
+
+# A wagon: a closed van, 14 m, grey with a faded company sign.
+model train_wagon
+  part box w=2.9 h=2.8 d=13.6 y=2.2 color=#5a5650
+  part box w=2.95 h=0.1 d=13.4 y=3.62 color=#3a3836
+  part box w=0.04 h=1.2 d=4.0 x=1.47 y=2.3 color=#8a8278 mirror=1                       # sliding doors
+  part box w=0.05 h=0.5 d=2.6 x=1.48 y=3.0 z=-3.6 color=#b8962e mirror=1                # the sign
+  part box w=2.6 h=0.7 d=3.0 y=0.5 z=-4.6 color=#18181c
+  part box w=2.6 h=0.7 d=3.0 y=0.5 z=4.6 color=#18181c
+
+# A level-crossing post: a white and red striped pole with two lamps (the renderer lights them).
+model crossing_post
+  part box w=0.18 h=3.2 d=0.18 y=1.6 color=#e8e8e0
+  part box w=0.2 h=0.4 d=0.2 y=0.6 color=#c82020
+  part box w=0.2 h=0.4 d=0.2 y=1.4 color=#c82020
+  part box w=1.2 h=0.4 d=0.12 y=2.8 color=#18181c
+  part disc r=0.17 h=0.08 pitch=90 x=0.42 y=2.8 z=-0.08 color=#601010 mirror=1
+  part box w=0.6 h=0.6 d=0.05 y=3.35 z=-0.03 color=#e8e8e0                              # the St. Andrew's sign
+  part box w=0.6 h=0.12 d=0.04 y=3.35 z=-0.07 color=#c82020
+
+# Rails across the road: two rails on sleepers, 4 m along the track and 10 m across (repeated).
+model rail_piece
+  part box w=10.0 h=0.06 d=3.2 y=0.02 color=#3a3430
+  part box w=10.0 h=0.12 d=0.1 y=0.08 z=-0.72 color=#9a9a9e
+  part box w=10.0 h=0.12 d=0.1 y=0.08 z=0.72 color=#9a9a9e
+  part box w=0.3 h=0.08 d=2.4 x=-4.0 y=0.04 color=#4a3a2a
+  part box w=0.3 h=0.08 d=2.4 x=-2.0 y=0.04 color=#4a3a2a
+  part box w=0.3 h=0.08 d=2.4 x=0.0 y=0.04 color=#4a3a2a
+  part box w=0.3 h=0.08 d=2.4 x=2.0 y=0.04 color=#4a3a2a
+  part box w=0.3 h=0.08 d=2.4 x=4.0 y=0.04 color=#4a3a2a
+
+# A drawbridge leaf: 12 m from the hinge (at z = 0) forwards (-z), 20 m wide, steel with yellow-black ends.
+model bridge_leaf
+  part box w=20.0 h=0.5 d=12.0 y=-0.15 z=-6.0 color=#4a4c50
+  part box w=20.0 h=0.06 d=11.8 y=0.12 z=-6.0 color=#3a3a3e
+  part box w=20.0 h=0.12 d=0.4 y=0.16 z=-11.8 color=#e0b020                             # the warning edge
+  part box w=0.2 h=1.0 d=12.0 x=9.9 y=0.6 z=-6.0 color=#7a2a20 mirror=1                 # railings
+  part box w=0.4 h=1.6 d=0.4 x=9.9 y=0.8 z=-0.2 color=#2a2a2e mirror=1                  # hinge blocks
+
+# Water under a raised drawbridge.
+model bridge_gap
+  part box w=24.0 h=0.04 d=24.0 y=0.12 color=#0c1a22

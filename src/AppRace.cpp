@@ -53,6 +53,7 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
     if ( !m_track.build( *def, g_data.venue( def->m_venue ), reverse, false, e, w ) ) return;
     if ( mode != ModeE::DERBY ) m_track.m_laps = std::max( 1, laps );
     m_trackName = track;
+    m_saidTrain = m_saidBridge = false;
     m_trackReverse = reverse;
     m_field = field;
     m_mode = mode;
@@ -94,9 +95,33 @@ void App::bubble( const std::string &who, const std::string &text, Color c )
     m_bubbles.push_back( { who, text, c, 3.6f } );
 }
 
+bool App::speak( const std::string &event )
+{
+    // Ricky's recorded lines (data/characters.txt "announcer_voice", assets/voice/<language>/ricky_<event>_<n>.ogg):
+    // what he says is what the display shows.
+    if ( !m_set.m_speech ) return false;
+    const CharacterDef *c = g_data.character( "announcer_voice" );
+    if ( !c ) return false;
+    const Says &says = english() ? c->m_sayEn : c->m_say;
+    auto        it = says.find( event );
+    if ( it == says.end() || it->second.empty() ) return false;
+    size_t      n = (size_t)GetRandomValue( 0, (int)it->second.size() - 1 );
+    std::string file = m_opt.m_root + "/assets/voice/" + ( english() ? "en" : "de" ) + "/ricky_" + event + "_" + std::to_string( n + 1 ) + ".ogg";
+    if ( !m_audio.voice( file ) ) return false;
+    m_announce = it->second[n];
+    m_announceTime = 5.0f;
+    return true;
+}
+
 void App::announce( const std::string &event, const std::string &name )
 {
     if ( !m_set.m_speech ) return;
+    // The player's big moments are spoken.
+    bool mine = name.empty() || name == m_world.m_cars[m_player].m_setup.m_driver;
+    if ( mine && ( event == "start" || event == "final_lap" || event == "player_lead" || event == "player_wrecked" ||
+                   event == "wrong_way" || ( event == "win" && !name.empty() ) || event == "lose" ) &&
+         speak( event ) )
+        return;
     bool important = event == "win" || event == "lose" || event == "player_wrecked" || event == "start";
     if ( m_announceTime > 1.2f && !important ) return;
     std::string s = announcerLine( event, name, (uint32_t)( m_world.m_time * 977 ) + (uint32_t)event.size() );
@@ -316,6 +341,7 @@ void App::raceEvents()
         {
             play( e.m_power >= 6 ? SfxE::EXPLOSION_BIG : SfxE::EXPLOSION_SMALL, e.m_pos, 1.0f );
             float d = len( sub( e.m_pos, me.m_pos ) );
+            if ( d < 30 && e.m_power >= 4 ) m_audio.duck( 0.5f + e.m_power * 0.05f, 0.3f );   // the blast drowns the band
             if ( d < 25 )
             {
                 m_shake += 0.6f * ( 1.0f - d / 25.0f );
@@ -345,6 +371,18 @@ void App::raceEvents()
             else
             {
                 announce( "wreck", victim.m_setup.m_driver );
+                // In the career a rival may not climb out: the band plays, the last words are said.
+                if ( m_inCareer && !victim.m_setup.m_rival.empty() && m_career.dies( victim.m_setup.m_rival, e.m_other == m_player ) )
+                {
+                    m_audio.play( SfxE::FUNERAL_MARCH, 0, 0.8f );
+                    m_audio.duck( 5.5f, 0.75f );
+                    m_feed.push_back( { "\xE2\x80\xA0 " + victim.m_setup.m_driver, 6.0f } );
+                    if ( const RivalDef *d = g_data.rival( victim.m_setup.m_rival ) )
+                    {
+                        std::string words = m_career.lastWords( victim.m_setup.m_rival );
+                        if ( !words.empty() ) bubble( d->m_name + "  \xE2\x80\xA0", words, { 90, 90, 100, 255 } );
+                    }
+                }
                 if ( e.m_other == m_player )
                     if ( const RivalDef *d = g_data.rival( victim.m_setup.m_rival ) )
                         bubble( d->m_name, d->line( "wrecked_by_player", (uint32_t)GetRandomValue( 0, 999 ) ), d->m_colors[0] );
@@ -400,6 +438,31 @@ void App::raceEvents()
             if ( mine ) m_rumbleHigh += 0.6f;
             break;
         case EvE::BARREL: play( SfxE::BARREL, e.m_pos, 1.0f ); break;
+        case EvE::TRAIN:
+        case EvE::BRIDGE:
+            if ( e.m_kind == 0 ) play( SfxE::BELL, e.m_pos, 0.9f, e.m_type == EvE::TRAIN ? 1.0f : 0.8f );
+            if ( e.m_kind == 0 && len( sub( e.m_pos, me.m_pos ) ) < 250 )
+            {
+                bool &said = e.m_type == EvE::TRAIN ? m_saidTrain : m_saidBridge;
+                if ( !said ) said = speak( e.m_type == EvE::TRAIN ? "train" : "bridge" );
+            }
+            else if ( e.m_type == EvE::TRAIN ) play( SfxE::HORN_TRUCK, e.m_pos, 1.0f, 0.7f );
+            break;
+        case EvE::ROCK:
+            if ( e.m_kind == 1 )
+            {
+                play( SfxE::CRASH_HEAVY, e.m_pos, 1.0f, 0.6f );
+                play( SfxE::EXPLOSION_SMALL, e.m_pos, 0.6f, 0.5f );
+            }
+            break;
+        case EvE::WEATHER:
+        {
+            if ( e.m_kind <= 1 ) speak( e.m_kind == 0 ? "rain" : "fog" );
+            static const char *words[] = { "Es fängt an zu regnen.", "Nebel zieht auf.", "Das Wetter schlägt um." };
+            m_feed.push_back( { T( words[std::clamp( e.m_kind, 0, 2 )] ), 6.0f } );
+            if ( m_feed.size() > 5 ) m_feed.erase( m_feed.begin() );
+            break;
+        }
         case EvE::HORN:
         {
             const Car &c = m_world.m_cars[e.m_car];
@@ -417,6 +480,9 @@ void App::raceEvents()
         case EvE::FINAL_LAP:
             if ( mine )
             {
+                // The music goes up a gear for the last lap (when the venue has a hot take).
+                if ( const VenueDef *v = g_data.venue( g_data.track( m_trackName ) ? g_data.track( m_trackName )->m_venue : "" ) )
+                    if ( m_audio.hasMusic( v->m_music + "_hot" ) ) m_audio.music( v->m_music + "_hot" );
                 m_audio.play( SfxE::FINAL_LAP, 0, 0.8f );
                 m_center = T( "LETZTE RUNDE" );
                 m_centerTime = 1.6f;
@@ -490,6 +556,31 @@ void App::raceSound( float dt )
 // ---------------------------------------------------------------------------------------------------- HUD
 
 void App::raceHud()
+{
+    // Names over the rivals' cars (who is who without telling the paints apart).
+    if ( m_set.m_tags && m_mode != ModeE::TRIAL )
+    {
+        float sx = (float)GetScreenWidth() / std::max( 1, m_view.m_w ), sy = (float)GetScreenHeight() / std::max( 1, m_view.m_h );
+        for ( size_t i = 0; i < m_world.m_cars.size(); ++i )
+        {
+            const Car &c = m_world.m_cars[i];
+            if ( (int)i == m_player || c.m_wrecked ) continue;
+            Vector2 p = m_view.project( { c.m_pos.x, 2.6f, c.m_pos.y } );
+            p = { p.x * sx, p.y * sy };
+            if ( p.x < 0 || p.y < 0 || p.x > GetScreenWidth() || p.y > GetScreenHeight() ) continue;
+            std::string tag = m_mode == ModeE::DERBY ? c.m_setup.m_driver : std::to_string( c.m_place ) + "  " + c.m_setup.m_driver;
+            float       w = ui::width( tag, 20 ) + 14 * ui::k();
+            DrawRectangleRec( { p.x - w * 0.5f, p.y - 30 * ui::k(), w, 26 * ui::k() }, { 0, 0, 0, 150 } );
+            DrawRectangleRec( { p.x - w * 0.5f, p.y - 30 * ui::k(), 4 * ui::k(), 26 * ui::k() }, c.m_setup.m_paint.m_c[0] );
+            ui::text( tag, p.x, p.y - 29 * ui::k(), 20, ui::Ink, ui::AlignE::CENTER );
+        }
+    }
+    ui::setScale( m_set.m_hud );
+    raceHudPanels();
+    ui::setScale( 1.0f );
+}
+
+void App::raceHudPanels()
 {
     float      k = ui::k();
     int        W = GetScreenWidth(), H = GetScreenHeight();
@@ -763,7 +854,8 @@ void App::results()
     for ( const std::string &key : m_report.m_dead )
         if ( const RivalDef *d = g_data.rival( key ) )
         {
-            std::string line = d->line( "dead", (uint32_t)( key.size() * 31 + m_career.m_day ) );
+            const RivalState *st = m_career.rival( key );
+            std::string       line = st ? st->m_words : "";
             if ( line.empty() ) continue;
             ui::text( "† " + d->m_name + ":  " + quote( line ), r.x, lw, 26, ui::Warn );
             lw += 34 * k;
@@ -784,10 +876,11 @@ void App::results()
         row( "Aufgesammelt", m_report.m_cash );
         row( "Schnellste Runde", m_report.m_lap );
         row( "Sponsor", m_report.m_sponsor );
+        row( "Aufstiegsprämie von Graves", m_report.m_promoBonus );
         DrawRectangle( (int)( m.x + 20 * k ), (int)my, (int)( m.width - 40 * k ), 2, ui::Dim );
         my += 12 * k;
         ui::text( T( "Gesamt" ), m.x + 20 * k, my, 34, ui::Ink );
-        ui::text( formatMoney( m_report.m_total ), m.x + m.width - 20 * k, my, 34, ui::Gold, ui::AlignE::RIGHT );
+        ui::text( formatMoney( m_report.m_total + m_report.m_promoBonus ), m.x + m.width - 20 * k, my, 34, ui::Gold, ui::AlignE::RIGHT );
         my += 60 * k;
         if ( m_career.m_damage > 0.01f )
         {
@@ -810,6 +903,24 @@ void App::results()
                 showStory( m_report.m_story, after );
             else
                 go( after );
+        }
+        else if ( m_tour > 0 )
+        {
+            // The endless tournament: a podium place goes on, anything else ends it.
+            const Car &me = m_world.m_cars[m_player];
+            if ( me.m_place <= 3 && !me.m_wrecked )
+            {
+                ++m_tour;
+                startTourRound();
+            }
+            else
+            {
+                m_rec.m_tourBest = std::max( m_rec.m_tourBest, m_tour - 1 );
+                m_rec.save( userDir() + "records.txt" );
+                m_tour = 0;
+                m_audio.music( "title" );
+                go( ScreenE::QUICK );
+            }
         }
         else
         {

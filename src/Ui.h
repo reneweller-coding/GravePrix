@@ -73,7 +73,25 @@ void pips( float x, float y, int n, int max, float size, Color on, Color off = {
 void highlight( Rectangle r, float t );
 
 /** @brief The interface's colours. */
-extern const Color Ink, Dim, Accent, Gold, Warn, Good;
+extern Color Ink, Dim, Accent, Gold, Warn, Good;
+
+/**
+ * @brief Picks the palette for colour vision.
+ * @param[in] mode  0 as made, 1 red-green (good blue, bad orange), 2 blue-yellow (gold turns pink)
+ */
+void setPalette( int mode );
+
+/** @brief Scales everything drawn after it (the HUD's size; 1 as made). */
+void setScale( float s );
+
+/**
+ * @brief Draws a pad button as a glyph: A, B, X, Y as coloured round buttons, LB/RB/LT/RT/Start/Select as pills.
+ * @param[in] label  the button's name ("A", "LB", ...)
+ * @param[in] x, y   the top left (pixels)
+ * @param[in] size   the size at 1080 lines
+ * @return its width in pixels (0: not a pad button, nothing drawn)
+ */
+float glyph( const std::string &label, float x, float y, float size );
 
 }   // namespace ui
 }   // namespace grave

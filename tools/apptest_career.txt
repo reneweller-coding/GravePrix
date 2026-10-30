@@ -45,6 +45,10 @@ expect table
 back
 expect hub
 down accept
+expect graveyard
+back
+expect hub
+down accept
 expect title
 up accept wait 3
 expect hub
