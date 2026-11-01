@@ -7,7 +7,7 @@
     .\Deploy\build_release.ps1 [-NoBuild] [-NoLinux]
 
     Builds the Release (build.ps1), checks the data (--validate), stages the game with its data and assets, the
-    player's readme and the credits in work\release and zips them into dist. The Linux archive comes from
+    player's readme, the credits and the licence in work\release and zips them into dist. The Linux archive comes from
     Deploy/build_linux.sh in WSL (GCC 12, glibc 2.35 and newer, the Steam Deck included); without WSL it is skipped.
 
     -NoBuild   pack what bin\msvc holds
@@ -44,6 +44,7 @@ foreach ($dir in "data", "assets") {
 }
 Copy-Item (Join-Path $root "docs\README-player.txt") (Join-Path $stage "README.txt")
 Copy-Item (Join-Path $root "docs\CREDITS.txt") $stage
+Copy-Item (Join-Path $root "LICENSE") $stage
 $dist = Join-Path $root "dist"
 New-Item -ItemType Directory -Force $dist | Out-Null
 $zip = Join-Path $dist "$name.zip"

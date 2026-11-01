@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Builds GRAVE PRIX for Linux (Release, GCC 12) and packs dist/GravePrix-<version>-linux-x86_64.tar.gz: the
-# program, its data and assets, the player's readme and the credits. Built on Ubuntu 22.04 it runs on glibc 2.35 and
+# program, its data and assets, the player's readme, the credits and the licence. Built on Ubuntu 22.04 it runs on glibc 2.35 and
 # newer, SteamOS (the Steam Deck) included.
 #
 #   bash Deploy/build_linux.sh [BUILD_DIR]      (default ~/build/graveprix-release; nice -n 15, four jobs)
@@ -26,6 +26,7 @@ cp -r "$root/data" "$stage/data"
 cp -r "$root/assets" "$stage/assets"
 cp "$root/docs/README-player.txt" "$stage/README.txt"
 cp "$root/docs/CREDITS.txt" "$stage/"
+cp "$root/LICENSE" "$stage/"
 mkdir -p "$root/dist"
 tar -C "$build/release" -czf "$root/dist/$name.tar.gz" "$name"
 echo "$root/dist/$name.tar.gz"

@@ -13,3 +13,7 @@ rival dies the band plays the opening bars of Frédéric Chopin's Funeral March 
 domain), synthesised as well.
 Ricky Rattle's voice was made locally with Qwen3-TTS (voice design and cloning, an invented voice).
 The tabloid's press photos were painted locally with FLUX.2 [dev]; they show invented people only.
+
+Licence
+GRAVE PRIX is free software under the GNU Affero General Public License 3.0 (LICENSE): use it, change it, pass it
+on, with the source of what you change. The source is at https://github.com/reneweller-coding/GravePrix
