@@ -14,7 +14,7 @@
   #define WIN32_LEAN_AND_MEAN
   #define NOMINMAX
   #include <windows.h>
-#else
+#elif defined( __linux__ )
   #include <dirent.h>
   #include <fcntl.h>
   #include <linux/input.h>
@@ -92,7 +92,7 @@ void send( float low, float high )
         }
 }
 
-#else
+#elif defined( __linux__ )
 
 int  g_fd = -1;       ///< the device with force feedback
 int  g_effect = -1;   ///< the effect uploaded to it
@@ -141,6 +141,11 @@ void send( float low, float high )
     play.value = low > 0.0f || high > 0.0f ? 1 : 0;
     if ( write( g_fd, &play, sizeof( play ) ) < 0 ) return;
 }
+
+#else
+
+// Elsewhere (macOS) no force feedback: the race asks, nothing shakes.
+void send( float, float ) {}
 
 #endif
 
