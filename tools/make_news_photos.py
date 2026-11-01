@@ -16,7 +16,7 @@ from PIL import Image, ImageFilter, ImageOps
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORK = os.path.join(ROOT, "work", "news")
 OUT = os.path.join(ROOT, "assets", "news")
-FLUX = "/mnt/g/Tools/Games/SpaceOpera/tools/flux_wsl.py"
+FLUX = "/mnt/g/Tools/Games/DarkConcordance/tools/flux_wsl.py"
 
 STYLE = ("1950s tabloid press photograph, black and white, heavy film grain, harsh flash, darkly comic, fictional "
          "people, no text, no letters, no numbers, no logos, no signs, no flags")
