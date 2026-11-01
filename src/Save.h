@@ -7,6 +7,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -47,6 +48,10 @@ struct Records
     std::map<std::string, float> m_bestLap;   ///< track (with ":r" reversed) -> seconds
     int m_quickWins = 0, m_derbyWins = 0, m_careersWon = 0;
     int m_tourBest = 0;   ///< the endless tournament: most rounds survived
+    std::set<std::string>      m_awards;            ///< the epitaphs earned (data/awards.txt)
+    std::map<std::string, int> m_count;             ///< what the epitaphs count over all races: wins, wrecks, mines ...
+    std::set<std::string>      m_seen;              ///< venues ("v:name") and tracks ("t:name") raced on
+    bool                       m_tutorial = false;  ///< the test drive passed
 
     void load( const std::string &path );
     bool save( const std::string &path ) const;

@@ -5,6 +5,8 @@
  */
 #include "Render.h"
 
+#include "Ui.h"
+
 #include <raymath.h>
 #include <rlgl.h>
 
@@ -912,6 +914,7 @@ void Renderer::setTrack( const Track &t )
     buildRoad();
     buildWalls();
     buildProps();
+    buildLife();
     m_marks.assign( m_quality == 0 ? 3000 : 6000, Mark{ { 0, 0 }, { 0, 0 }, 0, 0, BLANK } );
     m_markNext = 0;
     m_hasScene = true;
@@ -1288,6 +1291,308 @@ void Renderer::buildWalls()
     m_walls = mb.mesh( true );
 }
 
+void Renderer::setSticker( const std::string &text, Color back, Color ink, int car )
+{
+    m_stickerCar = text.empty() ? -1 : car;
+    if ( text == m_sticker && back.r == m_stickerBack.r && ink.r == m_stickerInk.r && m_stickerTex.id ) return;
+    m_sticker = text;
+    m_stickerBack = back;
+    m_stickerInk = ink;
+    m_stickerDirty = !text.empty();
+}
+
+void Renderer::buildSticker()
+{
+    m_stickerDirty = false;
+    if ( m_stickerTex.id ) UnloadRenderTexture( m_stickerTex );
+    m_stickerTex = LoadRenderTexture( 512, 128 );
+    BeginTextureMode( m_stickerTex );
+    ClearBackground( m_stickerBack );
+    DrawRectangleLinesEx( { 6, 6, 500, 116 }, 7, m_stickerInk );
+    const Font &f = ui::font();
+    float       size = 72;
+    Vector2     m = MeasureTextEx( f, m_sticker.c_str(), size, 0 );
+    while ( m.x > 468 && size > 18 )
+    {
+        size -= 3;
+        m = MeasureTextEx( f, m_sticker.c_str(), size, 0 );
+    }
+    DrawTextEx( f, m_sticker.c_str(), { 256 - m.x * 0.5f, 64 - m.y * 0.5f }, size, 0, m_stickerInk );
+    EndTextureMode();
+    SetTextureFilter( m_stickerTex.texture, TEXTURE_FILTER_BILINEAR );
+}
+
+void Renderer::dropCoffin( const World &w, int car )
+{
+    if ( car < 0 || car >= (int)w.m_cars.size() ) return;
+    const Car &c = w.m_cars[car];
+    Debris     d;
+    d.m_model = "_coffin";
+    d.m_pos = { c.m_pos.x, 1.6f, c.m_pos.y };
+    Vector2 r = c.right();
+    float   side = m_rng.chance( 0.5f ) ? 1.0f : -1.0f;
+    d.m_vel = { c.m_vel.x * 0.4f + r.x * side * 3.0f, 3.5f, c.m_vel.y * 0.4f + r.y * side * 3.0f };
+    d.m_rot = c.m_head;
+    d.m_spin = m_rng.range( -4.0f, 4.0f );
+    d.m_paint = { 182, 182, 182, 255 };
+    m_debris.push_back( d );
+    m_roofCoffin = -1;
+}
+
+void Renderer::buildLife()
+{
+    // Flocks every 120 to 220 metres beyond the shoulders, the venue's birds; a dog at every kennel and at the
+    // estate's gates.
+    m_flocks.clear();
+    m_dogs.clear();
+    m_cues.clear();
+    const Track &t = *m_track;
+    std::string  v = m_venue ? m_venue->m_name : "";
+    m_birdTint = { 40, 38, 42, 255 };
+    m_birdSize = 1.0f;
+    m_birdFlap = 14.0f;
+    if ( v == "docks" ) m_birdTint = { 235, 235, 228, 255 };
+    else if ( v == "refinery" || v == "downtown" || v == "fairground" ) m_birdTint = { 120, 124, 136, 255 };
+    else if ( v == "desert" )
+    {
+        m_birdTint = { 74, 56, 44, 255 };
+        m_birdSize = 1.8f;
+        m_birdFlap = 7.0f;
+    }
+    else if ( v == "estate" )
+    {
+        m_birdTint = { 26, 22, 24, 255 };   // bats
+        m_birdSize = 0.8f;
+        m_birdFlap = 22.0f;
+    }
+    Rng rng;
+    rng.seed( (uint32_t)t.m_length * 7919u + 17u );
+    for ( float s = rng.range( 40.0f, 120.0f ); s < t.m_length - 20.0f; s += rng.range( 120.0f, 220.0f ) )
+    {
+        const TrackSample &ts = t.sampleAt( s );
+        float              side = rng.chance( 0.5f ) ? 1.0f : -1.0f;
+        Flock              f;
+        f.m_home = t.pointAt( s, side * ( ts.m_half + ts.m_shoulder + rng.range( 2.5f, 8.0f ) ) );
+        Vector2 push;
+        if ( t.outside( f.m_home, push ) < 1.0f ) continue;   // not on another part of the road
+        int n = 4 + rng.below( 5 );
+        for ( int k = 0; k < n; ++k )
+        {
+            Bird b;
+            b.m_pos = { f.m_home.x + rng.range( -2.5f, 2.5f ), 0.0f, f.m_home.y + rng.range( -2.5f, 2.5f ) };
+            b.m_head = rng.range( 0, 6.28f );
+            b.m_phase = rng.range( 0, 6.28f );
+            f.m_birds.push_back( b );
+        }
+        m_flocks.push_back( f );
+    }
+    for ( const PropSpot &p : t.m_props )
+    {
+        bool kennel = p.m_model == "dog_kennel", gate = p.m_model == "iron_gate";
+        if ( ( !kennel && !gate ) || m_dogs.size() >= 4 ) continue;
+        TrackPos           tp = t.locate( p.m_pos, -1 );
+        const TrackSample &ts = t.m_s[tp.m_i];
+        Dog                d;
+        Vector2            toRoad = mul( ts.m_right, tp.m_lat >= 0 ? -1.0f : 1.0f );
+        d.m_home = add( p.m_pos, mul( toRoad, 2.5f ) );
+        d.m_pos = d.m_home;
+        d.m_along = ts.m_dir;
+        d.m_head = headingOf( toRoad );
+        d.m_tint = gate ? Color{ 52, 44, 44, 255 } : Color{ 255, 255, 255, 255 };   // the estate keeps a black one
+        m_dogs.push_back( d );
+    }
+}
+
+void Renderer::life( const World &w, float dt )
+{
+    if ( !m_track || dt <= 0 ) return;
+    dt = std::min( dt, 0.05f );
+    auto nearest = [&]( Vector2 p, float &speed, Vector2 &from ) {
+        float best = 1e9f;
+        for ( const Car &c : w.m_cars )
+        {
+            if ( c.m_wrecked ) continue;
+            float d = len( sub( c.m_pos, p ) );
+            if ( d < best )
+            {
+                best = d;
+                speed = len( c.m_vel );
+                from = c.m_pos;
+            }
+        }
+        return best;
+    };
+    // People: a car close and fast, and they throw themselves aside (or the crowd steps back); then up again.
+    for ( Person &p : m_people )
+    {
+        if ( p.m_t >= 0 )
+        {
+            p.m_t += dt;
+            if ( p.m_t > ( p.m_crowd ? 1.4f : 2.6f ) ) p.m_t = -1.0f;
+            continue;
+        }
+        float   sp = 0;
+        Vector2 from = { 0, 0 };
+        if ( nearest( p.m_pos, sp, from ) < ( p.m_crowd ? 11.0f : 13.0f ) && sp > 10.0f ) p.m_t = m_rng.range( 0.0f, 0.12f );
+    }
+    // Birds: up when a car comes, away and out of sight, back after a while when it is quiet.
+    for ( Flock &f : m_flocks )
+    {
+        float   sp = 0;
+        Vector2 from = { 0, 0 };
+        float   d = nearest( f.m_home, sp, from );
+        if ( f.m_t < 0 )
+        {
+            for ( Bird &b : f.m_birds )
+            {
+                b.m_phase += dt * 3.0f;   // pecking
+                if ( m_rng.chance( dt * 0.3f ) ) b.m_head += m_rng.range( -1.5f, 1.5f );
+            }
+            if ( d < 22.0f && sp > 4.0f )
+            {
+                f.m_t = 0;
+                Vector2 away = norm( sub( f.m_home, from ) );
+                for ( Bird &b : f.m_birds )
+                {
+                    float sideways = m_rng.range( -0.6f, 0.6f );
+                    Vector2 dir = norm( add( away, mul( perp( away ), sideways ) ) );
+                    float   v = m_rng.range( 6.0f, 10.0f );
+                    b.m_vel = { dir.x * v, m_rng.range( 3.0f, 5.5f ), dir.y * v };
+                    b.m_head = headingOf( dir );
+                }
+                m_cues.push_back( { 0, f.m_home } );
+            }
+            continue;
+        }
+        f.m_t += dt;
+        for ( Bird &b : f.m_birds )
+        {
+            b.m_vel.y = std::min( 6.0f, b.m_vel.y + dt * 1.2f );
+            float turn = std::sin( f.m_t * 0.7f + b.m_phase ) * 0.4f * dt;
+            float c = std::cos( turn ), s = std::sin( turn );
+            b.m_vel = { b.m_vel.x * c - b.m_vel.z * s, b.m_vel.y, b.m_vel.x * s + b.m_vel.z * c };
+            b.m_pos = Vector3Add( b.m_pos, Vector3Scale( b.m_vel, dt ) );
+            b.m_head = headingOf( { b.m_vel.x, b.m_vel.z } );
+            b.m_phase += dt * m_birdFlap;
+        }
+        if ( f.m_t > 40.0f && d > 50.0f )
+        {
+            // Back on the ground, as if they had never left.
+            f.m_t = -1.0f;
+            for ( Bird &b : f.m_birds ) b.m_pos = { f.m_home.x + m_rng.range( -2.5f, 2.5f ), 0.0f, f.m_home.y + m_rng.range( -2.5f, 2.5f ) };
+        }
+    }
+    // Dogs: after the cars along the road, as far as the chain or the fence lets them, barking; then home.
+    for ( Dog &dg : m_dogs )
+    {
+        float   sp = 0;
+        Vector2 from = { 0, 0 };
+        float   d = nearest( dg.m_home, sp, from );
+        Vector2 goal = dg.m_home;
+        if ( d < 40.0f && sp > 6.0f )
+        {
+            float along = clampf( dot( sub( from, dg.m_home ), dg.m_along ), -26.0f, 26.0f );
+            goal = add( dg.m_home, mul( dg.m_along, along ) );
+            dg.m_calm = 0;
+            dg.m_bark -= dt;
+            if ( dg.m_bark <= 0 )
+            {
+                dg.m_bark = m_rng.range( 0.7f, 1.4f );
+                m_cues.push_back( { 1, dg.m_pos } );
+            }
+        }
+        else
+            dg.m_calm += dt;
+        Vector2 to = sub( goal, dg.m_pos );
+        float   dist = len( to );
+        float   want = dist < 0.4f ? 0.0f : std::min( dg.m_calm > 1.0f ? 4.0f : 11.0f, dist * 3.0f );
+        dg.m_speed += clampf( want - dg.m_speed, -20.0f * dt, 14.0f * dt );
+        if ( dist > 0.05f )
+        {
+            dg.m_pos = add( dg.m_pos, mul( to, std::min( 1.0f, dg.m_speed * dt / dist ) ) );
+            if ( dg.m_speed > 0.5f ) dg.m_head = headingOf( to );
+        }
+        dg.m_phase += dt * ( 2.0f + dg.m_speed * 1.6f );
+    }
+}
+
+void Renderer::drawLife( bool shadow )
+{
+    Material &lit = shadow ? g.m_depthMat : g.m_litMat;
+    Vector2   f = m_view.m_focus;
+    float     near = m_view.m_height * 1.3f + 30.0f;
+    for ( const Person &p : m_people )
+    {
+        if ( dist2( p.m_pos, f ) > near * near ) continue;
+        const ModelMesh &m = modelOf( p.m_model );
+        if ( !m.m_hasBase ) continue;
+        float tilt = 0, shift = 0, hop = 0;
+        if ( p.m_t >= 0 )
+        {
+            if ( p.m_crowd )
+            {
+                shift = std::sin( std::min( 1.0f, p.m_t / 1.4f ) * Pi ) * 1.1f;
+                hop = std::fabs( std::sin( p.m_t * 7.0f ) ) * 0.35f * ( 1.0f - p.m_t / 1.4f );
+            }
+            else
+            {
+                // Down in a quarter second, a second and a half flat on the ground, then up again.
+                float down = p.m_t < 0.25f ? p.m_t / 0.25f : p.m_t < 1.8f ? 1.0f : std::max( 0.0f, 1.0f - ( p.m_t - 1.8f ) / 0.8f );
+                tilt = down * 1.45f;
+                shift = std::min( 1.0f, p.m_t / 0.25f ) * 1.4f;
+                hop = p.m_t < 0.25f ? std::sin( p.m_t / 0.25f * Pi ) * 0.4f : 0.0f;
+            }
+        }
+        Vector3 axis = { p.m_away.y, 0, -p.m_away.x };
+        Matrix  xf = MatrixMultiply( MatrixMultiply( MatrixScale( p.m_scale, p.m_scale, p.m_scale ), MatrixRotateY( -p.m_rot ) ),
+                                     MatrixRotate( axis, tilt ) );
+        Vector2 at = add( p.m_pos, mul( p.m_away, shift ) );
+        xf = MatrixMultiply( xf, MatrixTranslate( at.x, hop + std::sin( tilt ) * 0.25f, at.y ) );
+        DrawMesh( m.m_base, lit, xf );
+        if ( m.m_hasHead ) DrawMesh( m.m_head, lit, xf );
+    }
+    const ModelMesh &body = modelOf( "bird_body" ), &wing = modelOf( "bird_wing" );
+    if ( !shadow ) setVec4( g.m_lit, "tint", { m_birdTint.r / 255.0f, m_birdTint.g / 255.0f, m_birdTint.b / 255.0f, 0 } );
+    for ( const Flock &fl : m_flocks )
+    {
+        if ( dist2( fl.m_home, f ) > ( near + 60.0f ) * ( near + 60.0f ) ) continue;
+        if ( fl.m_t > 14.0f ) continue;   // out of sight
+        for ( const Bird &b : fl.m_birds )
+        {
+            Matrix at = MatrixMultiply( MatrixMultiply( MatrixScale( m_birdSize, m_birdSize, m_birdSize ), MatrixRotateY( -b.m_head ) ),
+                                        MatrixTranslate( b.m_pos.x, b.m_pos.y + ( fl.m_t < 0 ? std::max( 0.0f, std::sin( b.m_phase ) ) * 0.04f : 0.0f ),
+                                                         b.m_pos.z ) );
+            if ( body.m_hasBase ) DrawMesh( body.m_base, lit, at );
+            float flap = fl.m_t < 0 ? -0.15f : std::sin( b.m_phase ) * 0.9f;
+            Matrix right = MatrixMultiply( MatrixMultiply( MatrixRotateZ( flap ), MatrixTranslate( 0.07f, 0.2f, 0 ) ), at );
+            Matrix left = MatrixMultiply( MatrixMultiply( MatrixMultiply( MatrixRotateZ( flap ), MatrixRotateY( Pi ) ), MatrixTranslate( -0.07f, 0.2f, 0 ) ), at );
+            if ( wing.m_hasBase )
+            {
+                DrawMesh( wing.m_base, lit, right );
+                DrawMesh( wing.m_base, lit, left );
+            }
+        }
+    }
+    const ModelMesh &dogBody = modelOf( "dog_body" ), &leg = modelOf( "dog_leg" );
+    for ( const Dog &d : m_dogs )
+    {
+        if ( dist2( d.m_pos, f ) > near * near ) continue;
+        if ( !shadow ) setVec4( g.m_lit, "tint", { d.m_tint.r / 255.0f, d.m_tint.g / 255.0f, d.m_tint.b / 255.0f, 0 } );
+        float  bob = std::fabs( std::sin( d.m_phase ) ) * 0.06f * std::min( 1.0f, d.m_speed / 4.0f );
+        Matrix at = MatrixMultiply( MatrixRotateY( -d.m_head ), MatrixTranslate( d.m_pos.x, bob, d.m_pos.y ) );
+        if ( dogBody.m_hasBase ) DrawMesh( dogBody.m_base, lit, at );
+        const float sc = 1.35f;
+        const Vector3 hips[4] = { { 0.1f, 0.42f, -0.28f }, { -0.1f, 0.42f, -0.28f }, { 0.1f, 0.42f, 0.28f }, { -0.1f, 0.42f, 0.28f } };
+        for ( int k = 0; k < 4; ++k )
+        {
+            float  swing = std::sin( d.m_phase + ( k == 0 || k == 3 ? 0.0f : Pi ) ) * 0.6f * std::min( 1.0f, d.m_speed / 3.0f );
+            Matrix lm = MatrixMultiply( MatrixRotateX( swing ), MatrixTranslate( hips[k].x * sc, hips[k].y * sc, hips[k].z * sc ) );
+            if ( leg.m_hasBase ) DrawMesh( leg.m_base, lit, MatrixMultiply( lm, at ) );
+        }
+    }
+    if ( !shadow ) setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
+}
+
 void Renderer::buildProps()
 {
     m_turning.clear();
@@ -1295,8 +1600,27 @@ void Renderer::buildProps()
     const float  cell = 64.0f;
     std::map<std::pair<int, int>, MeshBuilder> cells;
     std::map<std::string, ModelMesh>           cpu;
+    m_people.clear();
     for ( const PropSpot &p : t.m_props )
     {
+        // People near the road are drawn apart: they throw themselves aside when a car comes.
+        if ( !p.m_car && ( p.m_model.rfind( "fig_", 0 ) == 0 || p.m_model.rfind( "crowd_", 0 ) == 0 ) )
+        {
+            TrackPos           tp = t.locate( p.m_pos, -1 );
+            const TrackSample &ts = t.m_s[tp.m_i];
+            if ( std::fabs( tp.m_lat ) - ts.m_half < 22.0f && m_people.size() < 160 )
+            {
+                Person pe;
+                pe.m_model = p.m_model;
+                pe.m_pos = p.m_pos;
+                pe.m_rot = p.m_rot * Deg;
+                pe.m_scale = p.m_scale;
+                pe.m_away = mul( ts.m_right, tp.m_lat >= 0 ? 1.0f : -1.0f );
+                pe.m_crowd = p.m_model.rfind( "crowd_", 0 ) == 0;
+                m_people.push_back( pe );
+                continue;
+            }
+        }
         // Cars by the road: a car's own model in a paint of its own; wrecks rusted, sunk on their rims, sometimes
         // on their side.
         std::string meshKey = p.m_model;
@@ -1496,6 +1820,20 @@ void Renderer::events( const World &w )
                 puff( { c.m_pos.x, 0.9f, c.m_pos.y }, 6, 6.0f, 0.3f, { 255, 220, 140, 255 }, { 255, 80, 10, 0 }, 0.4f, T_SPARK, true );
             }
             break;
+        case EvE::LOOSE:
+        {
+            // Snow, water, dust or splinters, by what it was.
+            if ( e.m_kind == 2 )
+                puff( { at.x, 0.9f, at.z }, 18, 4.0f, 0.7f, { 240, 246, 255, 235 }, { 240, 246, 255, 0 }, 1.2f, T_SOFT, false );
+            else if ( e.m_kind == 3 )
+            {
+                if ( m_fountains.size() > 8 ) m_fountains.erase( m_fountains.begin() );
+                m_fountains.push_back( { { at.x, 0.4f, at.z }, 14.0f } );
+            }
+            else
+                puff( { at.x, 0.4f, at.z }, 4, 2.5f, 0.6f, { 120, 110, 95, 160 }, { 120, 110, 95, 0 }, 0.8f, T_SMOKE, false );
+            break;
+        }
         case EvE::ROCK:
             if ( e.m_kind == 1 )
                 puff( { at.x, 0.8f, at.z }, 16, 5.0f, 2.2f, { 150, 140, 125, 230 }, { 170, 160, 145, 0 }, 2.2f, T_SMOKE, false );
@@ -1588,6 +1926,47 @@ void Renderer::update( const World &w, float dt )
     }
     m_wetRace = w.m_wetness;
     m_fogRace = w.m_fogAdd;
+    life( w, dt );
+    // The ghosts leave a pale mist behind.
+    for ( const Ghost &s : m_spirits )
+        if ( s.m_on && m_rng.chance( std::min( 1.0f, dt * 24.0f ) ) )
+        {
+            Particle p;
+            p.m_pos = { s.m_pos.x + m_rng.range( -1.0f, 1.0f ), 0.6f, s.m_pos.y + m_rng.range( -1.0f, 1.0f ) };
+            p.m_vel = { 0, 1.2f, 0 };
+            p.m_size0 = 0.9f;
+            p.m_size1 = 1.8f;
+            p.m_c0 = { 120, 255, 170, 110 };
+            p.m_c1 = { 120, 255, 170, 0 };
+            p.m_life = 1.0f;
+            p.m_tex = T_SOFT;
+            p.m_add = true;
+            spawn( p );
+        }
+    // Broken hydrants spout for a while.
+    for ( auto &[at, left] : m_fountains )
+    {
+        left -= dt;
+        if ( left <= 0 ) continue;
+        int n = (int)( dt * 60.0f * std::min( 1.0f, left / 3.0f ) ) + 1;
+        for ( int k = 0; k < n; ++k )
+        {
+            Particle p;
+            p.m_pos = at;
+            p.m_vel = { m_rng.range( -0.8f, 0.8f ), m_rng.range( 7.0f, 10.0f ), m_rng.range( -0.8f, 0.8f ) };
+            p.m_rise = -14.0f;
+            p.m_size0 = 0.35f;
+            p.m_size1 = 0.8f;
+            p.m_c0 = { 200, 225, 255, 200 };
+            p.m_c1 = { 200, 225, 255, 0 };
+            p.m_life = 1.3f;
+            p.m_tex = T_SOFT;
+            p.m_add = false;
+            spawn( p );
+        }
+    }
+    m_fountains.erase( std::remove_if( m_fountains.begin(), m_fountains.end(), []( const auto &f ) { return f.second <= 0; } ),
+                       m_fountains.end() );
     // The bells of crossings and bridges, and where a rock is about to land: blinking lights.
     bool blink = std::fmod( w.m_time, 0.9f ) < 0.45f;
     if ( m_track )
@@ -2000,6 +2379,35 @@ void Renderer::drawCar( const World &w, int i, bool shadow )
     };
     attach( gunModel, c.m_def->m_mountFront );
     if ( c.m_rockets > 0 ) attach( "_pod", c.m_def->m_mountRoof );
+    if ( i == m_stickerCar && !shadow && m_stickerTex.id && !c.m_wrecked )
+    {
+        // The sponsor on the roof (on the bonnet when a coffin or a rocket pod takes the roof): a textured quad just above
+        // it, the text across the car, its top to the nose.
+        rlDrawRenderBatchActive();
+        bool    bonnet = i == m_roofCoffin || c.m_rockets > 0;
+        Vector3 at = bonnet ? c.m_def->m_mountFront : c.m_def->m_mountRoof;
+        float   hw = c.m_wid * 0.4f, hl = bonnet ? 0.3f : 0.38f, y = at.y + 0.04f, z = at.z + ( bonnet ? 0.8f : 0.0f );
+        Vector3 q[4] = { { -hw, y, z + hl }, { hw, y, z + hl }, { hw, y, z - hl }, { -hw, y, z - hl } };
+        for ( Vector3 &v : q ) v = Vector3Transform( v, base );
+        float lum = m_dark ? 0.55f : 0.95f;
+        rlDisableBackfaceCulling();
+        rlSetTexture( m_stickerTex.texture.id );
+        rlBegin( RL_QUADS );
+        rlColor4f( lum, lum, lum, 1.0f );
+        rlTexCoord2f( 0, 0 );
+        rlVertex3f( q[0].x, q[0].y, q[0].z );
+        rlTexCoord2f( 1, 0 );
+        rlVertex3f( q[1].x, q[1].y, q[1].z );
+        rlTexCoord2f( 1, 1 );
+        rlVertex3f( q[2].x, q[2].y, q[2].z );
+        rlTexCoord2f( 0, 1 );
+        rlVertex3f( q[3].x, q[3].y, q[3].z );
+        rlEnd();
+        rlSetTexture( 0 );
+        rlDrawRenderBatchActive();
+        rlEnableBackfaceCulling();
+    }
+    if ( i == m_roofCoffin ) attach( "_coffin", { c.m_def->m_mountRoof.x, c.m_def->m_mountRoof.y + 0.05f, c.m_def->m_mountRoof.z + 0.3f } );
     int rear = 0;
     for ( int r = 0; r < (int)RearE::COUNT; ++r ) rear += c.m_rear[r];
     if ( rear > 0 ) attach( "_rack", c.m_def->m_mountRear );
@@ -2039,6 +2447,28 @@ void Renderer::drawScene( const World &w, bool shadow )
             const ModelMesh &m = modelOf( o.m_model );
             if ( m.m_hasBase ) DrawMesh( m.m_base, lit, place( o.m_pos, o.m_rot * Deg ) );
         }
+    drawLife( shadow );
+    // The shoulders' small things: standing, tipping over, rolling, lying where they came to rest.
+    {
+        float near = m_view.m_height * 1.3f + 30.0f;
+        for ( const Loose &l : w.m_loose )
+        {
+            if ( l.m_gone || dist2( l.m_pos, f ) > near * near ) continue;
+            const LooseSpot &sp = m_track->m_loose[l.m_spot];
+            const ModelMesh &m = modelOf( sp.m_model );
+            if ( !m.m_hasBase ) continue;
+            Vector3 axis = { l.m_fallDir.y, 0, -l.m_fallDir.x };   // up turns towards where it falls
+            float   tilt = sp.m_kind == 1 ? l.m_roll : l.m_fall * 1.5708f;
+            float   lift = sp.m_kind == 1 ? 0.0f : std::sin( l.m_fall * 1.5708f ) * std::min( sp.m_r, sp.m_h ) * 0.55f;
+            Matrix  xf = MatrixMultiply( MatrixMultiply( MatrixScale( sp.m_scale, sp.m_scale, sp.m_scale ), MatrixRotateY( -l.m_rot ) ),
+                                         MatrixRotate( axis, tilt ) );
+            if ( sp.m_kind == 1 )   // a ball rolls round its middle
+                xf = MatrixMultiply( MatrixMultiply( MatrixMultiply( MatrixTranslate( 0, -sp.m_h * 0.5f, 0 ), MatrixRotateY( -l.m_rot ) ),
+                                                     MatrixRotate( axis, tilt ) ),
+                                     MatrixMultiply( MatrixScale( sp.m_scale, sp.m_scale, sp.m_scale ), MatrixTranslate( 0, sp.m_h * 0.5f, 0 ) ) );
+            DrawMesh( m.m_base, lit, MatrixMultiply( xf, MatrixTranslate( l.m_pos.x, lift + l.m_y, l.m_pos.y ) ) );
+        }
+    }
     // What turns: Ferris wheels, carousels, radar dishes.
     for ( const auto &[name, xf] : m_turning )
     {
@@ -2144,6 +2574,15 @@ void Renderer::drawScene( const World &w, bool shadow )
         if ( m.m_hasBase ) DrawMesh( m.m_base, lit, place( r.m_pos, r.m_head, 0.9f ) );
     }
     for ( size_t i = 0; i < w.m_cars.size(); ++i ) drawCar( w, (int)i, shadow );
+    if ( !shadow )
+        for ( const Ghost &s : m_spirits )
+        {
+            if ( !s.m_on ) continue;
+            const ModelMesh &m = g.m_forge.get( g_data, s.m_model, s.m_paint );
+            // Pale and green, a faint glow that flickers (more glow and the night's bloom turns it into a white block).
+            setVec4( g.m_lit, "tint", { 0.35f, 0.85f, 0.55f, 0.14f + 0.06f * std::sin( m_time * 7.0f + s.m_pos.x ) } );
+            if ( m.m_hasBase ) DrawMesh( m.m_base, g.m_litMat, place( s.m_pos, s.m_head, 0.2f + 0.1f * std::sin( m_time * 2.0f ) ) );
+        }
     if ( !shadow && m_ghost.m_on )
     {
         const ModelMesh &m = g.m_forge.get( g_data, m_ghost.m_model, m_ghost.m_paint );
@@ -2340,6 +2779,7 @@ void Renderer::render( const World &w, const View &v )
     m_cam.up = { 0, 1, 0 };
     m_cam.fovy = 45.0f;
     lights( w );
+    if ( m_stickerDirty ) buildSticker();
     if ( m_track ) shadowPass( w );
     BeginTextureMode( m_hdr );
     Color fog = m_venue ? m_venue->m_fog : Color{ 30, 30, 36, 255 };

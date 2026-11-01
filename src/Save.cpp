@@ -76,6 +76,23 @@ void Records::load( const std::string &path )
         }
         else if ( k == "wins" ) ss >> m_quickWins >> m_derbyWins >> m_careersWon;
         else if ( k == "tour" ) ss >> m_tourBest;
+        else if ( k == "award" )
+        {
+            std::string a;
+            if ( ss >> a ) m_awards.insert( a );
+        }
+        else if ( k == "count" )
+        {
+            std::string a;
+            int         n = 0;
+            if ( ss >> a >> n ) m_count[a] = n;
+        }
+        else if ( k == "seen" )
+        {
+            std::string a;
+            if ( ss >> a ) m_seen.insert( a );
+        }
+        else if ( k == "tutorial" ) ss >> m_tutorial;
     }
 }
 
@@ -85,6 +102,10 @@ bool Records::save( const std::string &path ) const
     if ( !f ) return false;
     fprintf( f, "wins %d %d %d\ntour %d\n", m_quickWins, m_derbyWins, m_careersWon, m_tourBest );
     for ( const auto &[t, s] : m_bestLap ) fprintf( f, "lap %s %.3f\n", t.c_str(), s );
+    fprintf( f, "tutorial %d\n", m_tutorial ? 1 : 0 );
+    for ( const std::string &a : m_awards ) fprintf( f, "award %s\n", a.c_str() );
+    for ( const auto &[a, n] : m_count ) fprintf( f, "count %s %d\n", a.c_str(), n );
+    for ( const std::string &a : m_seen ) fprintf( f, "seen %s\n", a.c_str() );
     return endWrite( f, path );
 }
 

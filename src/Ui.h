@@ -22,6 +22,9 @@ void init( const std::string &assets );
 /** @brief Lets go of it. */
 void shutdown();
 
+/** @return the font (for pictures drawn into textures) */
+const Font &font();
+
 /** @brief Sets the chosen text size (1 as made). */
 void setTextSize( float s );
 

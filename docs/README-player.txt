@@ -32,7 +32,11 @@ Screenshot          F12
 
 Modes
 -----
-Career       five leagues, race days with three offers, garage, black market, loan shark, sponsors, the tabloid
+Career       five leagues, race days with three offers (and now and then a job for Graves), garage, black market,
+             loan shark, sponsors, the tabloid
+Test drive   eight short lessons on the Graves & Sons yard, Ricky Rattle explaining: throttle, brakes, handbrake,
+             guns, mines, nitro, rockets (from the title screen, and first on a new career's paddock)
+The crypt    65 epitaphs to earn over all your races and careers, each a gravestone (title screen and paddock)
 Quick race   any track and car; race, derby (last car driving wins) or time trial; or a random track
 Endless tournament   a new random track every round; finish in the top three to race on
 Daily challenge      the same random track and car for everyone today, a time trial against your ghost
@@ -53,6 +57,20 @@ screen shake, the announcer's lines. With a pad the hints and the controls scree
 vision setting the rivals race in colours that stay apart for red-green and blue-yellow eyes. On the Steam Deck the
 game starts in the fast graphics setting (smaller shadow map, lighter bloom, 67 % resolution); 40 frames save battery.
 
+Graves' jobs
+------------
+Some race days bring a fourth card: a job for Mortimer Graves. No league points, but he pays on top of the prize:
+- The coffin: one on your roof. Reach the finish with at most 40 % damage, or it falls off.
+- The debtor: a rival owes Graves money. Wreck their car yourself.
+- The hearse: the Graves & Sons hearse races with you. The rivals go for it; see it home.
+- The wreaths: nine lie on the track. Pick up six before the others run them over.
+
+Upgrades have a price on the road
+---------------------------------
+A stronger engine makes the rear twitchy on full throttle (lift off and it bites again), soft tyres cost a little
+top speed, armour weighs (slower off the line and on the brakes, but harder in a crash). The garage shows what the
+next level gives and takes.
+
 Tips
 ----
 - Level crossings ring before the train comes. The train does not brake. Drawbridges rise for the ships.
@@ -66,3 +84,7 @@ Tips
 - Cash, wrenches, ammo, nitro, mines, rockets and coffins (anything can be inside) lie on the track.
 - Sabotage on the black market leaves a rival's car half broken for the next race. Do not get caught.
 - The loan shark is patient. Until he is not.
+- Bins, cones, crates, grave crosses and snowmen stand on the shoulders. Knock them flying; a hydrant spouts.
+- The dead do not always rest: on the cemetery's tracks and at the final, the last rivals to die race along as
+  ghosts. They cannot hurt you. They still talk.
+- Sign a sponsor and their name goes on your roof.

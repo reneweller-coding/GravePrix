@@ -48,6 +48,12 @@ SmartScreen may warn once ("More info", "Run anyway").
   the Graveyard of Honour, with their last words, and a newcomer takes their seat.
 - **Tracks that fight back:** level crossings and trains that do not brake, drawbridges, falling rocks on the pass,
   weather that turns in the middle of a race.
+- **Jobs for Graves:** carry a coffin on the roof without losing it, wreck a debtor, see the firm's hearse home
+  through a field that wants it dead, pick up the wreaths before the others flatten them.
+- **A world that reacts:** bins, crates, grave crosses, garden gnomes and snowmen on the shoulders fly when hit,
+  hydrants spout, spectators throw themselves flat, crows take off, yard dogs chase the field, and on the cemetery
+  the dead rivals still race along as ghosts.
+- **65 epitaphs** to earn, each a gravestone in the crypt; a test drive on the Graves & Sons yard teaches the controls.
 - **Other modes:** quick race (race, derby or time trial), an endless tournament on random tracks and a daily
   challenge, the same for everyone.
 - **Five difficulties** and options for everyone: a driving assist (on by default), text and display sizes, colour

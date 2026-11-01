@@ -73,3 +73,93 @@ scene estate_statues
   put gargoyle x=-5 z=1
   put tree_dead_big x=5 z=5
   put tree_dead x=-6 z=6
+
+scene estate_maze
+  venue estate
+  size 16
+  near 5
+  weight 0.5
+  put hedge_maze x=0 z=9
+  put lamp_gothic x=-9 z=1
+  put lamp_gothic x=9 z=1
+  put fig_widow x=-3 z=1 rot=30
+  put topiary_skull x=9 z=6
+
+scene estate_pool
+  venue estate
+  size 13
+  near 4
+  weight 0.6
+  put pool_hearse x=0 z=6
+  put chair_plastic x=-5 z=2 rot=20
+  put chair_plastic x=-3.5 z=2.4 rot=-10
+  put fig_undertaker x=5 z=2 rot=-40
+  put lamp_gothic x=-8 z=0
+  put urn_stone x=7 z=1
+
+scene estate_greenhouse
+  venue estate
+  size 12
+  near 5
+  weight 0.6
+  put greenhouse x=0 z=7
+  put urn_stone x=-6 z=1
+  put urn_stone x=6 z=1
+  put fig_worker x=-3 z=2 rot=30
+  put gnome x=3 z=2 rot=-20
+
+scene estate_gnomes
+  venue estate
+  size 11
+  near 3
+  put gnome_army x=0 z=4
+  put gnome x=-6 z=1 rot=20
+  put gnome x=6 z=1.5 rot=-30
+  put hedge_block x=0 z=9
+  put lamp_gothic x=-8 z=0
+
+scene estate_topiary
+  venue estate
+  size 13
+  near 3
+  put topiary_skull x=-6 z=3
+  put topiary_skull x=0 z=3.5
+  put topiary_skull x=6 z=3
+  put lamp_gothic x=-3 z=0
+  put lamp_gothic x=3 z=0
+  put hedge_block x=0 z=8
+
+scene estate_gazebo
+  venue estate
+  size 12
+  near 4
+  weight 0.7
+  put gazebo x=0 z=6
+  put crowd_mourners x=-5 z=2 rot=160
+  put bench x=5 z=1.5
+  put tree_dead x=8 z=5
+  put urn_stone x=-2 z=1.5
+
+scene estate_angel
+  venue estate
+  size 12
+  near 3
+  put statue_angel x=0 z=3
+  put gravestone_angel x=-5 z=2
+  put gravestone_angel x=5 z=2
+  put cypress x=-8 z=6
+  put cypress x=8 z=6
+  put wreath x=-1.5 z=1
+  put grave_lantern x=1.5 z=1
+
+scene estate_family
+  venue estate
+  size 13
+  near 4
+  put mausoleum x=-6 z=6
+  put crypt x=6 z=5
+  put obelisk x=0 z=3
+  put wreath x=-2 z=1
+  put wreath x=2 z=1
+  put grave_lantern x=0 z=1
+  put lamp_gothic x=9 z=1

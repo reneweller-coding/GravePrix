@@ -43,6 +43,18 @@ std::string replaceAll( std::string s, const std::string &from, const std::strin
 
 }   // namespace
 
+const char *jobKey( JobE j )
+{
+    switch ( j )
+    {
+    case JobE::COFFIN: return "coffin";
+    case JobE::DEBTOR: return "debtor";
+    case JobE::ESCORT: return "escort";
+    case JobE::WREATHS: return "wreaths";
+    default: return "";
+    }
+}
+
 std::string formatMoney( long long m )
 {
     // 12345 -> "12.345 $" (German) or "$12,345".
@@ -209,6 +221,28 @@ void Career::newDay()
         o.m_rivals = f;
         m_offers.push_back( o );
     }
+    // Every other day or so Graves has a job: a race of the league's with a task of his, paid apart.
+    if ( r.chance( 0.5f ) && !own.empty() )
+    {
+        Offer o;
+        o.m_tier = 1;
+        static const JobE kinds[] = { JobE::COFFIN, JobE::DEBTOR, JobE::ESCORT, JobE::WREATHS };
+        o.m_job = kinds[r.below( 4 )];
+        do
+            o.m_track = races[r.below( (int)races.size() )];
+        while ( races.size() > 2 && std::any_of( m_offers.begin(), m_offers.end(), [&]( const Offer &x ) { return x.m_track == o.m_track; } ) );
+        const TrackDef &td = g_data.m_tracks.at( o.m_track );
+        o.m_reverse = td.m_reverse && r.chance( 0.4f );
+        o.m_laps = td.m_laps;
+        o.m_purse = l->m_purse / 2;
+        o.m_fee = 0;
+        for ( size_t k = 0; k < own.size() && o.m_rivals.size() < 5; ++k ) o.m_rivals.push_back( own[( k + m_day ) % own.size()] );
+        if ( o.m_job == JobE::ESCORT && o.m_rivals.size() > 4 ) o.m_rivals.pop_back();   // the hearse takes a place
+        if ( o.m_job == JobE::DEBTOR ) o.m_target = o.m_rivals[(size_t)r.below( (int)o.m_rivals.size() )];
+        static const float pay[] = { 0, 0.8f, 1.0f, 1.1f, 0.8f };
+        o.m_pay = (int)( l->m_purse * pay[(int)o.m_job] * g_data.difficulty( m_difficulty ).m_prize / 50 ) * 50;
+        m_offers.push_back( o );
+    }
 }
 
 CarSetup Career::rivalSetup( const std::string &key, int tier ) const
@@ -226,6 +260,12 @@ CarSetup Career::rivalSetup( const std::string &key, int tier ) const
     s.m_likes = d ? d->m_likes : "mine";
     const RivalState    *st = rival( key );
     int                  league = st ? st->m_league : m_league;
+    // The leagues get steeper: down below the rivals drive slower than their skill would let them, up top faster.
+    if ( const LeagueDef *ld = g_data.league( league ) )
+    {
+        s.m_pace = ld->m_pace;
+        s.m_skill = clampf( s.m_skill * ld->m_skill, 0.05f, 1.0f );
+    }
     const DifficultyDef &dif = g_data.difficulty( m_difficulty );
     const CarDef        *cd = g_data.car( s.m_car );
     int base = std::max( 0, 5 - league );
@@ -312,6 +352,25 @@ std::vector<CarSetup> Career::field( const Offer &o, int &player ) const
     }
     out.insert( out.begin() + pos, playerSetup() );
     player = pos;
+    if ( o.m_job == JobE::ESCORT )
+    {
+        // Graves' hearse beside the player: slow, unarmed, armoured, and the rivals' favourite target.
+        CarSetup h;
+        h.m_car = g_data.car( "pallbearer" ) ? "pallbearer" : m_car;
+        h.m_driver = T( "Leichenwagen von Graves & Sons" );
+        h.m_escort = true;
+        h.m_paint.m_c[0] = { 24, 24, 28, 255 };
+        h.m_paint.m_c[1] = { 190, 170, 110, 255 };
+        h.m_paint.m_c[2] = { 60, 60, 66, 255 };
+        h.m_skill = 0.75f;
+        h.m_aggression = 0.0f;
+        h.m_weapons = 0.0f;
+        h.m_pace = 0.88f;
+        h.m_engine = 2;
+        h.m_tires = 3;
+        h.m_armor = 2;
+        out.insert( out.begin() + pos + 1, h );
+    }
     return out;
 }
 
@@ -425,7 +484,7 @@ RaceReport Career::finish( const Offer &o, const World &w, int player )
         line.m_wrecks = c.m_wrecks;
         bool counts = !( c.m_wrecked && w.m_mode == ModeE::RACE ) && c.m_dist > -1e8f;   // not wrecked, not given up
         line.m_prize = counts && p < 6 ? (int)( o.m_purse * PrizeShare[p] * ( line.m_player ? dif.m_prize : 1.0f ) ) : 0;
-        if ( l && counts && p < l->m_points.size() && !o.m_showdown && !o.m_final ) line.m_points = l->m_points[p];
+        if ( l && counts && p < l->m_points.size() && !o.m_showdown && !o.m_final && o.m_job == JobE::NONE ) line.m_points = l->m_points[p];
         rep.m_lines.push_back( line );
     }
     for ( ResultLine &line : rep.m_lines )
@@ -461,7 +520,15 @@ RaceReport Career::finish( const Offer &o, const World &w, int player )
         if ( rep.m_lap > 0 ) rep.m_sponsor += bonus( "lap" );
         if ( me.m_shots == 0 && !me.m_wrecked ) rep.m_sponsor += bonus( "nogun" );
     }
-    rep.m_total = rep.m_prize + rep.m_bounty + rep.m_cash + rep.m_lap + rep.m_sponsor;
+    if ( o.m_job != JobE::NONE )
+    {
+        rep.m_job = o.m_job;
+        rep.m_jobDone = jobDone( o, w, player );
+        rep.m_jobPay = rep.m_jobDone ? o.m_pay : 0;
+        if ( rep.m_jobDone ) ++m_jobsDone;
+        news( std::string( rep.m_jobDone ? "job_done_" : "job_failed_" ) + jobKey( o.m_job ), o.m_target, trackTitle, rep.m_place, o.m_pay );
+    }
+    rep.m_total = rep.m_prize + rep.m_bounty + rep.m_cash + rep.m_lap + rep.m_sponsor + rep.m_jobPay;
     m_money += rep.m_total;
     m_earned += rep.m_total;
     for ( RivalState &s : m_rivals )
@@ -629,6 +696,32 @@ void Career::promote()
         if ( s.m_league == m_league ) s.m_points = 0;
     m_story = m_league == 0 ? "boss" : "league_" + std::to_string( m_league );
     news( "league_up", "", "", 0, 0 );
+}
+
+bool Career::jobDone( const Offer &o, const World &w, int player )
+{
+    const Car &me = w.m_cars[player];
+    auto       find = [&]( auto pred ) {
+        for ( size_t i = 0; i < w.m_cars.size(); ++i )
+            if ( pred( w.m_cars[i] ) ) return (int)i;
+        return -1;
+    };
+    switch ( o.m_job )
+    {
+    case JobE::COFFIN: return me.m_finished && !me.m_wrecked && me.m_damage <= CoffinLimit * me.m_maxHp;
+    case JobE::DEBTOR:
+    {
+        int t = find( [&]( const Car &c ) { return c.m_setup.m_rival == o.m_target; } );
+        return t >= 0 && w.m_cars[t].m_wrecked && w.m_cars[t].m_wreckedBy == player;
+    }
+    case JobE::ESCORT:
+    {
+        int h = find( []( const Car &c ) { return c.m_setup.m_escort; } );
+        return h >= 0 && w.m_cars[h].m_finished && !w.m_cars[h].m_wrecked;
+    }
+    case JobE::WREATHS: return me.m_wreaths >= WreathsNeeded;
+    default: return false;
+    }
 }
 
 bool Career::solvent() const
@@ -967,8 +1060,8 @@ bool Career::save( const std::string &path ) const
     fprintf( f, "loan %lld %d\nsponsor %s\nsabotaged %s\n", m_loan, m_loanDue, m_sponsor.empty() ? "-" : m_sponsor.c_str(),
              m_sabotaged.empty() ? "-" : m_sabotaged.c_str() );
     if ( !m_used.empty() ) fprintf( f, "used %s %d %s\n", m_used.c_str(), m_usedPrice, m_usedFrom.empty() ? "-" : m_usedFrom.c_str() );
-    fprintf( f, "stats %d %d %d %d %d\nover %d %d\nseed %u\nstory %s\n", m_races, m_wins, m_wrecks, m_wrecked, m_earned,
-             m_over ? 1 : 0, m_won ? 1 : 0, m_seed, m_story.empty() ? "-" : m_story.c_str() );
+    fprintf( f, "stats %d %d %d %d %d\nover %d %d\nseed %u\nstory %s\njobs %d\n", m_races, m_wins, m_wrecks, m_wrecked, m_earned,
+             m_over ? 1 : 0, m_won ? 1 : 0, m_seed, m_story.empty() ? "-" : m_story.c_str(), m_jobsDone );
     for ( const RivalState &r : m_rivals )
     {
         fprintf( f, "rival %s %d %d %d %d %d %d %d %d %d\n", r.m_key.c_str(), r.m_active ? 1 : 0, r.m_alive ? 1 : 0, r.m_league,
@@ -1064,6 +1157,7 @@ bool Career::load( const std::string &path )
             c.m_won = b != 0;
         }
         else if ( key == "seed" ) ss >> c.m_seed;
+        else if ( key == "jobs" ) ss >> c.m_jobsDone;
         else if ( key == "story" )
         {
             ss >> c.m_story;

@@ -1,0 +1,47 @@
+# The pieces of 0.3.0: the test drive, the crypt from the title, a career race with Graves' coffin on the roof and
+# the sponsor's sticker, the dead rivals' ghosts on the cemetery, an escort job.
+expect title
+down down down accept wait 5
+expect race
+wait 400 shot tutorial
+race wait 5
+expect results
+shot tutorial_done
+accept wait 2
+expect title
+down accept
+expect crypt
+wait 10 shot crypt_title
+back
+expect title
+up up up up accept
+expect newgame
+down down down accept
+expect story
+back wait 2
+expect story
+back wait 2
+expect hub
+graves
+sign crate_king
+careerrace cem_slalom coffin wait 5
+expect race
+wait 270 shot coffin
+wait 190 shot ghosts
+wait 40 shot ghosts2
+race wait 5
+expect results
+shot coffin_results
+accept wait 2
+expect news
+accept wait 2
+expect hub
+careerrace junk_squeeze escort wait 5
+expect race
+wait 400 shot escort
+race wait 5
+expect results
+accept wait 2
+expect news
+accept wait 2
+expect hub

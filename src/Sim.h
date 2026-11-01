@@ -69,6 +69,9 @@ struct CarSetup
     float       m_skill = 0.6f, m_aggression = 0.5f, m_weapons = 0.5f;   ///< computer drivers
     int         m_grudge = 0;      ///< 0..3: how much this rival wants the player dead (a feud)
     float       m_novice = 0.0f;   ///< 0..1: a beginner's late, wide steering and misjudged corners (tests)
+    float       m_hands = 0.0f;    ///< 0..1: a person at a keyboard (0.3 practised, 1 a beginner): late hands, all-or-nothing keys (tests)
+    float       m_pace = 1.0f;     ///< a computer driver's engine: its league's share (LeagueDef::m_pace)
+    bool        m_escort = false;  ///< Graves' hearse in an escort job: the rivals go for it
     std::string m_likes = "mine";
 };
 
@@ -87,6 +90,11 @@ struct AiState
     int   m_target = -1;         ///< the car it is after (derby, ramming)
     float m_mistake = 0.0f;      ///< a late brake
     float m_gearWait = 0.0f;     ///< seconds before it drops or fires gear again
+    CarInput m_late[32];         ///< the hands: what the eyes decided, played back a reaction time later
+    int      m_lateAt = 0;
+    float    m_tapOwed = 0.0f;    ///< the keys: steering owed, tapped out in tenths of a second
+    float    m_tapOut = 0.0f;
+    int      m_tapLeft = 0;
 };
 
 /** @brief A car in the race. */
@@ -98,6 +106,7 @@ struct Car
     // What it can do (the car, its upgrades, the difficulty).
     float m_power = 11, m_top = 36, m_grip = 1, m_brakeF = 1, m_steerF = 1, m_offroad = 1, m_maxHp = 100;
     float m_mass = 1200, m_inertia = 2000, m_len = 4.4f, m_wid = 1.8f;
+    float m_slip = 0.0f;           ///< a tuned engine's nervous rear: grip lost under full throttle
     float m_dmgTaken = 1.0f, m_dmgDealt = 1.0f;   ///< the difficulty's
     // Where it is.
     Vector2 m_pos = { 0, 0 }, m_vel = { 0, 0 };
@@ -143,6 +152,7 @@ struct Car
     int   m_shots = 0, m_hits = 0;
     float m_damage = 0.0f;         ///< damage taken
     int   m_cash = 0;              ///< cash picked up
+    int   m_wreaths = 0;           ///< wreaths picked up (Graves' job)
     AiState m_ai;
     CarInput m_in;                 ///< the last input
 
@@ -209,7 +219,20 @@ enum class EvE : int
 {
     SHOT, HIT, RICOCHET, FLAME, CRASH, WALL, SCRAPE, EXPLODE, WRECK, PICKUP, MINE_DROP, MINE_ARM, ROCKET, NITRO, OIL,
     SPIKES, SMOKE, TIRE_BURST, LAP, FINAL_LAP, FINISH, OVERTAKE, BARREL, COUNTDOWN, GO, HORN, WRONG_WAY, SAY,
-    TRAIN, BRIDGE, ROCK, WEATHER, PART, COUNT
+    TRAIN, BRIDGE, ROCK, WEATHER, PART, LOOSE, COUNT
+};
+
+/** @brief A small thing from the shoulders (Track::m_loose): standing, knocked flying, lying. */
+struct Loose
+{
+    int     m_spot = 0;                    ///< its Track::m_loose
+    Vector2 m_pos = { 0, 0 }, m_vel = { 0, 0 };
+    float   m_rot = 0.0f, m_spin = 0.0f;   ///< its heading (radians) and how fast it turns
+    float   m_fall = 0.0f;                 ///< 0 standing .. 1 lying
+    Vector2 m_fallDir = { 0, 1 };          ///< where it falls to
+    float   m_roll = 0.0f;                 ///< how far it rolled (radians)
+    float   m_y = 0.0f, m_vy = 0.0f;       ///< thrown up
+    bool    m_hit = false, m_gone = false;
 };
 
 /** @brief A rock from a rockfall. */
@@ -294,6 +317,7 @@ public:
     std::vector<Pickup>   m_pickups;
     std::vector<Barrel>   m_barrels;
     std::vector<Rock>     m_rocks;               ///< from rockfalls: falling (age < 0) or lying on the road
+    std::vector<Loose>    m_loose;               ///< the shoulders' small things
     std::vector<int>      m_moverCycle;          ///< each rockfall's last rock
     float                 m_wetness = 0.0f;      ///< 0..1: rain that came during the race
     float                 m_fogAdd = 0.0f;       ///< fog that came during the race (added density)
@@ -321,6 +345,8 @@ private:
     void hazards();
     void pickups();
     void movers();
+    void looseThings();
+    void knock( Loose &l, Vector2 vel, Vector2 away, int by );
     void progress( int i );
     void places();
     void damage( int victim, float amount, int by, Vector2 at );
@@ -329,6 +355,7 @@ private:
     void event( EvE type, int car, Vector2 pos, float power = 1.0f, int kind = 0, int other = -1,
                 const std::string &text = "" );
     CarInput ai( int i );
+    CarInput hands( int i, const CarInput &want );
 };
 
 /** @brief The race's derived numbers for a car (its class, upgrades and gear): what the garage shows too. */
@@ -336,6 +363,7 @@ struct CarStats
 {
     float m_power = 0, m_top = 0, m_grip = 0, m_brake = 0, m_steer = 0, m_offroad = 0, m_hp = 0;
     float m_ammo = 0, m_damage = 0, m_rate = 0;
+    float m_mass = 0, m_slip = 0;   ///< the weight (armour adds), the rear's nervousness (the engine adds)
 };
 
 /** @return a setup's numbers */

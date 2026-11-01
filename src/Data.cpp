@@ -101,7 +101,7 @@ std::string pickLine( const Says &de, const Says &en, const std::string &event, 
 
 const std::vector<std::string> BlockTypes = { "model",  "car",       "gun",   "gear",       "upgrade", "venue",
                                               "track",  "rival",     "character", "league", "difficulty",
-                                              "news",   "ad",        "story", "story_en",   "sponsor", "scene" };
+                                              "news",   "ad",        "story", "story_en",   "sponsor", "scene", "award" };
 
 }   // namespace
 
@@ -278,9 +278,9 @@ void readVenue( const Block &b, VenueDef &v, std::vector<std::string> &warnings 
             }
         }
         else if ( k == "wall" ) v.m_wall = l.arg( 0, v.m_wall );
-        else if ( k == "props" || k == "litter" )
+        else if ( k == "props" || k == "litter" || k == "loose" )
         {
-            auto &list = k == "props" ? v.m_props : v.m_litter;
+            auto &list = k == "props" ? v.m_props : k == "litter" ? v.m_litter : v.m_loose;
             for ( const std::string &w : l.m_args )
             {
                 size_t star = w.find( '*' );
@@ -541,6 +541,9 @@ bool Catalog::load( const std::string &dir )
             u.m_brake = p.num( "brake", 0 );
             u.m_offroad = p.num( "offroad", 0 );
             u.m_hp = p.num( "hp", 0 );
+            u.m_slip = p.num( "slip", 0 );
+            u.m_drag = p.num( "drag", 0 );
+            u.m_mass = p.num( "mass", 0 );
         }
         else if ( t == "venue" )
         {
@@ -591,6 +594,8 @@ bool Catalog::load( const std::string &dir )
             }
             l.m_showdown = p.integer( "showdown", l.m_showdown );
             l.m_intro = p.str( "intro" );
+            l.m_pace = p.num( "pace", 1.0f );
+            l.m_skill = p.num( "skill", 1.0f );
         }
         else if ( t == "difficulty" )
         {
@@ -639,6 +644,15 @@ bool Catalog::load( const std::string &dir )
                 s.m_en = b.m_prose;
                 if ( p.has( "title" ) && s.m_title.m_en.empty() ) s.m_title.m_en = p.str( "title" );
             }
+        }
+        else if ( t == "award" )
+        {
+            dup( b, m_awards.count( b.m_name ) > 0 );
+            AwardDef &a = m_awards[b.m_name];
+            a.m_key = b.m_name;
+            a.m_title = p.text( "title" );
+            a.m_desc = p.text( "desc" );
+            m_awardOrder.push_back( b.m_name );
         }
         else if ( t == "sponsor" )
         {
@@ -700,6 +714,8 @@ void Catalog::check()
     {
         for ( const auto &pr : v.m_litter )
             if ( !m_models.count( pr.first ) ) m_warnings.push_back( "venue " + n + ": no litter model \"" + pr.first + "\"" );
+        for ( const auto &pr : v.m_loose )
+            if ( !m_models.count( pr.first ) ) m_warnings.push_back( "venue " + n + ": no loose model \"" + pr.first + "\"" );
         for ( const auto &pr : v.m_props )
             if ( !m_models.count( pr.first ) ) m_warnings.push_back( "venue " + n + ": no prop model \"" + pr.first + "\"" );
     }
@@ -741,6 +757,7 @@ const CharacterDef *Catalog::character( const std::string &n ) const { return fi
 const LeagueDef    *Catalog::league( int id ) const { return findIn( m_leagues, id ); }
 const StoryDef     *Catalog::story( const std::string &n ) const { return findIn( m_stories, n ); }
 const SponsorDef   *Catalog::sponsor( const std::string &n ) const { return findIn( m_sponsors, n ); }
+const AwardDef     *Catalog::award( const std::string &n ) const { return findIn( m_awards, n ); }
 
 const DifficultyDef &Catalog::difficulty( int i ) const
 {

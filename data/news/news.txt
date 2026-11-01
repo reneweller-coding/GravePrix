@@ -903,3 +903,101 @@ ad ad_49
 ad ad_50
   text "Kredite ohne Fragen, ohne Formulare, ohne Kniescheibengarantie. Barnaby Fin, Finanzdienstleistungen mit Biss."
   text_en "Loans with no questions, no forms and no kneecap guarantee. Barnaby Fin, financial services with bite."
+
+# ------------------------------------------------------------------------------------------------ Graves' jobs
+
+news job_done_coffin jcof_1
+  head "Kundschaft pünktlich zugestellt"
+  head_en "Customer Delivered on Time"
+  text "{player} brachte bei „{track}“ einen Sarg auf dem Wagendach ins Ziel – samt Inhalt und ohne Kratzer. Graves & Sons zahlt {money} und lobt „die ruhige Hand“. Der Inhalt äußerte sich nicht."
+  text_en "{player} carried a coffin on the roof all the way round {track} – contents included, not a scratch. Graves & Sons pays {money} and praises the 'steady hand'. The contents declined to comment."
+
+news job_done_coffin jcof_2
+  head "Die letzte Fahrt, mit Vollgas"
+  head_en "The Last Ride, at Full Throttle"
+  text "Der Verstorbene wünschte sich eine „flotte letzte Reise“. {player} lieferte: Rennen „{track}“, Sarg auf dem Dach, Lohn {money}. Die Angehörigen sprechen von einer „würdevollen Hetzjagd“."
+  text_en "The deceased wished for a 'brisk final journey'. {player} delivered: {track}, coffin on the roof, paid {money}. The family calls it 'a dignified stampede'."
+
+news job_failed_coffin jcof_3
+  head "Sarg auf der Fahrbahn"
+  head_en "Coffin on the Carriageway"
+  text "Bei „{track}“ verlor {player} einen Sarg vom Dach. Mortimer Graves: „Der Kunde ist zweimal gestorben. Das berechne ich doppelt.“ Lohn: keiner."
+  text_en "At {track}, {player} lost a coffin off the roof. Mortimer Graves: 'The customer has now died twice. I shall bill accordingly.' Pay: none."
+
+news job_failed_coffin jcof_4
+  head "Unfreiwillige Auferstehung"
+  head_en "Unscheduled Resurrection"
+  text "Zeugen sahen einen Sarg über die Leitplanke von „{track}“ segeln. Fahrer {player} schweigt, Graves & Sons prüft rechtliche Schritte. Und neue Gurte."
+  text_en "Witnesses saw a coffin sail over the barrier at {track}. Driver {player} is saying nothing; Graves & Sons is considering legal steps. And new straps."
+
+news job_done_debtor jdeb_1
+  head "Schuld beglichen, Wagen auch"
+  head_en "Debt Settled, Car Too"
+  text "{rival} schuldete Graves & Sons eine stattliche Summe. Bei „{track}“ trieb {player} sie ein – mit der Stoßstange. Inkassogebühr: {money}."
+  text_en "{rival} owed Graves & Sons a tidy sum. At {track}, {player} collected it – with the bumper. Collection fee: {money}."
+
+news job_done_debtor jdeb_2
+  head "Mahnung zugestellt"
+  head_en "Final Reminder Delivered"
+  text "„Wir schicken keine Briefe mehr“, sagt Mortimer Graves. „Wir schicken {player}.“ {rival} hat die Botschaft bei „{track}“ verstanden. Der Wagen leider nicht mehr."
+  text_en "'We no longer send letters,' says Mortimer Graves. 'We send {player}.' {rival} got the message at {track}. The car, sadly, did not survive it."
+
+news job_failed_debtor jdeb_3
+  head "Schuldner entkommt"
+  head_en "Debtor Gets Away"
+  text "{rival} fuhr bei „{track}“ mit heiler Haut und offenen Rechnungen davon. {player} hätte ihn erwischen sollen. Graves hat sich beide Namen notiert."
+  text_en "{rival} drove away from {track} with a whole skin and unpaid bills. {player} was supposed to catch them. Graves has written down both names."
+
+news job_failed_debtor jdeb_4
+  head "Zu spät für die Mahnung"
+  head_en "Too Late for the Reminder"
+  text "Bei „{track}“ war {player} hinter {rival} her, doch das Schicksal – oder ein anderer Fahrer – war schneller. Graves: „Ich zahle für Arbeit, nicht für Zuschauen.“"
+  text_en "At {track}, {player} was hunting {rival}, but fate – or another driver – got there first. Graves: 'I pay for work, not for spectating.'"
+
+news job_done_escort jesc_1
+  head "Leichenwagen unversehrt"
+  head_en "Hearse Arrives Intact"
+  text "Die halbe Liga schoss bei „{track}“ auf den Leichenwagen von Graves & Sons. {player} hielt sie ihm vom Leib. Lohn: {money}. Der Fahrer des Leichenwagens hat um Urlaub gebeten."
+  text_en "Half the league opened fire on the Graves & Sons hearse at {track}. {player} kept them off its back. Pay: {money}. The hearse driver has asked for leave."
+
+news job_done_escort jesc_2
+  head "Geleitschutz mit Kanone"
+  head_en "Armed Escort"
+  text "Ein Trauerzug der besonderen Art: {player} begleitete bei „{track}“ den Leichenwagen von Graves & Sons ins Ziel und räumte dabei die Straße. {money} für die Mühe."
+  text_en "A funeral procession of a special kind: at {track}, {player} saw the Graves & Sons hearse home and cleared the road on the way. {money} for the trouble."
+
+news job_failed_escort jesc_3
+  head "Leichenwagen selbst ein Fall für den Bestatter"
+  head_en "Hearse Now Needs a Hearse"
+  text "Bei „{track}“ ging der Leichenwagen von Graves & Sons in Flammen auf. {player} sollte ihn beschützen. Mortimer Graves nennt den Vorfall „geschäftsschädigend und ein wenig ironisch“."
+  text_en "At {track}, the Graves & Sons hearse went up in flames. {player} was meant to protect it. Mortimer Graves calls the incident 'bad for business and slightly ironic'."
+
+news job_failed_escort jesc_4
+  head "Trauerzug ohne Wagen"
+  head_en "Procession Without a Hearse"
+  text "Die Trauergäste warteten vergeblich: Der Leichenwagen kam bei „{track}“ nicht an. {player} kam an, leider allein. Graves hat die Zusammenarbeit „vorerst eingefroren. Wie seine Kunden.“"
+  text_en "The mourners waited in vain: the hearse never made it round {track}. {player} did, alone. Graves has put the partnership 'on ice. Like his clientele.'"
+
+news job_done_wreaths jwre_1
+  head "Kränze für alle"
+  head_en "Wreaths for Everyone"
+  text "{player} sammelte bei „{track}“ genug Kränze für eine Staatstrauer ein, mitten im Rennen. Graves & Sons zahlt {money} und spart sich den Floristen."
+  text_en "{player} picked up enough wreaths at {track} for a state funeral, mid-race. Graves & Sons pays {money} and saves on the florist."
+
+news job_done_wreaths jwre_2
+  head "Florist auf vier Rädern"
+  head_en "Florist on Four Wheels"
+  text "Zwischen Raketen und Ölflecken las {player} bei „{track}“ einen Kranz nach dem anderen auf. Lohn: {money}. Die Konkurrenz fuhr die übrigen platt."
+  text_en "Between rockets and oil slicks, {player} gathered wreath after wreath at {track}. Pay: {money}. The rivals flattened the rest."
+
+news job_failed_wreaths jwre_3
+  head "Kahle Trauerfeier"
+  head_en "A Bare Funeral"
+  text "Bei „{track}“ brachte {player} nicht genug Kränze zusammen. Die Trauerfeier fand mit Plastikblumen statt. Graves: „Peinlich. Für alle Beteiligten, vor allem die Lebenden.“"
+  text_en "At {track}, {player} failed to gather enough wreaths. The funeral went ahead with plastic flowers. Graves: 'Embarrassing. For everyone involved, especially the living.'"
+
+news job_failed_wreaths jwre_4
+  head "Kränze überfahren"
+  head_en "Wreaths Run Over"
+  text "Statt sie einzusammeln, fuhr das Feld bei „{track}“ die Kränze von Graves & Sons zu Kompost. {player} war auch dabei. Leider auf der falschen Seite."
+  text_en "Instead of being collected, the Graves & Sons wreaths at {track} were turned into compost by the field. {player} was there too. On the wrong side, sadly."

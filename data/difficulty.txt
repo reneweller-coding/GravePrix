@@ -62,8 +62,8 @@ difficulty 3
   title_en "Coffin Nail"
   desc "Die Konkurrenz rüstet schneller auf, der Mechaniker langt kräftiger zu, und der Bestatter lässt schon mal Maß nehmen."
   desc_en "The competition upgrades faster, the mechanic charges more, and the undertaker has started taking your measurements."
-  ai_speed 0.96
-  ai_skill 0.86
+  ai_speed 0.975
+  ai_skill 0.87
   ai_aggression 0.85
   ai_weapons 0.8
   damage_taken 1.0
@@ -81,8 +81,8 @@ difficulty 4
   title_en "Danse Macabre"
   desc "Keine Gnade, kein Gummiband, kein Mitleid. Die Blaskapelle probt bereits. Für Leute, die ihren Grabstein selbst entwerfen wollen."
   desc_en "No mercy, no rubber band, no pity. The brass band is already rehearsing. For people who want to design their own headstone."
-  ai_speed 0.975
-  ai_skill 0.88
+  ai_speed 0.99
+  ai_skill 0.9
   ai_aggression 0.95
   ai_weapons 0.85
   damage_taken 1.05

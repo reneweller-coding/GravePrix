@@ -102,6 +102,7 @@ bool Track::build( const TrackDef &def, const VenueDef *venue, bool reverse, boo
     scenes( g_data );
     scatter( g_data );
     litter( g_data );
+    loose( g_data );
     return true;
 }
 

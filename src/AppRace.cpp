@@ -90,11 +90,81 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
     m_announce.clear();
     m_center.clear();
     m_lastBest = 0;
+    m_worstPlace = 0;
+    m_slipped = false;
+    m_moverSeen = -100.0f;
+    // The sponsor's sticker on the player's roof.
+    {
+        const SponsorDef *sp = m_inCareer ? g_data.sponsor( m_career.m_sponsor ) : nullptr;
+        static const Color backs[] = { { 240, 236, 226, 255 }, { 240, 200, 40, 255 }, { 24, 22, 24, 255 }, { 170, 30, 26, 255 }, { 30, 90, 60, 255 } };
+        static const Color inks[] = { { 20, 20, 20, 255 }, { 20, 20, 20, 255 }, { 220, 180, 80, 255 }, { 245, 240, 230, 255 }, { 240, 236, 226, 255 } };
+        size_t h = sp ? std::hash<std::string>()( sp->m_key ) % 5 : 0;
+        m_view.setSticker( sp ? sp->m_title.get() : "", backs[h], inks[h], player );
+    }
+    // The dead rivals haunt the cemetery's tracks and the final: the last two to die, along the racing line.
+    m_spiritList.clear();
+    m_view.m_spirits.clear();
+    m_spiritSeen = false;
+    if ( m_inCareer && !m_tutorialOn && m_track.m_venue && ( m_track.m_venue->m_name == "cemetery" || track == "est_finale" ) )
+    {
+        std::vector<const RivalState *> dead;
+        for ( const RivalState &s : m_career.m_rivals )
+            if ( !s.m_alive && s.m_died > 0 && g_data.rival( s.m_key ) ) dead.push_back( &s );
+        std::sort( dead.begin(), dead.end(), []( const RivalState *a, const RivalState *b ) { return a->m_died > b->m_died; } );
+        for ( size_t k = 0; k < dead.size() && k < 2; ++k )
+        {
+            Spirit sp;
+            sp.m_rival = dead[k]->m_key;
+            sp.m_s = m_track.wrap( -25.0f - 14.0f * k );
+            sp.m_wait = 5.0f + 8.0f * k;
+            sp.m_lane = k ? 2.0f : -2.0f;
+            m_spiritList.push_back( sp );
+            const RivalDef  *rd = g_data.rival( sp.m_rival );
+            const CarDef    *cd = g_data.car( rd->m_car );
+            Renderer::Ghost  gh;
+            gh.m_model = cd ? cd->m_model : "?";
+            for ( int c = 0; c < 3; ++c ) gh.m_paint.m_c[c] = rd->m_colors[c];
+            m_view.m_spirits.push_back( gh );
+        }
+        // Their pace: what the racing line's bends allow, braking ahead of them.
+        int n = (int)m_track.m_s.size();
+        m_spiritV.assign( (size_t)n, 30.0f );
+        for ( int i = 0; i < n; ++i ) m_spiritV[i] = std::min( 31.0f, std::sqrt( 15.0f * 0.85f / std::max( m_track.m_s[i].m_lineCurv, 1e-4f ) ) );
+        for ( int pass = 0; pass < 2; ++pass )
+            for ( int i = n - 1; i >= 0; --i )
+            {
+                int j = ( i + 1 ) % n;
+                m_spiritV[i] = std::min( m_spiritV[i], std::sqrt( m_spiritV[j] * m_spiritV[j] + 2.0f * 9.0f * m_track.m_step ) );
+            }
+    }
+    // Graves' job: the debtor or the hearse found, the coffin strapped on, the wreaths laid out.
+    m_jobState = 0;
+    m_jobCar = -1;
+    m_view.m_roofCoffin = -1;
+    if ( m_inCareer && !m_tutorialOn && m_offer.m_job != JobE::NONE )
+    {
+        for ( size_t i = 0; i < m_world.m_cars.size(); ++i )
+        {
+            const CarSetup &s = m_world.m_cars[i].m_setup;
+            if ( ( m_offer.m_job == JobE::DEBTOR && s.m_rival == m_offer.m_target ) || ( m_offer.m_job == JobE::ESCORT && s.m_escort ) )
+                m_jobCar = (int)i;
+        }
+        if ( m_offer.m_job == JobE::COFFIN ) m_view.m_roofCoffin = player;
+        if ( m_offer.m_job == JobE::WREATHS )
+            for ( int k = 0; k < 9; ++k )
+            {
+                float              s = m_track.m_length * ( k + 0.5f ) / 9.0f;
+                const TrackSample &ts = m_track.sampleAt( s );
+                m_world.m_pickups.push_back( { "wreath", m_track.pointAt( s, ts.m_line + ( k % 3 - 1 ) * ts.m_half * 0.25f ), 0.0f, (float)k } );
+            }
+        if ( const CharacterDef *g = g_data.character( "graves" ) )
+            bubble( g->m_name, g->line( std::string( "job_" ) + jobKey( m_offer.m_job ), (uint32_t)GetRandomValue( 0, 999 ) ), { 30, 30, 34, 255 } );
+    }
     m_ghostRec.clear();
     m_ghost.clear();
     m_ghostAt = 0;
     m_view.m_ghost.m_on = false;
-    if ( mode == ModeE::TRIAL ) loadGhost();
+    if ( mode == ModeE::TRIAL && !m_tutorialOn ) loadGhost();
     const Car &me = m_world.m_cars[player];
     m_cam.m_focus = me.m_pos;
     m_cam.m_height = 64.0f * m_set.m_zoom;
@@ -162,6 +232,7 @@ bool App::speak( const std::string &event )
 void App::announce( const std::string &event, const std::string &name )
 {
     if ( !m_set.m_speech ) return;
+    if ( m_tutorialOn && event == "start" ) return;   // Ricky explains the first step instead
     // The player's big moments are spoken.
     bool mine = name.empty() || name == m_world.m_cars[m_player].m_setup.m_driver;
     if ( mine && ( event == "start" || event == "final_lap" || event == "player_lead" || event == "player_wrecked" ||
@@ -200,6 +271,15 @@ void App::race( float dt )
         }
         if ( m_acc > Dt * 5 ) m_acc = 0;
         m_view.update( m_world, dt );
+        for ( const Renderer::Cue &c : m_view.m_cues )
+        {
+            float d = len( sub( c.m_pos, m_cam.m_focus ) );
+            if ( d > 70.0f ) continue;
+            float pan = clampf( ( c.m_pos.x - m_cam.m_focus.x ) / 45.0f, -1, 1 );
+            m_audio.play( c.m_kind == 0 ? SfxE::BIRDS_UP : SfxE::DOG_BARK, pan, 0.7f / ( 1.0f + d / 25.0f ),
+                          0.9f + GetRandomValue( 0, 25 ) / 100.0f );
+        }
+        m_view.m_cues.clear();
         const Car &me = m_world.m_cars[m_player];
         float      speed = len( me.m_vel );
         Vector2    goal = me.m_wrecked ? me.m_pos : add( me.m_pos, mul( me.m_vel, 0.5f ) );
@@ -245,7 +325,7 @@ void App::raceStep()
     int leader = m_world.m_leader;
     int lapBefore = m_world.m_cars[m_player].m_lap;
     m_world.step( inputs );
-    if ( m_mode == ModeE::TRIAL && m_world.m_phase != World::PhaseE::COUNTDOWN )
+    if ( m_mode == ModeE::TRIAL && m_world.m_phase != World::PhaseE::COUNTDOWN && !m_tutorialOn )
     {
         // The ghost: this lap recorded, the best one played back from the lap's start.
         const Car &c = m_world.m_cars[m_player];
@@ -254,6 +334,7 @@ void App::raceStep()
             bool best = c.m_lastLap > 0 && c.m_lastLap <= c.m_bestLap + 1e-4f && lapBefore >= 0 && m_ghostRec.size() > 60;
             if ( best && ( m_ghost.empty() || c.m_lastLap < m_ghostTime ) )
             {
+                if ( !m_ghost.empty() ) award( "ghost_beaten" );
                 m_ghost = m_ghostRec;
                 m_ghostTime = c.m_lastLap;
                 saveGhost();
@@ -276,6 +357,10 @@ void App::raceStep()
     m_in.consumed();
     m_view.events( m_world );
     raceEvents();
+    awardsEvents();
+    spirits();
+    if ( m_tutorialOn ) tutorial();
+    if ( m_inCareer && !m_tutorialOn && m_offer.m_job != JobE::NONE && m_jobState == 0 && m_world.m_phase != World::PhaseE::COUNTDOWN ) jobWatch();
     // Places and lead changes.
     const Car &me = m_world.m_cars[m_player];
     // A close fight for a podium place (or, in a derby, three cars left): the music goes up a gear.
@@ -315,7 +400,8 @@ void App::raceStep()
     }
     if ( m_world.m_bestLap > 0 && m_world.m_bestLap != m_lastBest )
     {
-        if ( m_lastBest > 0 ) announce( "lap_record", m_world.m_cars[m_world.m_bestLapCar].m_setup.m_driver );
+        if ( m_lastBest > 0 && !( m_world.m_bestLapCar == m_player && speak( "player_record" ) ) )
+            announce( "lap_record", m_world.m_cars[m_world.m_bestLapCar].m_setup.m_driver );
         m_lastBest = m_world.m_bestLap;
     }
 }
@@ -449,8 +535,15 @@ void App::raceEvents()
                     }
                 }
                 if ( e.m_other == m_player )
+                {
                     if ( const RivalDef *d = g_data.rival( victim.m_setup.m_rival ) )
                         bubble( d->m_name, d->line( "wrecked_by_player", (uint32_t)GetRandomValue( 0, 999 ) ), d->m_colors[0] );
+                    // Ricky on the player's deed: the third of the race, a feud settled, or a short cry now and then.
+                    const RivalState *st = m_inCareer ? m_career.rival( victim.m_setup.m_rival ) : nullptr;
+                    if ( m_world.m_cars[m_player].m_wrecks == 3 ) speak( "player_spree" );
+                    else if ( st && st->m_grudge >= 2 ) speak( "player_revenge" );
+                    else if ( m_world.m_time - m_lastQuip > 6.0f && speak( "player_wreck" ) ) m_lastQuip = m_world.m_time;
+                }
                 if ( m_mode == ModeE::DERBY )
                 {
                     int alive = 0;
@@ -468,7 +561,13 @@ void App::raceEvents()
             else if ( e.m_text == "ammo" ) s = SfxE::PICK_AMMO;
             else if ( e.m_text.rfind( "nitro", 0 ) == 0 ) s = SfxE::PICK_NITRO;
             else if ( e.m_text != "curse" ) s = SfxE::PICK_WEAPON;
-            if ( mine )
+            if ( mine && e.m_text == "wreath" )
+            {
+                m_audio.play( SfxE::PICK_MYSTERY, 0, 0.8f );
+                m_feed.push_back( { tf( T( "+ Kranz (%d/%d)" ), std::min( me.m_wreaths, WreathsNeeded ), WreathsNeeded ), 2.5f } );
+                if ( m_feed.size() > 5 ) m_feed.erase( m_feed.begin() );
+            }
+            else if ( mine )
             {
                 m_audio.play( s, 0, 0.8f );
                 static const std::pair<const char *, const char *> names[] = {
@@ -503,6 +602,15 @@ void App::raceEvents()
             if ( mine ) m_rumbleHigh += 0.6f;
             break;
         case EvE::BARREL: play( SfxE::BARREL, e.m_pos, 1.0f ); break;
+        case EvE::LOOSE:
+        {
+            // Plastic, wood, tin: a knock by what it was.
+            const std::string &m = e.m_text;
+            bool tin = m == "bin" || m == "barrel_oil" || m == "mailbox" || m == "sign_post" || m == "hydrant";
+            play( tin ? SfxE::METAL_CRUNCH : SfxE::CRASH_LIGHT, e.m_pos, tin ? 0.35f : 0.45f, tin ? 1.4f : 1.5f + GetRandomValue( 0, 30 ) / 100.0f );
+            if ( mine ) m_rumbleHigh += 0.15f;
+            break;
+        }
         case EvE::TRAIN:
         case EvE::BRIDGE:
             if ( e.m_kind == 0 ) play( SfxE::BELL, e.m_pos, 0.9f, e.m_type == EvE::TRAIN ? 1.0f : 0.8f );
@@ -558,7 +666,17 @@ void App::raceEvents()
                 m_audio.play( SfxE::FINISH, 0, 0.9f );
                 m_center = e.m_kind == 1 ? T( "SIEG!" ) : tf( "ZIEL  ·  Platz %d", e.m_kind );
                 m_centerTime = 4.0f;
-                announce( e.m_kind == 1 ? "win" : "lose", me.m_setup.m_driver );
+                bool said = false;
+                if ( e.m_kind == 1 && m_mode == ModeE::RACE )
+                {
+                    float gap = 1e9f;
+                    for ( const Car &c : m_world.m_cars )
+                        if ( &c != &me && !c.m_wrecked ) gap = std::min( gap, me.m_dist - c.m_dist );
+                    if ( gap < 15.0f ) said = speak( "player_close" );
+                    else if ( m_world.m_cars.size() >= 4 && m_worstPlace >= (int)m_world.m_cars.size() ) said = speak( "player_comeback" );
+                    else if ( me.m_damage < me.m_maxHp * 0.05f ) said = speak( "player_clean" );
+                }
+                if ( !said ) announce( e.m_kind == 1 ? "win" : "lose", me.m_setup.m_driver );
             }
             else if ( e.m_kind == 1 )
                 if ( const RivalDef *d = g_data.rival( m_world.m_cars[e.m_car].m_setup.m_rival ) )
@@ -576,6 +694,116 @@ void App::raceEvents()
         default: break;
         }
     }
+}
+
+void App::spirits()
+{
+    if ( m_spiritList.empty() || m_world.m_phase != World::PhaseE::RACE ) return;
+    const Car &me = m_world.m_cars[m_player];
+    for ( size_t k = 0; k < m_spiritList.size() && k < m_view.m_spirits.size(); ++k )
+    {
+        Spirit          &sp = m_spiritList[k];
+        Renderer::Ghost &gh = m_view.m_spirits[k];
+        if ( m_world.m_time < sp.m_wait ) continue;
+        sp.m_s = m_track.wrap( sp.m_s + m_spiritV[(size_t)m_track.indexAt( sp.m_s )] * 0.95f * Dt );
+        const TrackSample &ts = m_track.sampleAt( sp.m_s );
+        float              lane = clampf( ts.m_line + sp.m_lane * std::sin( m_world.m_time * 0.4f + k ), -ts.m_half + 1.5f, ts.m_half - 1.5f );
+        gh.m_on = true;
+        gh.m_pos = m_track.pointAt( sp.m_s, lane );
+        gh.m_head = headingOf( ts.m_dir );
+        float d = len( sub( gh.m_pos, me.m_pos ) );
+        if ( d < 40.0f && !m_spiritSeen )
+        {
+            m_spiritSeen = true;
+            award( "ghost_seen" );
+            speak( "ghost" );
+        }
+        if ( d < 26.0f && m_world.m_time - sp.m_said > 14.0f )
+        {
+            // Their old lines from the other side, or their last words again.
+            sp.m_said = m_world.m_time;
+            const RivalDef   *rd = g_data.rival( sp.m_rival );
+            const RivalState *st = m_career.rival( sp.m_rival );
+            static const char *events[] = { "overtake", "start", "hit", "win" };
+            std::string line = GetRandomValue( 0, 2 ) == 0 && st && !st->m_words.empty()
+                                   ? st->m_words
+                                   : rd->line( events[GetRandomValue( 0, 3 )], (uint32_t)GetRandomValue( 0, 999 ) );
+            bubble( rd->m_name + "  \xE2\x80\xA0", line, { 120, 220, 160, 255 } );
+        }
+    }
+}
+
+void App::jobWatch()
+{
+    const Car &me = m_world.m_cars[m_player];
+    auto       end = [&]( int state, const char *text, const char *say ) {
+        m_jobState = state;
+        m_feed.push_back( { T( text ), 6.0f } );
+        if ( m_feed.size() > 5 ) m_feed.erase( m_feed.begin() );
+        m_audio.play( state > 0 ? SfxE::UI_CASH : SfxE::UI_DENY, 0, 0.7f );
+        speak( say );
+    };
+    const Car *other = m_jobCar >= 0 ? &m_world.m_cars[m_jobCar] : nullptr;
+    switch ( m_offer.m_job )
+    {
+    case JobE::COFFIN:
+        if ( me.m_wrecked || me.m_damage > CoffinLimit * me.m_maxHp )
+        {
+            m_view.dropCoffin( m_world, m_player );
+            end( -1, "Der Sarg ist vom Dach gefallen. Auftrag verpatzt.", "job_coffin_lost" );
+        }
+        else if ( me.m_finished )
+            end( 1, "Der Sarg ist angekommen. Die Kundschaft hat nichts gemerkt.", "job_done" );
+        break;
+    case JobE::DEBTOR:
+        if ( other && other->m_wrecked )
+        {
+            if ( other->m_wreckedBy == m_player ) end( 1, "Schuld beglichen. Graves lässt grüßen.", "job_debtor_done" );
+            else end( -1, "Jemand anderes war schneller. Der Schuldner ist hin, das Geld auch.", "job_failed" );
+        }
+        else if ( me.m_finished || me.m_wrecked )
+            end( -1, "Der Schuldner ist entwischt.", "job_failed" );
+        break;
+    case JobE::ESCORT:
+        if ( other && other->m_wrecked ) end( -1, "Der Leichenwagen ist ein Wrack. Graves wird das nicht gefallen.", "job_escort_lost" );
+        else if ( other && other->m_finished ) end( 1, "Der Leichenwagen ist heil im Ziel.", "job_done" );
+        break;
+    case JobE::WREATHS:
+        if ( me.m_wreaths >= WreathsNeeded ) end( 1, "Genug Kränze für die ganze Familie.", "job_done" );
+        else if ( me.m_finished || me.m_wrecked ) end( -1, "Zu wenig Kränze. Die Trauerfeier wird karg.", "job_failed" );
+        break;
+    default: break;
+    }
+}
+
+void App::jobHud()
+{
+    if ( !m_inCareer || m_offer.m_job == JobE::NONE ) return;
+    float       k = ui::k();
+    const Car  &me = m_world.m_cars[m_player];
+    const Car  *other = m_jobCar >= 0 ? &m_world.m_cars[m_jobCar] : nullptr;
+    static const char *titles[] = { "", "Auftrag: der Sarg auf dem Dach", "Auftrag: der Schuldner", "Auftrag: der Leichenwagen",
+                                    "Auftrag: die Kränze" };
+    std::string line;
+    switch ( m_offer.m_job )
+    {
+    case JobE::COFFIN:
+        line = tf( T( "Schaden %d %% von höchstens %d %%" ), (int)( me.m_damage / std::max( 1.0f, me.m_maxHp ) * 100 ), (int)( CoffinLimit * 100 ) );
+        break;
+    case JobE::DEBTOR: line = other ? tf( T( "%s muss verschrottet werden. Von dir." ), other->m_setup.m_driver.c_str() ) : ""; break;
+    case JobE::ESCORT:
+        line = other ? tf( T( "Panzerung des Leichenwagens: %d %%" ), (int)( std::max( 0.0f, other->m_hp ) / std::max( 1.0f, other->m_maxHp ) * 100 ) ) : "";
+        break;
+    case JobE::WREATHS: line = tf( T( "Kränze: %d von %d" ), std::min( me.m_wreaths, WreathsNeeded ), WreathsNeeded ); break;
+    default: break;
+    }
+    if ( m_jobState > 0 ) line = T( "Erledigt!" );
+    if ( m_jobState < 0 ) line = T( "Verpatzt." );
+    float     w = std::max( ui::width( T( titles[(int)m_offer.m_job] ), 26 ), ui::width( line, 24 ) ) + 40 * k;
+    Rectangle r = { GetScreenWidth() * 0.5f - w * 0.5f, 20 * k, w, 82 * k };
+    ui::panel( r, 0.6f );
+    ui::text( T( titles[(int)m_offer.m_job] ), r.x + 20 * k, r.y + 8 * k, 26, ui::Gold );
+    ui::text( line, r.x + 20 * k, r.y + 44 * k, 24, m_jobState > 0 ? ui::Good : m_jobState < 0 ? ui::Warn : ui::Ink );
 }
 
 void App::raceSound( float dt )
@@ -638,6 +866,18 @@ void App::raceHud()
             ui::text( tag, p.x, p.y - 29 * ui::k(), 20, ui::Ink, ui::AlignE::CENTER );
         }
     }
+    // The debtor or the hearse: always named.
+    if ( m_jobCar >= 0 && !m_world.m_cars[m_jobCar].m_wrecked && m_jobState == 0 )
+    {
+        float      sx = (float)GetScreenWidth() / std::max( 1, m_view.m_w ), sy = (float)GetScreenHeight() / std::max( 1, m_view.m_h );
+        const Car &c = m_world.m_cars[m_jobCar];
+        Vector2    p = m_view.project( { c.m_pos.x, 3.0f, c.m_pos.y } );
+        p = { p.x * sx, p.y * sy };
+        std::string tag = m_offer.m_job == JobE::DEBTOR ? T( "SCHULDNER" ) : T( "LEICHENWAGEN" );
+        float       w = ui::width( tag, 22 ) + 16 * ui::k();
+        DrawRectangleRec( { p.x - w * 0.5f, p.y - 34 * ui::k(), w, 28 * ui::k() }, { 120, 20, 16, 200 } );
+        ui::text( tag, p.x, p.y - 33 * ui::k(), 22, ui::Ink, ui::AlignE::CENTER );
+    }
     ui::setScale( m_set.m_hud );
     raceHudPanels();
     ui::setScale( 1.0f );
@@ -661,7 +901,8 @@ void App::raceHudPanels()
     }
     else
     {
-        ui::text( m_mode == ModeE::TRIAL ? T( "Zeitfahren" ) : tf( "%d/%d", me.m_place, n ), top.x + 20 * k, top.y + 6 * k, m_mode == ModeE::TRIAL ? 44 : 72, ui::Ink );
+        ui::text( m_tutorialOn ? T( "Probefahrt" ) : m_mode == ModeE::TRIAL ? T( "Zeitfahren" ) : tf( "%d/%d", me.m_place, n ), top.x + 20 * k,
+                  top.y + 6 * k, m_mode == ModeE::TRIAL ? 44 : 72, ui::Ink );
         int lap = std::clamp( me.m_lap + 1, 1, m_world.m_laps );
         ui::text( tf( "Runde %d/%d", lap, m_world.m_laps ), top.x + 220 * k, top.y + 16 * k, 32, ui::Gold );
         ui::text( clock( m_world.m_time - me.m_lapStart ), top.x + 220 * k, top.y + 56 * k, 30, ui::Ink );
@@ -725,6 +966,7 @@ void App::raceHudPanels()
             const Car &c = m_world.m_cars[i];
             if ( c.m_wrecked ) continue;
             float r = (int)i == m_player ? 7 * k : 5 * k;
+            if ( (int)i == m_jobCar ) DrawCircleLinesV( P( c.m_pos ), r + 5 * k, std::fmod( m_time, 0.6f ) < 0.3f ? ui::Warn : ui::Gold );
             DrawCircleV( P( c.m_pos ), r + 1.5f * k, BLACK );
             DrawCircleV( P( c.m_pos ), r, (int)i == m_player ? ui::Gold : c.m_setup.m_paint.m_c[0] );
         }
@@ -736,6 +978,8 @@ void App::raceHudPanels()
             fy += 30 * k;
         }
     }
+    if ( !m_tutorialOn ) jobHud();
+    tutorialHud();
     // The middle: countdown, laps, wreck.
     if ( m_centerTime > 0 && !m_center.empty() )
     {
@@ -772,15 +1016,21 @@ void App::racePause()
     Rectangle r = { GetScreenWidth() * 0.5f - 360 * k, GetScreenHeight() * 0.5f - 230 * k, 720 * k, 460 * k };
     ui::panel( r, 0.92f );
     ui::text( T( "Pause" ), r.x + 40 * k, r.y + 24 * k, 56, ui::Ink );
-    std::vector<std::string> items = { T( "Weiter" ), m_inCareer ? T( "Aufgeben (letzter Platz)" ) : T( "Neu starten" ),
-                                       T( "Optionen" ), m_inCareer ? T( "Aufgeben und Speichern" ) : T( "Zum Hauptmenü" ) };
+    bool                     booked = m_inCareer && !m_tutorialOn;
+    std::vector<std::string> items = { T( "Weiter" ), booked ? T( "Aufgeben (letzter Platz)" ) : T( "Neu starten" ),
+                                       T( "Optionen" ), booked ? T( "Aufgeben und Speichern" ) : T( "Zum Hauptmenü" ) };
     int pick = menu( items, m_pauseSel, { r.x + 50 * k, r.y + 120 * k, r.width - 80 * k, 320 * k }, 40 );
     // The key that paused is still down in this frame: it must not unpause at once.
     if ( m_time - m_pausedAt > 0.05f && ( m_in.back() || m_in.pause() ) ) pick = 0;
     if ( pick == 0 ) m_paused = false;
     else if ( pick == 1 )
     {
-        if ( m_inCareer )
+        if ( m_tutorialOn )
+        {
+            m_paused = false;
+            startTutorial();
+        }
+        else if ( m_inCareer )
         {
             Car &me = m_world.m_cars[m_player];
             me.m_dist = -1e9f;
@@ -798,7 +1048,13 @@ void App::racePause()
     }
     else if ( pick == 3 )
     {
-        if ( m_inCareer )
+        if ( m_tutorialOn )
+        {
+            m_paused = false;
+            m_world.m_phase = World::PhaseE::DONE;
+            endRace();
+        }
+        else if ( m_inCareer )
         {
             Car &me = m_world.m_cars[m_player];
             me.m_dist = -1e9f;
@@ -852,12 +1108,15 @@ void App::endRace()
     rumble::stop();
     const Car  &me = m_world.m_cars[m_player];
     std::string key = m_trackName + ( m_trackReverse ? ":r" : "" );
-    if ( me.m_bestLap > 0 && ( m_rec.m_bestLap[key] <= 0 || me.m_bestLap < m_rec.m_bestLap[key] ) ) m_rec.m_bestLap[key] = me.m_bestLap;
-    if ( m_inCareer )
+    if ( me.m_bestLap > 0 && !m_tutorialOn && ( m_rec.m_bestLap[key] <= 0 || me.m_bestLap < m_rec.m_bestLap[key] ) )
+        m_rec.m_bestLap[key] = me.m_bestLap;
+    awardsRace();
+    if ( m_inCareer && !m_tutorialOn )
     {
         m_report = m_career.finish( m_offer, m_world, m_player );
         if ( m_report.m_won ) ++m_rec.m_careersWon;
         saveCareer();
+        awardsCareer();
     }
     else
     {
@@ -890,8 +1149,13 @@ void App::results()
 {
     backdrop();
     float k = ui::k();
-    header( m_report.m_place == 1 ? T( "Sieg!" ) : m_report.m_wrecked ? T( "Verschrottet" ) : tf( "Platz %d", m_report.m_place ),
-            g_data.track( m_trackName ) ? g_data.track( m_trackName )->m_title.get() : m_trackName );
+    if ( m_tutorialOn )
+        header( m_tutStep >= 8 ? T( "Probefahrt bestanden" ) : T( "Probefahrt abgebrochen" ),
+                m_tutStep >= 8 ? T( "Graves & Sons stellen dir einen Führerschein aus. Auf Probe, versteht sich." )
+                               : T( "Kein Führerschein heute. Der Hof bleibt offen." ) );
+    else
+        header( m_report.m_place == 1 ? T( "Sieg!" ) : m_report.m_wrecked ? T( "Verschrottet" ) : tf( "Platz %d", m_report.m_place ),
+                g_data.track( m_trackName ) ? g_data.track( m_trackName )->m_title.get() : m_trackName );
     moneyBox();
     Rectangle r = { 70 * k, 200 * k, 1100 * k, 620 * k };
     ui::panel( r );
@@ -900,7 +1164,7 @@ void App::results()
     ui::text( T( "Fahrer" ), r.x + 120 * k, y, 24, ui::Dim );
     ui::text( T( "Wagen" ), r.x + 500 * k, y, 24, ui::Dim );
     ui::text( T( "Zeit" ), r.x + 760 * k, y, 24, ui::Dim );
-    if ( m_inCareer ) ui::text( T( "Preis / Punkte" ), r.x + r.width - 20 * k, y, 24, ui::Dim, ui::AlignE::RIGHT );
+    if ( m_inCareer && !m_tutorialOn ) ui::text( T( "Preis / Punkte" ), r.x + r.width - 20 * k, y, 24, ui::Dim, ui::AlignE::RIGHT );
     y += 44 * k;
     for ( const ResultLine &l : m_report.m_lines )
     {
@@ -909,7 +1173,7 @@ void App::results()
         ui::text( l.m_name + ( l.m_died ? T( "  † verstorben" ) : "" ), r.x + 120 * k, y, 32, l.m_died ? ui::Warn : c );
         ui::text( l.m_car, r.x + 500 * k, y, 28, c );
         ui::text( l.m_wrecked ? T( "Wrack" ) : clock( l.m_time ), r.x + 760 * k, y, 28, c );
-        if ( m_inCareer ) ui::text( formatMoney( l.m_prize ) + ( l.m_points ? tf( "  ·  %d P", l.m_points ) : "" ), r.x + r.width - 20 * k, y, 28, c, ui::AlignE::RIGHT );
+        if ( m_inCareer && !m_tutorialOn ) ui::text( formatMoney( l.m_prize ) + ( l.m_points ? tf( "  ·  %d P", l.m_points ) : "" ), r.x + r.width - 20 * k, y, 28, c, ui::AlignE::RIGHT );
         y += 48 * k;
     }
     // Last words of the departed.
@@ -923,7 +1187,7 @@ void App::results()
             ui::text( "† " + d->m_name + ":  " + quote( line ), r.x, lw, 26, ui::Warn );
             lw += 34 * k;
         }
-    if ( m_inCareer )
+    if ( m_inCareer && !m_tutorialOn )
     {
         Rectangle m = { r.x + r.width + 30 * k, r.y, GetScreenWidth() - r.x - r.width - 100 * k, 620 * k };
         ui::panel( m );
@@ -940,6 +1204,12 @@ void App::results()
         row( "Schnellste Runde", m_report.m_lap );
         row( "Sponsor", m_report.m_sponsor );
         row( "Aufstiegsprämie von Graves", m_report.m_promoBonus );
+        row( "Auftrag von Graves", m_report.m_jobPay );
+        if ( m_report.m_job != JobE::NONE && !m_report.m_jobDone )
+        {
+            ui::text( T( "Auftrag verpatzt: kein Lohn" ), m.x + 20 * k, my, 28, ui::Warn );
+            my += 42 * k;
+        }
         DrawRectangle( (int)( m.x + 20 * k ), (int)my, (int)( m.width - 40 * k ), 2, ui::Dim );
         my += 12 * k;
         ui::text( T( "Gesamt" ), m.x + 20 * k, my, 34, ui::Ink );
@@ -958,7 +1228,13 @@ void App::results()
     if ( m_in.accept() || IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
     {
         sound( SfxE::UI_OK );
-        if ( m_inCareer )
+        if ( m_tutorialOn )
+        {
+            m_tutorialOn = false;
+            m_audio.music( m_inCareer ? "garage" : "title" );
+            go( m_inCareer ? ScreenE::HUB : ScreenE::TITLE );
+        }
+        else if ( m_inCareer )
         {
             m_audio.music( "garage" );
             ScreenE after = m_career.m_over ? ScreenE::TABLE : ScreenE::NEWS;
@@ -974,6 +1250,8 @@ void App::results()
             if ( me.m_place <= 3 && !me.m_wrecked )
             {
                 ++m_tour;
+                if ( m_tour - 1 >= 5 ) award( "tour_5" );
+                if ( m_tour - 1 >= 10 ) award( "tour_10" );
                 startTourRound();
             }
             else

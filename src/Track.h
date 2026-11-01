@@ -106,6 +106,18 @@ struct PropSpot
     uint32_t    m_seed = 0;       ///< its paint
 };
 
+/** @brief A small thing on a shoulder that a car knocks over (a bin, a cone, a crate, a grave cross). */
+struct LooseSpot
+{
+    std::string m_model;
+    Vector2     m_pos = { 0, 0 };
+    float       m_rot = 0.0f;     ///< degrees
+    float       m_scale = 1.0f;
+    float       m_r = 0.4f;       ///< how far it reaches from its middle
+    float       m_h = 1.0f;       ///< its top
+    int         m_kind = 0;       ///< 0 tips over, 1 rolls away (tumbleweed, tyre), 2 bursts (snowman), 3 breaks and spouts (hydrant)
+};
+
 /** @brief Where a point lies along the track. */
 struct TrackPos
 {
@@ -200,6 +212,7 @@ public:
     int                       m_weatherLap = 0; ///< ... at this lap of the leader (0 never)
     std::vector<PatchSpot>    m_patches;
     std::vector<PropSpot>     m_props;
+    std::vector<LooseSpot>    m_loose;          ///< what stands on the shoulders and falls over
     std::vector<Vector2>      m_problems;       ///< where the checks found something (drawn on the map)
     int                       m_crossings = 0;
     Rectangle                 m_bounds = { 0, 0, 0, 0 };   ///< the drivable ground's box (x, z)
@@ -216,6 +229,7 @@ private:
     void scatter( const Catalog &cat );
     void scenes( const Catalog &cat );
     void litter( const Catalog &cat );
+    void loose( const Catalog &cat );
     float segDist( int i, Vector2 p, float &t ) const;
 
     struct Raw

@@ -8,7 +8,7 @@ set( CMAKE_POLICY_VERSION_MINIMUM 3.5 )
 set( CMAKE_POLICY_DEFAULT_CMP0091 NEW )
 set( CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" )
 
-project( GravePrix VERSION 0.2.0 LANGUAGES C CXX )
+project( GravePrix VERSION 0.3.0 LANGUAGES C CXX )
 
 set( CMAKE_CXX_STANDARD 20 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
@@ -84,7 +84,7 @@ add_test( NAME races COMMAND GravePrix --simall --difficulty 2 )
 # A career played through by the computer (the economy and the leagues hold together).
 add_test( NAME career COMMAND GravePrix --careersim --difficulty 2 )
 # The screens played through by scripts (a hidden window; the saves go to a test folder in the build).
-foreach( flow career quick )
+foreach( flow career quick extras )
     add_test( NAME app_${flow} COMMAND GravePrix --apptest ${CMAKE_SOURCE_DIR}/tools/apptest_${flow}.txt )
     set_tests_properties( app_${flow} PROPERTIES ENVIRONMENT "GRAVE_HOME=${CMAKE_BINARY_DIR}/testhome_${flow}" )
 endforeach()

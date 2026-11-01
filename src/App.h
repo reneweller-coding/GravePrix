@@ -26,7 +26,7 @@ namespace grave
 enum class ScreenE : int
 {
     TITLE, NEWGAME, HUB, OFFERS, GARAGE, MARKET, SHARK, SPONSOR, NEWS, TABLE, STORY, RACE, RESULTS, QUICK, OPTIONS,
-    CONTROLS, GRAVEYARD, COUNT
+    CONTROLS, GRAVEYARD, CRYPT, COUNT
 };
 
 /** @brief The game. */
@@ -76,6 +76,10 @@ private:
     bool speak( const std::string &event );   ///< Ricky Rattle says a line of his own (false: no recording)
     bool quip( const std::string &event );    ///< a short cry of his at a rival's moment
     void goHot();                             ///< the venue's hotter take (last lap, close fights)
+    void jobWatch();                          ///< Graves' job during the race: done, failed, the coffin falling
+    void jobHud();
+    int  m_jobState = 0;                      ///< 0 open, 1 done, -1 failed
+    int  m_jobCar = -1;                       ///< the debtor or the hearse
     bool  m_hot = false;
     float m_closeTime = 0.0f, m_lastQuip = -10.0f;
     bool m_saidTrain = false, m_saidBridge = false;
@@ -94,6 +98,43 @@ private:
     void graveyard();
     void saveCareer();
     void carCard( Rectangle r );
+
+    // AppAwards.cpp: the epitaphs, the crypt, the test drive.
+    void award( const std::string &key );
+    int  countUp( const std::string &key, int n = 1 );
+    void awardsEvents();   ///< after every race step: what its events earn
+    void awardsRace();     ///< at the end of a race
+    void awardsCareer();   ///< after a career race was booked
+    void toasts();
+    void crypt();
+    void startTutorial();
+    void tutorial();
+    void tutorialHud();
+    struct Toast
+    {
+        std::string m_text;
+        float       m_time;
+    };
+    std::vector<Toast> m_toasts;
+    int     m_worstPlace = 0;          ///< the race's worst place once the first lap was done
+    bool    m_slipped = false;         ///< the player slid on oil this race
+    float   m_moverSeen = -100.0f;     ///< the last train that hit the player
+    bool    m_tutorialOn = false;
+    int     m_tutStep = 0, m_tutSaid = -1, m_tutCount = 0;
+    float   m_tutTime = 0.0f;
+    ScreenE m_tutFrom = ScreenE::TITLE;
+    bool    m_hubTutorial = false;   ///< the paddock offered the test drive last frame
+
+    // The dead rivals' ghosts (AppRace.cpp): along the racing line on the cemetery's tracks and at the final.
+    struct Spirit
+    {
+        std::string m_rival;
+        float       m_s = 0.0f, m_wait = 0.0f, m_said = -100.0f, m_lane = 0.0f;
+    };
+    std::vector<Spirit> m_spiritList;
+    std::vector<float>  m_spiritV;   ///< the ghosts' speed at each sample of the track
+    bool                m_spiritSeen = false;
+    void                spirits();
 
     // Drawing helpers.
     void header( const std::string &title, const std::string &sub = "" );

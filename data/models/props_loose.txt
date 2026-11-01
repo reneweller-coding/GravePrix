@@ -1,0 +1,106 @@
+# Small things for the shoulders that cars knock over (venues "loose", docs/DESIGN.md "Loose things"): light, about
+# knee to chest high, readable from the camera's height by their colour and shape.
+
+# a dustbin with its lid and handle
+model bin scale=1.15
+  part disc r=0.32 r2=0.28 h=0.95 y=0.475 seg=12 color=#4a5a4a
+  part disc r=0.35 h=0.06 y=0.98 seg=12 color=#3a4a3a
+  part box w=0.1 h=0.05 d=0.24 y=1.03 color=#2a2a2a
+  part box w=0.7 h=0.04 d=0.04 y=0.7 z=-0.31 color=#3a4a3a
+
+# a striped road barrier on two trestles
+model sawhorse
+  part box w=1.9 h=0.24 d=0.06 y=0.85 color=#ece8e0
+  part box w=0.32 h=0.24 d=0.065 x=-0.64 y=0.85 color=#c82a1a
+  part box w=0.32 h=0.24 d=0.065 x=0 y=0.85 color=#c82a1a
+  part box w=0.32 h=0.24 d=0.065 x=0.64 y=0.85 color=#c82a1a
+  part box w=0.06 h=0.95 d=0.06 x=-0.78 y=0.45 z=0.16 pitch=12 color=#6a5a44
+  part box w=0.06 h=0.95 d=0.06 x=-0.78 y=0.45 z=-0.16 pitch=-12 color=#6a5a44
+  part box w=0.06 h=0.95 d=0.06 x=0.78 y=0.45 z=0.16 pitch=12 color=#6a5a44
+  part box w=0.06 h=0.95 d=0.06 x=0.78 y=0.45 z=-0.16 pitch=-12 color=#6a5a44
+  part disc r=0.07 h=0.08 x=-0.78 y=1.02 seg=8 color=#ffb020 emit=0.6
+
+# a cardboard box, taped, one flap open
+model box_cardboard
+  part box w=0.85 h=0.62 d=0.62 y=0.31 color=#b08a5a
+  part box w=0.87 h=0.02 d=0.12 y=0.63 color=#d8c8a0
+  part box w=0.8 h=0.02 d=0.3 y=0.68 z=-0.42 pitch=-40 color=#9a764a
+
+# a white plastic garden chair
+model chair_plastic scale=1.2
+  part box w=0.52 h=0.05 d=0.5 y=0.45 color=#ecece6
+  part box w=0.52 h=0.48 d=0.05 y=0.72 z=0.25 pitch=-10 color=#ecece6
+  part box w=0.05 h=0.45 d=0.05 x=-0.23 y=0.22 z=-0.21 color=#dcdcd6
+  part box w=0.05 h=0.45 d=0.05 x=0.23 y=0.22 z=-0.21 color=#dcdcd6
+  part box w=0.05 h=0.45 d=0.05 x=-0.23 y=0.22 z=0.21 color=#dcdcd6
+  part box w=0.05 h=0.45 d=0.05 x=0.23 y=0.22 z=0.21 color=#dcdcd6
+  part box w=0.06 h=0.04 d=0.46 x=-0.27 y=0.62 color=#ecece6
+  part box w=0.06 h=0.04 d=0.46 x=0.27 y=0.62 color=#ecece6
+
+# a garden gnome, a big one, with a red cap and a lantern
+model gnome scale=1.5
+  part disc r=0.17 r2=0.19 h=0.08 y=0.04 seg=10 color=#4a3a2a
+  part disc r=0.16 r2=0.12 h=0.32 y=0.24 seg=10 color=#2a4a9a
+  part box w=0.3 h=0.05 d=0.24 y=0.36 color=#3a2a1a
+  part sphere r=0.12 y=0.5 seg=8 color=#ecc0a0
+  part disc r=0.11 r2=0.06 h=0.16 y=0.42 z=-0.08 pitch=20 seg=8 color=#f0ece4
+  part disc r=0.13 r2=0.005 h=0.34 y=0.74 z=0.02 pitch=-8 seg=10 color=#d01a1a
+  part sphere r=0.05 x=0.2 y=0.3 z=-0.06 seg=6 color=#ffc040 emit=0.7
+
+# a wooden grave cross with a wreath, freshly dug
+model wood_cross
+  part box w=0.55 h=0.12 d=0.95 y=0.06 z=0.3 color=#4a3a2a taper=0.2
+  part box w=0.1 h=1.35 d=0.1 y=0.67 color=#6a5038
+  part box w=0.72 h=0.1 d=0.1 y=1.02 color=#6a5038
+  part ring r=0.2 thick=0.08 y=0.78 z=-0.08 seg=10 color=#2e5a26
+  part sphere r=0.05 x=0.12 y=0.92 z=-0.1 seg=6 color=#c02030
+
+# a grave lantern: a red candle in a little stone house
+model grave_lantern scale=1.3
+  part box w=0.34 h=0.06 d=0.34 y=0.03 color=#6a6862
+  part box w=0.26 h=0.38 d=0.26 y=0.25 color=#3a3a38
+  part box w=0.2 h=0.28 d=0.27 y=0.25 color=#c02418 emit=0.7
+  part disc r=0.22 r2=0.02 h=0.16 y=0.52 seg=4 rot=45 color=#5a5852
+
+# a stone urn with flowers
+model urn_stone scale=1.3
+  part disc r=0.2 r2=0.28 h=0.15 y=0.075 seg=10 color=#8a8680
+  part disc r=0.18 r2=0.36 h=0.55 y=0.42 seg=10 color=#9a968e
+  part sphere r=0.3 y=0.76 seg=8 color=#3a6a2a
+  part sphere r=0.1 x=0.12 y=0.94 z=0.1 seg=6 color=#c02838
+  part sphere r=0.09 x=-0.14 y=0.9 z=-0.06 seg=6 color=#e8d040
+
+# a round straw bale
+model hay_bale
+  part disc r=0.6 h=1.1 y=0.6 roll=90 seg=12 color=#c8a85a
+  part disc r=0.61 h=0.04 x=0.55 y=0.6 roll=90 seg=12 color=#a8884a
+  part disc r=0.61 h=0.04 x=-0.55 y=0.6 roll=90 seg=12 color=#a8884a
+
+# a warning sign on a post
+model sign_post
+  part box w=0.08 h=1.6 d=0.08 y=0.8 color=#7a7a78
+  part box w=0.62 h=0.62 d=0.04 y=1.5 roll=45 color=#e8c020
+  part box w=0.09 h=0.3 d=0.05 y=1.53 color=#1a1a1a
+  part box w=0.09 h=0.08 d=0.05 y=1.32 color=#1a1a1a
+
+# a mailbox on a post, its flag up
+model mailbox scale=1.2
+  part box w=0.08 h=1.0 d=0.08 y=0.5 color=#5a4a3a
+  part box w=0.32 h=0.3 d=0.56 y=1.12 color=#2a4a8a
+  part disc r=0.16 h=0.56 y=1.27 pitch=90 seg=10 color=#2a4a8a
+  part box w=0.04 h=0.24 d=0.04 x=0.18 y=1.32 z=0.12 color=#d02a1a
+
+# an orange plastic road drum with white bands
+model drum_road
+  part disc r=0.32 r2=0.28 h=0.95 y=0.475 seg=12 color=#ff6a12 emit=0.15
+  part disc r=0.325 r2=0.315 h=0.1 y=0.3 seg=12 color=#f2f2ec
+  part disc r=0.305 r2=0.295 h=0.1 y=0.65 seg=12 color=#f2f2ec
+  part disc r=0.42 h=0.06 y=0.03 seg=12 color=#1a1a1a
+
+# a wreath to pick up (Graves' job): big, its ribbon bright
+model pickup_wreath scale=1.4
+  part ring r=0.5 thick=0.18 y=0.1 seg=12 color=#2e6a26 emit=0.25
+  part sphere r=0.07 x=0.3 y=0.18 z=0.35 seg=5 color=#e02030 emit=0.4
+  part sphere r=0.07 x=-0.38 y=0.18 z=0.2 seg=5 color=#f0f0f0 emit=0.4
+  part sphere r=0.07 x=0.1 y=0.18 z=-0.48 seg=5 color=#e8c020 emit=0.4
+  part box w=0.18 h=0.02 d=0.5 x=0 y=0.2 z=0.55 rot=15 color=#e8d8a0 emit=0.5

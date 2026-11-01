@@ -350,11 +350,87 @@ lap times and where cars got stuck). `--validate` must report 0 errors for every
 ## Driving assist
 
 `CarSetup::m_assist` (the player's car, `Settings::m_assist`, on by default): while the car slides less than 2.5 m/s
-sideways its tyres hold 18 % more (5 % more once it slides), and it turns at most as fast as that held grip carries
-(1.15 x grip / speed + 0.08 rad/s, against 1.2 x + 0.25 without). Measured over all tracks: the sideways slide drops
+sideways its tyres hold 30 % more (5 % more once it slides), and it turns at most a little faster than the sliding
+grip carries (1.15 x grip / speed + 0.08 rad/s, against 1.2 x + 0.25 without). Measured over all tracks: the sideways slide drops
 from 1.02 to 0.29 m/s, the race pace stays the same, and the career sweep stays where it was (Totalschaden 5/5,
 Sargnagel 3/5, Totentanz 2/5). Without it the early cars (grip 0.88-0.95) slid like on ice and the tyre upgrades
 made the game easier as it went on. `--careersim --assist 0`, `--sim --assist`.
+
+## Balance: a person's hands, steeper leagues, upgrades with a price
+
+`CarSetup::m_hands` (0..1) makes a computer driver drive like a person at a keyboard (`World::hands`): its inputs come
+late (0.07 s practised .. 0.2 s a beginner), the steering keys know only full lock or nothing (tapped out in tenths
+of a second, a little too much), the pedals only all or nothing. `--careersim --hands 0.3` (a practised player),
+`--sim --hands 1`, `tools/careersweep.py --hands`. With such hands the slide was 2.7 m/s without the assist and 0.5
+with it; the clean bot (no hands) hardly needs it.
+
+The leagues get steeper (`data/leagues.txt` `pace` and `skill`: the rivals' engines and driving): league 5 is gentle
+(0.86 / 0.78), league 1 harsher (0.96 / 0.95), Graves at the final 0.9 / 0.9; Sargnagel and Totentanz drive 1.5 %
+faster to make up for it. Measured with the practised hands (0.3, three seeds): Schonfrist won in 77 to 143 days,
+the places rising from about 2 in league 5 to about 3 in league 1; Blechschaden reaches league 1 (place 3.5 to 4
+there with the 3.3 t mausoleum the bot buys); Totalschaden reaches leagues 3 and 2; Sargnagel and Totentanz are for
+the clean bot. The career bot is no judge of cars: a person would pick a lighter one. And every upgrade has its price on the road (`data/upgrades.txt`):
+`slip` (the engine: the rear's grip lost per level under full throttle at speed; the computer drivers corner with
+half of it in hand), `drag` (the tyres: top speed lost per level), `mass` (the armour: weight per level, power and
+braking scaled by the lighter car's share, harder in crashes). The garage shows the next level's numbers.
+
+## Loose things and life by the road
+
+Venues name `loose` models (bins, cones, crates, sawhorses, grave crosses, snowmen, gnomes, hydrants ...,
+`data/models/props_loose.txt`): `Track::loose` puts one on a shoulder now and then (inside the walls, never at the
+start, the clockwork, a pickup or an obstacle), sometimes two or three together. The race moves them (`World::m_loose`):
+a car or a bullet or a blast knocks them flying, they tip over (tumbleweeds and tyres roll, snowmen burst, hydrants
+break and spout for a while), slide to a stop and stay; the car loses 1.5 % of its speed. `EvE::LOOSE` tells the
+sound and the pictures.
+
+The estate got its garden (`tools/props_estate_v2.py`, eight more scenes): a hedge maze, the pool with a hearse gone
+in nose first, a greenhouse, a gazebo, a weeping angel, topiary skulls and an army of garden gnomes.
+
+Life by the road is only pictures (`Renderer::life`): people near the road (`fig_*`, `crowd_*` within 22 m) are not
+baked: a fast car close by and one throws themself flat (crowds step back and hop); flocks of the venue's birds
+(crows, gulls, pigeons, vultures, the estate's bats) sit beyond the shoulders and fly up when a car comes, back when
+it is quiet; a dog at each kennel (and a black one at the estate's gates) runs along with the field as far as its
+chain lets it, barking. `Renderer::m_cues` asks the race for the sounds (`SfxE::BIRDS_UP`, `SfxE::DOG_BARK`).
+
+## Graves' jobs (`JobE`, `Career::jobDone`)
+
+Every other race day or so a fourth card: a job for Graves on a track of the league, half the purse for places, no
+league points, paid apart (`Offer::m_pay`: 0.8 to 1.1 of the purse). Coffin: a coffin on the roof (`Renderer::
+m_roofCoffin`), the finish with at most 40 % of the armour lost, else it falls off. Debtor: a rival of the field
+(`Offer::m_target`) must be wrecked by the player. Escort: Graves' hearse (`CarSetup::m_escort`, the pallbearer, slow
+and unarmed) must finish; the rivals ram it first and shoot at it from a wider angle. Wreaths: nine `wreath` pickups
+on the racing line (back after 15 s); six to pick up. The tabloid reports either way (`job_done_<key>`,
+`job_failed_<key>`), Graves says why at the start (`job_<key>`), Ricky when it is decided. The career bot leaves
+them alone unless `--jobs`.
+
+## Epitaphs and the crypt (`data/awards.txt`, `AppAwards.cpp`)
+
+65 epitaphs over all races and careers (`Records::m_awards`, with counters `m_count` and the venues and tracks raced
+`m_seen`); the code checks them by key after every race step (events), at a race's end and after a career race (the
+report, the rivals, the tabloid), and in the shops. A new one is a toast and a stamp; the crypt shows them as
+gravestones (title screen and paddock). The app tests earn none.
+
+## The test drive (`App::startTutorial`)
+
+Eight steps on `test_undertaker` (Graves & Sons' yard), a time trial alone: throttle and steering, braking, the
+handbrake in a hairpin, shooting three barrels, a mine, nitro, a rocket, the line. Ricky explains each (`tut_1` ..
+`tut_8`, `tut_done`), a panel shows the step and its key. Passing it earns the licence (`Records::m_tutorial`). It
+heads the paddock's list on a career's first day and is on the title screen.
+
+## Ghosts and stickers
+
+On the cemetery's tracks and at the final the last two rivals to die race along as ghosts (`App::spirits`): along
+the racing line at what its bends allow, pale green, a mist behind them, harmless; near the player they say their
+old lines or their last words again. A signed sponsor's name goes on the player's roof (on the bonnet when a coffin
+or a rocket pod takes the roof): `Renderer::setSticker`, a texture drawn once from the interface font.
+
+## Ricky about the player
+
+Besides the start, the lead, the last lap and the end Ricky comments on the player's own deeds (`announcer_voice`):
+`player_record` (the race's fastest lap), `player_close` (a win by less than 15 m), `player_comeback` (a win from
+last place), `player_clean`, `player_spree` (the third wreck of a race), `player_revenge` (a feud settled),
+`player_wreck` (now and then), the jobs (`job_*`), the ghosts (`ghost`) and the test drive; five takes of his most
+frequent lines.
 
 ## Turning props and the ground
 

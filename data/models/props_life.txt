@@ -1,0 +1,27 @@
+# Life by the road (docs/DESIGN.md "Life by the road"): the birds and the dogs the pictures move. Drawn white and
+# tinted per venue (crows, gulls, pigeons, vultures, bats; a brown mutt, the estate's black dog).
+
+# a bird's body: the wings are drawn apart and flap
+model bird_body scale=1.5
+  part sphere r=0.12 rx=0.11 rz=0.2 y=0.18 color=#ffffff seg=6
+  part sphere r=0.075 y=0.27 z=-0.17 color=#ffffff seg=6
+  part disc r=0.03 r2=0.004 h=0.1 y=0.26 z=-0.27 pitch=90 seg=4 color=#d8d0b0
+  part box w=0.12 h=0.02 d=0.16 y=0.2 z=0.22 taper=0.3 color=#e8e8e8
+
+# a wing, from its root at x = 0 outwards
+model bird_wing scale=1.5
+  part box w=0.34 h=0.02 d=0.17 x=0.17 color=#f0f0f0 taper=0.4
+
+# a dog's body and head; the legs are drawn apart and run
+model dog_body scale=1.35
+  part box w=0.3 h=0.3 d=0.75 y=0.55 color=#6a4a34 taper=0.1
+  part box w=0.24 h=0.24 d=0.26 y=0.78 z=-0.46 color=#6a4a34
+  part box w=0.15 h=0.12 d=0.17 y=0.72 z=-0.65 color=#3e2c20
+  part box w=0.06 h=0.13 d=0.06 x=0.09 y=0.94 z=-0.42 color=#3e2c20
+  part box w=0.06 h=0.13 d=0.06 x=-0.09 y=0.94 z=-0.42 color=#3e2c20
+  part box w=0.05 h=0.05 d=0.32 y=0.7 z=0.5 pitch=-30 color=#6a4a34
+  part box w=0.26 h=0.06 d=0.05 y=0.66 z=-0.34 color=#b02020
+
+# a dog's leg, hanging from its hip at y = 0
+model dog_leg scale=1.35
+  part box w=0.08 h=0.42 d=0.08 y=-0.21 color=#5a3e2c

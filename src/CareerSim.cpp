@@ -114,6 +114,8 @@ int toolCareerSim( const Options &opt )
             if ( c.m_damage > 0.5f || c.m_money < c.m_offers[1].m_fee ) pick = 0;
             else if ( c.m_money > c.purse() * 3 && c.m_money >= c.m_offers[2].m_fee ) pick = 2;
             if ( c.m_offers[(size_t)pick].m_derby ) pick = pick == 0 ? 1 : 0;   // derbies are for the brave
+            // --jobs: Graves' job now and then (the economy's measurements leave them out).
+            if ( opt.has( "--jobs" ) && c.m_offers.size() > 3 && c.m_day % 2 == 0 ) pick = 3;
             o = c.m_offers[(size_t)std::min( pick, (int)c.m_offers.size() - 1 )];
             if ( !c.enter( o ) ) o = c.m_offers[0];
         }
@@ -128,6 +130,7 @@ int toolCareerSim( const Options &opt )
         field[player].m_human = false;   // driven by a computer driver of middling skill
         field[player].m_skill = (float)opt.num( "--skill", 0.85f );
         field[player].m_novice = (float)opt.num( "--novice", 0.0f );
+        field[player].m_hands = (float)opt.num( "--hands", 0.0f );
         field[player].m_assist = opt.num( "--assist", 1.0f ) != 0.0f;
         field[player].m_aggression = 0.5f;
         field[player].m_weapons = 0.7f;
@@ -141,13 +144,14 @@ int toolCareerSim( const Options &opt )
         if ( r.m_place == 1 ) ++wins;
         minMoney = std::min( minMoney, c.m_money );
         const CarDef *cd = g_data.car( c.m_car );
+        std::string kind = duel ? "SHOWDOWN" : o.m_job != JobE::NONE ? std::string( "job_" ) + jobKey( o.m_job ) + ( r.m_jobDone ? "(done)" : "(failed)" )
+                         : o.m_derby ? "derby" : o.m_tier == 0 ? "small" : o.m_tier == 1 ? "main" : "big";
         printf( "%3d %6d %8lld %7lld  %-14s %4d %4d  %s %s place %d%s%s +%d\n", c.m_day - 1, before, c.m_money, c.m_loan,
                 cd ? cd->m_name.c_str() : "?", c.rank(), [&] {
                     for ( auto &e : c.table() )
                         if ( std::get<2>( e ).empty() ) return std::get<1>( e );
                     return 0;
-                }(), duel ? "SHOWDOWN" : o.m_derby ? "derby" : o.m_tier == 0 ? "small" : o.m_tier == 1 ? "main" : "big",
-                o.m_track.c_str(), r.m_place, r.m_wrecked ? " (wrecked)" : "", r.m_dead.empty() ? "" : " +dead", r.m_total );
+                }(), kind.c_str(), o.m_track.c_str(), r.m_place, r.m_wrecked ? " (wrecked)" : "", r.m_dead.empty() ? "" : " +dead", r.m_total );
         if ( c.m_league != lastLeague )
         {
             printf( "    league %d done in %d days\n", lastLeague, c.m_day - leagueStart );

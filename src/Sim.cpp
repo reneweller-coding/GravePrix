@@ -99,6 +99,14 @@ CarStats carStats( const CarSetup &s )
     st.m_brake = d.m_brake * ( 1.0f + s.m_tires * ( ut ? ut->m_brake : 0.05f ) );
     st.m_offroad = d.m_offroad * ( 1.0f + s.m_tires * ( ut ? ut->m_offroad : 0.05f ) );
     st.m_steer = d.m_steer;
+    // Every upgrade has its price on the road: a stronger engine makes the rear nervous under full throttle, soft tyres
+    // cost top speed, armour weighs (slower off the line and on the brakes, harder in a crash).
+    st.m_slip = s.m_engine * ( ue ? ue->m_slip : 0.0f );
+    st.m_top *= 1.0f - s.m_tires * ( ut ? ut->m_drag : 0.0f );
+    st.m_mass = d.m_mass * ( 1.0f + s.m_armor * ( ua ? ua->m_mass : 0.0f ) );
+    float light = d.m_mass / std::max( 1.0f, st.m_mass );
+    st.m_power *= light;
+    st.m_brake *= std::sqrt( light );
     // HpScale: the data's armour is relative; races last about two and a half minutes and should leave one or two
     // wrecks, not four.
     constexpr float HpScale = 1.6f;
@@ -129,6 +137,15 @@ void World::init( const Track &track, const std::vector<CarSetup> &cars, ModeE m
     m_pickups.clear();
     m_barrels.clear();
     m_finishOrder.clear();
+    m_loose.clear();
+    for ( size_t i = 0; i < track.m_loose.size(); ++i )
+    {
+        Loose l;
+        l.m_spot = (int)i;
+        l.m_pos = track.m_loose[i].m_pos;
+        l.m_rot = track.m_loose[i].m_rot * Deg;
+        m_loose.push_back( l );
+    }
     const DifficultyDef &dif = g_data.difficulty( difficulty );
     auto grid = track.grid( (int)cars.size() );
     for ( size_t i = 0; i < cars.size(); ++i )
@@ -149,7 +166,8 @@ void World::init( const Track &track, const std::vector<CarSetup> &cars, ModeE m
         c.m_maxHp = st.m_hp;
         c.m_hp = st.m_hp * clampf( c.m_setup.m_hpShare, 0.05f, 1.0f );
         c.m_maxAmmo = c.m_ammo = st.m_ammo;
-        c.m_mass = c.m_def->m_mass;
+        c.m_mass = st.m_mass > 0 ? st.m_mass : c.m_def->m_mass;
+        c.m_slip = st.m_slip;
         c.m_len = c.m_def->m_length;
         c.m_wid = c.m_def->m_width;
         c.m_inertia = c.m_mass * ( c.m_len * c.m_len + c.m_wid * c.m_wid ) / 12.0f;
@@ -161,7 +179,7 @@ void World::init( const Track &track, const std::vector<CarSetup> &cars, ModeE m
         else
         {
             // The computer's pace: the difficulty's share of the ideal, and its own skill.
-            float k = dif.m_aiSpeed * ( 0.9f + 0.1f * c.m_setup.m_skill );
+            float k = dif.m_aiSpeed * ( 0.9f + 0.1f * c.m_setup.m_skill ) * c.m_setup.m_pace;
             c.m_power *= k;
             c.m_top *= 0.94f + 0.06f * k;
         }
@@ -249,6 +267,7 @@ void World::step( const std::vector<CarInput> &inputs )
     {
         Car     &c = m_cars[i];
         CarInput in = c.m_setup.m_human && !c.m_finished && i < inputs.size() ? inputs[i] : ai( (int)i );
+        if ( !c.m_setup.m_human && c.m_setup.m_hands > 0 && !c.m_finished ) in = hands( (int)i, in );
         if ( m_noAi && !c.m_setup.m_human ) in = CarInput();
         stepCar( (int)i, in );
     }
@@ -259,6 +278,7 @@ void World::step( const std::vector<CarInput> &inputs )
     hazards();
     pickups();
     movers();
+    looseThings();
     for ( size_t i = 0; i < m_cars.size(); ++i ) progress( (int)i );
     places();
     if ( m_phase == PhaseE::RACE )
@@ -375,7 +395,10 @@ void World::physics( Car &c, const CarInput &in, float dt )
     float maxLat = LatAccel * c.m_grip * gS * ( in.m_handbrake ? 0.35f : 1.0f );
     // The assist: while the car barely slides the tyres hold more (static against sliding friction), so it stays
     // planted until it is really pushed; once it slides it is a slide as before.
-    if ( c.m_setup.m_assist && !in.m_handbrake ) maxLat *= std::fabs( vlat ) < 2.5f ? 1.18f : 1.05f;
+    // (A person's late, all-or-nothing hands slid 2.7 m/s without it, 0.5 m/s with it: --simall --hands 1.)
+    if ( c.m_setup.m_assist && !in.m_handbrake ) maxLat *= std::fabs( vlat ) < 2.5f ? 1.3f : 1.05f;
+    // A tuned engine on full throttle pushes the rear out; lift off and it bites again.
+    if ( c.m_slip > 0 ) maxLat *= 1.0f - c.m_slip * thr * clampf( std::fabs( vl ) / std::max( 1.0f, c.m_top ), 0.3f, 1.0f );
     float dl = clampf( vlat, -maxLat * dt, maxLat * dt );
     vlat -= dl;
     float slide = std::fabs( vlat );
@@ -392,8 +415,8 @@ void World::physics( Car &c, const CarInput &in, float dt )
     if ( !in.m_handbrake && sp > 4 )
     {
         // Without the assist a car turns up to a fifth faster than its tyres carry (and a little more at any speed):
-        // the slides of the old top-down racers. With it, it turns up to what the held tyres carry (a sixth more than
-        // the sliding grip, see above), so a hard turn bites instead of sliding.
+        // the slides of the old top-down racers. With it, it turns a little more than the sliding grip carries, well
+        // within what the held tyres carry (see above), so a hard turn bites instead of sliding.
         float lim = c.m_setup.m_assist ? LatAccel * c.m_grip * gS * 1.15f / sp + 0.08f : LatAccel * c.m_grip * gS * 1.2f / sp + 0.25f;
         target = clampf( target, -lim, lim );
     }
@@ -418,6 +441,33 @@ void World::physics( Car &c, const CarInput &in, float dt )
     c.m_gear = gear;
     c.m_rpm += ( rpm - c.m_rpm ) * std::min( 1.0f, dt * 14 );
     c.m_load += ( std::max( thr, nitro ? 1.0f : 0.0f ) - c.m_load ) * std::min( 1.0f, dt * 10 );
+}
+
+CarInput World::hands( int i, const CarInput &want )
+{
+    // A person at a keyboard (the career's test driver, docs/DESIGN.md "Balance"): the hands follow the eyes late (a
+    // practised driver sees the corners coming, so less than a reaction time; a beginner the whole of it), the keys
+    // know only full lock or nothing (tapped out in tenths of a second, a little too much), the pedals only all or
+    // nothing.
+    Car     &c = m_cars[i];
+    AiState &a = c.m_ai;
+    float    h = clampf( c.m_setup.m_hands, 0, 1 );
+    int      lag = 4 + (int)std::lround( h * 8 );   // 0.07 .. 0.2 s
+    a.m_late[a.m_lateAt % 32] = want;
+    ++a.m_lateAt;
+    CarInput in = a.m_lateAt > lag ? a.m_late[( a.m_lateAt - 1 - lag ) % 32] : CarInput();
+    if ( a.m_tapLeft <= 0 )
+    {
+        a.m_tapOwed = a.m_tapOwed * 0.7f + clampf( in.m_steer * ( 1.0f + 0.35f * h ), -1, 1 );
+        a.m_tapOut = a.m_tapOwed >= 0.5f ? 1.0f : a.m_tapOwed <= -0.5f ? -1.0f : 0.0f;
+        a.m_tapOwed -= a.m_tapOut;
+        a.m_tapLeft = 6;
+    }
+    --a.m_tapLeft;
+    in.m_steer = a.m_tapOut;
+    in.m_throttle = in.m_throttle >= 0.5f ? 1.0f : 0.0f;
+    in.m_brake = in.m_brake > 0.15f ? 1.0f : 0.0f;
+    return in;
 }
 
 void World::walls( Car &c, int i )
@@ -503,6 +553,81 @@ void World::obstacles( Car &c, int i )
             event( EvE::BARREL, i, b.m_pos );
             explode( b.m_pos, 7.0f, 35.0f, i );
         }
+    // The shoulders' small things: knocked flying, the car hardly slowed.
+    for ( Loose &l : m_loose )
+    {
+        if ( l.m_gone ) continue;
+        const LooseSpot &sp = m_track->m_loose[l.m_spot];
+        float            reach = sp.m_r + hl + 0.3f;
+        if ( dist2( l.m_pos, c.m_pos ) > reach * reach ) continue;
+        Vector2 q = local( c, l.m_pos );
+        if ( std::fabs( q.x ) > hw + sp.m_r * 0.7f || std::fabs( q.y ) > hl + sp.m_r * 0.7f ) continue;
+        Vector2 rel = sub( c.m_vel, l.m_vel );
+        if ( len( rel ) < 1.2f && l.m_hit ) continue;
+        knock( l, c.m_vel, norm( sub( l.m_pos, c.m_pos ) ), i );
+        c.m_vel = mul( c.m_vel, 0.985f );
+    }
+}
+
+void World::knock( Loose &l, Vector2 vel, Vector2 away, int by )
+{
+    const LooseSpot &sp = m_track->m_loose[l.m_spot];
+    float            v = len( vel );
+    l.m_vel = add( mul( vel, m_rng.range( 1.0f, 1.3f ) ), mul( away, 1.5f + v * 0.25f ) );
+    l.m_spin = m_rng.range( -9.0f, 9.0f );
+    l.m_vy = std::max( l.m_vy, std::min( 6.0f, v * 0.2f ) * ( sp.m_kind == 1 ? 0.4f : 1.0f ) );
+    if ( !l.m_hit )
+    {
+        l.m_hit = true;
+        l.m_fallDir = len( l.m_vel ) > 0.1f ? norm( l.m_vel ) : away;
+        if ( sp.m_kind == 2 ) l.m_gone = true;   // a snowman: a cloud of snow
+        event( EvE::LOOSE, by, l.m_pos, v, sp.m_kind, -1, sp.m_model );
+    }
+}
+
+void World::looseThings()
+{
+    for ( Loose &l : m_loose )
+    {
+        if ( !l.m_hit || l.m_gone ) continue;
+        const LooseSpot &sp = m_track->m_loose[l.m_spot];
+        if ( sp.m_kind != 1 ) l.m_fall = std::min( 1.0f, l.m_fall + Dt * 5.0f );
+        if ( l.m_y > 0 || l.m_vy > 0 )
+        {
+            l.m_vy -= 9.81f * Dt;
+            l.m_y += l.m_vy * Dt;
+            if ( l.m_y <= 0 )
+            {
+                l.m_y = 0;
+                l.m_vy = l.m_vy < -2.0f ? -l.m_vy * 0.3f : 0.0f;   // a bounce
+            }
+        }
+        float sp2 = dot( l.m_vel, l.m_vel );
+        if ( sp2 < 0.0025f && l.m_y <= 0 )
+        {
+            l.m_vel = { 0, 0 };
+            continue;
+        }
+        l.m_pos = add( l.m_pos, mul( l.m_vel, Dt ) );
+        l.m_rot += l.m_spin * Dt;
+        l.m_roll += std::sqrt( sp2 ) * Dt / std::max( 0.2f, sp.m_r );
+        if ( l.m_y <= 0 )
+        {
+            // Rolling things roll on, the rest scrape to a stop.
+            float drag = sp.m_kind == 1 ? 0.6f : 2.6f;
+            l.m_vel = mul( l.m_vel, std::max( 0.0f, 1.0f - Dt * drag ) );
+            l.m_spin *= std::max( 0.0f, 1.0f - Dt * 2.5f );
+        }
+        // The walls send them back.
+        Vector2 push;
+        float   ex = m_track->outside( l.m_pos, push );
+        if ( ex > -0.2f )
+        {
+            l.m_pos = add( l.m_pos, mul( push, ex + 0.2f ) );
+            float vn = dot( l.m_vel, push );
+            if ( vn < 0 ) l.m_vel = sub( l.m_vel, mul( push, vn * 1.5f ) );
+        }
+    }
 }
 
 void World::collide( int ia, int ib )
@@ -784,6 +909,16 @@ void World::bullets()
                         explode( br.m_pos, 7.0f, 35.0f, b.m_owner );
                     }
                 }
+        if ( !gone && b.m_kind != 1 )
+            for ( Loose &l : m_loose )
+            {
+                if ( l.m_gone ) continue;
+                float r = m_track->m_loose[l.m_spot].m_r * 0.8f;
+                if ( dist2( l.m_pos, to ) > r * r ) continue;
+                knock( l, mul( norm( b.m_vel ), b.m_kind == 2 ? 9.0f : 4.0f ), norm( b.m_vel ), b.m_owner );
+                gone = true;
+                break;
+            }
         if ( !gone )
             for ( Hazard &h : m_hazards )
                 if ( !h.m_gone && h.m_kind == Hazard::MINE && dist2( h.m_pos, to ) < 0.5f )
@@ -934,7 +1069,12 @@ void World::pickups()
                 static const char *luck[] = { "cash3", "nitro2", "mine3", "rocket2", "repair", "oil2", "smoke", "spikes", "curse", "ammo" };
                 kind = luck[m_rng.below( 10 )];
             }
-            if ( kind == "cash" ) c.m_cash += 1;
+            if ( kind == "wreath" )
+            {
+                ++c.m_wreaths;
+                p.m_respawn = 15.0f;
+            }
+            else if ( kind == "cash" ) c.m_cash += 1;
             else if ( kind == "cash3" ) c.m_cash += 3;
             else if ( kind == "wrench" ) c.m_hp = std::min( c.m_maxHp, c.m_hp + c.m_maxHp * 0.3f );
             else if ( kind == "repair" ) c.m_hp = c.m_maxHp;
@@ -1104,6 +1244,15 @@ void World::explode( Vector2 at, float radius, float dmg, int by )
             event( EvE::BARREL, by, b.m_pos );
             explode( b.m_pos, 7.0f, 35.0f, by );
         }
+    for ( Loose &l : m_loose )
+    {
+        if ( l.m_gone ) continue;
+        float d = len( sub( l.m_pos, at ) );
+        if ( d >= radius * 1.3f ) continue;
+        Vector2 away = d > 0.01f ? mul( sub( l.m_pos, at ), 1.0f / d ) : Vector2{ 1, 0 };
+        knock( l, mul( away, 14.0f * ( 1.0f - d / ( radius * 1.3f ) ) + 2.0f ), away, by );
+        l.m_vy = std::max( l.m_vy, 5.0f );
+    }
 }
 
 void World::wreck( int i, int by )

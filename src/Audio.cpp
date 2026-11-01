@@ -47,7 +47,7 @@ const char *const SfxNames[] = {
     "mine_drop",    "mine_arm",    "spikes_drop", "oil_drop",     "smoke_drop", "nitro",           "tire_burst",
     "crash_light",  "crash_heavy", "crash_wall",  "metal_crunch", "glass",      "explosion_small", "explosion_big",
     "wreck",        "barrel",      "count_beep",  "count_go",     "lap",        "final_lap",       "finish",
-    "wrong_way",    "bell",        "funeral_march", "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
+    "wrong_way",    "bell",        "funeral_march", "birds_up",   "dog_bark",    "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
     "pick_mystery", "horn_plain",  "horn_truck",  "horn_dixie",   "horn_ice",   "horn_funeral",    "horn_siren",
     "horn_klaxon",  "ui_move",     "ui_ok",       "ui_back",      "ui_buy",     "ui_deny",         "ui_cash",
     "ui_paper",     "ui_stamp"
@@ -1425,6 +1425,37 @@ std::vector<float> makeSfx( SfxE e )
         s.noise( 0, 0.35f, 0.5f, { 0.04f, 0.05f, 0.1f }, Flt::BP, 2600, 2600, 1, 0.8f );
         s.grains( 0, 0.3f, 300, 100, 0.4f, 1200, 6000, 0.001f, 0.003f );
         return s.finish( -28 );
+    }
+    case SfxE::BIRDS_UP:
+    {
+        // A flock taking off: a flurry of wing beats and two hoarse calls.
+        Fx       s( 1.5f, 93 );
+        uint32_t r = 12345;
+        for ( int k = 0; k < 34; ++k )
+        {
+            r = r * 1664525u + 1013904223u;
+            float t = k * 0.032f + ( r >> 24 ) / 255.0f * 0.03f;
+            s.noise( t, 0.04f, 0.5f * ( 1.0f - k / 40.0f ), { 0.003f, 0.0f, 0.012f }, Flt::BP, 1400 + ( r >> 20 ) % 900, 900, 0.03f, 1.4f );
+        }
+        s.tone( 0.15f, 0.22f, 980, 700, 0.18f, 0.35f, { 0.01f, 0.06f, 0.06f }, Wv::SAW );
+        s.tone( 0.55f, 0.2f, 900, 640, 0.16f, 0.28f, { 0.01f, 0.05f, 0.06f }, Wv::SAW );
+        s.filter( Flt::BP, 1500, 0.7f );
+        return s.finish( -24 );
+    }
+    case SfxE::DOG_BARK:
+    {
+        // A yard dog: two hoarse barks.
+        Fx s( 0.75f, 94 );
+        for ( int k = 0; k < 2; ++k )
+        {
+            float t = k * 0.27f;
+            s.tone( t, 0.17f, 560, 290, 0.12f, 0.65f, { 0.006f, 0.035f, 0.05f }, Wv::SAW );
+            s.tone( t, 0.17f, 1120, 580, 0.12f, 0.2f, { 0.006f, 0.035f, 0.04f }, Wv::SQUARE );
+            s.noise( t, 0.15f, 0.4f, { 0.004f, 0.03f, 0.05f }, Flt::BP, 1000, 650, 0.1f, 1.2f );
+        }
+        s.filter( Flt::BP, 850, 0.8f );
+        s.saturate( 2.2f );
+        return s.finish( -20 );
     }
     case SfxE::FUNERAL_MARCH:
     {

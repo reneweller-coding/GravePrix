@@ -381,3 +381,202 @@ model coffin_stack
   part plate pts="-0.258,-0.95;0.258,-0.95;0.38,-0.446;0.258,0.95;-0.258,0.95;-0.38,-0.446" thick=0.5 y=2.5 color=#2a1e18
   part plate pts="-0.271,-0.969;0.271,-0.969;0.399,-0.455;0.271,0.969;-0.271,0.969;-0.399,-0.455" thick=0.04 y=2.76 color=#3a2014
   part box w=0.25 h=0.3 d=0.02 x=0.3 y=0.75 z=-0.96 color=#efe8d8   # a price tag
+
+# --- the garden (tools/props_estate_v2.py) ---
+
+# a hedge maze 14 m across, a reaper in the middle; the way in faces the road
+model hedge_maze
+  part box w=15 h=0.1 d=15 y=0.05 color=#2e2a22
+  part box w=6.70 h=1.8 d=0.7 x=-4.00 y=0.9 z=-7.00 color=#1e3a1e taper=0.06
+  part box w=6.70 h=1.8 d=0.7 x=4.00 y=0.9 z=-7.00 color=#1e3a1e taper=0.06
+  part box w=2.70 h=1.8 d=0.7 x=-4.00 y=0.9 z=-5.00 color=#1e3a1e taper=0.06
+  part box w=6.70 h=1.8 d=0.7 x=2.00 y=0.9 z=-5.00 color=#1e3a1e taper=0.06
+  part box w=2.70 h=1.8 d=0.7 x=-6.00 y=0.9 z=-3.00 color=#1e3a1e taper=0.06
+  part box w=6.70 h=1.8 d=0.7 x=2.00 y=0.9 z=-3.00 color=#1e3a1e taper=0.06
+  part box w=2.70 h=1.8 d=0.7 x=-2.00 y=0.9 z=-1.00 color=#1e3a1e taper=0.06
+  part box w=10.70 h=1.8 d=0.7 x=0.00 y=0.9 z=1.00 color=#1e3a1e taper=0.06
+  part box w=8.70 h=1.8 d=0.7 x=-1.00 y=0.9 z=3.00 color=#1e3a1e taper=0.06
+  part box w=2.70 h=1.8 d=0.7 x=-4.00 y=0.9 z=5.00 color=#1e3a1e taper=0.06
+  part box w=4.70 h=1.8 d=0.7 x=3.00 y=0.9 z=5.00 color=#1e3a1e taper=0.06
+  part box w=4.70 h=1.8 d=0.7 x=-5.00 y=0.9 z=7.00 color=#1e3a1e taper=0.06
+  part box w=8.70 h=1.8 d=0.7 x=3.00 y=0.9 z=7.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=14.70 x=-7.00 y=0.9 z=0.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=2.70 x=-5.00 y=0.9 z=-6.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=4.70 x=-5.00 y=0.9 z=-1.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=2.70 x=-5.00 y=0.9 z=4.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=4.70 x=-3.00 y=0.9 z=-3.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=2.70 x=-1.00 y=0.9 z=-2.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=4.70 x=-1.00 y=0.9 z=5.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=2.70 x=1.00 y=0.9 z=0.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=2.70 x=3.00 y=0.9 z=-2.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=2.70 x=5.00 y=0.9 z=-4.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=6.70 x=5.00 y=0.9 z=2.00 color=#1e3a1e taper=0.06
+  part box w=0.7 h=1.8 d=14.70 x=7.00 y=0.9 z=0.00 color=#1e3a1e taper=0.06
+  part greeble n=40 w=13 d=13 size=0.35 y=1.8 color=#24442a seed=9
+  part box w=1.2 h=0.8 d=1.2 y=0.4 color=#4a4846
+  part disc r=0.45 r2=0.25 h=1.6 y=1.6 seg=8 color=#3a3a3e
+  part sphere r=0.28 y=2.55 seg=8 color=#2e2e32
+  part box w=0.06 h=2.6 d=0.06 x=0.5 y=1.9 color=#5a5650
+  part box w=1.1 h=0.08 d=0.05 x=0.1 y=3.1 roll=-15 color=#9a9690
+
+# the gnome army: fifteen garden gnomes drawn up in ranks on a lawn, a general in front
+model gnome_army
+  part box w=6 h=0.06 d=4 y=0.03 color=#2e4a26
+  part disc r=0.255 r2=0.285 h=0.120 x=-2.25 y=0.060 z=-0.40 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-2.25 y=0.360 z=-0.40 seg=8 color=#3a6a2a
+  part sphere r=0.180 x=-2.25 y=0.750 z=-0.40 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-2.25 y=0.630 z=-0.52 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-2.25 y=1.110 z=-0.40 seg=8 color=#e0b020
+  part disc r=0.255 r2=0.285 h=0.120 x=-1.13 y=0.060 z=-0.40 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-1.13 y=0.360 z=-0.40 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=-1.13 y=0.750 z=-0.40 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-1.13 y=0.630 z=-0.52 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-1.13 y=1.110 z=-0.40 seg=8 color=#e0b020
+  part disc r=0.255 r2=0.285 h=0.120 x=0.03 y=0.060 z=-0.40 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=0.03 y=0.360 z=-0.40 seg=8 color=#8a5a2a
+  part sphere r=0.180 x=0.03 y=0.750 z=-0.40 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=0.03 y=0.630 z=-0.52 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=0.03 y=1.110 z=-0.40 seg=8 color=#d01a1a
+  part disc r=0.255 r2=0.285 h=0.120 x=1.00 y=0.060 z=-0.40 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=1.00 y=0.360 z=-0.40 seg=8 color=#6a2a6a
+  part sphere r=0.180 x=1.00 y=0.750 z=-0.40 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=1.00 y=0.630 z=-0.52 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=1.00 y=1.110 z=-0.40 seg=8 color=#2a6a2a
+  part disc r=0.255 r2=0.285 h=0.120 x=2.21 y=0.060 z=-0.40 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=2.21 y=0.360 z=-0.40 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=2.21 y=0.750 z=-0.40 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=2.21 y=0.630 z=-0.52 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=2.21 y=1.110 z=-0.40 seg=8 color=#d01a1a
+  part disc r=0.255 r2=0.285 h=0.120 x=-2.19 y=0.060 z=0.70 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-2.19 y=0.360 z=0.70 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=-2.19 y=0.750 z=0.70 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-2.19 y=0.630 z=0.58 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-2.19 y=1.110 z=0.70 seg=8 color=#e0b020
+  part disc r=0.255 r2=0.285 h=0.120 x=-1.12 y=0.060 z=0.70 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-1.12 y=0.360 z=0.70 seg=8 color=#3a6a2a
+  part sphere r=0.180 x=-1.12 y=0.750 z=0.70 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-1.12 y=0.630 z=0.58 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-1.12 y=1.110 z=0.70 seg=8 color=#d01a1a
+  part disc r=0.255 r2=0.285 h=0.120 x=0.03 y=0.060 z=0.70 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=0.03 y=0.360 z=0.70 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=0.03 y=0.750 z=0.70 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=0.03 y=0.630 z=0.58 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=0.03 y=1.110 z=0.70 seg=8 color=#e0b020
+  part disc r=0.255 r2=0.285 h=0.120 x=1.15 y=0.060 z=0.70 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=1.15 y=0.360 z=0.70 seg=8 color=#3a6a2a
+  part sphere r=0.180 x=1.15 y=0.750 z=0.70 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=1.15 y=0.630 z=0.58 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=1.15 y=1.110 z=0.70 seg=8 color=#d01a1a
+  part disc r=0.255 r2=0.285 h=0.120 x=2.25 y=0.060 z=0.70 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=2.25 y=0.360 z=0.70 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=2.25 y=0.750 z=0.70 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=2.25 y=0.630 z=0.58 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=2.25 y=1.110 z=0.70 seg=8 color=#e0b020
+  part disc r=0.255 r2=0.285 h=0.120 x=-2.24 y=0.060 z=1.80 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-2.24 y=0.360 z=1.80 seg=8 color=#6a2a6a
+  part sphere r=0.180 x=-2.24 y=0.750 z=1.80 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-2.24 y=0.630 z=1.68 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-2.24 y=1.110 z=1.80 seg=8 color=#d01a1a
+  part disc r=0.255 r2=0.285 h=0.120 x=-1.11 y=0.060 z=1.80 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-1.11 y=0.360 z=1.80 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=-1.11 y=0.750 z=1.80 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-1.11 y=0.630 z=1.68 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-1.11 y=1.110 z=1.80 seg=8 color=#2a6a2a
+  part disc r=0.255 r2=0.285 h=0.120 x=-0.02 y=0.060 z=1.80 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=-0.02 y=0.360 z=1.80 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=-0.02 y=0.750 z=1.80 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=-0.02 y=0.630 z=1.68 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=-0.02 y=1.110 z=1.80 seg=8 color=#e0b020
+  part disc r=0.255 r2=0.285 h=0.120 x=1.19 y=0.060 z=1.80 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=1.19 y=0.360 z=1.80 seg=8 color=#6a2a6a
+  part sphere r=0.180 x=1.19 y=0.750 z=1.80 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=1.19 y=0.630 z=1.68 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=1.19 y=1.110 z=1.80 seg=8 color=#d01a1a
+  part disc r=0.255 r2=0.285 h=0.120 x=2.12 y=0.060 z=1.80 seg=8 color=#4a3a2a
+  part disc r=0.240 r2=0.180 h=0.480 x=2.12 y=0.360 z=1.80 seg=8 color=#2a4a9a
+  part sphere r=0.180 x=2.12 y=0.750 z=1.80 seg=6 color=#ecc0a0
+  part disc r=0.165 r2=0.090 h=0.240 x=2.12 y=0.630 z=1.68 seg=8 color=#f0ece4
+  part disc r=0.195 r2=0.005 h=0.510 x=2.12 y=1.110 z=1.80 seg=8 color=#d01a1a
+  part disc r=0.323 r2=0.361 h=0.152 x=0.00 y=0.076 z=-1.60 seg=8 color=#4a3a2a
+  part disc r=0.304 r2=0.228 h=0.608 x=0.00 y=0.456 z=-1.60 seg=8 color=#8a1a1a
+  part sphere r=0.228 x=0.00 y=0.950 z=-1.60 seg=6 color=#ecc0a0
+  part disc r=0.209 r2=0.114 h=0.304 x=0.00 y=0.798 z=-1.75 seg=8 color=#f0ece4
+  part disc r=0.247 r2=0.005 h=0.646 x=0.00 y=1.406 z=-1.60 seg=8 color=#101010
+  part box w=0.04 h=0.9 d=0.04 x=0.3 y=0.75 z=-1.6 color=#5a4a3a   # the general's flag
+  part box w=0.45 h=0.3 d=0.03 x=0.53 y=1.05 z=-1.6 color=#1a1a1a
+
+# the pool, a hearse gone in nose first; lily pads, a wreath afloat, the diving board
+model pool_hearse
+  part box w=11.4 h=0.3 d=6.4 y=0.15 color=#8a8680
+  part box w=10.2 h=0.32 d=5.2 y=0.17 color=#1a4a44 emit=0.12
+  part body len=6 wid=2.1 hgt=0.8 x=1.2 y=0.1 z=0.4 round=4 nose=0.2 tail=0.15 drop=0.3 rot=25 roll=-10 pitch=14 color=#121214
+  part cabin len=3.2 wid=1.9 hgt=0.7 x=1.8 y=0.75 z=0.6 front=0.4 back=0.05 top=0.9 rot=25 roll=-10 pitch=14 color=#121214 glass=#1a1e22
+  part box w=1.4 h=0.05 d=0.5 x=2.6 y=1.25 z=1.0 rot=25 color=#c8b060   # the brass rail
+  part disc r=0.35 h=0.02 x=-3.2 y=0.34 z=1.2 seg=8 color=#3a7a2a
+  part disc r=0.3 h=0.02 x=-2.4 y=0.34 z=1.8 seg=8 color=#3a7a2a
+  part disc r=0.4 h=0.02 x=-3.8 y=0.34 z=-0.6 seg=8 color=#3a7a2a
+  part sphere r=0.12 x=-2.4 y=0.4 z=1.8 seg=6 color=#e8d0e0
+  part ring r=0.45 thick=0.12 x=-1.0 y=0.36 z=-1.4 seg=10 color=#2e5a26
+  part box w=0.6 h=0.08 d=2.6 x=-4.2 y=0.7 z=-2.6 color=#d8d4c8
+  part box w=0.5 h=0.6 d=0.4 x=-4.2 y=0.35 z=-3.6 color=#8a8680
+  part box w=0.06 h=1.2 d=0.06 x=4.9 y=0.9 z=-2.9 color=#7a7a78   # a sign: no swimming
+  part box w=0.8 h=0.5 d=0.04 x=4.9 y=1.5 z=-2.9 color=#e8e4dc
+
+# the greenhouse: brick footing, misted glass, a ribbed roof, a light left on; outside a plant that eats meat
+model greenhouse lamp=1
+  part box w=8.2 h=0.6 d=4.6 y=0.3 color=#6a4a3a
+  part box w=8 h=2.1 d=4.4 y=1.65 color=#4a6a66
+  part box w=8.1 h=0.08 d=4.5 y=2.72 color=#d8d4c8
+  part box w=8.2 h=0.06 d=2.6 y=3.25 z=-1.08 pitch=-28 color=#5a7a76
+  part box w=8.2 h=0.06 d=2.6 y=3.25 z=1.08 pitch=28 color=#5a7a76
+  part box w=8.3 h=0.12 d=0.12 y=3.85 color=#d8d4c8
+  part box w=0.08 h=0.1 d=4.6 x=-3 y=3.3 color=#d8d4c8
+  part box w=0.08 h=0.1 d=4.6 x=-1 y=3.3 color=#d8d4c8
+  part box w=0.08 h=0.1 d=4.6 x=1 y=3.3 color=#d8d4c8
+  part box w=0.08 h=0.1 d=4.6 x=3 y=3.3 color=#d8d4c8
+  part box w=1.1 h=1.9 d=0.06 y=1.55 z=-2.23 color=#2a3a36
+  part light x=0 y=2.2 z=-2.3 color=#ffe0a0
+  part disc r=0.45 r2=0.35 h=0.5 x=-2.4 y=0.25 z=-3 seg=10 color=#8a5a3a
+  part sphere r=0.75 x=-2.4 y=1.0 z=-3 seg=8 color=#3a6a26
+  part sphere r=0.35 rx=0.45 x=-2.4 y=1.75 z=-3.25 seg=8 color=#a01828
+  part box w=0.6 h=0.05 d=0.12 x=-2.4 y=1.78 z=-3.5 color=#f0f0e0
+  part disc r=0.4 r2=0.3 h=0.45 x=2.6 y=0.22 z=-2.9 seg=10 color=#8a5a3a
+  part sphere r=0.6 x=2.6 y=0.8 z=-2.9 seg=8 color=#2e5a22
+
+# a gazebo of eight posts under a slate roof, a lantern inside
+model gazebo lamp=1
+  part disc r=3 h=0.3 y=0.15 seg=8 color=#8a8680
+  part disc r=0.12 h=2.6 x=2.6 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 x=-2.6 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 z=2.6 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 z=-2.6 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 x=1.84 z=1.84 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 x=-1.84 z=1.84 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 x=1.84 z=-1.84 y=1.6 seg=6 color=#d8d4c8
+  part disc r=0.12 h=2.6 x=-1.84 z=-1.84 y=1.6 seg=6 color=#d8d4c8
+  part disc r=3.5 r2=0.25 h=1.5 y=3.65 seg=8 color=#2e3036
+  part sphere r=0.3 y=4.45 seg=6 color=#b09040
+  part light x=0 y=2.6 z=0 color=#ffd090
+  part box w=1.6 h=0.45 d=0.5 x=0 y=0.52 z=1.6 color=#5a4a3a   # a bench
+  part disc r=0.5 h=0.75 y=0.67 seg=8 color=#3a2a24              # a little table
+
+# a weeping angel on a pedestal, wings half open, its face in its hands
+model statue_angel
+  part box w=1.6 h=1.0 d=1.6 y=0.5 color=#5a5854
+  part box w=1.8 h=0.18 d=1.8 y=1.09 color=#66645f
+  part disc r=0.5 r2=0.3 h=1.9 y=2.13 seg=10 color=#8a8a86
+  part sphere r=0.24 y=3.2 z=-0.12 seg=8 color=#8a8a86
+  part box w=0.5 h=0.3 d=0.22 y=3.05 z=-0.32 color=#7e7e7a
+  part box w=1.3 h=1.6 d=0.12 x=-0.75 y=2.7 z=0.3 rot=-25 roll=-12 color=#7a7a76 taper=0.5
+  part box w=1.3 h=1.6 d=0.12 x=0.75 y=2.7 z=0.3 rot=25 roll=12 color=#7a7a76 taper=0.5
+
+# a hedge clipped into a skull on a stone plinth: eyes, a nose, teeth (readable from above)
+model topiary_skull
+  part box w=1.8 h=0.5 d=1.8 y=0.25 color=#5a5854
+  part sphere r=1.05 y=1.65 seg=10 color=#24442a
+  part box w=1.1 h=0.6 d=0.9 y=0.85 z=-0.35 color=#24442a
+  part sphere r=0.28 x=-0.38 y=2.0 z=-0.78 seg=6 color=#080a08
+  part sphere r=0.28 x=0.38 y=2.0 z=-0.78 seg=6 color=#080a08
+  part sphere r=0.12 y=1.62 z=-0.98 seg=5 color=#080a08
+  part box w=0.8 h=0.08 d=0.1 y=1.02 z=-0.82 color=#080a08
+# --- end of the garden ---

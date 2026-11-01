@@ -14,6 +14,7 @@ venue junkyard
   wall scrap
   props scrap_pile*4 wreck_stack*3 tire_pile*4 wreck_car*4 engine_block*3 barrel_oil*3 tire_stack*2 crate_stack*1 shack_tin*1 oil_tank_small*1 wreck_bus*1 car_crusher*0.3 crane_magnet*0.3
   litter tire_single*4 hubcap*3 car_door*3 oil_stain*3 barrel_oil*1 engine_block*0.5 newspaper*1 wreck_car*0.6 tire_stack*0.8 crate*0.5
+  loose tire_single*3 barrel_oil*2 box_cardboard*2 bin*2 sawhorse*1 drum_road*1 crate*1
   density 1.1
 
 venue cemetery
@@ -30,6 +31,7 @@ venue cemetery
   wall stone
   props gravestone*10 gravestone_cross*6 gravestone_candle*4 grave_plot*4 gravestone_angel*2 cypress*4 tree_dead*2 obelisk*1.5 wreath*1.5 lamp_old*1.5 bench*1 crypt*2 mausoleum*0.6 open_grave*0.8 chapel*0.2
   litter flowers*4 wreath*1 gravestone*2 gravestone_cross*2 gravestone_candle*1 bones_small*0.5 rock_small*1 cypress*0.5 lamp_old*0.3 bench*0.3
+  loose wood_cross*3 grave_lantern*3 urn_stone*2 bin*1 sawhorse*1
   density 1.8
 
 venue docks
@@ -46,6 +48,7 @@ venue docks
   wall containers
   props container*4 container_stack*3 bollard*3 pallet_stack*3 crate_stack*3 crate*2 barrel_oil*2 lamp_harbor*2 forklift*1 buoy*1 warehouse*0.4
   litter crate*2 barrel_oil*2 oil_stain*2 tire_single*1 pipe_short*1 newspaper*1 trash_bag*1 pallet_stack*0.6 crate_stack*0.4 bollard*0.6
+  loose crate*2 barrel_oil*2 box_cardboard*2 bin*1 drum_road*2 sawhorse*1
   density 1.1
 
 venue desert
@@ -62,6 +65,7 @@ venue desert
   wall tires
   props cactus*6 cactus_tall*3 rock_red*3 tumbleweed*4 skull_cow*3 ribcage*1 vulture_post*1 wreck_rust*1.5 mesa_rock*0.6 water_tower*0.2
   litter tumbleweed*3 bones_small*2 rock_small*4 skull_cow*0.6 cactus*1.5 tire_single*0.6 hubcap*0.6 cactus_tall*0.8 rock_red*0.6 wreck_rust*0.3
+  loose tumbleweed*3 drum_road*2 barrel_oil*1 sign_post*2 box_cardboard*1
   density 1.1
 
 venue refinery
@@ -78,6 +82,7 @@ venue refinery
   wall pipes
   props barrel_stack*3 barrel_oil*3 valve*3 oil_puddle*3 pipe_rack*2 lamp_sodium*2 catwalk*1 crate_stack*1 oil_tank_small*1 distill_column*0.6 tank_oil*0.5 flare_stack*0.3
   litter oil_stain*4 barrel_oil*3 pipe_short*2 valve*0.6 crate*1 tire_single*0.5 barrel_stack*0.6 valve*0.4 crate_stack*0.4
+  loose drum_road*3 barrel_oil*2 sawhorse*2 cone*2 bin*1
   density 1.2
 
 venue swamp
@@ -94,6 +99,7 @@ venue swamp
   wall wood
   props reeds*8 tree_swamp*5 stump*3 bog_pool*3 gator*1.5 lantern*1.2 boat_wreck*1 sunken_car*1 stilt_hut*0.8 dock_wood*0.5
   litter reeds*5 stump*2 rock_small*2 bones_small*0.5 tire_single*0.5 lantern*0.3 tree_swamp*0.6 stump*0.5 gator*0.2
+  loose crate*2 box_cardboard*1 barrel_oil*2 bin*1 sign_post*1 hay_bale*1
   density 1.3
 
 venue downtown
@@ -110,6 +116,7 @@ venue downtown
   wall neon
   props building_a*3 building_b*3 building_tall*1.5 parked_car*2 parked_van*1 dumpster*2 hydrant*2 lamp_city*2 newsstand*1 neon_sign*1 bus_stop*0.6
   litter newspaper*3 trash_bag*3 cone*2 oil_stain*2 hydrant*0.6 tire_single*0.5 dumpster*0.4 bus_stop*0.1 parked_car*0.3
+  loose bin*3 mailbox*2 cone*2 sawhorse*2 drum_road*1 box_cardboard*1 hydrant*1
   density 1.0
 
 venue pass
@@ -126,6 +133,7 @@ venue pass
   wall snowbank
   props fir_snow*8 fir_tree*6 rock_snow*4 snow_bank*2 avalanche_fence*1 cabin_wood*0.6 lift_pylon*0.5 snowman*0.6 snow_plow*0.3
   litter rock_snow*1 rock_small*3 snow_bank*1 fir_snow*0.8 tire_single*0.5 sign_curve*0.3 fir_tree*0.6 fir_snow*0.6 snowman*0.1
+  loose snowman*2 sign_post*2 sawhorse*2 drum_road*2 cone*1
   density 1.3
 
 venue fairground
@@ -142,6 +150,7 @@ venue fairground
   wall fence
   props ticket_booth*2 balloon_stand*2 bumper_car*2 lamp_street*1.5 tent_striped*1 clown_head*1 bulb_arch*1 high_striker*1 crate_stack*1 barrel_oil*1 carousel*0.3 coaster_segment*0.4 ghost_train*0.3 ferris_wheel*0.08
   litter newspaper*3 trash_bag*2 cone*1 crate*1 flowers*1 balloon_stand*0.2 tent_striped*0.3 crowd_small*0.3 bumper_car*0.2 ticket_booth*0.1
+  loose chair_plastic*2 bin*2 box_cardboard*1 hay_bale*2 cone*1 gnome*0.5
   density 1.3
 
 venue proving
@@ -158,6 +167,7 @@ venue proving
   wall sandbags
   props crater*6 tank_trap*4 sandbag_wall*3 barbed_post*2 target_board*2 tank_wreck*1 jeep_wreck*1 bunker*1 watchtower*1 crash_dummy*1 barrel_oil*1 radar_dish*0.4
   litter sandbag*3 crater*1.5 tire_single*1 tank_trap*0.6 rock_small*1 barbed_post*0.5
+  loose crash_dummy*2 drum_road*2 sawhorse*2 cone*2 barrel_oil*1
   density 1.0
 
 venue estate
@@ -172,6 +182,7 @@ venue estate
   road cobble color=#4e4a48 line=#b0a080
   shoulder gravel color=#423e3a
   wall iron
-  props hedge_block*3 tree_dead*3 gravestone*3 tree_dead_big*2 gargoyle*2 lamp_gothic*2 cypress*2 gravestone_angel*1.5 statue_reaper*1 mausoleum*1 crypt*1 obelisk*1 manor_wall*1 coffin_stack*0.6 fountain_skull*0.5 mausoleum_large*0.2
-  litter flowers*3 gravestone*1.5 rock_small*1 bones_small*0.4 wreath*0.6 hedge_block*0.6 gargoyle*0.2 tree_dead*0.4
-  density 1.3
+  props hedge_block*3 tree_dead*3 gravestone*3 tree_dead_big*2 gargoyle*2 lamp_gothic*3.5 cypress*2 gravestone_angel*1.5 statue_reaper*1 mausoleum*1 crypt*1 obelisk*1 manor_wall*1 coffin_stack*0.6 fountain_skull*0.5 mausoleum_large*0.2 topiary_skull*1.5 statue_angel*0.8 urn_stone*1.5 gnome*1 bench*1
+  litter flowers*3 gravestone*1.5 rock_small*1 bones_small*0.4 wreath*0.6 hedge_block*0.6 gargoyle*0.2 tree_dead*0.4 urn_stone*0.6 grave_lantern*0.8
+  loose gnome*3 urn_stone*3 chair_plastic*1 sawhorse*1 wood_cross*1 grave_lantern*1
+  density 1.6

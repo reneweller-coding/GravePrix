@@ -42,6 +42,22 @@ struct RivalState
     int         m_grudge = 0;       ///< 0..3: a feud with the player
 };
 
+/** @brief Graves' jobs (docs/DESIGN.md "Jobs"): a race with a task of his, paid apart, no league points. */
+enum class JobE : int
+{
+    NONE,
+    COFFIN,    ///< a coffin on the roof: to the finish with at most CoffinLimit of the armour lost
+    DEBTOR,    ///< a rival owes Graves & Sons: wreck their car yourself
+    ESCORT,    ///< Graves' hearse must reach the finish; the rivals go for it
+    WREATHS,   ///< wreaths lie on the track: pick up WreathsNeeded of them
+};
+
+constexpr float CoffinLimit = 0.4f;    ///< the coffin falls off beyond this share of the armour lost
+constexpr int   WreathsNeeded = 6;     ///< of the nine on the track
+
+/** @return a job's key ("coffin", "debtor", "escort", "wreaths"; "" none) */
+const char *jobKey( JobE j );
+
 /** @brief A race on offer. */
 struct Offer
 {
@@ -53,6 +69,9 @@ struct Offer
     bool                     m_final = false;     ///< against Graves
     std::vector<std::string> m_rivals;
     int                      m_purse = 0, m_fee = 0, m_laps = 3;
+    JobE                     m_job = JobE::NONE;   ///< Graves' job (NONE: a race)
+    int                      m_pay = 0;            ///< what the job pays when done
+    std::string              m_target;             ///< the debtor (a rival's key)
 };
 
 /** @brief One line of a race's result. */
@@ -78,6 +97,9 @@ struct RaceReport
     bool                     m_seasonOver = false;   ///< the table was reset after this race
     bool                     m_won = false;          ///< the career is won
     std::string              m_story;                ///< a story to show now ("" none)
+    JobE                     m_job = JobE::NONE;     ///< the job it was
+    bool                     m_jobDone = false;
+    int                      m_jobPay = 0;
 };
 
 /** @brief A piece of the tabloid. */
@@ -175,6 +197,9 @@ public:
     std::vector<std::string> sponsors() const;
     void                     sign( const std::string &sponsor );
 
+    /** @return whether a finished race did the job (the race's own rules: see JobE) */
+    static bool jobDone( const Offer &o, const World &w, int player );
+
     /** @return whether the player can go on (false: broke with a wreck and no credit) */
     bool solvent() const;
 
@@ -216,6 +241,7 @@ public:
     std::vector<NewsItem>   m_news;
     std::string             m_story;   ///< a story waiting to be shown
     int  m_races = 0, m_wins = 0, m_wrecks = 0, m_wrecked = 0, m_earned = 0;
+    int  m_jobsDone = 0;               ///< Graves' jobs done
     bool m_over = false;               ///< won or bankrupt
     bool m_won = false;
     uint32_t m_seed = 1;

@@ -53,12 +53,13 @@ float g_dmg[6] = {};
 struct SimResult
 {
     float m_time = 0, m_avg = 0, m_bestLap = 0;
-    int   m_finished = 0, m_wrecked = 0, m_stuck = 0;
+    int   m_finished = 0, m_wrecked = 0, m_stuck = 0, m_knocked = 0;
     bool  m_timeout = false;
     std::map<int, int> m_stuckAt;   ///< where (100 m bins) cars backed out
 };
 
 bool   g_assist = false;   ///< --assist: every car with the driving assist
+float  g_hands = 0.0f;     ///< --hands: every car driven by a person's hands (World::hands)
 double g_slide = 0, g_slideN = 0;
 
 SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool verbose, const std::string &car,
@@ -74,7 +75,11 @@ SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool
             s.m_weapons = 0;
             s.m_aggression = 0;
         }
-    for ( CarSetup &s : field ) s.m_assist = g_assist;
+    for ( CarSetup &s : field )
+    {
+        s.m_assist = g_assist;
+        s.m_hands = g_hands;
+    }
     w.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, difficulty, seed );
     std::vector<CarInput> none( field.size() );
     SimResult             r;
@@ -99,6 +104,7 @@ SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool
             }
             lastReverse[i] = c.m_ai.m_reverse;
         }
+        for ( const Event &e : w.m_events ) r.m_knocked += e.m_type == EvE::LOOSE ? 1 : 0;
         if ( verbose )
             for ( const Event &e : w.m_events )
                 if ( e.m_type == EvE::WRECK )
@@ -147,6 +153,7 @@ int toolSim( const Options &opt )
     std::string car = opt.value( "--car" );
     bool        noWeapons = opt.has( "--peaceful" );
     g_assist = opt.has( "--assist" );
+    g_hands = (float)opt.num( "--hands", 0.0f );
     std::vector<std::string> names;
     if ( opt.has( "--simall" ) )
         names = g_data.m_trackOrder;
@@ -176,8 +183,9 @@ int toolSim( const Options &opt )
         if ( verbose ) printf( "%s (%.0f m, %d laps)\n", name.c_str(), t.m_length, t.m_laps );
         SimResult r = runRace( t, difficulty, seed, cars, verbose, car, noWeapons );
         bool      fail = r.m_timeout || ( !t.m_arena && r.m_finished == 0 );
-        printf( "%-22s %5.0f m  %s %6.1f s  avg %4.1f m/s  best lap %6.2f  finished %d  wrecked %d  stuck %d", name.c_str(),
-                t.m_length, t.m_arena ? "derby" : "race ", r.m_time, r.m_avg, r.m_bestLap, r.m_finished, r.m_wrecked, r.m_stuck );
+        printf( "%-22s %5.0f m  %s %6.1f s  avg %4.1f m/s  best lap %6.2f  finished %d  wrecked %d  stuck %d  knocked %d/%d", name.c_str(),
+                t.m_length, t.m_arena ? "derby" : "race ", r.m_time, r.m_avg, r.m_bestLap, r.m_finished, r.m_wrecked, r.m_stuck,
+                r.m_knocked, (int)t.m_loose.size() );
         if ( !r.m_stuckAt.empty() )
         {
             printf( "  (stuck near" );
@@ -190,9 +198,11 @@ int toolSim( const Options &opt )
     float total = 0;
     for ( float d : g_dmg ) total += d;
     if ( total > 0 )
+    {
         printf( "slide %.2f m/s sideways on average while racing\n", g_slideN > 0 ? g_slide / g_slideN : 0.0 );
         printf( "damage: guns %.0f%%  explosions %.0f%%  crashes %.0f%%  walls %.0f%%  spikes %.0f%%  other %.0f%%\n", g_dmg[0] / total * 100,
                 g_dmg[1] / total * 100, g_dmg[2] / total * 100, g_dmg[3] / total * 100, g_dmg[4] / total * 100, g_dmg[5] / total * 100 );
+    }
     return bad ? 1 : 0;
 }
 

@@ -243,7 +243,7 @@ void App::run()
 void App::testStep()
 {
     static const char *names[] = { "title", "newgame", "hub", "offers", "garage", "market", "shark", "sponsor", "news", "table",
-                                   "story", "race", "results", "quick", "options", "controls", "graveyard" };
+                                   "story", "race", "results", "quick", "options", "controls", "graveyard", "crypt" };
     // A hard limit: a script that hangs ends by itself.
     if ( ++m_testFrames > 30 * 60 * 8 )
     {
@@ -329,6 +329,37 @@ void App::testStep()
         }
         return;
     }
+    if ( w == "tutorial" )
+    {
+        startTutorial();
+        return;
+    }
+    if ( w == "sign" && m_testAt < m_testWords.size() )
+    {
+        m_career.sign( m_testWords[m_testAt++] );
+        return;
+    }
+    if ( w == "careerrace" && m_testAt + 1 < m_testWords.size() )
+    {
+        // careerrace TRACK JOB: today's main race moved to that track, with a job of Graves' (none, coffin, debtor,
+        // escort, wreaths).
+        Offer o = m_career.m_offers.empty() ? Offer() : m_career.m_offers[std::min<size_t>( 1, m_career.m_offers.size() - 1 )];
+        o.m_track = m_testWords[m_testAt++];
+        std::string job = m_testWords[m_testAt++];
+        o.m_job = job == "coffin" ? JobE::COFFIN : job == "debtor" ? JobE::DEBTOR : job == "escort" ? JobE::ESCORT
+                : job == "wreaths" ? JobE::WREATHS : JobE::NONE;
+        o.m_derby = o.m_reverse = false;
+        o.m_fee = 0;
+        o.m_pay = 1000;
+        if ( const TrackDef *td = g_data.track( o.m_track ) ) o.m_laps = td->m_laps;
+        if ( o.m_job == JobE::DEBTOR && !o.m_rivals.empty() ) o.m_target = o.m_rivals[0];
+        if ( o.m_job == JobE::ESCORT && o.m_rivals.size() > 4 ) o.m_rivals.pop_back();
+        m_offer = o;
+        int  player = 0;
+        auto field = m_career.field( o, player );
+        startRace( o.m_track, false, field, ModeE::RACE, o.m_laps, player );
+        return;
+    }
     m_in.script( { w } );
     m_testWait = 3;
 }
@@ -367,8 +398,10 @@ void App::frame( float dt )
     case ScreenE::QUICK: quick(); break;
     case ScreenE::OPTIONS: options(); break;
     case ScreenE::CONTROLS: controls(); break;
+    case ScreenE::CRYPT: crypt(); break;
     default: break;
     }
+    toasts();
     if ( !m_testShot.empty() )
     {
         // The app test's picture of this frame (before the swap the frame is still there to read).
@@ -596,8 +629,8 @@ void App::title()
     ui::text( T( "Das Rennen, bei dem der Bestatter mitverdient." ), 96 * k, 290 * k, 34, ui::Ink );
     bool                     canLoad = fs::exists( careerPath() );
     std::vector<std::string> items = { T( "Karriere fortsetzen" ), T( "Neue Karriere" ), T( "Schnelles Rennen" ), T( "Optionen" ),
-                                       T( "Beenden" ) };
-    std::vector<bool>        on = { canLoad, true, true, true, true };
+                                       T( "Probefahrt beim Bestatter" ), T( "Die Gruft der Grabinschriften" ), T( "Beenden" ) };
+    std::vector<bool>        on = { canLoad, true, true, true, true, true, true };
     if ( !canLoad && m_sel[(int)ScreenE::TITLE] == 0 ) m_sel[(int)ScreenE::TITLE] = 1;
     int pick = menu( items, m_sel[(int)ScreenE::TITLE], { 96 * k, 420 * k, 640 * k, 420 * k }, 48, &on );
     hints( m_in.padUsed() ? T( "A wählen   ·   Steuerkreuz bewegen" ) : T( "Eingabe wählen   ·   Pfeile bewegen   ·   F11 Vollbild" ) );
@@ -615,7 +648,12 @@ void App::title()
     case 1: go( ScreenE::NEWGAME ); break;
     case 2: go( ScreenE::QUICK ); break;
     case 3: go( ScreenE::OPTIONS ); break;
-    case 4: m_quit = true; break;
+    case 4:
+        m_inCareer = false;
+        startTutorial();
+        break;
+    case 5: go( ScreenE::CRYPT ); break;
+    case 6: m_quit = true; break;
     default: break;
     }
 }

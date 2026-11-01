@@ -1,0 +1,263 @@
+# The epitaphs (docs/DESIGN.md "Epitaphs"): what a player earns over all their races and careers, kept in
+# records.txt and shown as gravestones in the crypt. The key is what the code checks (AppAwards.cpp); the order here
+# is the order of the stones.
+
+award first_win
+  title "Hier ruht die Konkurrenz" title_en "Here Lies the Competition"
+  desc "Gewinne ein Rennen." desc_en "Win a race."
+
+award wins_25
+  title "Stammgast auf dem Podest" title_en "Podium Regular"
+  desc "Gewinne 25 Rennen." desc_en "Win 25 races."
+
+award wins_100
+  title "Unsterblich (vorerst)" title_en "Immortal (For Now)"
+  desc "Gewinne 100 Rennen." desc_en "Win 100 races."
+
+award wreck_first
+  title "Erste Beerdigung" title_en "First Funeral"
+  desc "Verschrotte einen Gegner." desc_en "Wreck a rival."
+
+award wreck_3
+  title "Dreifache Trauerfeier" title_en "Triple Funeral"
+  desc "Verschrotte drei Gegner in einem Rennen." desc_en "Wreck three rivals in one race."
+
+award wreck_100
+  title "Großkunde von Graves & Sons" title_en "Graves & Sons' Best Customer"
+  desc "Verschrotte 100 Gegner." desc_en "Wreck 100 rivals."
+
+award wrecked_10
+  title "Stammkunde beim Bestatter" title_en "Regular at the Undertaker's"
+  desc "Werde zehnmal verschrottet." desc_en "Get wrecked ten times."
+
+award wrecked_50
+  title "Ruhte selten in Frieden" title_en "Rarely Rested in Peace"
+  desc "Werde 50-mal verschrottet." desc_en "Get wrecked 50 times."
+
+award no_gun_win
+  title "Kam in Frieden" title_en "Came in Peace"
+  desc "Gewinne ein Rennen, ohne einen Schuss abzugeben." desc_en "Win a race without firing a shot."
+
+award clean_win
+  title "Ohne einen Kratzer" title_en "Not a Scratch"
+  desc "Gewinne mit weniger als fünf Prozent Schaden." desc_en "Win with less than five per cent damage."
+
+award close_call
+  title "Am seidenen Faden" title_en "Hanging by a Thread"
+  desc "Komm mit weniger als fünf Prozent Panzerung ins Ziel." desc_en "Finish with less than five per cent armour left."
+
+award photo_finish
+  title "Um eine Nasenlänge" title_en "By a Nose"
+  desc "Gewinne mit weniger als drei Zehntelsekunden Vorsprung." desc_en "Win by less than three tenths of a second."
+
+award comeback
+  title "Auferstanden von den Letzten" title_en "Risen from the Back"
+  desc "Gewinne, nachdem du nach der ersten Runde Letzter warst." desc_en "Win after running last when the first lap was done."
+
+award lap_record
+  title "Schneller als der Tod" title_en "Faster than Death"
+  desc "Fahre die schnellste Runde eines Rennens." desc_en "Set the fastest lap of a race."
+
+award derby_win
+  title "Der Letzte, der noch steht" title_en "Last One Standing"
+  desc "Gewinne ein Derby." desc_en "Win a derby."
+
+award oil_win
+  title "Glatt gewonnen" title_en "Slick Victory"
+  desc "Rutsche auf Öl aus und gewinne trotzdem." desc_en "Slip on oil and win anyway."
+
+award ghost_beaten
+  title "Den eigenen Geist besiegt" title_en "Beat Your Own Ghost"
+  desc "Schlage im Zeitfahren deinen eigenen Geist." desc_en "Beat your own ghost in a time trial."
+
+award tour_5
+  title "Fünf Runden Fegefeuer" title_en "Five Rounds of Purgatory"
+  desc "Überstehe fünf Runden im Endlos-Turnier." desc_en "Survive five rounds of the endless tournament."
+
+award tour_10
+  title "Zehn Runden Fegefeuer" title_en "Ten Rounds of Purgatory"
+  desc "Überstehe zehn Runden im Endlos-Turnier." desc_en "Survive ten rounds of the endless tournament."
+
+award daily
+  title "Täglich grüßt der Totengräber" title_en "Same Grave, Every Day"
+  desc "Fahre eine Tagesherausforderung." desc_en "Drive a daily challenge."
+
+award all_venues
+  title "Weltreise in Schwarz" title_en "World Tour in Black"
+  desc "Fahre an allen elf Schauplätzen." desc_en "Race at all eleven venues."
+
+award tracks_30
+  title "Kennt jede Kurve" title_en "Knows Every Bend"
+  desc "Fahre auf 30 verschiedenen Strecken." desc_en "Race on 30 different tracks."
+
+award knock_50
+  title "Elefant im Porzellanladen" title_en "Bull in a China Shop"
+  desc "Wirf 50 Dinge am Straßenrand um." desc_en "Knock over 50 things by the roadside."
+
+award knock_500
+  title "Abrissunternehmen" title_en "Demolition Contractor"
+  desc "Wirf 500 Dinge am Straßenrand um." desc_en "Knock over 500 things by the roadside."
+
+award knock_gnome
+  title "Gartenzwerg-Schreck" title_en "Gnome Menace"
+  desc "Fahre einen Gartenzwerg um." desc_en "Run over a garden gnome."
+
+award knock_snowman
+  title "Tauwetter" title_en "Early Thaw"
+  desc "Fahre einen Schneemann um." desc_en "Run down a snowman."
+
+award knock_hydrant
+  title "Wasserspiele" title_en "Water Feature"
+  desc "Fahre einen Hydranten um." desc_en "Knock over a fire hydrant."
+
+award knock_cross
+  title "Totenruhe gestört" title_en "Disturbing the Dead"
+  desc "Fahre ein Grabkreuz um." desc_en "Knock over a grave cross."
+
+award curse
+  title "Grabbeigabe" title_en "Grave Goods"
+  desc "Heb den Fluch aus einer Wunderkiste auf." desc_en "Pick up the curse from a mystery box."
+
+award cash_100
+  title "Leichenfledderer" title_en "Grave Robber"
+  desc "Sammle 100 Geldbündel auf der Strecke." desc_en "Pick up 100 bundles of cash on the track."
+
+award horn_50
+  title "Trauermarsch auf der Hupe" title_en "Dirge on the Horn"
+  desc "Hupe 50-mal." desc_en "Sound your horn 50 times."
+
+award nitro_50
+  title "Lachgas-Leiche" title_en "Laughing All the Way"
+  desc "Zünde 50 Lachgas." desc_en "Fire 50 nitro canisters."
+
+award mines_100
+  title "Minenleger aus Leidenschaft" title_en "Born Minelayer"
+  desc "Lege 100 Minen." desc_en "Lay 100 mines."
+
+award rockets_50
+  title "Feuerwerk zur Beerdigung" title_en "Fireworks at the Funeral"
+  desc "Feuere 50 Raketen ab." desc_en "Fire 50 rockets."
+
+award train_hit
+  title "Vom Zug erwischt" title_en "Hit by the Express"
+  desc "Lass dich von einem Zug rammen." desc_en "Get hit by a train."
+
+award wrong_way
+  title "Geisterfahrer" title_en "Wrong-Way Spirit"
+  desc "Fahre in die falsche Richtung." desc_en "Drive the wrong way round."
+
+award weather
+  title "Unter einem schlechten Stern" title_en "Under a Bad Sky"
+  desc "Fahre ein Rennen, in dem das Wetter umschlägt." desc_en "Race while the weather turns."
+
+award ghost_seen
+  title "Sie fahren immer noch" title_en "They Still Race"
+  desc "Begegne dem Geist eines toten Rivalen." desc_en "Meet the ghost of a dead rival."
+
+award licence
+  title "Führerschein auf Probe" title_en "Learner's Permit"
+  desc "Bestehe die Probefahrt beim Bestatter." desc_en "Pass the test drive at the undertaker's."
+
+award league_4
+  title "Raus aus dem Armengrab" title_en "Out of the Pauper's Grave"
+  desc "Steig in die Liga Reihengrab auf." desc_en "Move up to the Death Row league."
+
+award league_3
+  title "Reihe um Reihe" title_en "Row by Row"
+  desc "Steig in die Liga Familiengruft auf." desc_en "Move up to the Family Plot league."
+
+award league_2
+  title "Ein Platz bei den Ahnen" title_en "A Seat with the Ancestors"
+  desc "Steig in die Liga Staatsbegräbnis auf." desc_en "Move up to the Lying in State league."
+
+award league_1
+  title "Mit Blaskapelle" title_en "With a Brass Band"
+  desc "Steig in die Liga Pharaonengrab auf." desc_en "Move up to the Pharaoh's Tomb league."
+
+award final
+  title "Einladung aufs Anwesen" title_en "Invited to the Estate"
+  desc "Erreiche das Finale gegen Mortimer Graves." desc_en "Reach the final against Mortimer Graves."
+
+award career_won
+  title "Der Bestatter, bestattet" title_en "The Undertaker, Undertaken"
+  desc "Besiege Mortimer Graves." desc_en "Beat Mortimer Graves."
+
+award career_won_hard
+  title "Ein Sargnagel für Graves" title_en "A Nail in Graves' Coffin"
+  desc "Besiege Graves auf Sargnagel oder Totentanz." desc_en "Beat Graves on Coffin Nail or Danse Macabre."
+
+award killer
+  title "Blut an der Stoßstange" title_en "Blood on the Bumper"
+  desc "Ein Rivale stirbt durch deine Hand." desc_en "A rival dies by your hand."
+
+award graves_10
+  title "Friedhofsgärtner" title_en "Cemetery Gardener"
+  desc "Zehn Gräber auf dem Ehrenfriedhof einer Karriere." desc_en "Ten graves in one career's cemetery."
+
+award feud
+  title "Erzfeind" title_en "Nemesis"
+  desc "Zieh dir den Groll eines Rivalen zu." desc_en "Earn a rival's grudge."
+
+award feud_end
+  title "Fehde begraben" title_en "Feud Buried"
+  desc "Beende eine Fehde. Endgültig." desc_en "End a feud. For good."
+
+award job_first
+  title "Im Dienste von Graves & Sons" title_en "In the Service of Graves & Sons"
+  desc "Erledige einen Auftrag von Graves." desc_en "Do a job for Graves."
+
+award jobs_10
+  title "Graves' rechte Hand" title_en "Graves' Right Hand"
+  desc "Erledige zehn Aufträge von Graves." desc_en "Do ten jobs for Graves."
+
+award coffin_lost
+  title "Kundschaft verloren" title_en "Lost a Client"
+  desc "Verliere den Sarg vom Dach." desc_en "Lose the coffin off the roof."
+
+award millionaire
+  title "Reichste Leiche im Fahrerlager" title_en "Richest Corpse in the Paddock"
+  desc "Besitze eine Million." desc_en "Own a million."
+
+award bankrupt
+  title "Pleitegeier" title_en "Vulture Capital"
+  desc "Geh pleite." desc_en "Go bankrupt."
+
+award loan
+  title "Mit dem Hai geschwommen" title_en "Swam with the Shark"
+  desc "Leih dir Geld beim Kredithai." desc_en "Borrow from the loan shark."
+
+award collectors
+  title "Besuch vom Inkasso" title_en "The Collectors Called"
+  desc "Lass einen Kredit überfällig werden." desc_en "Let a loan go overdue."
+
+award saboteur
+  title "Schmutzige Hände" title_en "Dirty Hands"
+  desc "Lass einen Rivalen sabotieren." desc_en "Have a rival sabotaged."
+
+award caught
+  title "Auf frischer Tat" title_en "Caught Red-Handed"
+  desc "Lass dich beim Sabotieren erwischen." desc_en "Get caught sabotaging."
+
+award used_car
+  title "Erbschleicher" title_en "Legacy Hunter"
+  desc "Kauf einen Gebrauchtwagen aus dem Nachlass eines Toten." desc_en "Buy a used car from a dead rival's estate."
+
+award top_car
+  title "Die Luxuskiste" title_en "The Deluxe Box"
+  desc "Kauf ein Auto der obersten Klasse." desc_en "Buy a car of the top class."
+
+award full_tune
+  title "Ausgereizt" title_en "Maxed Out"
+  desc "Bau alle vier Upgrades eines Wagens voll aus." desc_en "Max out all four upgrades of one car."
+
+award sponsor
+  title "Gekauft" title_en "Bought and Paid For"
+  desc "Unterschreib bei einem Sponsor." desc_en "Sign with a sponsor."
+
+award old_school
+  title "Wie früher" title_en "The Old Way"
+  desc "Gewinne ein Karriererennen ohne Fahrhilfe." desc_en "Win a career race without the driving assist."
+
+award mourner
+  title "Trauergast" title_en "Mourner"
+  desc "Besuche den Ehrenfriedhof, wenn dort jemand liegt." desc_en "Visit the cemetery once someone lies there."

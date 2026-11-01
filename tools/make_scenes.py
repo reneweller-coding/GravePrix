@@ -146,6 +146,22 @@ S = {
         "coffins": (11, 3, ["put coffin_stack -3 2", "put coffin_stack 1 3", "car pallbearer 6 1 90", "put fig_undertaker 3 0 -30",
                             "put fig_undertaker -1 0 20"]),
         "statues": (10, 4, ["put statue_reaper 0 3", "put gargoyle -5 1", "put tree_dead_big 5 5", "put tree_dead -6 6"]),
+        "maze": (16, 5, ["put hedge_maze 0 9", "put lamp_gothic -9 1", "put lamp_gothic 9 1", "put fig_widow -3 1 30",
+                         "put topiary_skull 9 6"]),
+        "pool": (13, 4, ["put pool_hearse 0 6", "put chair_plastic -5 2 20", "put chair_plastic -3.5 2.4 -10",
+                         "put fig_undertaker 5 2 -40", "put lamp_gothic -8 0", "put urn_stone 7 1"]),
+        "greenhouse": (12, 5, ["put greenhouse 0 7", "put urn_stone -6 1", "put urn_stone 6 1", "put fig_worker -3 2 30",
+                               "put gnome 3 2 -20"]),
+        "gnomes": (11, 3, ["put gnome_army 0 4", "put gnome -6 1 20", "put gnome 6 1.5 -30", "put hedge_block 0 9",
+                           "put lamp_gothic -8 0"]),
+        "topiary": (13, 3, ["put topiary_skull -6 3", "put topiary_skull 0 3.5", "put topiary_skull 6 3", "put lamp_gothic -3 0",
+                            "put lamp_gothic 3 0", "put hedge_block 0 8"]),
+        "gazebo": (12, 4, ["put gazebo 0 6", "put crowd_mourners -5 2 160", "put bench 5 1.5", "put tree_dead 8 5",
+                           "put urn_stone -2 1.5"]),
+        "angel": (12, 3, ["put statue_angel 0 3", "put gravestone_angel -5 2", "put gravestone_angel 5 2", "put cypress -8 6",
+                          "put cypress 8 6", "put wreath -1.5 1", "put grave_lantern 1.5 1"]),
+        "family": (13, 4, ["put mausoleum -6 6", "put crypt 6 5", "put obelisk 0 3", "put wreath -2 1", "put wreath 2 1",
+                           "put grave_lantern 0 1", "put lamp_gothic 9 1"]),
     },
 }
 
@@ -153,7 +169,8 @@ S = {
 # How often a scene comes (1 if not named): the big set pieces now and then, the spectators often.
 WEIGHTS = {"wheel": 0.35, "carousel": 0.5, "ghost": 0.4, "cranes": 0.5, "warehouse": 0.5, "motel": 0.5, "mesa": 0.6,
            "chapel": 0.4, "crypt": 0.7, "tower": 0.6, "block": 0.8, "mausoleum": 0.5, "flare": 0.6, "tanks": 0.6,
-           "radar": 0.5, "lift": 0.6, "hut": 0.7, "spectators": 1.6, "funeral": 1.2}
+           "radar": 0.5, "lift": 0.6, "hut": 0.7, "spectators": 1.6, "funeral": 1.2, "maze": 0.5, "pool": 0.6,
+           "greenhouse": 0.6, "gazebo": 0.7}
 
 
 def main():

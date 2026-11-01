@@ -178,7 +178,7 @@ CarInput World::ai( int i )
             if ( std::fabs( op.m_lat - lineLat ) < o.m_r + 2.5f )
                 goal = ( op.m_lat > 0 ? op.m_lat - o.m_r - 3.0f : op.m_lat + o.m_r + 3.0f ) - here.m_line;
         }
-        if ( a.m_ram <= 0 && !calm && m_rng.chance( temper * 0.05f ) )
+        if ( a.m_ram <= 0 && !calm && !c.m_setup.m_escort && m_rng.chance( temper * 0.05f ) )
         {
             for ( size_t k = 0; k < m_cars.size(); ++k )
             {
@@ -186,7 +186,8 @@ CarInput World::ai( int i )
                 if ( (int)k == i || o.m_wrecked ) continue;
                 float ds = T.delta( c.m_s, o.m_s );
                 if ( ds < -4 || ds > 16 ) continue;
-                if ( !o.m_setup.m_player && ( c.m_setup.m_grudge > 0 || m_rng.chance( 0.6f ) ) ) continue;   // a feud rams only the player
+                // A feud rams only the player; Graves' hearse is everyone's favourite.
+                if ( !o.m_setup.m_player && !o.m_setup.m_escort && ( c.m_setup.m_grudge > 0 || m_rng.chance( 0.6f ) ) ) continue;
                 a.m_ram = 1.5f;
                 a.m_target = (int)k;
                 break;
@@ -233,7 +234,7 @@ CarInput World::ai( int i )
     float gMin = gripOf( c.m_surface, 1.0f );
     float decelFull = BrakeAccel * c.m_brakeF * 0.82f;
     float decel = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
-    float corner = ( 0.8f + 0.2f * skill ) * ( 1.0f - 0.14f * c.m_setup.m_novice );
+    float corner = ( 0.8f + 0.2f * skill ) * ( 1.0f - 0.14f * c.m_setup.m_novice ) * ( 1.0f - 0.5f * c.m_slip );
     float want = c.m_top * 1.2f;
     float reach = v * v / ( 2 * decel ) + 25.0f;
     int   steps = std::min( n, (int)( reach / T.m_step ) + 2 );
@@ -324,8 +325,10 @@ CarInput World::ai( int i )
         Vector2 dd = sub( o.m_pos, c.m_pos );
         float   dl = len( dd );
         float   oa = std::fabs( wrapRad( headingOf( dd ) - c.m_head ) );
-        if ( dl < gunRange && oa < 0.12f + 0.6f / std::max( dl, 1.0f ) ) inSights = (int)k;
-        if ( dl > 25 && dl < 120 && oa < 0.35f ) rocketT = (int)k;
+        // Graves' hearse draws fire from a wider angle.
+        float wide = o.m_setup.m_escort ? 2.0f : 1.0f;
+        if ( dl < gunRange && oa < ( 0.12f + 0.6f / std::max( dl, 1.0f ) ) * wide ) inSights = (int)k;
+        if ( dl > 25 && dl < 120 && oa < 0.35f * wide ) rocketT = (int)k;
         // Behind: close and in its tracks (what it drops will be driven over).
         float side = std::fabs( dot( dd, c.right() ) );
         if ( dl > 4 && dl < 20 && oa > 2.75f && side < 2.4f ) behind = (int)k;

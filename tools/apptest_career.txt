@@ -9,7 +9,7 @@ back wait 2
 expect story
 back wait 2
 expect hub
-accept
+down accept
 expect offers
 accept wait 5
 expect race
@@ -51,6 +51,11 @@ graves
 down accept
 expect graveyard
 wait 10 shot graveyard
+back
+expect hub
+down accept
+expect crypt
+wait 10 shot crypt
 back
 expect hub
 down accept

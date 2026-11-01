@@ -104,6 +104,7 @@ struct UpgradeDef
     Text             m_title, m_desc;
     std::vector<int> m_cost;
     float            m_power = 0, m_top = 0, m_grip = 0, m_brake = 0, m_offroad = 0, m_hp = 0;
+    float            m_slip = 0, m_drag = 0, m_mass = 0;   ///< the price on the road: rear grip under power, top speed, weight
 };
 
 /** @brief The ground's kinds (grip and drag, docs/DESIGN.md). */
@@ -164,6 +165,7 @@ struct VenueDef
     std::string m_wall = "concrete";
     std::vector<std::pair<std::string, float>> m_props;   ///< model, weight
     std::vector<std::pair<std::string, float>> m_litter;  ///< small things in a band by the road: model, weight
+    std::vector<std::pair<std::string, float>> m_loose;   ///< things on the shoulders that cars knock over: model, weight
     float       m_density = 1.0f;
     std::string m_music, m_ambience;
     std::vector<Line> m_extra;   ///< other lines (the renderer's own values)
@@ -257,6 +259,8 @@ struct LeagueDef
     std::vector<int>         m_points = { 10, 6, 4, 3, 2, 1 };
     int                      m_showdown = 40;
     std::string              m_intro;
+    float                    m_pace = 1.0f;    ///< the rivals' engines in this league (the climb gets steeper)
+    float                    m_skill = 1.0f;   ///< and their driving
 };
 
 /** @brief A difficulty (data/difficulty.txt). */
@@ -296,6 +300,13 @@ struct SponsorDef
     std::map<std::string, int> m_bonus;   ///< win podium wreck clean lap nogun -> money
 };
 
+/** @brief An epitaph (data/awards.txt): what a player can earn over all their races and careers. */
+struct AwardDef
+{
+    std::string m_key;
+    Text        m_title, m_desc;
+};
+
 /** @brief Everything read. */
 class Catalog
 {
@@ -330,6 +341,7 @@ public:
     const LeagueDef    *league( int id ) const;
     const StoryDef     *story( const std::string &n ) const;
     const SponsorDef   *sponsor( const std::string &n ) const;
+    const AwardDef     *award( const std::string &n ) const;
     /** @return a difficulty (held to the ones there are) */
     const DifficultyDef &difficulty( int i ) const;
 
@@ -350,6 +362,8 @@ public:
     std::map<int, LeagueDef>            m_leagues;
     std::map<std::string, StoryDef>     m_stories;
     std::map<std::string, SponsorDef>   m_sponsors;
+    std::map<std::string, AwardDef>     m_awards;
+    std::vector<std::string>            m_awardOrder;   ///< as the file has them (the crypt's order)
     std::vector<DifficultyDef>          m_difficulties;
     std::vector<NewsDef>                m_news;
     std::vector<Text>                   m_ads;

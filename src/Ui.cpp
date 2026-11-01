@@ -56,6 +56,8 @@ void init( const std::string &assets )
         g_font = GetFontDefault();
 }
 
+const Font &font() { return g_font; }
+
 void shutdown()
 {
     if ( g_has ) UnloadFont( g_font );

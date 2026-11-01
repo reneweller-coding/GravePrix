@@ -1,5 +1,8 @@
 # The five leagues of the Grave Prix (5 the lowest .. 1 the top) and the final on Graves' estate.
 # The higher the league, the better the grave: that is the whole ladder.
+# pace and skill: the rivals' engines and driving in the league (1 as the data and the difficulty say). The low leagues
+# are gentler and the top ones harsher, so the climb gets steeper while the player's car gets better (measured with
+# tools/careersweep.py --hands, a person's late, clumsy hands).
 
 league 5
   title "Armengrab"
@@ -9,6 +12,8 @@ league 5
   venues junkyard cemetery
   purse 1200
   entry 0
+  pace 0.86
+  skill 0.78
   points 10 6 4 3 2 1
   showdown 40
   intro league_5
@@ -21,6 +26,8 @@ league 4
   venues docks desert
   purse 3500
   entry 300
+  pace 0.88
+  skill 0.82
   points 10 6 4 3 2 1
   showdown 40
   intro league_4
@@ -33,6 +40,8 @@ league 3
   venues refinery swamp
   purse 9000
   entry 900
+  pace 0.92
+  skill 0.9
   points 10 6 4 3 2 1
   showdown 40
   intro league_3
@@ -45,6 +54,8 @@ league 2
   venues downtown pass
   purse 22000
   entry 2500
+  pace 0.95
+  skill 0.94
   points 10 6 4 3 2 1
   showdown 40
   intro league_2
@@ -57,6 +68,8 @@ league 1
   venues fairground proving
   purse 50000
   entry 6000
+  pace 0.96
+  skill 0.95
   points 10 6 4 3 2 1
   showdown 40
   intro league_1
@@ -70,4 +83,6 @@ league 0
   venues estate
   purse 150000
   entry 0
+  pace 0.9
+  skill 0.9
   intro boss

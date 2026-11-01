@@ -392,6 +392,89 @@ void Track::litter( const Catalog &cat )
     }
 }
 
+namespace
+{
+
+/** @return how far a model reaches from its middle on the ground and its top (from its part lines) */
+std::pair<float, float> footprint( const ModelDef &m )
+{
+    float r = 0.2f, top = 0.3f;
+    for ( const Line &p : m.m_parts )
+    {
+        float x = p.num( "x", 0 ), y = p.num( "y", 0 ), z = p.num( "z", 0 );
+        float ext = std::max( { p.num( "w", 0 ) * 0.5f, p.num( "d", 0 ) * 0.5f, p.num( "r", 0 ), p.num( "rx", 0 ), p.num( "rz", 0 ) } );
+        float up = std::max( { p.num( "h", 0 ) * 0.5f, p.num( "r", 0 ), p.num( "ry", 0 ) } );
+        r = std::max( r, std::sqrt( x * x + z * z ) + ext );
+        top = std::max( top, y + up );
+    }
+    return { r * m.m_scale, top * m.m_scale };
+}
+
+}   // namespace
+
+void Track::loose( const Catalog &cat )
+{
+    // Small things on the shoulders, inside the walls, where a car that runs wide or cuts a corner knocks them over:
+    // one now and then on either side, sometimes two or three together. Not at the start, the crossings, the
+    // clockwork, nor beside a pickup or an obstacle.
+    m_loose.clear();
+    if ( !m_venue || m_venue->m_loose.empty() ) return;
+    float total = 0;
+    for ( const auto &p : m_venue->m_loose ) total += p.second;
+    Rng      rng;
+    uint32_t h = 2166136261u;
+    for ( char c : m_name ) h = ( h ^ (unsigned char)c ) * 16777619u;
+    rng.seed( h ^ 0x51ed270bu );
+    float end = m_arena ? m_length : m_length - 45.0f;
+    for ( float s = m_arena ? 0.0f : 25.0f; s < end; s += rng.range( 12.0f, 30.0f ) )
+    {
+        const TrackSample &ts = sampleAt( s );
+        if ( ts.m_shoulder < 1.6f || ts.m_bridge ) continue;
+        bool nearMover = false;
+        for ( const MoverSpot &mv : m_movers )
+            if ( std::fabs( delta( s, mv.m_s ) ) < mv.m_len * 0.5f + 18.0f ) nearMover = true;
+        if ( nearMover ) continue;
+        float pick = rng.range( 0, total );
+        const std::string *model = &m_venue->m_loose.back().first;
+        for ( const auto &q : m_venue->m_loose )
+        {
+            if ( pick < q.second )
+            {
+                model = &q.first;
+                break;
+            }
+            pick -= q.second;
+        }
+        const ModelDef *md = cat.model( *model );
+        if ( !md ) continue;
+        auto [r, top] = footprint( *md );
+        int  side = rng.chance( 0.5f ) ? 1 : -1;
+        int  n = rng.chance( 0.3f ) ? 2 + rng.below( 2 ) : 1;
+        float lat0 = ts.m_half + rng.range( 0.5f + r, std::max( 0.6f + r, ts.m_shoulder - 0.4f - r ) );
+        for ( int k = 0; k < n; ++k )
+        {
+            float   ss = wrap( s + k * ( 2.0f * r + 0.5f ) );
+            Vector2 p = pointAt( ss, side * ( lat0 + rng.range( -0.3f, 0.3f ) ) );
+            Vector2 push;
+            if ( outside( p, push ) > -r - 0.2f ) continue;   // inside the walls, all of it
+            bool busy = false;
+            for ( const PickupSpot &pk : m_pickups ) busy = busy || dist2( pk.m_pos, p ) < 16.0f;
+            for ( const ObstacleSpot &o : m_obstacles ) busy = busy || dist2( o.m_pos, p ) < ( o.m_r + 2.0f ) * ( o.m_r + 2.0f );
+            for ( const HazardSpot &hz : m_hazards ) busy = busy || dist2( hz.m_pos, p ) < 9.0f;
+            if ( busy ) continue;
+            LooseSpot l;
+            l.m_model = *model;
+            l.m_pos = p;
+            l.m_rot = rng.range( 0, 360 );
+            l.m_scale = rng.range( 0.92f, 1.08f );
+            l.m_r = r * l.m_scale;
+            l.m_h = top * l.m_scale;
+            l.m_kind = *model == "tumbleweed" || *model == "tire_single" ? 1 : *model == "snowman" ? 2 : *model == "hydrant" ? 3 : 0;
+            m_loose.push_back( l );
+        }
+    }
+}
+
 bool Track::map( const std::string &path, const Catalog &cat ) const
 {
     const float margin = 30.0f;

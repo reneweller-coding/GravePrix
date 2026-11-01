@@ -11,3 +11,28 @@ track test_oval
   straight 120
   right 180 r=40
   close
+
+# The test drive at the undertaker's (App::startTutorial): Graves & Sons' yard, two long straights and two tight
+# turns, barrels to shoot on the back straight.
+track test_undertaker
+  title "Hof von Graves & Sons" title_en "The Graves & Sons Yard"
+  venue junkyard
+  laps 12
+  width 16
+  shoulder 3
+  start 0 0 90
+  straight 230 surface=concrete
+  right 180 r=24
+  straight 230
+  right 180 r=24
+  close
+  hazard barrel at=330 lat=-0.85
+  hazard barrel at=345 lat=0.85
+  hazard barrel at=360 lat=-0.85
+  hazard barrel at=375 lat=0.85
+  hazard barrel at=390 lat=-0.85
+  hazard barrel at=405 lat=0.85
+  place start_gantry x=0 z=0 rot=90
+  prop grandstand at=60 side=left off=3
+  prop crate_stack at=150 side=right off=2
+  prop wreck_stack at=420 side=left off=4

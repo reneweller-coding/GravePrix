@@ -26,6 +26,8 @@ enum class SfxE : int
     EXPLOSION_SMALL, EXPLOSION_BIG, WRECK, BARREL,
     // the race
     COUNT_BEEP, COUNT_GO, LAP, FINAL_LAP, FINISH, WRONG_WAY, BELL, FUNERAL_MARCH,
+    // the roadside
+    BIRDS_UP, DOG_BARK,
     // pickups
     PICK_CASH, PICK_WRENCH, PICK_AMMO, PICK_NITRO, PICK_WEAPON, PICK_MYSTERY,
     // horns (one per horn kind in the car data)

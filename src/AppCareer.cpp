@@ -53,7 +53,7 @@ void App::carCard( Rectangle r )
     ui::text( T( "Zustand" ), r.x + 24 * k, y, 24, ui::Dim );
     ui::bar( { r.x + 200 * k, y + 4 * k, r.width - 230 * k, 20 * k }, hp, hp < 0.3f ? ui::Warn : hp < 0.7f ? ui::Gold : ui::Good );
     y += 36 * k;
-    ui::text( tf( "Panzerung %d  ·  Spitze %d km/h", (int)st.m_hp, (int)( st.m_top * 3.6f ) ), r.x + 24 * k, y, 24, ui::Ink );
+    ui::text( tf( "Panzerung %d  ·  Spitze %d km/h  ·  %d kg", (int)st.m_hp, (int)( st.m_top * 3.6f ), (int)st.m_mass ), r.x + 24 * k, y, 24, ui::Ink );
     y += 32 * k;
     ui::text( tf( "Motor %d/%d  Reifen %d/%d  Panzer %d/%d  Kanone %d/%d", m_career.m_up[0], m_career.upgradeLevels( UpE::ENGINE ),
                   m_career.m_up[1], m_career.upgradeLevels( UpE::TIRES ), m_career.m_up[2], m_career.upgradeLevels( UpE::ARMOR ),
@@ -89,7 +89,16 @@ void App::hub()
                                     tf( "Saisontag %d/%d", m_career.m_leagueDay % SeasonDays + 1, SeasonDays ) );
     moneyBox();
     bool                     sd = m_career.showdownReady();
-    std::vector<std::string> items;
+    std::vector<std::string> items, keys;
+    // The test drive heads the list until the first race; when it goes, the cursor stays on what it was on.
+    bool tut = m_career.m_races == 0 && m_career.m_day == 1 && !m_rec.m_tutorial;
+    if ( m_hubTutorial && !tut && m_sel[(int)ScreenE::HUB] > 0 ) --m_sel[(int)ScreenE::HUB];
+    m_hubTutorial = tut;
+    if ( tut )
+    {
+        items.push_back( T( "Probefahrt beim Bestatter (empfohlen)" ) );
+        keys.push_back( "tutorial" );
+    }
     if ( sd )
     {
         Offer           duel = m_career.showdown();
@@ -98,11 +107,22 @@ void App::hub()
         items.push_back( m_career.m_league == 0 ? std::string( T( "FINALE gegen Mortimer Graves" ) )
                          : boss && bc       ? tf( T( "SHOWDOWN gegen %s in %s" ), boss->m_name.c_str(), bc->m_title.get().c_str() )
                                             : std::string( T( "SHOWDOWN gegen den Ligachampion" ) ) );
+        keys.push_back( "showdown" );
     }
-    if ( m_career.m_league > 0 ) items.push_back( T( "Renntag: die Angebote" ) );
-    for ( const char *s : { "Werkstatt", "Schwarzmarkt", "Kredithai", "Sponsor", "Das Sensenblatt", "Tabelle", "Ehrenfriedhof",
-                            "Speichern und Hauptmenü" } )
-        items.push_back( T( s ) );
+    if ( m_career.m_league > 0 )
+    {
+        items.push_back( T( "Renntag: die Angebote" ) );
+        keys.push_back( "offers" );
+    }
+    static const char *rest[][2] = { { "Werkstatt", "garage" },   { "Schwarzmarkt", "market" }, { "Kredithai", "shark" },
+                                     { "Sponsor", "sponsor" },    { "Das Sensenblatt", "news" }, { "Tabelle", "table" },
+                                     { "Ehrenfriedhof", "graveyard" }, { "Grabinschriften", "crypt" },
+                                     { "Speichern und Hauptmenü", "save" } };
+    for ( const auto &r : rest )
+    {
+        items.push_back( T( r[0] ) );
+        keys.push_back( r[1] );
+    }
     int pick = menu( items, m_sel[(int)ScreenE::HUB], { 96 * k, 220 * k, 760 * k, 700 * k }, 44 );
     carCard( { GetScreenWidth() - 760 * k, 200 * k, 700 * k, 760 * k } );
     hints( m_in.padUsed() ? T( "A wählen   ·   B Hauptmenü" ) : T( "Eingabe wählen   ·   Esc Hauptmenü" ) );
@@ -115,17 +135,15 @@ void App::hub()
         return;
     }
     if ( pick < 0 ) return;
-    if ( !sd ) ++pick;
-    if ( m_career.m_league == 0 && pick >= 1 ) ++pick;
-    switch ( pick )
-    {
-    case 0:
+    const std::string &what = keys[(size_t)pick];
+    if ( what == "tutorial" ) startTutorial();
+    else if ( what == "showdown" )
     {
         if ( m_career.m_damage >= 0.95f )
         {
             m_greeting = greet( "mechanic", "broke" );
             go( ScreenE::GARAGE );
-            break;
+            return;
         }
         m_offer = m_career.showdown();
         int  player = 0;
@@ -139,35 +157,38 @@ void App::hub()
             m_racing = true;
             showStory( story, ScreenE::RACE );
         }
-        break;
     }
-    case 1: go( ScreenE::OFFERS ); break;
-    case 2:
+    else if ( what == "offers" ) go( ScreenE::OFFERS );
+    else if ( what == "garage" )
+    {
         m_greeting = greet( "mechanic", "greet" );
         go( ScreenE::GARAGE );
-        break;
-    case 3:
+    }
+    else if ( what == "market" )
+    {
         m_greeting = greet( "dealer", "greet" );
         go( ScreenE::MARKET );
-        break;
-    case 4:
+    }
+    else if ( what == "shark" )
+    {
         m_greeting = greet( "shark", "greet" );
         go( ScreenE::SHARK );
-        break;
-    case 5: go( ScreenE::SPONSOR ); break;
-    case 6:
+    }
+    else if ( what == "sponsor" ) go( ScreenE::SPONSOR );
+    else if ( what == "news" )
+    {
         m_greeting = greet( "editor", "greet" );
         go( ScreenE::NEWS );
-        break;
-    case 7: go( ScreenE::TABLE ); break;
-    case 8: go( ScreenE::GRAVEYARD ); break;
-    case 9:
+    }
+    else if ( what == "table" ) go( ScreenE::TABLE );
+    else if ( what == "graveyard" ) go( ScreenE::GRAVEYARD );
+    else if ( what == "crypt" ) go( ScreenE::CRYPT );
+    else if ( what == "save" )
+    {
         saveCareer();
         m_inCareer = false;
         m_audio.music( "title" );
         go( ScreenE::TITLE );
-        break;
-    default: break;
     }
 }
 
@@ -183,6 +204,7 @@ void App::graveyard()
         if ( !s.m_alive && s.m_died > 0 && g_data.rival( s.m_key ) ) dead.push_back( &s );
     std::sort( dead.begin(), dead.end(), []( const RivalState *a, const RivalState *b ) { return a->m_died > b->m_died; } );
     int &sel = m_sel[(int)ScreenE::GRAVEYARD];
+    if ( !dead.empty() ) award( "mourner" );
     if ( dead.empty() )
     {
         ui::text( T( "Noch keine Gräber. Das wird sich ändern." ), 96 * k, 260 * k, 40, ui::Dim );
@@ -279,7 +301,8 @@ void App::offers()
         ui::panel( r, 0.85f, i == sel ? ui::Accent : Color{ 160, 124, 70, 255 } );
         if ( i == sel ) ui::highlight( { r.x, r.y, r.width, 70 * k }, m_time );
         float y = r.y + 16 * k;
-        ui::text( o.m_derby ? T( "Derby" ) : T( TierNames[o.m_tier] ), r.x + 24 * k, y, 40, i == sel ? ui::Ink : ui::Gold );
+        ui::text( o.m_job != JobE::NONE ? T( "Auftrag von Graves" ) : o.m_derby ? T( "Derby" ) : T( TierNames[o.m_tier] ), r.x + 24 * k, y, 40,
+                  i == sel ? ui::Ink : ui::Gold );
         y += 70 * k;
         ui::text( td ? td->m_title.get() : o.m_track, r.x + 24 * k, y, 34, ui::Ink );
         y += 44 * k;
@@ -291,6 +314,23 @@ void App::offers()
         y += 38 * k;
         ui::text( T( "Startgeld: " ) + formatMoney( o.m_fee ), r.x + 24 * k, y, 28, o.m_fee > m_career.m_money ? ui::Warn : ui::Ink );
         y += 54 * k;
+        if ( o.m_job != JobE::NONE )
+        {
+            // What Graves wants, and what he pays for it.
+            ui::text( T( "Lohn: " ) + formatMoney( o.m_pay ) + T( "  ·  keine Ligapunkte" ), r.x + 24 * k, y - 14 * k, 26, ui::Good );
+            y += 26 * k;
+            const RivalDef *t = g_data.rival( o.m_target );
+            std::string     what = o.m_job == JobE::COFFIN ? tf( T( "Ein Sarg auf dem Dach, Kundschaft drin. Ins Ziel, mit höchstens %d %% Schaden, sonst fällt er runter." ), (int)( CoffinLimit * 100 ) )
+                                 : o.m_job == JobE::DEBTOR ? tf( T( "%s schuldet Graves & Sons Geld. Verschrotte den Wagen, und zwar eigenhändig." ), t ? t->m_name.c_str() : "?" )
+                                 : o.m_job == JobE::ESCORT ? std::string( T( "Der Leichenwagen von Graves & Sons muss heil ins Ziel. Die Konkurrenz hat andere Pläne." ) )
+                                                           : tf( T( "Neun Kränze liegen auf der Strecke. Sammle %d davon, bevor die anderen sie plattfahren." ), WreathsNeeded );
+            for ( const std::string &l : ui::wrap( what, r.width - 48 * k, 24 ) )
+            {
+                ui::text( l, r.x + 24 * k, y, 24, ui::Ink );
+                y += 30 * k;
+            }
+            y += 10 * k;
+        }
         ui::text( T( "Gegner:" ), r.x + 24 * k, y, 24, ui::Dim );
         y += 34 * k;
         for ( const std::string &rk : o.m_rivals )
@@ -432,7 +472,28 @@ void App::garage()
     else if ( m_tab == 1 )
     {
         static const char *keysUp[] = { "engine", "tires", "armor", "gun" };
-        if ( const UpgradeDef *u = g_data.upgrade( keysUp[std::clamp( sel, 0, 3 )] ) ) desc = u->m_desc.get();
+        int                u = std::clamp( sel, 0, 3 );
+        if ( const UpgradeDef *ud = g_data.upgrade( keysUp[u] ) ) desc = ud->m_desc.get();
+        // What the next level gives and takes, in the car's own numbers.
+        if ( m_career.upgradeCost( (UpE)u ) >= 0 )
+        {
+            CarSetup s = m_career.playerSetup(), n = s;
+            ( u == 0 ? n.m_engine : u == 1 ? n.m_tires : u == 2 ? n.m_armor : n.m_gunLv ) += 1;
+            CarStats a = carStats( s ), b = carStats( n );
+            if ( u == 0 )
+                desc += "\n" + tf( T( "Nächste Stufe: Kraft %.1f → %.1f   Spitze %d → %d km/h   Heck unter Vollgas %d → %d %% weniger Grip" ),
+                                   a.m_power, b.m_power, (int)( a.m_top * 3.6f ), (int)( b.m_top * 3.6f ), (int)( a.m_slip * 100 ),
+                                   (int)( b.m_slip * 100 ) );
+            else if ( u == 1 )
+                desc += "\n" + tf( T( "Nächste Stufe: Grip %.2f → %.2f   Bremsen %.2f → %.2f   Spitze %d → %d km/h" ), a.m_grip, b.m_grip,
+                                   a.m_brake, b.m_brake, (int)( a.m_top * 3.6f ), (int)( b.m_top * 3.6f ) );
+            else if ( u == 2 )
+                desc += "\n" + tf( T( "Nächste Stufe: Panzerung %d → %d   Gewicht %d → %d kg   Kraft %.1f → %.1f" ), (int)a.m_hp, (int)b.m_hp,
+                                   (int)a.m_mass, (int)b.m_mass, a.m_power, b.m_power );
+            else
+                desc += "\n" + tf( T( "Nächste Stufe: Schaden %.1f → %.1f   Kadenz %.1f → %.1f   Munition %d → %d" ), a.m_damage, b.m_damage,
+                                   a.m_rate, b.m_rate, (int)a.m_ammo, (int)b.m_ammo );
+        }
     }
     if ( !desc.empty() )
     {
@@ -489,11 +550,18 @@ void App::garage()
     {
         ok = m_career.upgrade( (UpE)pick );
         if ( ok ) m_greeting = greet( "mechanic", "upgrade" );
+        bool full = true;
+        for ( int u = 0; u < (int)UpE::COUNT; ++u ) full = full && m_career.upgradeLevel( (UpE)u ) >= m_career.upgradeLevels( (UpE)u );
+        if ( ok && full ) award( "full_tune" );
     }
     else if ( m_tab == 2 && pick < (int)keys.size() && !keys[pick].empty() )
     {
+        const RivalState *from = m_career.rival( m_career.m_usedFrom );
+        bool              estate = keys[pick] == "_used" && from && !from->m_alive;
         ok = keys[pick] == "_used" ? m_career.buyUsed() : m_career.buyCar( keys[pick] );
         if ( ok ) m_greeting = greet( "mechanic", "buy" );
+        if ( ok && estate ) award( "used_car" );
+        if ( ok && g_data.car( m_career.m_car ) && g_data.car( m_career.m_car )->m_class >= 5 ) award( "top_car" );
     }
     else if ( m_tab == 3 && pick < (int)keys.size() )
         ok = m_career.buyGun( keys[pick] );
@@ -569,6 +637,7 @@ void App::market()
     }
     if ( pick < 0 ) return;
     bool ok = keys[pick] == "_sabotage" ? m_career.sabotage( roster[target] ) : m_career.buyGear( keys[pick] );
+    if ( ok && keys[pick] == "_sabotage" ) award( "saboteur" );
     if ( ok )
     {
         sound( SfxE::UI_CASH );
@@ -619,6 +688,7 @@ void App::shark()
     bool ok = false;
     if ( pick == 0 ) ok = m_career.borrow( step );
     else if ( pick == 1 ) ok = m_career.borrow( (int)room );
+    if ( ok && pick <= 1 ) award( "loan" );
     else if ( pick == 2 ) ok = m_career.repay( step );
     else if ( pick == 3 ) ok = m_career.repay( (int)m_career.m_loan );
     if ( pick >= 0 )
@@ -677,6 +747,7 @@ void App::sponsor()
     if ( pick >= 0 )
     {
         m_career.sign( keys[pick] );
+        award( "sponsor" );
         sound( SfxE::UI_STAMP );
         saveCareer();
     }
