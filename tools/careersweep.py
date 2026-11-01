@@ -1,6 +1,6 @@
 """Runs --careersim for every difficulty and several seeds at low priority and prints one line per career.
 
-Usage: python tools/careersweep.py [--seeds 5,11,23] [--difficulties 0,1,2,3,4] [--skills 0.85] [--novice 0] [--workers 3]
+Usage: python tools/careersweep.py [--seeds 5,11,23] [--difficulties 0,1,2,3,4] [--skills 0.85] [--novice 0] [--assist 1] [--workers 3]
 The logs land in work/careersweep/d<difficulty>_s<seed>_k<skill>.log.
 """
 import argparse
@@ -16,10 +16,10 @@ OUT = ROOT / "work" / "careersweep"
 LOW = getattr(subprocess, "BELOW_NORMAL_PRIORITY_CLASS", 0)
 
 
-def run(difficulty, seed, skill, novice):
+def run(difficulty, seed, skill, novice, assist="1"):
     log = OUT / f"d{difficulty}_s{seed}_k{skill}_n{novice}.log"
     cmd = [str(EXE), "--careersim", "--difficulty", str(difficulty), "--seed", str(seed), "--skill", str(skill),
-           "--novice", str(novice)]
+           "--novice", str(novice), "--assist", str(assist)]
     with open(log, "w", encoding="utf-8") as f:
         subprocess.run(cmd, cwd=ROOT, stdout=f, stderr=subprocess.STDOUT, creationflags=LOW, timeout=3600)
     text = log.read_text(encoding="utf-8", errors="replace")
@@ -34,10 +34,11 @@ def main():
     ap.add_argument("--difficulties", default="0,1,2,3,4")
     ap.add_argument("--skills", default="0.85")
     ap.add_argument("--novice", default="0")
+    ap.add_argument("--assist", default="1", help="the driving assist for the player's car (1 on, 0 off)")
     ap.add_argument("--workers", type=int, default=3)
     a = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
-    jobs = [(int(d), int(s), k, a.novice) for k in a.skills.split(",") for d in a.difficulties.split(",") for s in a.seeds.split(",")]
+    jobs = [(int(d), int(s), k, a.novice, a.assist) for k in a.skills.split(",") for d in a.difficulties.split(",") for s in a.seeds.split(",")]
     with concurrent.futures.ThreadPoolExecutor(a.workers) as pool:
         results = list(pool.map(lambda j: run(*j), jobs))
     for d, s, k, leagues, last in sorted(results):

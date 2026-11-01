@@ -58,6 +58,9 @@ struct SimResult
     std::map<int, int> m_stuckAt;   ///< where (100 m bins) cars backed out
 };
 
+bool   g_assist = false;   ///< --assist: every car with the driving assist
+double g_slide = 0, g_slideN = 0;
+
 SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool verbose, const std::string &car,
                    bool noWeapons )
 {
@@ -71,6 +74,7 @@ SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool
             s.m_weapons = 0;
             s.m_aggression = 0;
         }
+    for ( CarSetup &s : field ) s.m_assist = g_assist;
     w.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, difficulty, seed );
     std::vector<CarInput> none( field.size() );
     SimResult             r;
@@ -82,6 +86,11 @@ SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool
         for ( size_t i = 0; i < w.m_cars.size(); ++i )
         {
             const Car &c = w.m_cars[i];
+            if ( c.racing() && len( c.m_vel ) > 8.0f )
+            {
+                g_slide += std::fabs( dot( c.m_vel, c.right() ) );
+                g_slideN += 1;
+            }
             if ( c.m_ai.m_reverse > 0.95f && lastReverse[i] <= 0.95f )
             {
                 ++r.m_stuck;
@@ -137,6 +146,7 @@ int toolSim( const Options &opt )
     int         cars = (int)opt.num( "--cars", 6 );
     std::string car = opt.value( "--car" );
     bool        noWeapons = opt.has( "--peaceful" );
+    g_assist = opt.has( "--assist" );
     std::vector<std::string> names;
     if ( opt.has( "--simall" ) )
         names = g_data.m_trackOrder;
@@ -180,6 +190,7 @@ int toolSim( const Options &opt )
     float total = 0;
     for ( float d : g_dmg ) total += d;
     if ( total > 0 )
+        printf( "slide %.2f m/s sideways on average while racing\n", g_slideN > 0 ? g_slide / g_slideN : 0.0 );
         printf( "damage: guns %.0f%%  explosions %.0f%%  crashes %.0f%%  walls %.0f%%  spikes %.0f%%  other %.0f%%\n", g_dmg[0] / total * 100,
                 g_dmg[1] / total * 100, g_dmg[2] / total * 100, g_dmg[3] / total * 100, g_dmg[4] / total * 100, g_dmg[5] / total * 100 );
     return bad ? 1 : 0;

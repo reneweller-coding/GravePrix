@@ -128,6 +128,7 @@ int toolCareerSim( const Options &opt )
         field[player].m_human = false;   // driven by a computer driver of middling skill
         field[player].m_skill = (float)opt.num( "--skill", 0.85f );
         field[player].m_novice = (float)opt.num( "--novice", 0.0f );
+        field[player].m_assist = opt.num( "--assist", 1.0f ) != 0.0f;
         field[player].m_aggression = 0.5f;
         field[player].m_weapons = 0.7f;
         World world;

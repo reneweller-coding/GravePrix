@@ -373,6 +373,9 @@ void World::physics( Car &c, const CarInput &in, float dt )
     if ( in.m_handbrake ) a -= ( vl > 0 ? 1.0f : -1.0f ) * std::min( std::fabs( vl ) / dt, 3.5f );
     vl += a * dt;
     float maxLat = LatAccel * c.m_grip * gS * ( in.m_handbrake ? 0.35f : 1.0f );
+    // The assist: while the car barely slides the tyres hold more (static against sliding friction), so it stays
+    // planted until it is really pushed; once it slides it is a slide as before.
+    if ( c.m_setup.m_assist && !in.m_handbrake ) maxLat *= std::fabs( vlat ) < 2.5f ? 1.18f : 1.05f;
     float dl = clampf( vlat, -maxLat * dt, maxLat * dt );
     vlat -= dl;
     float slide = std::fabs( vlat );
@@ -388,7 +391,10 @@ void World::physics( Car &c, const CarInput &in, float dt )
     float target = clampf( in.m_steer, -1, 1 ) * SteerRate * c.m_steerF * sf * dir * ( in.m_handbrake ? 1.5f : 1.0f );
     if ( !in.m_handbrake && sp > 4 )
     {
-        float lim = LatAccel * c.m_grip * gS * 1.2f / sp + 0.25f;
+        // Without the assist a car turns up to a fifth faster than its tyres carry (and a little more at any speed):
+        // the slides of the old top-down racers. With it, it turns up to what the held tyres carry (a sixth more than
+        // the sliding grip, see above), so a hard turn bites instead of sliding.
+        float lim = c.m_setup.m_assist ? LatAccel * c.m_grip * gS * 1.15f / sp + 0.08f : LatAccel * c.m_grip * gS * 1.2f / sp + 0.25f;
         target = clampf( target, -lim, lim );
     }
     float resp = clampf( dt * 9.0f * ( 0.35f + 0.65f * std::min( gS, 1.0f ) ), 0, 1 );

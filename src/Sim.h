@@ -57,6 +57,7 @@ struct CarSetup
     Paint       m_paint;
     bool        m_human = false;
     bool        m_player = false;   ///< the player's car: the difficulty's factors apply, even when a computer drives it
+    bool        m_assist = false;   ///< the driving assist: tyres hold until pushed, steering within the grip
     int         m_pad = 0;             ///< which player (0 or 1) for humans
     int         m_engine = 0, m_tires = 0, m_armor = 0, m_gunLv = 0;   ///< upgrade levels
     std::string m_gun;                 ///< "" the car's own

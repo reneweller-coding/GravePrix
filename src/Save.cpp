@@ -39,6 +39,7 @@ void Settings::load( const std::string &path )
         else if ( k == "hud" ) ss >> m_hud;
         else if ( k == "palette" ) ss >> m_palette;
         else if ( k == "tags" ) ss >> m_tags;
+        else if ( k == "assist" ) ss >> m_assist;
         else if ( k == "bind" ) m_binds.push_back( line );
     }
 }
@@ -52,7 +53,7 @@ bool Settings::save( const std::string &path ) const
     if ( !m_language.empty() ) fprintf( f, "language %s\n", m_language.c_str() );
     fprintf( f, "textsize %.2f\nrumble %d\nshake %.2f\nzoom %.2f\nspeech %d\n", m_textSize, m_rumble ? 1 : 0, m_shake, m_zoom,
              m_speech ? 1 : 0 );
-    fprintf( f, "hud %.2f\npalette %d\ntags %d\n", m_hud, m_palette, m_tags ? 1 : 0 );
+    fprintf( f, "hud %.2f\npalette %d\ntags %d\nassist %d\n", m_hud, m_palette, m_tags ? 1 : 0, m_assist ? 1 : 0 );
     for ( const std::string &b : m_binds ) fprintf( f, "%s\n", b.c_str() );
     return endWrite( f, path );
 }

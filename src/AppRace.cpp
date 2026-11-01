@@ -56,6 +56,8 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
     m_saidTrain = m_saidBridge = false;
     m_trackReverse = reverse;
     m_field = field;
+    for ( CarSetup &s : m_field )
+        if ( s.m_human ) s.m_assist = m_set.m_assist;
     // Colour vision: the rivals in the Okabe-Ito colours, which stay apart for red-green and blue-yellow eyes.
     if ( m_set.m_palette != 0 )
     {

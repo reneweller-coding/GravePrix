@@ -44,6 +44,9 @@ damage you take and deal, prize money, prices, repairs, how often wrecked rivals
 
 Options for everyone
 --------------------
+Driving assist (on by default): the car turns only as sharply as its tyres can hold and stays planted until you
+really push it; the handbrake still lets you drift. Turn it off in the options for the slippery handling of the old
+top-down racers.
 Text size, race display size, colour vision (red-green or blue-yellow: other colours for good and bad), names
 above the cars, frame rate (30, 40, 60 or unlimited; 40 saves battery on the Deck), vibration, camera height,
 screen shake, the announcer's lines. With a pad the hints and the controls screen show its buttons. With a colour

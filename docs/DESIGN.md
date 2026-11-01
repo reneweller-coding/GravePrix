@@ -347,6 +347,15 @@ Check a track with `GravePrix --trackshot <name> work/maps/<name>.png` (a map: r
 100 m, pickups and props, warnings drawn in red) and `GravePrix --sim <name>` (six computer drivers race it; prints
 lap times and where cars got stuck). `--validate` must report 0 errors for every track.
 
+## Driving assist
+
+`CarSetup::m_assist` (the player's car, `Settings::m_assist`, on by default): while the car slides less than 2.5 m/s
+sideways its tyres hold 18 % more (5 % more once it slides), and it turns at most as fast as that held grip carries
+(1.15 x grip / speed + 0.08 rad/s, against 1.2 x + 0.25 without). Measured over all tracks: the sideways slide drops
+from 1.02 to 0.29 m/s, the race pace stays the same, and the career sweep stays where it was (Totalschaden 5/5,
+Sargnagel 3/5, Totentanz 2/5). Without it the early cars (grip 0.88-0.95) slid like on ice and the tyre upgrades
+made the game easier as it went on. `--careersim --assist 0`, `--sim --assist`.
+
 ## Turning props and the ground
 
 A model's parts with `group=spin` turn while the race runs (Ferris wheel, carousel, radar dish): the first of them

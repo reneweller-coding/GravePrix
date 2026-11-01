@@ -1048,6 +1048,7 @@ void App::options()
         std::string( T( "Farbsicht: " ) ) + T( palettes[std::clamp( m_set.m_palette, 0, 2 )] ),
         std::string( T( "Namen über den Autos: " ) ) + ( m_set.m_tags ? T( "an" ) : T( "aus" ) ),
         std::string( T( "Bildrate: " ) ) + ( m_set.m_fps > 0 ? std::to_string( m_set.m_fps ) : std::string( T( "unbegrenzt" ) ) ),
+        std::string( T( "Fahrhilfe: " ) ) + ( m_set.m_assist ? T( "an" ) : T( "aus (rutschig wie früher)" ) ),
         T( "Steuerung" ),
         T( "Zurück" ),
     };
@@ -1055,7 +1056,7 @@ void App::options()
     int dir = m_in.left() ? -1 : m_in.right() ? 1 : 0;
     if ( dir || pick >= 0 )
     {
-        if ( pick >= 0 && pick < 14 && dir == 0 ) dir = 1;
+        if ( pick >= 0 && pick < 15 && dir == 0 ) dir = 1;
         switch ( sel )
         {
         case 0:
@@ -1085,14 +1086,15 @@ void App::options()
             m_set.m_fps = rates[( at + dir + 4 ) % 4];
             break;
         }
+        case 14: m_set.m_assist = !m_set.m_assist; break;
         default: break;
         }
-        if ( sel <= 13 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 || sel == 11 || sel == 13 ) ) applySettings();
-        if ( sel <= 13 ) sound( SfxE::UI_MOVE );
+        if ( sel <= 14 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 || sel == 11 || sel == 13 ) ) applySettings();
+        if ( sel <= 14 ) sound( SfxE::UI_MOVE );
         saveSettings();
     }
-    if ( pick == 14 ) go( ScreenE::CONTROLS );
-    if ( pick == 15 || m_in.back() )
+    if ( pick == 15 ) go( ScreenE::CONTROLS );
+    if ( pick == 16 || m_in.back() )
     {
         saveSettings();
         go( m_racing ? ScreenE::RACE : m_inCareer ? ScreenE::HUB : ScreenE::TITLE );

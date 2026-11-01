@@ -337,3 +337,5 @@ Zufallsstrecke %u  (Eingabe: neu würfeln) = Random track %u  (Enter: roll again
 Start!   (Rekord: %d Runden) = Start!   (record: %d rounds)
 Jede Runde eine neue Strecke irgendwo im Grave Prix. Wer unter die ersten drei kommt, fährt weiter. Wer nicht, bekommt einen Kranz. = Every round a new track somewhere in the Grave Prix. Finish in the top three and you race on. If not, you get a wreath.
 Heute für alle dieselbe Strecke und dasselbe Auto. Zeitfahren gegen deinen eigenen Geist. = Today the same track and the same car for everyone. A time trial against your own ghost.
+Fahrhilfe: = Driving assist:
+aus (rutschig wie früher) = off (slippery, the old way)

@@ -32,6 +32,7 @@ struct Settings
     float       m_hud = 1.0f;                ///< the race display's size
     int         m_palette = 0;               ///< colour vision: 0 as made, 1 red-green, 2 blue-yellow
     bool        m_tags = false;              ///< names over the rivals' cars
+    bool        m_assist = true;             ///< the driving assist for the player's car
     std::vector<std::string> m_binds;        ///< Input's lines
 
     /** @brief Reads them (missing values stay at their defaults). */
