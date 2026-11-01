@@ -20,15 +20,16 @@ cars on closed circuits; wrecks stay on the track, burning.
 
 ## Download
 
-**[GravePrix-0.2.0-windows-x64.zip](https://github.com/reneweller-coding/GravePrix/releases/download/v0.2.0/GravePrix-0.2.0-windows-x64.zip)**
+**[GravePrix-1.0.0-windows-x64.zip](https://github.com/reneweller-coding/GravePrix/releases/download/v1.0.0/GravePrix-1.0.0-windows-x64.zip)**
 for Windows 10 and 11: unpack it anywhere and start `GravePrix.exe`, nothing to install. The
-**[Linux archive](https://github.com/reneweller-coding/GravePrix/releases/download/v0.2.0/GravePrix-0.2.0-linux-x86_64.tar.gz)**
+**[Linux archive](https://github.com/reneweller-coding/GravePrix/releases/download/v1.0.0/GravePrix-1.0.0-linux-x86_64.tar.gz)**
 runs on any x86-64 distribution with glibc 2.35 or newer, SteamOS included (add `GravePrix` to Steam as a non-Steam
 game). Both carry the player's readme (`README.txt`), the credits and the licence. The same packages are on
 **[itch.io](https://reneweller-coding.itch.io/grave-prix)**.
 
-From 1.0.0 on, GitHub's runners also build a macOS archive (Apple Silicon, ad hoc signed); it is compiled and
-checked but has never been played on a Mac.
+A **[macOS archive](https://github.com/reneweller-coding/GravePrix/releases/download/v1.0.0/GravePrix-1.0.0-macos-arm64.zip)**
+(Apple Silicon) is built by GitHub's runners; it is compiled and checked but has never been played on a Mac. It is
+only ad hoc signed: right-click `GravePrix` and choose Open the first time.
 
 Requirements: a graphics card with OpenGL 3.3; a gamepad or the keyboard. The program is not code-signed: Windows'
 SmartScreen may warn once ("More info", "Run anyway").

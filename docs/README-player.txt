@@ -10,8 +10,9 @@ Starting
 --------
 Windows:      GravePrix.exe
 Linux/Deck:   ./GravePrix   (on the Steam Deck: add it to Steam as a non-Steam game, it runs natively)
+macOS:        ./GravePrix   (untested on a real Mac; the first time right-click it and choose Open)
 
-Your settings, career and records live in %APPDATA%\GravePrix (Windows) or ~/.local/share/GravePrix (Linux).
+Your settings, careers and records live in %APPDATA%\GravePrix (Windows) or ~/.local/share/GravePrix (Linux, macOS).
 
 Controls (rebind them under Options > Controls)
 -----------------------------------------------
