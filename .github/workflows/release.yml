@@ -1,0 +1,121 @@
+# GRAVE PRIX for Windows, Linux and macOS, built on GitHub's runners.
+#
+# A tag v* (or "Run workflow" by hand): Release builds with the headless tests, packed by the same scripts as at home
+# -- Deploy/build_release.ps1 -NoLinux makes GravePrix-<version>-windows-x64.zip (MSVC, the msvc preset, static
+# runtime), Deploy/build_linux.sh makes GravePrix-<version>-linux-x86_64.tar.gz (GCC 12 on Ubuntu 22.04, so it runs on
+# glibc 2.35 and newer, SteamOS included), Deploy/build_macos.sh makes GravePrix-<version>-macos-arm64.zip (Apple's
+# clang, ad hoc signed; compiled and checked, never played: nobody here has a Mac). The archives are kept as the run's
+# artifacts and, for a tag, attached to the tag's DRAFT release where it lacks them (a draft is made from
+# CHANGELOG.md when there is none). Publishing the draft stays a step by hand. A failing macOS build does not hold
+# up the other two. raylib's sources travel with the repository (third_party/raylib).
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build, test, pack
+        shell: pwsh
+        # The headless tests only: the app tests need a window with OpenGL 3.3, which the runner lacks.
+        run: |
+          ./build.ps1
+          if ($LASTEXITCODE -ne 0) { throw "build failed" }
+          ctest --preset msvc -R "data|races|career"
+          if ($LASTEXITCODE -ne 0) { throw "tests failed" }
+          ./Deploy/build_release.ps1 -NoBuild -NoLinux
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: dist/*.zip
+          if-no-files-found: error
+
+  linux:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The compiler and the headers GLFW needs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends g++-12 ninja-build libx11-dev libxrandr-dev \
+            libxinerama-dev libxcursor-dev libxi-dev libxext-dev libgl1-mesa-dev
+
+      - name: Build, test, pack
+        env:
+          CC: gcc-12
+          CXX: g++-12
+        run: |
+          bash Deploy/build_linux.sh "$PWD/build/linux"
+          ctest --test-dir build/linux --output-on-failure -R "data|races|career"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  macos:
+    runs-on: macos-14
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build, check, pack
+        run: |
+          bash Deploy/build_macos.sh "$PWD/build/macos"
+          ctest --test-dir build/macos --output-on-failure -R "data|races"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: dist/*.zip
+          if-no-files-found: error
+
+  release:
+    if: always() && startsWith(github.ref, 'refs/tags/v') && needs.windows.result == 'success' && needs.linux.result == 'success'
+    needs: [windows, linux, macos]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Attach to the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="$GITHUB_REF_NAME"
+          version="${tag#v}"
+          # The tag must name the version of CMakeLists.txt.
+          grep -q "^project( GravePrix VERSION $version " CMakeLists.txt ||
+            { echo "CMakeLists.txt is not at version $version"; exit 1; }
+          ( cd dist && sha256sum * > SHA256SUMS.txt )
+          if ! gh release view "$tag" -R "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            awk -v a="## [$version]" '
+              index($0, a) == 1 { on = 1; next }
+              on && /^## / { exit }
+              on { print }' CHANGELOG.md > notes.md
+            [ -s notes.md ] || { echo "CHANGELOG.md has no section for $version"; exit 1; }
+            gh release create "$tag" -R "$GITHUB_REPOSITORY" --draft --verify-tag \
+              --title "GRAVE PRIX $version" --notes-file notes.md
+          fi
+          # Only what the release lacks: archives uploaded by hand (and their checksums) stay.
+          for f in dist/*; do
+            gh release upload "$tag" "$f" -R "$GITHUB_REPOSITORY" || echo "kept the release's own $(basename "$f")"
+          done

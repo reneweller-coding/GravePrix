@@ -392,6 +392,22 @@ baked: a fast car close by and one throws themself flat (crowds step back and ho
 it is quiet; a dog at each kennel (and a black one at the estate's gates) runs along with the field as far as its
 chain lets it, barking. `Renderer::m_cues` asks the race for the sounds (`SfxE::BIRDS_UP`, `SfxE::DOG_BARK`).
 
+## The walls, and how they give
+
+The showdown asks the league's points (40) in the first season, six fewer in every further season spent in the
+league, down to 22 (`Career::showdownPoints`), and the place it asks widens from second to third after two seasons and
+fourth after four (`Career::showdownRank`): a mid-field driver is not held for ever, the duel with the champion stays
+the gate. Every final Graves wins costs him two per cent of his pace, at most twelve (`Career::m_finalsLost`, his
+rheumatism).
+
+## Career slots and the credits
+
+Three careers (`career.txt`, `career2.txt`, `career3.txt` in the player's folder; the first is the old single one).
+"Continue" goes straight on with the only one, else shows them; "New career" takes the first slot while there is
+none, else asks where (a taken slot is overwritten when chosen twice). The credits roll (`App::credits`) from the
+title and after Graves is beaten (the ending, the credits, the table): the people of Graves & Sons, the whole field
+(this career's dead marked, and in memoriam with their last words), the tools, the licence.
+
 ## Graves' jobs (`JobE`, `Career::jobDone`)
 
 Every other race day or so a fourth card: a job for Graves on a track of the league, half the purse for places, no
@@ -620,13 +636,21 @@ switches to the venue's hot take (`tools/music_hot.json`). All three run on the 
 - `--gallery FILE.png [prefix]` — the model sheet, drawn on the CPU (no window, no GPU; `--yaw DEG --cell N --cols N`).
 - `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place.
 - `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window.
-- `--careersim [--days N] [--seed N] [--skill 0..1]` — a career played by the computer (the economy's test).
+- `--careersim [--days N] [--seed N] [--skill 0..1] [--hands 0..1] [--novice 0..1] [--assist 0|1] [--jobs]` — a career
+  played by the computer (the economy's test).
 - `--deckcheck [TRACK] [--frames N]` — frame times at the Steam Deck's 1280 x 800 and quality 0 and 1 (hidden window).
-- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1]` — `--careersim` for every difficulty and seed,
-  three at a time at low priority, one line per career.
+- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1] [--hands 0..1] [--exe COPY]` —
+  `--careersim` for every difficulty and seed, three at a time at low priority, one line per career with the average
+  place per league. `--exe` runs a copy of the game (with a copy of `data` beside it, the measurement stays fixed while
+  the work goes on).
 - `--apptest SCRIPT` — the screens played by a script (tools/apptest_*.txt; a hidden window; set GRAVE_HOME).
 - `--shot` refuses while G:/Tools/Games/GPU_BELEGT.txt exists (another session's GPU job).
 - `.\build.ps1` builds into bin\msvc; `.\build.ps1 -Dir <name>` into build\<name> (for a second worker).
+- `Deploy/build_release.ps1` packs the Windows zip and (WSL) the Linux archive; `Deploy/build_macos.sh` the macOS zip.
+- GitHub: `.github/workflows/build.yml` builds Windows and Linux on every push with the headless tests
+  (`data|races|career`); `release.yml` on a tag `v*` builds, tests and packs all three (macOS compiled and checked,
+  never played) and attaches the archives to the tag's draft release (made from `CHANGELOG.md` when there is none).
+  Publishing stays a step by hand. The app tests need a window with OpenGL 3.3 and stay local.
 
 ## Rules for helpers working in parallel
 

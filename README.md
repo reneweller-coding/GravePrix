@@ -25,6 +25,9 @@ runs on any x86-64 distribution with glibc 2.35 or newer, SteamOS included (add 
 game). Both carry the player's readme (`README.txt`), the credits and the licence. The same packages are on
 **[itch.io](https://reneweller-coding.itch.io/grave-prix)**.
 
+From 0.3.0 on, GitHub's runners also build a macOS archive (Apple Silicon, ad hoc signed); it is compiled and
+checked but has never been played on a Mac.
+
 Requirements: a graphics card with OpenGL 3.3; a gamepad or the keyboard. The program is not code-signed: Windows'
 SmartScreen may warn once ("More info", "Run anyway").
 
@@ -53,7 +56,8 @@ SmartScreen may warn once ("More info", "Run anyway").
 - **A world that reacts:** bins, crates, grave crosses, garden gnomes and snowmen on the shoulders fly when hit,
   hydrants spout, spectators throw themselves flat, crows take off, yard dogs chase the field, and on the cemetery
   the dead rivals still race along as ghosts.
-- **65 epitaphs** to earn, each a gravestone in the crypt; a test drive on the Graves & Sons yard teaches the controls.
+- **65 epitaphs** to earn, each a gravestone in the crypt; a test drive on the Graves & Sons yard teaches the controls;
+  three career slots.
 - **Other modes:** quick race (race, derby or time trial), an endless tournament on random tracks and a daily
   challenge, the same for everyone.
 - **Five difficulties** and options for everyone: a driving assist (on by default), text and display sizes, colour

@@ -45,3 +45,17 @@ accept wait 2
 expect news
 accept wait 2
 expect hub
+back wait 2
+expect title
+accept
+expect slots
+wait 10 shot slots
+right accept
+expect newgame
+back
+expect title
+down down down down down accept
+expect credits
+wait 400 shot credits
+back
+expect title

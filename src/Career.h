@@ -152,6 +152,10 @@ public:
     int rank() const;
     /** @return whether the showdown is open (first place and enough points) */
     bool showdownReady() const;
+    /** @return the points the showdown asks for now: the league's, less with every season spent in it */
+    int showdownPoints() const;
+    /** @return the place in the table the showdown asks for now: second, third after two seasons, fourth after four */
+    int showdownRank() const;
     /** @return the showdown (or in the final league the race against Graves) */
     Offer showdown() const;
 
@@ -242,6 +246,7 @@ public:
     std::string             m_story;   ///< a story waiting to be shown
     int  m_races = 0, m_wins = 0, m_wrecks = 0, m_wrecked = 0, m_earned = 0;
     int  m_jobsDone = 0;               ///< Graves' jobs done
+    int  m_finalsLost = 0;             ///< finals lost to Graves (each one slows him: his rheumatism)
     bool m_over = false;               ///< won or bankrupt
     bool m_won = false;
     uint32_t m_seed = 1;

@@ -26,7 +26,7 @@ namespace grave
 enum class ScreenE : int
 {
     TITLE, NEWGAME, HUB, OFFERS, GARAGE, MARKET, SHARK, SPONSOR, NEWS, TABLE, STORY, RACE, RESULTS, QUICK, OPTIONS,
-    CONTROLS, GRAVEYARD, CRYPT, COUNT
+    CONTROLS, GRAVEYARD, CRYPT, SLOTS, CREDITS, COUNT
 };
 
 /** @brief The game. */
@@ -53,6 +53,24 @@ private:
     void options();
     void controls();
     void showStory( const std::string &key, ScreenE after );
+    void slots();     ///< the three careers: which to go on with, or where a new one goes
+    void readSlots();
+    void credits();   ///< the credits roll (from the title, and after Graves is beaten)
+    /** @return a career slot's file (0 is the old single career.txt) */
+    static std::string careerFile( int slot );
+    struct SlotInfo
+    {
+        bool                     m_used = false;
+        std::string              m_name;
+        std::vector<std::string> m_lines;
+    };
+    SlotInfo m_slotInfo[3];
+    int      m_slot = 0;            ///< the career's slot
+    bool     m_slotsNew = false;    ///< the slot screen picks a place for a new career
+    int      m_slotConfirm = -1;    ///< a taken slot chosen once (choose it again to overwrite)
+    float    m_creditsTime = 0.0f;
+    ScreenE  m_creditsAfter = ScreenE::TITLE;
+    std::vector<std::pair<int, std::string>> m_creditLines;   ///< 0 the title, 1 a heading, 2 a line, 3 small, 4 a gap
     void attract( float dt );
     void backdrop();
     int  quality() const;

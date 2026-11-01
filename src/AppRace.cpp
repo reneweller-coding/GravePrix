@@ -1238,6 +1238,12 @@ void App::results()
         {
             m_audio.music( "garage" );
             ScreenE after = m_career.m_over ? ScreenE::TABLE : ScreenE::NEWS;
+            if ( m_report.m_won )
+            {
+                m_creditsAfter = ScreenE::TABLE;
+                m_creditLines.clear();
+                after = ScreenE::CREDITS;
+            }
             if ( !m_report.m_story.empty() )
                 showStory( m_report.m_story, after );
             else

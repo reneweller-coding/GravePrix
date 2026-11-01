@@ -42,7 +42,10 @@ function( grave_options target )
         # -fwrapv: an int that overflows wraps round as with MSVC, so a seed plays the same everywhere.
         target_compile_options( ${target} PRIVATE -Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter
                                                   -fwrapv )
-        target_link_options( ${target} PRIVATE -static-libstdc++ -static-libgcc )
+        if( NOT APPLE )
+            # The C++ runtime inside the program: it runs on any glibc 2.35 or newer (Apple's libc++ is always there).
+            target_link_options( ${target} PRIVATE -static-libstdc++ -static-libgcc )
+        endif()
     endif()
 endfunction()
 

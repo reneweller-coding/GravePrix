@@ -34,7 +34,7 @@ const char *TierNames[3] = { "Hinterhofrennen", "Hauptrennen", "Großer Preis" }
 
 }   // namespace
 
-void App::saveCareer() { m_career.save( userDir() + "career.txt" ); }
+void App::saveCareer() { m_career.save( careerFile( m_slot ) ); }
 
 void App::carCard( Rectangle r )
 {
@@ -870,7 +870,8 @@ void App::tableScreen()
         y += 48 * k;
     }
     if ( l )
-        ui::text( tf( "Showdown ab %d Punkten unter den ersten zwei  ·  Saisontag %d/%d, danach beginnt die Tabelle von vorn", l->m_showdown,
+        ui::text( tf( "Showdown ab %d Punkten unter den ersten %d  ·  Saisontag %d/%d, danach beginnt die Tabelle von vorn", m_career.showdownPoints(),
+                      m_career.showdownRank(),
                       m_career.m_leagueDay % SeasonDays + 1, SeasonDays ),
                   r.x + 20 * k, r.y + r.height - 50 * k, 24, ui::Dim );
     // The dead of this career.

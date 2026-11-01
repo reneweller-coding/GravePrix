@@ -37,6 +37,7 @@ Career       five leagues, race days with three offers (and now and then a job f
 Test drive   eight short lessons on the Graves & Sons yard, Ricky Rattle explaining: throttle, brakes, handbrake,
              guns, mines, nitro, rockets (from the title screen, and first on a new career's paddock)
 The crypt    65 epitaphs to earn over all your races and careers, each a gravestone (title screen and paddock)
+Three career slots; the credits from the title screen (and after the final).
 Quick race   any track and car; race, derby (last car driving wins) or time trial; or a random track
 Endless tournament   a new random track every round; finish in the top three to race on
 Daily challenge      the same random track and car for everyone today, a time trial against your ghost
@@ -88,3 +89,5 @@ Tips
 - The dead do not always rest: on the cemetery's tracks and at the final, the last rivals to die race along as
   ghosts. They cannot hurt you. They still talk.
 - Sign a sponsor and their name goes on your roof.
+- Stuck in a league? Its showdown asks fewer points with every season you spend there. And every final Graves wins
+  takes a little out of him.

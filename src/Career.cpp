@@ -272,7 +272,12 @@ CarSetup Career::rivalSetup( const std::string &key, int tier ) const
     // They grow while the player stays in a league, but only so far: no spiral for someone who struggles.
     int level = std::clamp( (int)std::lround( ( base * 0.6f + std::min( m_leagueDay, 20 ) * 0.08f ) * dif.m_growth + ( tier - 1 ) * 0.5f ), 0, 6 );
     if ( d && d->m_champion ) level = std::min( 6, level + 1 );
-    if ( league == 0 ) level = 6;
+    if ( league == 0 )
+    {
+        level = 6;
+        // Every final Graves wins costs him: two per cent of his pace a time, at most twelve.
+        s.m_pace *= 1.0f - 0.02f * std::min( m_finalsLost, 6 );
+    }
     s.m_engine = cd ? std::min( level, cd->m_upEngine ) : 0;
     s.m_tires = cd ? std::min( level, cd->m_upTires ) : 0;
     s.m_armor = cd ? std::min( level, cd->m_upArmor ) : 0;
@@ -410,12 +415,25 @@ bool Career::showdownReady() const
 {
     if ( m_over ) return false;
     if ( m_league == 0 ) return true;
-    const LeagueDef *l = g_data.league( m_league );
     auto             t = table();
     int              mine = 0;
     for ( auto &e : t )
         if ( std::get<2>( e ).empty() ) mine = std::get<1>( e );
-    return rank() <= 2 && mine >= ( l ? l->m_showdown : 40 );
+    return rank() <= showdownRank() && mine >= showdownPoints();
+}
+
+int Career::showdownRank() const
+{
+    // The duel with the champion stays the gate; who may ask for it widens when a league holds someone long.
+    return 2 + std::min( 2, ( m_leagueDay / SeasonDays ) / 2 );
+}
+
+int Career::showdownPoints() const
+{
+    // A league that holds someone for seasons on end grows impatient: six points fewer a season, down to 22.
+    const LeagueDef *l = g_data.league( m_league );
+    int              base = l ? l->m_showdown : 40;
+    return std::max( std::min( base, 22 ), base - 6 * ( m_leagueDay / SeasonDays ) );
 }
 
 Offer Career::showdown() const
@@ -645,7 +663,10 @@ RaceReport Career::finish( const Offer &o, const World &w, int player )
                 news( "boss_won", "mortimer_graves", trackTitle, 1, rep.m_total );
             }
             else
+            {
+                ++m_finalsLost;
                 news( "showdown_lost", "mortimer_graves", trackTitle, rep.m_place, 0 );
+            }
         }
         else if ( won )
         {
@@ -1060,8 +1081,8 @@ bool Career::save( const std::string &path ) const
     fprintf( f, "loan %lld %d\nsponsor %s\nsabotaged %s\n", m_loan, m_loanDue, m_sponsor.empty() ? "-" : m_sponsor.c_str(),
              m_sabotaged.empty() ? "-" : m_sabotaged.c_str() );
     if ( !m_used.empty() ) fprintf( f, "used %s %d %s\n", m_used.c_str(), m_usedPrice, m_usedFrom.empty() ? "-" : m_usedFrom.c_str() );
-    fprintf( f, "stats %d %d %d %d %d\nover %d %d\nseed %u\nstory %s\njobs %d\n", m_races, m_wins, m_wrecks, m_wrecked, m_earned,
-             m_over ? 1 : 0, m_won ? 1 : 0, m_seed, m_story.empty() ? "-" : m_story.c_str(), m_jobsDone );
+    fprintf( f, "stats %d %d %d %d %d\nover %d %d\nseed %u\nstory %s\njobs %d\nfinals %d\n", m_races, m_wins, m_wrecks, m_wrecked, m_earned,
+             m_over ? 1 : 0, m_won ? 1 : 0, m_seed, m_story.empty() ? "-" : m_story.c_str(), m_jobsDone, m_finalsLost );
     for ( const RivalState &r : m_rivals )
     {
         fprintf( f, "rival %s %d %d %d %d %d %d %d %d %d\n", r.m_key.c_str(), r.m_active ? 1 : 0, r.m_alive ? 1 : 0, r.m_league,
@@ -1158,6 +1179,7 @@ bool Career::load( const std::string &path )
         }
         else if ( key == "seed" ) ss >> c.m_seed;
         else if ( key == "jobs" ) ss >> c.m_jobsDone;
+        else if ( key == "finals" ) ss >> c.m_finalsLost;
         else if ( key == "story" )
         {
             ss >> c.m_story;

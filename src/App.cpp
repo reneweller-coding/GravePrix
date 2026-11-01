@@ -71,9 +71,9 @@ const char *SchemeNames[10] = { "Blut und Kohle", "Bestatterschwarz", "Knochenwe
 const char *PresetNames[] = { "Fahrer", "Kurt Kurve", "Rosa Rost", "Max Mortal", "Vera Vollgas", "Hank Hinüber",
                               "Lilly Leichtsinn", "Otto Ohnebremse" };
 
-std::string careerPath() { return userDir() + "career.txt"; }
-
 }   // namespace
+
+std::string App::careerFile( int slot ) { return userDir() + ( slot <= 0 ? std::string( "career.txt" ) : "career" + std::to_string( slot + 1 ) + ".txt" ); }
 
 // ---------------------------------------------------------------------------------------------------- setup
 
@@ -132,7 +132,7 @@ bool App::init( const Options &o )
         if ( f ) fclose( f );
         // A test starts without a career.
         std::error_code ec;
-        fs::remove( careerPath(), ec );
+        for ( int s = 0; s < 3; ++s ) fs::remove( careerFile( s ), ec );
         if ( m_testWords.empty() )
         {
             printf( "apptest: no script %s\n", o.value( "--apptest" ).c_str() );
@@ -243,7 +243,8 @@ void App::run()
 void App::testStep()
 {
     static const char *names[] = { "title", "newgame", "hub", "offers", "garage", "market", "shark", "sponsor", "news", "table",
-                                   "story", "race", "results", "quick", "options", "controls", "graveyard", "crypt" };
+                                   "story", "race", "results", "quick", "options", "controls", "graveyard", "crypt", "slots",
+                                   "credits" };
     // A hard limit: a script that hangs ends by itself.
     if ( ++m_testFrames > 30 * 60 * 8 )
     {
@@ -399,6 +400,8 @@ void App::frame( float dt )
     case ScreenE::OPTIONS: options(); break;
     case ScreenE::CONTROLS: controls(); break;
     case ScreenE::CRYPT: crypt(); break;
+    case ScreenE::SLOTS: slots(); break;
+    case ScreenE::CREDITS: credits(); break;
     default: break;
     }
     toasts();
@@ -627,10 +630,18 @@ void App::title()
     float pulse = 0.85f + 0.15f * std::sin( m_time * 2.0f );
     ui::text( "GRAVE PRIX", 90 * k, 120 * k, 150, { (unsigned char)( 214 * pulse ), 40, 36, 255 } );
     ui::text( T( "Das Rennen, bei dem der Bestatter mitverdient." ), 96 * k, 290 * k, 34, ui::Ink );
-    bool                     canLoad = fs::exists( careerPath() );
+    int saves = 0, only = 0;
+    for ( int s = 0; s < 3; ++s )
+        if ( fs::exists( careerFile( s ) ) )
+        {
+            ++saves;
+            only = s;
+        }
+    bool                     canLoad = saves > 0;
     std::vector<std::string> items = { T( "Karriere fortsetzen" ), T( "Neue Karriere" ), T( "Schnelles Rennen" ), T( "Optionen" ),
-                                       T( "Probefahrt beim Bestatter" ), T( "Die Gruft der Grabinschriften" ), T( "Beenden" ) };
-    std::vector<bool>        on = { canLoad, true, true, true, true, true, true };
+                                       T( "Probefahrt beim Bestatter" ), T( "Die Gruft der Grabinschriften" ), T( "Abspann" ),
+                                       T( "Beenden" ) };
+    std::vector<bool>        on = { canLoad, true, true, true, true, true, true, true };
     if ( !canLoad && m_sel[(int)ScreenE::TITLE] == 0 ) m_sel[(int)ScreenE::TITLE] = 1;
     int pick = menu( items, m_sel[(int)ScreenE::TITLE], { 96 * k, 420 * k, 640 * k, 420 * k }, 48, &on );
     hints( m_in.padUsed() ? T( "A wählen   ·   Steuerkreuz bewegen" ) : T( "Eingabe wählen   ·   Pfeile bewegen   ·   F11 Vollbild" ) );
@@ -638,14 +649,35 @@ void App::title()
     switch ( pick )
     {
     case 0:
-        if ( m_career.load( careerPath() ) )
+        // One career: on with it; more: choose.
+        if ( saves > 1 )
         {
+            m_slotsNew = false;
+            readSlots();
+            go( ScreenE::SLOTS );
+        }
+        else if ( m_career.load( careerFile( only ) ) )
+        {
+            m_slot = only;
             m_inCareer = true;
             m_audio.music( "garage" );
             go( m_career.m_over ? ScreenE::TABLE : ScreenE::HUB );
         }
         break;
-    case 1: go( ScreenE::NEWGAME ); break;
+    case 1:
+        // The first career goes to the first slot; with one there already, choose where.
+        if ( saves == 0 )
+        {
+            m_slot = 0;
+            go( ScreenE::NEWGAME );
+        }
+        else
+        {
+            m_slotsNew = true;
+            readSlots();
+            go( ScreenE::SLOTS );
+        }
+        break;
     case 2: go( ScreenE::QUICK ); break;
     case 3: go( ScreenE::OPTIONS ); break;
     case 4:
@@ -653,8 +685,206 @@ void App::title()
         startTutorial();
         break;
     case 5: go( ScreenE::CRYPT ); break;
-    case 6: m_quit = true; break;
+    case 6:
+        m_creditsAfter = ScreenE::TITLE;
+        m_creditLines.clear();
+        go( ScreenE::CREDITS );
+        break;
+    case 7: m_quit = true; break;
     default: break;
+    }
+}
+
+void App::readSlots()
+{
+    for ( int s = 0; s < 3; ++s )
+    {
+        SlotInfo &i = m_slotInfo[s];
+        i = SlotInfo();
+        Career c;
+        if ( !fs::exists( careerFile( s ) ) || !c.load( careerFile( s ) ) ) continue;
+        const LeagueDef *l = g_data.league( c.m_league );
+        const CarDef    *cd = g_data.car( c.m_car );
+        i.m_used = true;
+        i.m_name = c.m_name;
+        i.m_lines = { g_data.difficulty( c.m_difficulty ).m_title.get(), l ? l->m_title.get() : std::string( T( "Finale" ) ),
+                      tf( T( "Renntag %d" ), c.m_day ), formatMoney( c.m_money ), cd ? cd->m_title.get() : c.m_car };
+        if ( c.m_won ) i.m_lines.push_back( T( "Graves besiegt" ) );
+        else if ( c.m_over ) i.m_lines.push_back( T( "Pleite" ) );
+    }
+}
+
+void App::slots()
+{
+    backdrop();
+    float k = ui::k();
+    header( m_slotsNew ? T( "Neue Karriere" ) : T( "Karriere fortsetzen" ),
+            m_slotsNew ? T( "Welcher Platz? Ein belegter wird überschrieben." ) : T( "Welche Karriere?" ) );
+    int &sel = m_sel[(int)ScreenE::SLOTS];
+    sel = std::clamp( sel, 0, 2 );
+    int before = sel;
+    if ( m_in.left() ) sel = ( sel + 2 ) % 3;
+    if ( m_in.right() ) sel = ( sel + 1 ) % 3;
+    if ( sel != before )
+    {
+        m_slotConfirm = -1;
+        sound( SfxE::UI_MOVE );
+    }
+    float cw = ( GetScreenWidth() - 200 * k - 60 * k ) / 3;
+    for ( int s = 0; s < 3; ++s )
+    {
+        const SlotInfo &i = m_slotInfo[s];
+        Rectangle       r = { 100 * k + s * ( cw + 30 * k ), 220 * k, cw, 560 * k };
+        ui::panel( r, 0.85f, s == sel ? ui::Accent : Color{ 160, 124, 70, 255 } );
+        if ( s == sel ) ui::highlight( { r.x, r.y, r.width, 70 * k }, m_time );
+        float y = r.y + 16 * k;
+        ui::text( tf( T( "Spielstand %d" ), s + 1 ), r.x + 24 * k, y, 40, s == sel ? ui::Ink : ui::Gold );
+        y += 80 * k;
+        if ( !i.m_used )
+        {
+            ui::text( T( "frei" ), r.x + 24 * k, y, 34, ui::Dim );
+            continue;
+        }
+        ui::text( i.m_name, r.x + 24 * k, y, 38, ui::Ink );
+        y += 56 * k;
+        for ( const std::string &l : i.m_lines )
+        {
+            ui::text( l, r.x + 24 * k, y, 28, ui::Dim );
+            y += 38 * k;
+        }
+        if ( s == m_slotConfirm )
+            ui::text( T( "Nochmal wählen: überschreiben" ), r.x + 24 * k, r.y + r.height - 60 * k, 28, ui::Warn );
+    }
+    hints( m_in.padUsed() ? T( "Links/Rechts wählen   ·   A nehmen   ·   B zurück" ) : T( "Links/Rechts wählen   ·   Eingabe nehmen   ·   Esc zurück" ) );
+    if ( m_in.back() )
+    {
+        m_slotConfirm = -1;
+        go( ScreenE::TITLE );
+        return;
+    }
+    if ( !m_in.accept() ) return;
+    bool used = m_slotInfo[sel].m_used;
+    if ( !m_slotsNew )
+    {
+        if ( !used || !m_career.load( careerFile( sel ) ) )
+        {
+            sound( SfxE::UI_DENY );
+            return;
+        }
+        m_slot = sel;
+        m_inCareer = true;
+        m_audio.music( "garage" );
+        go( m_career.m_over ? ScreenE::TABLE : ScreenE::HUB );
+        return;
+    }
+    if ( used && m_slotConfirm != sel )
+    {
+        m_slotConfirm = sel;
+        sound( SfxE::UI_DENY );
+        return;
+    }
+    m_slotConfirm = -1;
+    m_slot = sel;
+    sound( SfxE::UI_OK );
+    go( ScreenE::NEWGAME );
+}
+
+void App::credits()
+{
+    // The roll: who made it, who raced in it (the dead of this career marked), what it was made with.
+    if ( m_creditLines.empty() )
+    {
+        m_creditsTime = 0;
+        auto add = [&]( int kind, const std::string &s ) { m_creditLines.push_back( { kind, s } ); };
+        add( 0, "GRAVE PRIX" );
+        add( 3, T( "Das Rennen, bei dem der Bestatter mitverdient." ) );
+        add( 4, "" );
+        add( 1, T( "Ein Spiel von" ) );
+        add( 2, "Rene Weller" );
+        add( 4, "" );
+        for ( const char *key : { "graves", "announcer", "mechanic", "dealer", "shark", "editor" } )
+            if ( const CharacterDef *c = g_data.character( key ) )
+            {
+                add( 1, c->m_role.get() );
+                add( 2, c->m_name );
+            }
+        add( 4, "" );
+        add( 1, T( "Das Fahrerfeld" ) );
+        std::vector<std::string> names;
+        for ( const std::string &key : g_data.m_rivalOrder )
+        {
+            const RivalDef   *d = g_data.rival( key );
+            const RivalState *s = m_inCareer ? m_career.rival( key ) : nullptr;
+            if ( d && key != "mortimer_graves" ) names.push_back( d->m_name + ( s && !s->m_alive && s->m_died > 0 ? "  \xE2\x80\xA0" : "" ) );
+        }
+        std::sort( names.begin(), names.end() );
+        for ( const std::string &n : names ) add( 2, n );
+        if ( m_inCareer )
+        {
+            bool any = false;
+            for ( const RivalState &s : m_career.m_rivals )
+                if ( !s.m_alive && s.m_died > 0 && g_data.rival( s.m_key ) )
+                {
+                    if ( !any )
+                    {
+                        add( 4, "" );
+                        add( 1, T( "In memoriam" ) );
+                    }
+                    any = true;
+                    add( 2, "\xE2\x80\xA0 " + g_data.rival( s.m_key )->m_name + tf( T( ", Renntag %d" ), s.m_died ) );
+                    if ( !s.m_words.empty() ) add( 3, quote( s.m_words ) );
+                }
+        }
+        add( 4, "" );
+        add( 1, T( "Musik" ) );
+        add( 2, T( "Erzeugt mit ACE-Step 1.5, auf dem eigenen Rechner" ) );
+        add( 2, T( "Trauermarsch: Frédéric Chopin, 1839, gemeinfrei" ) );
+        add( 1, T( "Stimme" ) );
+        add( 2, T( "Ricky Rattle: Qwen3-TTS, eine erfundene Stimme" ) );
+        add( 1, T( "Pressefotos" ) );
+        add( 2, T( "FLUX.2 [dev], erfundene Menschen" ) );
+        add( 1, T( "Klänge" ) );
+        add( 2, T( "Jeder Motor und jeder Knall: im Spiel erzeugt" ) );
+        add( 1, T( "Gebaut mit" ) );
+        add( 2, "raylib 5.5 (zlib)" );
+        add( 2, T( "Schrift: Barlow von Jeremy Tribby (SIL OFL 1.1)" ) );
+        add( 2, T( "Programmiert mit Claude (Anthropic)" ) );
+        add( 1, T( "Lizenz" ) );
+        add( 2, "GNU AGPL 3.0" );
+        add( 3, "github.com/reneweller-coding/GravePrix" );
+        add( 4, "" );
+        add( 4, "" );
+        add( 3, T( "Alle Figuren, Fahrer, Firmen und Orte sind erfunden." ) );
+        add( 3, T( "Ähnlichkeiten mit lebenden Personen wären Zufall." ) );
+        add( 3, T( "Mit toten auch." ) );
+        add( 4, "" );
+        add( 4, "" );
+        add( 1, T( "Graves & Sons danken für Ihre Kundschaft." ) );
+        add( 3, T( "Bis bald." ) );
+    }
+    backdrop();
+    DrawRectangle( 0, 0, GetScreenWidth(), GetScreenHeight(), { 0, 0, 0, 170 } );
+    float k = ui::k(), cx = GetScreenWidth() * 0.5f;
+    m_creditsTime += GetFrameTime() * ( m_in.accept() || IsKeyDown( KEY_SPACE ) ? 4.0f : 1.0f );
+    float y = GetScreenHeight() + 40 * k - m_creditsTime * 60 * k;
+    for ( const auto &[kind, s] : m_creditLines )
+    {
+        float size = kind == 0 ? 110 : kind == 1 ? 34 : kind == 2 ? 30 : 24;
+        float step = ( kind == 0 ? 140 : kind == 4 ? 50 : kind == 1 ? 58 : 40 ) * k;
+        if ( kind == 1 ) y += 18 * k;
+        if ( y > -150 * k && y < GetScreenHeight() + 50 * k && kind != 4 )
+        {
+            Color c = kind == 0 ? Color{ 214, 40, 36, 255 } : kind == 1 ? ui::Gold : kind == 2 ? ui::Ink : ui::Dim;
+            if ( s.find( "\xE2\x80\xA0" ) != std::string::npos && kind == 2 ) c = ui::Warn;
+            ui::text( s, cx, y, size, c, ui::AlignE::CENTER );
+        }
+        y += step;
+    }
+    hints( m_in.padUsed() ? T( "A schneller   ·   B zurück" ) : T( "Leertaste schneller   ·   Esc zurück" ) );
+    if ( m_in.back() || y < -100 * k )
+    {
+        m_creditLines.clear();
+        go( m_creditsAfter );
     }
 }
 
@@ -683,11 +913,9 @@ void App::newGame()
                 else
                 {
                     // UTF-8 for the umlauts.
-                    char buf[4];
-                    int  n = 0;
+                    int         n = 0;
                     const char *u = CodepointToUTF8( c, &n );
-                    for ( int i = 0; i < n; ++i ) buf[i] = u[i];
-                    m_newName.append( buf, n );
+                    m_newName.append( u, (size_t)std::clamp( n, 0, 4 ) );
                 }
             }
         if ( IsKeyPressed( KEY_BACKSPACE ) && !m_newName.empty() )
