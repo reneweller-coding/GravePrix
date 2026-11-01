@@ -31,7 +31,7 @@ jobs:
         run: |
           ./build.ps1
           if ($LASTEXITCODE -ne 0) { throw "build failed" }
-          ctest --preset msvc -R "data|races|career"
+          ctest --preset msvc -R "^(data|races|career)$"
           if ($LASTEXITCODE -ne 0) { throw "tests failed" }
           ./Deploy/build_release.ps1 -NoBuild -NoLinux
 
@@ -59,7 +59,7 @@ jobs:
           CXX: g++-12
         run: |
           bash Deploy/build_linux.sh "$PWD/build/linux"
-          ctest --test-dir build/linux --output-on-failure -R "data|races|career"
+          ctest --test-dir build/linux --output-on-failure -R "^(data|races|career)$"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -76,7 +76,7 @@ jobs:
       - name: Build, check, pack
         run: |
           bash Deploy/build_macos.sh "$PWD/build/macos"
-          ctest --test-dir build/macos --output-on-failure -R "data|races"
+          ctest --test-dir build/macos --output-on-failure -R "^(data|races)$"
 
       - uses: actions/upload-artifact@v4
         with:
