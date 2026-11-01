@@ -1,8 +1,8 @@
 # Changelog
 
-## [0.3.0] – 2026-11-01
+## [1.0.0] – 2026-11-01
 
-The difficulty now rises over a career instead of falling, and the world reacts.
+The finished game. The difficulty now rises over a career instead of falling, and the world reacts.
 
 - **A gentler start, a steeper climb:** the rivals of the low leagues drive slower, those of the high leagues faster;
   a league that holds you for seasons asks fewer points for its showdown; Graves slows a little after every final

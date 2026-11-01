@@ -1,4 +1,4 @@
-# The pieces of 0.3.0: the test drive, the crypt from the title, a career race with Graves' coffin on the roof and
+# The pieces of 1.0.0: the test drive, the crypt from the title, a career race with Graves' coffin on the roof and
 # the sponsor's sticker, the dead rivals' ghosts on the cemetery, an escort job.
 expect title
 down down down accept wait 5

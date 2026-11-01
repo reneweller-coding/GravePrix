@@ -340,7 +340,7 @@ Heute für alle dieselbe Strecke und dasselbe Auto. Zeitfahren gegen deinen eige
 Fahrhilfe: = Driving assist:
 aus (rutschig wie früher) = off (slippery, the old way)
 
-# 0.3.0: Graves' jobs, the upgrades' price, the epitaphs, the crypt, the test drive
+# 1.0.0: Graves' jobs, the upgrades' price, the epitaphs, the crypt, the test drive
 Probefahrt beim Bestatter = Test Drive at the Undertaker's
 Die Gruft der Grabinschriften = The Crypt of Epitaphs
 Probefahrt beim Bestatter (empfohlen) = Test drive at the undertaker's (recommended)
@@ -409,7 +409,7 @@ BESTANDEN = PASSED
 Grabinschriften = Epitaphs
 Lohn:  = Pay: 
 
-# 0.3.0: career slots, the credits
+# 1.0.0: career slots, the credits
 Spielstand %d = Slot %d
 frei = empty
 Pleite = Bankrupt

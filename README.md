@@ -25,7 +25,7 @@ runs on any x86-64 distribution with glibc 2.35 or newer, SteamOS included (add 
 game). Both carry the player's readme (`README.txt`), the credits and the licence. The same packages are on
 **[itch.io](https://reneweller-coding.itch.io/grave-prix)**.
 
-From 0.3.0 on, GitHub's runners also build a macOS archive (Apple Silicon, ad hoc signed); it is compiled and
+From 1.0.0 on, GitHub's runners also build a macOS archive (Apple Silicon, ad hoc signed); it is compiled and
 checked but has never been played on a Mac.
 
 Requirements: a graphics card with OpenGL 3.3; a gamepad or the keyboard. The program is not code-signed: Windows'
