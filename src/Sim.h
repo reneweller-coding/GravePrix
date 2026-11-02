@@ -57,7 +57,7 @@ struct CarSetup
     Paint       m_paint;
     bool        m_human = false;
     bool        m_player = false;   ///< the player's car: the difficulty's factors apply, even when a computer drives it
-    bool        m_assist = false;   ///< the driving assist: tyres hold until pushed, steering within the grip
+    bool        m_assist = false;   ///< the driving assist: tyres hold until pushed, full lock ploughs
     int         m_pad = 0;             ///< which player (0 or 1) for humans
     int         m_engine = 0, m_tires = 0, m_armor = 0, m_gunLv = 0;   ///< upgrade levels
     std::string m_gun;                 ///< "" the car's own
@@ -137,7 +137,7 @@ struct Car
     // How it feels (sound and pictures).
     float    m_rpm = 0.0f, m_load = 0.0f, m_skid = 0.0f, m_scrape = 0.0f, m_steerVis = 0.0f, m_wheelTurn = 0.0f;
     float    m_lean = 0.0f, m_pitch = 0.0f, m_hitFlash = 0.0f;
-    float    m_throttle = 0.0f, m_brakeLight = 0.0f;
+    float    m_throttle = 0.0f, m_brakeLight = 0.0f, m_reverseLight = 0.0f;
     int      m_gear = 1;
     SurfaceE m_surface = SurfaceE::ASPHALT;
     bool     m_offRoad = false;
@@ -301,6 +301,13 @@ public:
 
     /** @return whether every human has finished or is wrecked (or the race is done) */
     bool humansDone() const;
+
+    /**
+     * @brief One step of a car's driving alone on open ground: no walls, no weapons (--handling).
+     * @param[in] i   the car
+     * @param[in] in  its input
+     */
+    void drive( int i, const CarInput &in );
 
     const Track          *m_track = nullptr;
     ModeE                 m_mode = ModeE::RACE;

@@ -19,6 +19,17 @@ namespace
 constexpr float LatAccel = 15.0f;     ///< side grip of an ordinary car on asphalt (m/s²)
 constexpr float BrakeAccel = 13.0f;   ///< braking of an ordinary car (m/s²)
 constexpr float SteerRate = 2.4f;     ///< turning at low speed (radians a second)
+constexpr float AssistHold = 1.4f;    ///< with the assist: the tyres' grip while the car barely slides (times LatAccel)
+constexpr float AssistSlide = 1.2f;   ///< with the assist: their grip once it slides
+constexpr float AssistTurn = 1.4f;    ///< with the assist: the turn the held tyres carry (times LatAccel)
+constexpr float PloughFrom = 1.2f;    ///< with the assist: front wheels asking more than this times that plough
+constexpr float Plough = 0.8f;        ///< with the assist: slowing (m/s²) per m/s² of asked turn beyond that
+
+/** @return the share of the steering rate at a speed: quick at low speed, calmer at full speed */
+float steerShare( float sp, float top )
+{
+    return clampf( sp / 6.0f, 0, 1 ) * ( 1.0f - 0.45f * clampf( sp / ( top * 1.1f ), 0, 1 ) );
+}
 
 /** @return the first gear of a kind (nullptr none) */
 const GearDef *gearOf( GearE kind )
@@ -311,6 +322,14 @@ bool World::humansDone() const
     return any;
 }
 
+void World::drive( int i, const CarInput &in )
+{
+    Car &c = m_cars[i];
+    c.m_in = in;
+    physics( c, in, Dt * 0.5f );
+    physics( c, in, Dt * 0.5f );
+}
+
 void World::stepCar( int i, const CarInput &inRaw )
 {
     Car     &c = m_cars[i];
@@ -373,6 +392,19 @@ void World::physics( Car &c, const CarInput &in, float dt )
         else
             a += c.m_power * thr * std::max( 0.0f, 1.0f - ( vl / top ) * ( vl / top ) ) * ( 0.55f + 0.45f * std::min( gS, 1.0f ) );
     }
+    // The assist's full lock: front wheels turned well beyond what the tyres carry at this speed scrub, as a real car
+    // ploughs on full lock, and the car slows until the turn fits. So a held key turns tight instead of drawing ever
+    // wider circles with the throttle down; a corner taken near the grip costs nothing (a short tap barely turns the
+    // wheels). The U-turn at full throttle from 36, 72 and 108 km/h: 24, 33 and 38 m wide instead of 49, 87 and 109 m
+    // (docs/DESIGN.md "Driving assist").
+    if ( c.m_setup.m_assist && !in.m_handbrake && std::fabs( vl ) > 4 )
+    {
+        float sp = std::fabs( vl );
+        float asked = std::fabs( c.m_steerVis ) * SteerRate * c.m_steerF * steerShare( sp, c.m_top );
+        float carry = ( LatAccel * c.m_grip * gS * AssistTurn / sp + 0.1f ) * PloughFrom;
+        if ( asked > carry )
+            a -= ( vl > 0 ? 1.0f : -1.0f ) * std::min( std::fabs( vl ) / dt, Plough * ( asked - carry ) * sp );
+    }
     if ( nitro )
     {
         float boost = gearVal( GearE::NITRO, []( const GearDef &g ) { return g.m_boost; }, 12.0f );
@@ -394,9 +426,9 @@ void World::physics( Car &c, const CarInput &in, float dt )
     vl += a * dt;
     float maxLat = LatAccel * c.m_grip * gS * ( in.m_handbrake ? 0.35f : 1.0f );
     // The assist: while the car barely slides the tyres hold more (static against sliding friction), so it stays
-    // planted until it is really pushed; once it slides it is a slide as before.
+    // planted until it is really pushed; once it slides they still hold a little more.
     // (A person's late, all-or-nothing hands slid 2.7 m/s without it, 0.5 m/s with it: --simall --hands 1.)
-    if ( c.m_setup.m_assist && !in.m_handbrake ) maxLat *= std::fabs( vlat ) < 2.5f ? 1.3f : 1.05f;
+    if ( c.m_setup.m_assist && !in.m_handbrake ) maxLat *= std::fabs( vlat ) < 2.5f ? AssistHold : AssistSlide;
     // A tuned engine on full throttle pushes the rear out; lift off and it bites again.
     if ( c.m_slip > 0 ) maxLat *= 1.0f - c.m_slip * thr * clampf( std::fabs( vl ) / std::max( 1.0f, c.m_top ), 0.3f, 1.0f );
     float dl = clampf( vlat, -maxLat * dt, maxLat * dt );
@@ -409,15 +441,15 @@ void World::physics( Car &c, const CarInput &in, float dt )
     c.m_vel = add( mul( f, vl ), mul( r, vlat ) );
     // Steering: quick at low speed, calmer at full speed, held to what the tyres can carry (the handbrake lets go).
     float sp = std::fabs( vl );
-    float sf = clampf( sp / 6.0f, 0, 1 ) * ( 1.0f - 0.45f * clampf( sp / ( c.m_top * 1.1f ), 0, 1 ) );
+    float sf = steerShare( sp, c.m_top );
     float dir = vl >= -0.3f ? 1.0f : -1.0f;
     float target = clampf( in.m_steer, -1, 1 ) * SteerRate * c.m_steerF * sf * dir * ( in.m_handbrake ? 1.5f : 1.0f );
     if ( !in.m_handbrake && sp > 4 )
     {
         // Without the assist a car turns up to a fifth faster than its tyres carry (and a little more at any speed):
-        // the slides of the old top-down racers. With it, it turns a little more than the sliding grip carries, well
-        // within what the held tyres carry (see above), so a hard turn bites instead of sliding.
-        float lim = c.m_setup.m_assist ? LatAccel * c.m_grip * gS * 1.15f / sp + 0.08f : LatAccel * c.m_grip * gS * 1.2f / sp + 0.25f;
+        // the slides of the old top-down racers. With it, it turns as much as the held tyres carry and no more, so a
+        // hard turn bites instead of sliding, and much more lock ploughs (both above).
+        float lim = c.m_setup.m_assist ? LatAccel * c.m_grip * gS * AssistTurn / sp + 0.1f : LatAccel * c.m_grip * gS * 1.2f / sp + 0.25f;
         target = clampf( target, -lim, lim );
     }
     float resp = clampf( dt * 9.0f * ( 0.35f + 0.65f * std::min( gS, 1.0f ) ), 0, 1 );
@@ -431,6 +463,7 @@ void World::physics( Car &c, const CarInput &in, float dt )
     c.m_pitch += ( clampf( -a / 20.0f, -1, 1 ) - c.m_pitch ) * std::min( 1.0f, dt * 6 );
     c.m_throttle = thr;
     c.m_brakeLight = brk > 0.1f && vl > 0.5f ? 1.0f : 0.0f;
+    c.m_reverseLight = brk > 0.1f && vl < -0.3f ? 1.0f : 0.0f;
     // The engine: five gears over the top speed, the revs falling at each change.
     float share = clampf( std::fabs( vl ) / std::max( 1.0f, c.m_top ), 0, 1.2f );
     int   gear = std::clamp( 1 + (int)( share * 5.0f ), 1, 5 );

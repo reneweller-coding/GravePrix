@@ -1,9 +1,9 @@
 """Runs --careersim for every difficulty and several seeds at low priority and prints one line per career.
 
 Usage: python tools/careersweep.py [--seeds 5,11,23] [--difficulties 0,1,2,3,4] [--skills 0.85] [--novice 0] [--hands 0]
-                                   [--assist 1] [--workers 3]
-The logs land in work/careersweep/d<difficulty>_s<seed>_k<skill>_n<novice>_h<hands>_a<assist>.log. Each line ends with
-the player's average place per league (from the races of that league).
+                                   [--assist 1] [--days 160] [--workers 3] [--exe COPY] [--tag NAME]
+The logs land in work/careersweep/d<difficulty>_s<seed>_k<skill>_n<novice>_h<hands>_a<assist>[_<tag>].log (a tag keeps
+two sweeps at once apart). Each line ends with the player's average place per league (from the races of that league).
 """
 import argparse
 import concurrent.futures
@@ -15,14 +15,16 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 EXE = ROOT / "bin" / "msvc" / "GravePrix.exe"
 EXE_RUN = [EXE]
+DAYS = ["160"]
+TAG = [""]
 OUT = ROOT / "work" / "careersweep"
 LOW = getattr(subprocess, "BELOW_NORMAL_PRIORITY_CLASS", 0)
 
 
 def run(difficulty, seed, skill, novice, assist="1", hands="0"):
-    log = OUT / f"d{difficulty}_s{seed}_k{skill}_n{novice}_h{hands}_a{assist}.log"
+    log = OUT / f"d{difficulty}_s{seed}_k{skill}_n{novice}_h{hands}_a{assist}{TAG[0]}.log"
     cmd = [str(EXE_RUN[0]), "--careersim", "--difficulty", str(difficulty), "--seed", str(seed), "--skill", str(skill),
-           "--novice", str(novice), "--assist", str(assist), "--hands", str(hands)]
+           "--novice", str(novice), "--assist", str(assist), "--hands", str(hands), "--days", DAYS[0]]
     with open(log, "w", encoding="utf-8") as f:
         subprocess.run(cmd, cwd=ROOT, stdout=f, stderr=subprocess.STDOUT, creationflags=LOW, timeout=3600)
     text = log.read_text(encoding="utf-8", errors="replace")
@@ -45,7 +47,11 @@ def main():
     ap.add_argument("--assist", default="1", help="the driving assist for the player's car (1 on, 0 off)")
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--exe", default="", help="a copy of the game to run (so a build can replace bin/msvc meanwhile)")
+    ap.add_argument("--days", default="160", help="the longest career")
+    ap.add_argument("--tag", default="", help="added to the log names")
     a = ap.parse_args()
+    DAYS[0] = a.days
+    TAG[0] = "_" + a.tag if a.tag else ""
     if a.exe:
         EXE_RUN[0] = pathlib.Path(a.exe)
     OUT.mkdir(parents=True, exist_ok=True)

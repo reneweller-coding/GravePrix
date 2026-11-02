@@ -18,7 +18,7 @@ Controls (rebind them under Options > Controls)
 -----------------------------------------------
                     Keyboard            Pad / Steam Deck
 Accelerate          Up / W              RT (right trigger, analogue)
-Brake / reverse     Down / S            LT (left trigger, analogue)
+Brake / reverse     Down / S            LT (left trigger, analogue; held at a standstill: back up)
 Steer               Left/Right, A/D     left stick
 Handbrake           Ctrl / B            B
 Front gun           Space / J           A
@@ -50,9 +50,9 @@ damage you take and deal, prize money, prices, repairs, how often wrecked rivals
 
 Options for everyone
 --------------------
-Driving assist (on by default): the car turns only as sharply as its tyres can hold and stays planted until you
-really push it; the handbrake still lets you drift. Turn it off in the options for the slippery handling of the old
-top-down racers.
+Driving assist (on by default): the car turns as sharply as its tyres can hold and stays planted until you really
+push it; hold full lock and the front tyres scrub the speed off until the turn fits. The handbrake still lets you
+drift. Turn it off in the options for the slippery handling of the old top-down racers.
 Text size, race display size, colour vision (red-green or blue-yellow: other colours for good and bad), names
 above the cars, frame rate (30, 40, 60 or unlimited; 40 saves battery on the Deck), vibration, camera height,
 screen shake, the announcer's lines. With a pad the hints and the controls screen show its buttons. With a colour

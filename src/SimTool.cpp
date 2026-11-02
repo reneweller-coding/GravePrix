@@ -206,4 +206,104 @@ int toolSim( const Options &opt )
     return bad ? 1 : 0;
 }
 
+int toolHandling( const Options &opt )
+{
+    // The car alone on open asphalt: how fast it backs up, and what a full turn costs at each speed (the width of a
+    // U-turn and the speed left after it), with and without the assist, full throttle and coasting.
+    std::string car = opt.value( "--car" );
+    if ( car.empty() ) car = "rustbucket";
+    int lv = (int)opt.num( "--level", 0 );
+    ensureTrack( "test_undertaker" );
+    const TrackDef *def = g_data.track( "test_undertaker" );
+    if ( !def ) return 1;
+    std::vector<std::string> errors, warnings;
+    Track                    t;
+    if ( !t.build( *def, g_data.venue( def->m_venue ), false, false, errors, warnings ) ) return 1;
+    for ( int assist = 1; assist >= 0; --assist )
+    {
+        CarSetup s;
+        s.m_car = car;
+        s.m_human = s.m_player = true;
+        s.m_assist = assist != 0;
+        s.m_engine = s.m_tires = lv;
+        World w;
+        w.init( t, { s }, ModeE::TRIAL, 2, 1 );
+        w.m_phase = World::PhaseE::RACE;
+        auto reset = [&]( float v )
+        {
+            Car &c = w.m_cars[0];
+            c.m_pos = { 0, 0 };
+            c.m_head = 0;
+            c.m_yaw = 0;
+            c.m_vel = mul( c.fwd(), v );
+            c.m_surface = SurfaceE::ASPHALT;
+        };
+        printf( "%s, upgrades %d, assist %s\n", car.c_str(), lv, assist ? "on" : "off" );
+        reset( 0 );
+        CarInput back;
+        back.m_brake = 1;
+        printf( "  reverse (brake held from a stop):" );
+        for ( int k = 1; k <= 180; ++k )
+        {
+            w.drive( 0, back );
+            if ( k % 60 == 0 ) printf( "  %d s %.1f m/s", k / 60, w.m_cars[0].speed() );
+        }
+        printf( "\n  speed  throttle  90 deg after  U-turn: time  width  speed after\n" );
+        for ( float v : { 6.0f, 10.0f, 15.0f, 20.0f, 25.0f, 30.0f } )
+            for ( int thr = 1; thr >= 0; --thr )
+            {
+                reset( v );
+                CarInput in;
+                in.m_steer = 1;
+                in.m_throttle = (float)thr;
+                float turned = 0, t90 = 0, t180 = 0, width = 0, after = 0;
+                for ( int k = 1; k <= 60 * 12 && t180 == 0; ++k )
+                {
+                    float before = w.m_cars[0].m_head;
+                    w.drive( 0, in );
+                    turned += wrapRad( w.m_cars[0].m_head - before );
+                    if ( t90 == 0 && turned >= Pi / 2 ) t90 = k * Dt;
+                    if ( turned >= Pi )
+                    {
+                        t180 = k * Dt;
+                        width = std::fabs( w.m_cars[0].m_pos.x );
+                        after = len( w.m_cars[0].m_vel );
+                    }
+                }
+                printf( "  %5.0f  %8s  %10.2f s  %10.2f s  %5.1f m  %5.1f m/s\n", v, thr ? "full" : "off", t90, t180, width, after );
+            }
+    }
+    if ( opt.has( "--wall" ) )
+    {
+        // On the track with its walls: full throttle and full right lock into the wall, then the brake held.
+        CarSetup s;
+        s.m_car = car;
+        s.m_human = s.m_player = true;
+        s.m_assist = true;
+        World w;
+        w.init( t, { s }, ModeE::TRIAL, 2, 1 );
+        std::vector<CarInput> in( 1 );
+        while ( w.m_phase == World::PhaseE::COUNTDOWN ) w.step( in );
+        for ( int k = 1; k <= 60 * 10; ++k )
+        {
+            in[0] = CarInput();
+            if ( k <= 60 * 5 )
+            {
+                in[0].m_throttle = 1;
+                in[0].m_steer = k > 60 ? 1.0f : 0.0f;
+            }
+            else
+            {
+                in[0].m_brake = 1;
+                in[0].m_steer = -1;
+            }
+            w.step( in );
+            const Car &c = w.m_cars[0];
+            if ( k % 30 == 0 ) printf( "  %4.1f s  %s  speed %6.1f  pos %6.1f %6.1f  head %5.0f\n", k * Dt, k <= 300 ? "gas  " : "brake",
+                                       c.speed(), c.m_pos.x, c.m_pos.y, c.m_head / Deg );
+        }
+    }
+    return 0;
+}
+
 }   // namespace grave

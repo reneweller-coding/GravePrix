@@ -2733,17 +2733,18 @@ void Renderer::drawBullets( const World &w )
         rlTexCoord2f( 1, 1 ); rlVertex3f( e.x + s.x, 0.95f, e.y + s.y );
         rlTexCoord2f( 1, 0 ); rlVertex3f( e.x - s.x, 0.95f, e.y - s.y );
     }
-    // Brake lights and the headlights' glow seen from above.
+    // Brake lights (white backing up) and the headlights' glow seen from above.
     for ( const Car &c : w.m_cars )
     {
         if ( c.m_wrecked ) continue;
         Vector2 f = c.fwd(), r = c.right();
         for ( float sd : { -1.0f, 1.0f } )
         {
-            if ( c.m_brakeLight > 0 )
+            if ( c.m_brakeLight > 0 || c.m_reverseLight > 0 )
             {
                 Vector2 p = add( c.m_pos, add( mul( f, -c.m_len * 0.5f ), mul( r, sd * c.m_wid * 0.33f ) ) );
-                rlColor4ub( 255, 40, 20, 255 );
+                if ( c.m_reverseLight > 0 ) rlColor4ub( 255, 250, 235, 255 );
+                else rlColor4ub( 255, 40, 20, 255 );
                 rlTexCoord2f( 0, 0 ); rlVertex3f( p.x - 0.35f, 0.8f, p.y );
                 rlTexCoord2f( 0, 1 ); rlVertex3f( p.x, 0.8f, p.y + 0.35f );
                 rlTexCoord2f( 1, 1 ); rlVertex3f( p.x + 0.35f, 0.8f, p.y );

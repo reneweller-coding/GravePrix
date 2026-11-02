@@ -43,6 +43,8 @@ int toolShot( const Options &opt );
 int toolDeckCheck( const Options &opt );
 /** @brief --sim TRACK / --simall: computer races. */
 int toolSim( const Options &opt );
+/** @brief --handling [--car NAME]: a car alone on open ground: reversing, turning circles at each speed. */
+int toolHandling( const Options &opt );
 /** @brief --careersim: a career played by the computer. */
 int toolCareerSim( const Options &opt );
 /** @brief The game. */

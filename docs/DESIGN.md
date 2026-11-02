@@ -350,11 +350,28 @@ lap times and where cars got stuck). `--validate` must report 0 errors for every
 ## Driving assist
 
 `CarSetup::m_assist` (the player's car, `Settings::m_assist`, on by default): while the car slides less than 2.5 m/s
-sideways its tyres hold 30 % more (5 % more once it slides), and it turns at most a little faster than the sliding
-grip carries (1.15 x grip / speed + 0.08 rad/s, against 1.2 x + 0.25 without). Measured over all tracks: the sideways slide drops
-from 1.02 to 0.29 m/s, the race pace stays the same, and the career sweep stays where it was (Totalschaden 5/5,
-Sargnagel 3/5, Totentanz 2/5). Without it the early cars (grip 0.88-0.95) slid like on ice and the tyre upgrades
-made the game easier as it went on. `--careersim --assist 0`, `--sim --assist`.
+sideways its tyres hold 40 % more (20 % more once it slides), it turns at most as fast as the held grip carries
+(1.4 x grip / speed + 0.1 rad/s, against 1.2 x + 0.25 without), and full lock ploughs (below). Without it the early
+cars (grip 0.88-0.95) slid like on ice and the tyre upgrades made the game easier as it went on (the first assist,
+01.11.2026: hold 1.3 / 1.05, turn 1.15 x + 0.08: the slide over all tracks dropped from 1.02 to 0.29 m/s).
+`--careersim --assist 0`, `--sim --assist`.
+
+Full lock ploughs (02.11.2026, the user: "nicht maximal einschlagen, der Wenderadius ist riesig"): turning only as
+fast as the grip carries made a held steering key draw ever wider circles with the throttle down (the U-turn of the
+first car at full throttle from 36, 72 and 108 km/h was 49, 87 and 109 m wide; 25, 41 and 49 m without the assist).
+Now front wheels (`Car::m_steerVis`, a tenth of a second behind the key) that ask for more than 1.2 x the turn the
+tyres carry scrub: the car slows by 0.8 m/s² per m/s² of the excess until the turn fits, as a real car ploughs on
+full lock. The U-turns are 24, 33 and 38 m wide, coasting 8, 17 and 22 m.
+
+The price: the old assist gave a held key the ideal arc at the grip, and a keyboard holds full lock through corners
+the grip would carry; ploughing there costs pace. With the old hold (1.3 / 1.05) the person's hands lost 0.3-2 % over
+all tracks (ploughing from 1.0 x or harder cost more), 1.5 % on the final (est_finale with the reaper), and the career
+sweep at Blechschaden (h0.3, six seeds, 260 days) fell from 6/6 won (42-153 days) to 2/6: the test driver reached
+Graves and came second forever. The grip that makes up for it, 1.4 / 1.2: 6/6 won in 83-120 days; over all tracks
+the hands +0.5 % (stuck 48 times instead of 376), the clean bot (smooth steering, like a pad) +0.4 %.
+(`--simall --assist --hands 0.3 --peaceful`, `tools/careersweep.py --days 260 --tag NAME`.)
+`GravePrix --handling [--car NAME] [--level N] [--wall]` prints the table (reversing, 90 degrees and U-turns at each
+speed, with and without the assist; `--wall` drives into a wall and backs out).
 
 ## Balance: a person's hands, steeper leagues, upgrades with a price
 
@@ -636,10 +653,12 @@ switches to the venue's hot take (`tools/music_hot.json`). All three run on the 
 - `--gallery FILE.png [prefix]` — the model sheet, drawn on the CPU (no window, no GPU; `--yaw DEG --cell N --cols N`).
 - `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place.
 - `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window.
+- `--handling [--car NAME] [--level N] [--wall]` — a car alone on open ground: reversing, turning circles.
 - `--careersim [--days N] [--seed N] [--skill 0..1] [--hands 0..1] [--novice 0..1] [--assist 0|1] [--jobs]` — a career
   played by the computer (the economy's test).
 - `--deckcheck [TRACK] [--frames N]` — frame times at the Steam Deck's 1280 x 800 and quality 0 and 1 (hidden window).
-- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1] [--hands 0..1] [--exe COPY]` —
+- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1] [--hands 0..1] [--days N]
+  [--exe COPY] [--tag NAME]` —
   `--careersim` for every difficulty and seed, three at a time at low priority, one line per career with the average
   place per league. `--exe` runs a copy of the game (with a copy of `data` beside it, the measurement stays fixed while
   the work goes on).

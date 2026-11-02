@@ -348,7 +348,7 @@ void App::tutorialHud()
     float k = ui::k();
     static const char *titles[] = { "Gas geben und lenken", "Bremsen", "Handbremse", "Schießen", "Minen", "Lachgas", "Rakete", "Ins Ziel" };
     static const char *texts[] = { "Gib Gas und folge der Straße. Mit der Fahrhilfe bleibt der Wagen in der Spur.",
-                                   "Vor der Kehre: Bremse kräftig, bis der Wagen langsam genug ist.",
+                                   "Vor der Kehre: Bremse kräftig. Im Stand gehalten fährt sie rückwärts.",
                                    "Zieh in der Kehre die Handbremse, dann kommt das Heck herum.",
                                    "Schieß drei Fässer am Straßenrand in die Luft.",
                                    "Leg eine Mine hinter dir ab. Und fahr nicht selbst drüber.",

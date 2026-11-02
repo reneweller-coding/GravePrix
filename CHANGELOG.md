@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+- **Full lock turns tight:** with the driving assist, held full lock makes the front tyres scrub the speed off until
+  the turn fits, instead of drawing ever wider circles with the throttle down (a U-turn at full throttle from
+  72 km/h: 33 m instead of 87 m). The tyres hold a little more, also once they slide; the career stays as hard.
+- **Reversing lights:** white lights while backing up (hold the brake at a standstill); the test drive says so.
+
 ## [1.0.0] – 2026-11-01
 
 The finished game. The difficulty now rises over a career instead of falling, and the world reacts.
