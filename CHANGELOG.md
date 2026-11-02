@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [1.0.1] – 2026-11-02
+
+Steering you can lean on.
 
 - **Full lock turns tight:** with the driving assist, held full lock makes the front tyres scrub the speed off until
   the turn fits, instead of drawing ever wider circles with the throttle down (a U-turn at full throttle from
