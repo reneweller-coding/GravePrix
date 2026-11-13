@@ -923,6 +923,7 @@ void App::credits()
         add( 1, T( "Gebaut mit" ) );
         add( 2, "raylib 5.5 (zlib)" );
         add( 2, T( "Schrift: Barlow von Jeremy Tribby (SIL OFL 1.1)" ) );
+        add( 2, T( "Menschen: Quaternius' Grundfiguren und Animationen (CC0)" ) );
         add( 2, T( "Programmiert mit Claude (Anthropic)" ) );
         add( 1, T( "Lizenz" ) );
         add( 2, "GNU AGPL 3.0" );

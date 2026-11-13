@@ -130,6 +130,29 @@ at night when the prop has `lamp=1` in its model head line (`model lamp_old lamp
 `GravePrix --gallery work/gallery.png [prefix]` draws every model (or those whose name starts with prefix) on a
 sheet.
 
+### Modelled cars (`assets/cars/<model>.glb`, `tools/cars3d/`)
+
+A car model can be modelled properly instead of built from parts: `tools/cars3d/make_car.py` builds it in Blender
+(background mode, plain bpy) from its description in `tools/cars3d/cars.json` and exports `assets/cars/<model>.glb`;
+when that file exists the Forge takes the car's body from it (smooth normals as exported, no brightness noise) and
+keeps the wheels, exhausts and lights of the model's parts, and the car's mount points stay where `data/cars` puts
+them, so guns, pods, the coffin, the sticker, the mine rack, debris, dents and the wreck look work unchanged. The
+description repeats the wheel spots of the model's `part wheel` lines (the arches are cut there); the body is a loft
+of rounded sections (side profile `top`/`bottom`, plan corners, tumblehome, tuck); `"style": "modern"` makes body
+and greenhouse one loft (`belt` line, `green` tumblehome along z, subdivided, flush `glass` by place, `strips` for
+slim lamps and grilles), arches cut by a boolean and
+flared, the greenhouse a grid over its side profile with inset panes, then `parts` (box, bar, lamp, tube, cyl,
+tyre, sphere, cone, poly), `regions` (faces recoloured by place: a primer bonnet, rotten sills, an odd door),
+`shutlines` and shrink-wrapped `decals` (rust). Materials by name: `paint0`..`paint2` the driver's colours (paint,
+paint2, paint3), `light*` glows (`light_dim*` less), `glass`, `chrome*`, `rubber` and anything else keep the colour
+they are given. Keep a car at about 8,000–12,000 triangles (the game draws them unindexed).
+
+    "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --python-exit-code 1 -P tools/cars3d/make_car.py -- car_rustbucket
+
+`GravePrix --showroom rustbucket work/show.png [--yaws 240,60]` draws a car on the garage turntable (one view per
+yaw side by side); `--gallery` (no graphics card needed) shows the modelled cars too; `--forge-cars` ignores them
+(for before/after pictures).
+
 ## Cars (`data/cars/*.txt`)
 
 ```
@@ -470,6 +493,30 @@ baked: a fast car close by and one throws themself flat (crowds step back and ho
 it is quiet; a dog at each kennel (and a black one at the estate's gates) runs along with the field as far as its
 chain lets it, barking. `Renderer::m_cues` asks the race for the sounds (`SfxE::BIRDS_UP`, `SfxE::DOG_BARK`).
 
+The people themselves are skinned figures (`src/People.cpp`, `src/Skin.cpp` from DARK CONCORDANCE) in real clothes:
+eight looks built by `tools/make_people_mpfb.py` in Blender with MPFB (MakeHuman, CC0): Graves' black suit with
+gloves, Ricky's jacket over jeans, overalls over a T-shirt (marshals, mechanics, workers), a suit (undertakers,
+mourners), a tramp's jacket, a widow's blouse and skirt, fans' T-shirts and jeans. The textures are baked into the
+vertex colours (the brows and the hair laid onto the skin under them), the vertex alpha says what each part is (kept,
+top, legs, hair, skin, reflective tape cut in as its own band); one mesh per look, decimated to about 3,200 triangles
+(14,000 for Graves and Ricky), on MPFB's game engine rig with an `A_TPose` clip the retargeting measures from. The
+animation libraries are cut to the clips played by `tools/make_people3d.py` (`assets/models/people3d`). An outfit
+names its look and tints its top, legs, hair and skin keeping the texture's folds (the brightness against the part's
+mean); crowd members get one of four skin tones and hair colours by their clothes' colours, and a look of the other
+sex where there is one (fans, undertaker and widow). Hats and held things are Forge models on the head bone and in the fist
+(top hats, caps, a hard hat, the yellow flag, Ricky's microphone, the widow's umbrella). The library's idles stand
+like a fighter (the feet three hip-widths apart, the knees bent, the elbows out, fists), so `People::stand` draws the
+feet in under the hips by IK and raises the body until the knees are nearly straight (the feet flat as the clip had
+them), the free arms hang loosely (`relaxArm`) and the fingers are half way back to the T-pose's (`relaxHands`). The
+acts are the library's clips with the arms set by IK on top: idle (some fold their arms), cheer, clap, wave, the flag swung overhead, a
+microphone at the mouth, and the dive aside (Death01, then LayToIdle). Skinned on the CPU into a mesh per figure (once
+a frame, the shadow pass reuses it), so the lit and the depth shaders, the contact shadows and the fog need nothing
+new. `fig_*` become an outfit each; the `crowd_*` groups are read for their people (head, torso and legs: where, which
+colours) and drawn as fans or mourners within 50 m of the view, at most 24 skinned figures a picture (the rest stay the
+Forge's); their clock ticks 30 times a second, each figure on its own beat, so each is skinned every other picture. The podium has Graves clapping, Ricky waving with the microphone and talking into it, and six fans; the
+marshals beside a wreck swing the yellow flag. `--oldpeople` draws the Forge's figures instead (for comparisons),
+`--podium FILE` pictures the podium, `--shot ... --near MODEL [N]` looks at a prop by the road.
+
 ## The walls, and how they give
 
 The showdown asks the league's points (40) in the first season, six fewer in every further season spent in the
@@ -713,8 +760,11 @@ texture coordinates (`MarkE` in Forge.h): uv.x = the kind + a share, uv.y = a le
 garbage there, so it stays off for everything else). Models without marks keep no texture coordinates.
 
 - **The crowd** (`part crowd`): the fans sway and breathe; a fast car within ~45 m and they cheer (the eager ones
-  first): the seated stand up, the standing hop, arms go up in a V (an arm vertex knows how far below the shoulder it
-  hangs and mirrors above it). Now and then a wave (la ola) runs along a stand at 11 m/s, each stand on its own clock;
+  first): the seated stand up, the standing hop, arms go up in a V. The stands' bodies carry each arm twice: hanging
+  (`MARK_*_ARM_DOWN`, share = metres below the shoulder) and built raised, turned up and out about the shoulder joint
+  and a third thicker (`MARK_*_ARM_UP`, share = metres above it); cheering, the shader draws the hanging arm into the
+  chest and the raised one out of it (mirroring the hanging arm above the shoulder made thorns of them; the boxes'
+  figures of `--oldpeople` still mirror). Now and then a wave (la ola) runs along a stand at 11 m/s, each stand on its own clock;
   mourners and people under umbrellas only sway. `crowdJoy` makes everyone cheer: after a finish (`Renderer::m_joy`,
   fading over eight seconds) and on the podium. Uniforms: `animTime`, `crowdCars[8]` (x, z, speed), `crowdJoy`, `wind`.
 - **Night**: camera flashes from the stands (`Renderer::crowdLife`: a few sprites a second per stand at random fans'

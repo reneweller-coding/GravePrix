@@ -5,6 +5,7 @@
  */
 #include "Render.h"
 
+#include "People.h"
 #include "Ui.h"
 
 #include <raymath.h>
@@ -48,7 +49,7 @@ void animate( inout vec3 p, inout vec3 n )
 {
     if ( anim < 0.5 ) return;
     float kind = floor( vertexTexCoord.x + 0.0001 );
-    if ( kind < 0.5 || kind > 7.5 ) return;
+    if ( kind < 0.5 || kind > 11.5 ) return;
     float share = vertexTexCoord.x - kind;
     vec2  at = vertexTexCoord2;
     float r = animHash( at * 3.7 + 0.31 );
@@ -84,8 +85,9 @@ void animate( inout vec3 p, inout vec3 n )
     float cycle = floor( tw / period ), front = -32.0 + ( tw - cycle * period ) * 11.0;
     float ola = step( 0.45, animHash( vec2( stand, cycle ) ) ) * exp( -( along - front ) * ( along - front ) * 0.12 );
     bool  calm = kind > 3.5 && kind < 4.5;
-    bool  arm = kind > 2.5 && kind < 3.5 || kind > 6.5;
-    bool  seated = kind < 4.5;
+    bool  arm = kind > 2.5 && kind < 3.5 || kind > 6.5 && kind < 7.5;   // the boxes' arms (mirrored)
+    bool  armDown = kind > 7.5 && kind < 9.5, armUp = kind > 9.5;       // the bodies' hanging and raised arms
+    bool  seated = kind < 4.5 || kind > 7.5 && kind < 8.5 || kind > 9.5 && kind < 10.5;
     float cheer = calm ? 0.0 : clamp( ex * ( 1.5 - 0.9 * r ), 0.0, 1.0 );
     if ( calm ) ola = 0.0;
     float hop = abs( sin( animTime * ( 6.0 + 4.0 * r ) + r * 50.0 ) );
@@ -95,10 +97,13 @@ void animate( inout vec3 p, inout vec3 n )
     float idle = sin( animTime * ( 0.8 + 0.6 * r ) + r * 30.0 );
     p.x += idle * ( calm ? 0.05 : 0.03 ) * w;
     p.y += lift + w * 0.012 * sin( animTime * 1.7 + r * 12.0 );
+    // Arms up (some keep them down): a body's hanging arm is drawn into its chest and its raised copy out of it.
+    float up = max( cheer * step( 0.25, r + ex * 0.3 ), ola ) * ( 0.85 + 0.15 * hop );
+    if ( armDown ) p = mix( p, vec3( at.x, p.y + share, at.y ), up );
+    if ( armUp ) p = mix( vec3( at.x, p.y - share, at.y ), p, up );
     if ( arm )
     {
-        // Arms up: the arm mirrors above the shoulder and opens a little (a V); some keep them down.
-        float up = max( cheer * step( 0.25, r + ex * 0.3 ), ola ) * ( 0.85 + 0.15 * hop );
+        // The boxes' arms mirror above the shoulder and open a little (a V).
         float d = share;
         vec2  side = p.xz - at;
         float sl = length( side );
@@ -813,6 +818,14 @@ void builtins()
         { "_rocket", "hull len=0.95 wid=0.2 hgt=0.2 shape=cigar color=#c8c0b0", "cone r=0.1 len=0.25 z=-0.55 color=#c02010", "fin h=0.15 root=0.25 tip=0.1 sweep=0.1 z=0.35 thick=0.02 color=#404040", nullptr },
         { "_barrel", "disc r=0.45 h=1.0 y=0.5 seg=12 color=#b02818", "disc r=0.46 h=0.12 y=0.7 seg=12 color=#e0c020", "disc r=0.46 h=0.06 y=0.2 seg=12 color=#801810", nullptr },
         { "_pickup", "box w=1.1 h=0.6 d=0.7 y=0.3 color=#d0b040 emit=0.3", nullptr },
+        { "_p3_tophat", "disc r=0.165 h=0.018 y=-0.045 seg=12 color=#101012", "disc r=0.098 h=0.2 y=0.06 seg=12 color=#121214", "disc r=0.1 h=0.03 y=-0.02 seg=12 color=#3a1414", nullptr },
+        { "_p3_cap", "dome r=0.104 ry=0.075 y=-0.07 seg=10 color=#e06a10", "box w=0.15 h=0.012 d=0.09 y=-0.066 z=0.12 color=#c05a0c", nullptr },
+        { "_p3_cap_red", "dome r=0.104 ry=0.075 y=-0.07 seg=10 color=#c02020", "box w=0.15 h=0.012 d=0.09 y=-0.066 z=0.12 color=#a01818", nullptr },
+        { "_p3_hardhat", "dome r=0.122 ry=0.1 y=-0.075 seg=10 color=#e8b820", "disc r=0.14 h=0.012 y=-0.074 seg=12 color=#d8a818", nullptr },
+        { "_p3_beanie", "dome r=0.108 ry=0.105 y=-0.085 seg=10 color=#5a4a32", "disc r=0.11 h=0.03 y=-0.07 seg=10 color=#4a3c28", nullptr },
+        { "_p3_widowhat", "disc r=0.2 h=0.012 y=-0.05 seg=14 color=#0e0e10", "disc r=0.1 h=0.08 y=-0.005 seg=12 color=#121214", "cone r=0.2 len=0.16 pitch=90 y=-0.05 seg=14 color=#1a1a1e", nullptr },
+        { "_p3_mic", "disc r=0.017 h=0.17 y=0.06 seg=6 color=#1c1c1e", "sphere r=0.036 y=0.16 color=#3a3a3e", "disc r=0.022 h=0.025 y=0.13 seg=6 color=#d8b040 emit=0.2", nullptr },
+        { "_p3_umbrella", "box w=0.022 h=1.3 d=0.022 y=0.43 color=#202020", "cone r=0.62 len=0.3 pitch=-90 seg=10 y=1.07 color=#0e0e10", nullptr },
         { "_coffin", "box w=0.8 h=0.45 d=1.9 y=0.23 taper=0.15 color=#4a2a18", "box w=0.82 h=0.06 d=1.92 y=0.48 color=#6a3a20", "box w=0.08 h=0.02 d=0.6 y=0.52 z=-0.2 color=#d0b060 emit=0.3", "box w=0.4 h=0.02 d=0.08 y=0.52 z=-0.35 color=#d0b060 emit=0.3", nullptr },
     };
     for ( auto &d : defs )
@@ -958,6 +971,105 @@ const ModelMesh &modelOf( const std::string &name, const Paint &paint = Paint() 
     return g.m_forge.get( g_data, name, paint );
 }
 
+/** @return the skinned outfit for one of the Forge's single figures ("" none: it stays a Forge model) */
+std::string outfitFor( const std::string &model )
+{
+    static const std::map<std::string, std::string> m = { { "fig_marshal", "marshal" },       { "fig_mechanic", "mechanic" },
+                                                           { "fig_worker", "worker" },         { "fig_undertaker", "undertaker" },
+                                                           { "fig_tramp", "tramp" },           { "fig_widow", "widow" },
+                                                           { "fig_graves", "graves" },         { "fig_ricky", "ricky" } };
+    auto it = m.find( model );
+    return it == m.end() ? std::string() : it->second;
+}
+
+/**
+ * @brief Draws a skinned person (People.h) with its hat and what it holds.
+ * @param[in] slot    the figure's own mesh
+ * @param[in] o       the outfit (People::outfit)
+ * @param[in] act     what it does
+ * @param[in] t       seconds (into a dive, else a clock)
+ * @param[in] seed    0..1
+ * @param[in] xf      where (feet at 0, facing -z as the Forge's people)
+ * @param[in] mat     the lit or the shadow's material
+ * @return false if there are no skinned people (draw the Forge's figure instead)
+ */
+bool drawPersonAt( int slot, int o, PersonAct act, float t, float seed, const Matrix &xf, Material &mat )
+{
+    People &pp = people();
+    if ( !pp.ready() || o < 0 ) return false;
+    PersonPose  pose;
+    const Mesh *m = pp.pose( slot, o, act, t, seed, pose );
+    if ( !m ) return false;
+    DrawMesh( *m, mat, xf );
+    const Outfit &of = pp.outfitAt( o );
+    if ( !of.m_hat.empty() )
+    {
+        const ModelMesh &h = modelOf( of.m_hat );
+        if ( h.m_hasBase ) DrawMesh( h.m_base, mat, MatrixMultiply( pose.m_hat, xf ) );
+    }
+    if ( !of.m_hand.empty() )
+    {
+        const ModelMesh &h = modelOf( of.m_hand );
+        if ( h.m_hasBase ) DrawMesh( h.m_base, mat, MatrixMultiply( pose.m_hand, xf ) );
+    }
+    return true;
+}
+
+/** @return a clock that ticks 30 times a second, each figure on its own beat: a figure 30 pixels tall moves as
+ *          smoothly so, and only every other picture skins it (half the cost, spread over the pictures) */
+float tick30( float t, float seed ) { return std::floor( t * 30.0f + seed ) / 30.0f; }
+
+/** @brief drawPersonAt() with the outfit by its name. @return false if there are no skinned people */
+bool drawPerson( int slot, const std::string &outfit, PersonAct act, float t, float seed, const Matrix &xf, Material &mat )
+{
+    return people().ready() && drawPersonAt( slot, people().outfit( outfit ), act, t, seed, xf, mat );
+}
+
+/** @brief One of a Forge crowd model's people: where it stands in the model, its turn, its colours. */
+struct CrowdMember
+{
+    float m_x = 0, m_z = 0, m_rot = 0;
+    Color m_top = WHITE, m_legs = WHITE;
+    bool  m_umbrella = false;   ///< an umbrella's pole beside the head
+};
+
+/** @return the people of a crowd model (their heads, the torso and the legs nearest to each), read once */
+const std::vector<CrowdMember> &crowdMembers( const std::string &model )
+{
+    static std::map<std::string, std::vector<CrowdMember>> cache;
+    auto it = cache.find( model );
+    if ( it != cache.end() ) return it->second;
+    std::vector<CrowdMember> &out = cache[model];
+    const ModelDef           *d = g_data.model( model );
+    if ( !d ) return out;
+    auto nearest = [&]( float x, float z, float y, const Line **best ) {
+        float bd = 1e9f;
+        for ( const Line &q : d->m_parts )
+        {
+            if ( q.m_key != "box" || std::fabs( q.num( "y" ) - y ) > 0.06f ) continue;
+            float dd = ( q.num( "x" ) - x ) * ( q.num( "x" ) - x ) + ( q.num( "z" ) - z ) * ( q.num( "z" ) - z );
+            if ( dd < bd ) bd = dd, *best = &q;
+        }
+    };
+    for ( const Line &p : d->m_parts )
+    {
+        if ( p.m_key != "sphere" || p.num( "y" ) < 1.4f || p.num( "y" ) > 1.8f || p.num( "r" ) < 0.1f ) continue;
+        CrowdMember m;
+        m.m_x = p.num( "x" ), m.m_z = p.num( "z" );
+        const Line *torso = nullptr, *legs = nullptr;
+        nearest( m.m_x, m.m_z, 1.17f, &torso );
+        nearest( m.m_x, m.m_z, 0.43f, &legs );
+        if ( torso ) m.m_top = torso->color( "color", WHITE ), m.m_rot = torso->num( "rot" ) * Deg;
+        if ( legs ) m.m_legs = legs->color( "color", WHITE );
+        for ( const Line &q : d->m_parts )
+            if ( q.m_key == "box" && q.num( "h" ) > 0.6f && q.num( "w" ) < 0.05f && q.num( "y" ) > 1.4f &&
+                 std::fabs( q.num( "x" ) - m.m_x ) + std::fabs( q.num( "z" ) - m.m_z ) < 0.3f )
+                m.m_umbrella = true;
+        out.push_back( m );
+    }
+    return out;
+}
+
 /** @return a ground matrix: at (x, z), turned by heading (radians), raised by y */
 Matrix place( Vector2 p, float head, float y = 0.0f, float scale = 1.0f )
 {
@@ -1048,6 +1160,7 @@ void Renderer::shutdown()
     if ( --g.m_users == 0 )
     {
         g.m_forge.clear();
+        people().unload();
         for ( Shader s : { g.m_lit, g.m_surface, g.m_depth, g.m_sprite, g.m_prefilter, g.m_down, g.m_up, g.m_final } ) UnloadShader( s );
         for ( Texture2D &t : g.m_tex ) UnloadTexture( t );
     }
@@ -1961,10 +2074,45 @@ void Renderer::podium( const std::vector<PodiumCar> &cars, float dt )
         setAnimOn( false, false );
     }
     const ModelMesh &graves = modelOf( "fig_graves" ), &ricky = modelOf( "fig_ricky" );
-    if ( graves.m_hasBase ) DrawMesh( graves.m_base, g.m_litMat, MatrixMultiply( MatrixRotateY( Pi - 0.5f ), MatrixTranslate( -2.2f, 0, 2.2f ) ) );
-    if ( ricky.m_hasBase )
-        DrawMesh( ricky.m_base, g.m_litMat,
-                  MatrixMultiply( MatrixRotateY( Pi + 0.6f + 0.15f * std::sin( m_podiumTime * 1.3f ) ), MatrixTranslate( 7.3f, 0, 2.0f ) ) );
+    const Matrix     gx = MatrixMultiply( MatrixRotateY( Pi - 0.5f ), MatrixTranslate( -2.2f, 0, 2.2f ) );
+    const Matrix     rx = MatrixMultiply( MatrixRotateY( Pi + 0.6f + 0.15f * std::sin( m_podiumTime * 1.3f ) ), MatrixTranslate( 7.3f, 0, 2.0f ) );
+    if ( !drawPerson( 2000, "graves", PersonAct::CLAP, m_podiumTime, 0.1f, gx, g.m_litMat ) && graves.m_hasBase )
+        DrawMesh( graves.m_base, g.m_litMat, gx );
+    // Ricky: a wave to the crowd with the microphone, then a few words into it, over and over.
+    PersonAct rickyAct = std::fmod( m_podiumTime, 7.0f ) < 3.0f ? PersonAct::WAVE : PersonAct::TALK;
+    if ( !drawPerson( 2001, "ricky", rickyAct, m_podiumTime, 0.3f, rx, g.m_litMat ) && ricky.m_hasBase ) DrawMesh( ricky.m_base, g.m_litMat, rx );
+    // --podium FILE --lineup: every outfit and act in a row in front (to look at them).
+    if ( m_peopleLineup && people().ready() )
+    {
+        struct Show
+        {
+            const char *m_outfit;
+            PersonAct   m_act;
+            float       m_t;
+        };
+        const Show shows[] = { { "marshal", PersonAct::FLAG, m_podiumTime },    { "mechanic", PersonAct::CHEER, m_podiumTime },
+                               { "worker", PersonAct::CLAP, m_podiumTime },     { "undertaker", PersonAct::IDLE, m_podiumTime },
+                               { "tramp", PersonAct::WAVE, m_podiumTime },      { "widow", PersonAct::IDLE, m_podiumTime },
+                               { "fan_blue", PersonAct::DIVE, 0.3f },           { "fan_red", PersonAct::DIVE, 1.2f },
+                               { "fan_gold", PersonAct::DIVE, 2.2f },           { "ricky", PersonAct::TALK, m_podiumTime } };
+        for ( int i = 0; i < 10; ++i )
+        {
+            // Raised off the floor, so that the camera sees the feet and the ones lying down.
+            Matrix fx = MatrixMultiply( MatrixRotateY( Pi + 0.25f ), MatrixTranslate( -4.6f + i * 1.3f, 0.9f, 3.0f ) );
+            drawPerson( 2100 + i, shows[i].m_outfit, shows[i].m_act, shows[i].m_t, 0.2f, fx, g.m_litMat );
+        }
+    }
+    // Fans in the colours of the first three in front of the stand, cheering.
+    else if ( people().ready() )
+    {
+        const char *fans[] = { "fan_red", "fan_blue", "fan_gold", "fan_green", "fan_red", "fan_blue" };
+        const float fanX[] = { -8.6f, -6.9f, -5.3f, 6.1f, 8.9f, 10.4f };
+        for ( int i = 0; i < 6; ++i )
+        {
+            Matrix fx = MatrixMultiply( MatrixRotateY( Pi + ( fanX[i] < 0 ? -0.35f : 0.45f ) ), MatrixTranslate( fanX[i], 0, -2.6f - ( i % 2 ) * 0.9f ) );
+            drawPerson( 2010 + i, fans[i], i % 3 == 1 ? PersonAct::WAVE : PersonAct::CHEER, m_podiumTime, 0.13f * i + 0.05f, fx, g.m_litMat );
+        }
+    }
     drawParticles();
     rlEnableBackfaceCulling();
     EndMode3D();
@@ -2060,6 +2208,13 @@ void Renderer::life( const World &w, float dt )
     // People: a car close and fast, and they throw themselves aside (or the crowd steps back); then up again.
     for ( Person &p : m_people )
     {
+        p.m_cheer = std::max( 0.0f, p.m_cheer - dt );
+        if ( p.m_t < 0 )
+        {
+            float   sp = 0;
+            Vector2 from = { 0, 0 };
+            if ( nearest( p.m_pos, sp, from ) < 34.0f && sp > 4.0f ) p.m_cheer = 2.5f;
+        }
         if ( p.m_t >= 0 )
         {
             p.m_t += dt;
@@ -2156,9 +2311,72 @@ void Renderer::drawLife( bool shadow )
     Material &lit = shadow ? g.m_depthMat : g.m_litMat;
     Vector2   f = m_view.m_focus;
     float     near = m_view.m_height * 1.3f + 30.0f;
-    for ( const Person &p : m_people )
+    int skinned = 0;   // the skinned figures this picture (the rest stay the Forge's, far ones first)
+    for ( size_t pi = 0; pi < m_people.size(); ++pi )
     {
+        const Person &p = m_people[pi];
         if ( dist2( p.m_pos, f ) > near * near ) continue;
+        if ( p.m_crowd && people().ready() && dist2( p.m_pos, f ) < 50.0f * 50.0f )
+        {
+            const std::vector<CrowdMember> &ms = crowdMembers( p.m_model );
+            if ( !ms.empty() && skinned + (int)ms.size() <= 24 )
+            {
+                bool  mourners = p.m_model == "crowd_mourners";
+                float back = 0, hop = 0;
+                if ( p.m_t >= 0 )
+                {
+                    back = std::sin( std::min( 1.0f, p.m_t / 1.4f ) * Pi ) * 1.1f;
+                    hop = std::fabs( std::sin( p.m_t * 7.0f ) ) * 0.2f * ( 1.0f - p.m_t / 1.4f );
+                }
+                Vector2 at = add( p.m_pos, mul( p.m_away, back ) );
+                Matrix  group = MatrixMultiply( MatrixMultiply( MatrixScale( p.m_scale, p.m_scale, p.m_scale ), MatrixRotateY( -p.m_rot ) ),
+                                                MatrixTranslate( at.x, hop, at.y ) );
+                int baseFan = people().outfit( "fan_red" ), baseWidow = people().outfit( "widow" ),
+                    baseUnder = people().outfit( "undertaker" );
+                for ( size_t k = 0; k < ms.size(); ++k )
+                {
+                    const CrowdMember &cm = ms[k];
+                    float seed = std::fmod( std::fabs( p.m_pos.x * 0.173f + p.m_pos.y * 0.311f + k * 0.377f ), 1.0f );
+                    bool  female = cm.m_umbrella || ( (int)( seed * 100 ) & 1 ) != 0;
+                    int   base = cm.m_umbrella ? baseWidow : mourners ? ( female ? baseWidow : baseUnder ) : baseFan;
+                    int   o = people().outfitLike( base, cm.m_top, cm.m_legs, female, cm.m_umbrella );
+                    PersonAct act = mourners ? PersonAct::IDLE
+                                    : ( p.m_t >= 0 || p.m_cheer > 0 ) ? ( seed < 0.3f ? PersonAct::WAVE : seed < 0.45f ? PersonAct::CLAP : PersonAct::CHEER )
+                                                                      : PersonAct::IDLE;
+                    Matrix xf = MatrixMultiply( MatrixMultiply( MatrixRotateY( -cm.m_rot ), MatrixTranslate( cm.m_x, 0, cm.m_z ) ), group );
+                    drawPersonAt( 5000 + (int)pi * 24 + (int)k, o, act, tick30( m_time, seed ), seed, xf, lit );
+                }
+                skinned += (int)ms.size();
+                continue;
+            }
+        }
+        std::string outfit = p.m_crowd ? std::string() : outfitFor( p.m_model );
+        if ( !outfit.empty() && people().ready() )
+        {
+            float     seed = std::fmod( std::fabs( p.m_pos.x * 0.137f + p.m_pos.y * 0.291f ), 1.0f );
+            PersonAct act = PersonAct::IDLE;
+            float     t = m_time, shift = 0;
+            if ( p.m_t >= 0 )
+            {
+                act = PersonAct::DIVE;
+                t = p.m_t;
+                shift = std::min( 1.0f, p.m_t / 0.35f ) * 1.2f;
+            }
+            else if ( p.m_cheer > 0 )
+            {
+                int o = people().outfit( outfit );
+                act = o >= 0 ? people().outfitAt( o ).m_excited : PersonAct::CHEER;
+            }
+            if ( act == PersonAct::IDLE && people().outfitAt( people().outfit( outfit ) ).m_hand == "flag_yellow" ) act = PersonAct::FLAG;
+            Vector2 at = add( p.m_pos, mul( p.m_away, shift ) );
+            Matrix  xf = MatrixMultiply( MatrixMultiply( MatrixScale( p.m_scale, p.m_scale, p.m_scale ), MatrixRotateY( -p.m_rot ) ),
+                                         MatrixTranslate( at.x, 0, at.y ) );
+            if ( skinned < 24 && drawPerson( (int)pi, outfit, act, tick30( t, seed ), seed, xf, lit ) )
+            {
+                ++skinned;
+                continue;
+            }
+        }
         const ModelMesh &m = modelOf( p.m_model );
         if ( !m.m_hasBase ) continue;
         float tilt = 0, shift = 0, hop = 0;
@@ -3307,6 +3525,9 @@ void Renderer::drawTow( const World &w, bool shadow )
                 Vector2            p = m_track->pointAt( s, side * off );
                 float              face = headingOf( mul( ms.m_right, -side ) );
                 Matrix             xf = MatrixMultiply( MatrixRotateY( -face ), MatrixTranslate( p.x, 0, p.y ) );
+                if ( drawPerson( 1000 + (int)( &c - w.m_cars.data() ) * 2 + k, "marshal", PersonAct::FLAG, tick30( m_time, 0.37f * k ),
+                                 0.37f * k + 0.11f, xf, lit ) )
+                    continue;
                 if ( body.m_hasBase ) DrawMesh( body.m_base, lit, xf );
                 if ( body.m_hasHead ) DrawMesh( body.m_head, lit, xf );
                 float  wave = 0.55f * std::sin( m_time * 7.0f + k * 1.7f );

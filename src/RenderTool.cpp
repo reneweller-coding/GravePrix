@@ -5,6 +5,7 @@
  *        (G:/Tools/Games/GPU_BELEGT.txt).
  * @author Rene Weller
  */
+#include "People.h"
 #include "Render.h"
 #include "Tools.h"
 
@@ -78,6 +79,7 @@ std::vector<CarSetup> testField( const std::string &only )
 int toolDeckCheck( const Options &opt )
 {
     if ( gpuBusy( opt ) ) return 2;
+    if ( opt.has( "--oldpeople" ) ) people().disable();
     // The Deck: 1280 x 800, the game's automatic quality there (0), and the next one up for comparison. Tracks with
     // night, rain, neon and the most props, the hardest pictures.
     std::vector<std::string> tracks = { "dwn_welle", "cem_overcoat", "ref_oelung", "fair_lastride", "est_finale" };
@@ -144,6 +146,7 @@ int toolShot( const Options &opt )
     // One GPU user at a time across all sessions: while another session's GPU job runs, no picture.
     if ( gpuBusy( opt ) ) return 2;
     std::string name = opt.value( "--shot" ), file = opt.value2( "--shot", "work/shot.png" );
+    if ( opt.has( "--oldpeople" ) ) people().disable();
     const TrackDef *def = g_data.track( name );
     if ( !def )
     {
@@ -181,6 +184,21 @@ int toolShot( const Options &opt )
     else
         v.m_focus = world.m_cars[world.m_leader].m_pos;
     v.m_height = opt.num( "--height", 80.0f );
+    // --near MODEL [N]: the view on the N-th prop of that model by the road (the people, to look at them).
+    if ( opt.has( "--near" ) )
+    {
+        int want = (int)std::atof( opt.value2( "--near", "0" ).c_str() ), seen = 0;
+        for ( const PropSpot &p : t.m_props )
+        {
+            if ( p.m_model != opt.value( "--near" ) ) continue;
+            TrackPos tp = t.locate( p.m_pos, -1 );
+            if ( std::fabs( tp.m_lat ) - t.m_s[(size_t)tp.m_i].m_half > 22.0f ) continue;
+            if ( seen++ < want ) continue;
+            v.m_focus = p.m_pos;
+            printf( "%s at s %.0f\n", p.m_model.c_str(), tp.m_s );
+            break;
+        }
+    }
     if ( opt.has( "--tow" ) && !t.m_arena )
     {
         // Graves & Sons collecting a wreck: the car nearest to the view wrecked, the hook --tow seconds in (the
@@ -207,6 +225,83 @@ int toolShot( const Options &opt )
     r.shutdown();
     CloseWindow();
     printf( "%s -> %s\n", name.c_str(), file.c_str() );
+    return 0;
+}
+
+int toolShowroom( const Options &opt )
+{
+    if ( gpuBusy( opt ) ) return 2;
+    std::string name = opt.value( "--showroom" ), file = opt.value2( "--showroom", "work/showroom.png" );
+    if ( const CarDef *cd = g_data.car( name ) ) name = cd->m_model;
+    if ( !g_data.model( name ) )
+    {
+        printf( "error: no model \"%s\"\n", name.c_str() );
+        return 1;
+    }
+    int                w = (int)opt.num( "--w", 800 ), h = (int)opt.num( "--h", 600 );
+    std::vector<float> yaws;
+    std::string        list = opt.value( "--yaws", "240,60" );
+    for ( size_t at = 0; at < list.size(); )
+    {
+        size_t comma = list.find( ',', at );
+        yaws.push_back( (float)atof( list.substr( at, comma - at ).c_str() ) * Deg );
+        at = comma == std::string::npos ? list.size() : comma + 1;
+    }
+    hiddenWindow( 320, 240 );
+    Renderer r;
+    r.init( w, h, 2 );
+    Image all = GenImageColor( w * (int)yaws.size(), h, BLACK );
+    for ( size_t k = 0; k < yaws.size(); ++k )
+    {
+        r.showroom( name, paintOf( (int)opt.num( "--paint", 0 ) ), yaws[k], opt.num( "--dist", 7.5f ) );
+        Image img = LoadImageFromTexture( r.texture() );
+        ImageFlipVertical( &img );
+        ImageDraw( &all, img, { 0, 0, (float)w, (float)h }, { (float)( w * k ), 0, (float)w, (float)h }, WHITE );
+        UnloadImage( img );
+    }
+    std::error_code ec;
+    fs::create_directories( fs::path( file ).parent_path(), ec );
+    ExportImage( all, file.c_str() );
+    UnloadImage( all );
+    r.shutdown();
+    CloseWindow();
+    printf( "%s -> %s\n", name.c_str(), file.c_str() );
+    return 0;
+}
+
+int toolPodium( const Options &opt )
+{
+    if ( gpuBusy( opt ) ) return 2;
+    std::string file = opt.value( "--podium" );
+    if ( opt.has( "--oldpeople" ) ) people().disable();
+    if ( file.empty() ) file = "work/podium.png";
+    int w = (int)opt.num( "--w", 1600 ), h = (int)opt.num( "--h", 900 );
+    hiddenWindow( 320, 240 );
+    Renderer r;
+    r.init( w, h, (int)opt.num( "--quality", 2 ) );
+    r.m_peopleLineup = opt.has( "--lineup" );
+    std::vector<Renderer::PodiumCar> cars;
+    for ( size_t k = 0; k < g_data.m_carOrder.size() && cars.size() < 3; ++k )
+    {
+        const CarDef *d = g_data.car( g_data.m_carOrder[k] );
+        if ( !d ) continue;
+        Renderer::PodiumCar pc;
+        pc.m_model = d->m_model;
+        pc.m_paint = paintOf( (int)k );
+        cars.push_back( pc );
+    }
+    // The podium's own clock: --time seconds into it (the figures move, the confetti falls).
+    float seconds = opt.num( "--time", 2.0f );
+    for ( int k = 0; k < (int)( seconds * 60 ); ++k ) r.podium( cars, Dt );
+    Image img = LoadImageFromTexture( r.texture() );
+    ImageFlipVertical( &img );
+    std::error_code ec;
+    fs::create_directories( fs::path( file ).parent_path(), ec );
+    ExportImage( img, file.c_str() );
+    UnloadImage( img );
+    r.shutdown();
+    CloseWindow();
+    printf( "podium -> %s\n", file.c_str() );
     return 0;
 }
 

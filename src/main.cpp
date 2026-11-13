@@ -4,6 +4,7 @@
  * @author Rene Weller
  */
 #include "Data.h"
+#include "Forge.h"
 #include "Lang.h"
 #include "Tools.h"
 #include "Track.h"
@@ -58,6 +59,10 @@ int main( int argc, char **argv )
     loadUiTexts( dataDir );
     g_data.load( dataDir );
     g_data.check();
+    // The modelled cars (assets/cars/*.glb); --forge-cars keeps the Forge's parts (for comparison pictures).
+    if ( !opt.has( "--forge-cars" ) ) Forge::setAssetDir( root + "/assets" );
+    // The stands' bodies (assets/models/people3d/crowd_*.txt); --oldpeople keeps the boxes (comparison pictures).
+    if ( !opt.has( "--oldpeople" ) ) Forge::setPeopleDir( root + "/assets/models/people3d" );
     if ( opt.has( "--validate" ) ) return toolValidate( opt );
     if ( opt.has( "--trackshot" ) ) return toolTrackshot( opt );
     if ( opt.has( "--trackshots" ) ) return toolTrackshots( opt );
@@ -68,6 +73,8 @@ int main( int argc, char **argv )
     if ( opt.has( "--careersim" ) ) return toolCareerSim( opt );
     if ( opt.has( "--gallery" ) ) return toolGallery( opt );
     if ( opt.has( "--shot" ) ) return toolShot( opt );
+    if ( opt.has( "--showroom" ) ) return toolShowroom( opt );
+    if ( opt.has( "--podium" ) ) return toolPodium( opt );
     if ( opt.has( "--deckcheck" ) ) return toolDeckCheck( opt );
     return runGame( opt );
 }

@@ -164,6 +164,7 @@ public:
     Camera3D m_cam = {};
 
     // The look (RenderLook.cpp, docs/DESIGN.md "The miniature look, the sky and contact shadows").
+    bool m_peopleLineup = false;   ///< the podium shows every outfit and act in a row instead of its fans (--lineup)
     bool m_miniature = true;   ///< the tilt-shift blur at the top and bottom of the picture (the option)
     /** @brief What flies over the track, for the race's sound: loudness 0..1 of each and the Doppler pitch. */
     struct Hum
@@ -268,6 +269,7 @@ private:
         float       m_rot = 0.0f, m_scale = 1.0f;          ///< radians
         bool        m_crowd = false;                       ///< a group (they hop back) or one (dives flat)
         float       m_t = -1.0f;                           ///< seconds into the fright (< 0 calm)
+        float       m_cheer = 0.0f;                        ///< seconds of cheering left (a car passing near)
     };
     std::vector<Person> m_people;
     struct Bird
