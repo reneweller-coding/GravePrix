@@ -48,7 +48,9 @@ SmartScreen may warn once ("More info", "Run anyway").
 | ![Downtown at night](docs/shots/downtown.jpg) | ![The fairground](docs/shots/fairground.jpg) |
 | Downtown at night, neon and wet streets | The fairground |
 | ![The refinery](docs/shots/refinery.jpg) | ![The cemetery](docs/shots/cemetery.jpg) |
-| The refinery | The start at the cemetery |
+| The refinery | Night at the cemetery |
+| ![The docks](docs/shots/docks.jpg) | ![The podium](docs/shots/podium.jpg) |
+| The docks | The podium: the first three on a pile of coffins, Graves beside them |
 
 ## The game
 
