@@ -24,7 +24,8 @@ struct Settings
     int         m_fps = 60;                  ///< 0: no limit
     bool        m_vsync = true;
     int         m_quality = -1;              ///< 0 fast, 1 balanced, 2 fine (-1: by the machine)
-    bool        m_miniature = true;          ///< the miniature look: the picture's top and bottom blurred
+    int         m_miniature = 2;             ///< the miniature look (top and bottom blurred): 0 off, 1 on, 2 on while the
+                                             ///< frame rate holds
     std::string m_language;                  ///< de, en ("" the system's)
     float       m_textSize = 1.0f;
     bool        m_rumble = true;
@@ -38,6 +39,11 @@ struct Settings
     std::vector<std::string> m_binds;        ///< Input's lines
     bool        m_paceNotes = true;          ///< the corner arrows in the race (pace notes)
     bool        m_stickAims = false;         ///< the pad's stick points the way (else it turns the wheels)
+    bool        m_racingLine = false;        ///< the racing line on the road, coloured where to brake
+    bool        m_gripWarn = true;           ///< the tyres sing (and the pad hums) just before they slide
+    float       m_speed = 1.0f;              ///< the race's pace: 0.7 .. 1 (everything slower, the same race)
+    bool        m_lookDropped = false;       ///< the automatic miniature look was turned off: the frame rate did not hold
+    bool        m_replay = true;             ///< the finish again in slow motion after a race
 
     /** @brief Reads them (missing values stay at their defaults). */
     void load( const std::string &path );

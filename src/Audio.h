@@ -26,6 +26,8 @@ enum class SfxE : int
     EXPLOSION_SMALL, EXPLOSION_BIG, WRECK, BARREL,
     // the race
     COUNT_BEEP, COUNT_GO, LAP, FINAL_LAP, FINISH, WRONG_WAY, BELL, FUNERAL_MARCH,
+    // the crowd on the stands
+    CHEER, GASP, APPLAUSE,
     // the roadside
     BIRDS_UP, DOG_BARK,
     // the sky (the storm's lightning)
@@ -52,6 +54,8 @@ enum class LoopE : int
     WIND,           ///< wind (snow, desert, storms)
     ROTOR,          ///< the news helicopter overhead
     AIRSHIP,        ///< the airship's engines overhead
+    TYRE_SING,      ///< tyres near their limit: a thin whine before the squeal (the warning)
+    CROWD,          ///< the crowd on a stand nearby: many voices
     // one ambience per venue
     AMB_JUNKYARD, AMB_CEMETERY, AMB_DOCKS, AMB_DESERT, AMB_REFINERY, AMB_SWAMP, AMB_DOWNTOWN, AMB_PASS,
     AMB_FAIRGROUND, AMB_PROVING, AMB_ESTATE,

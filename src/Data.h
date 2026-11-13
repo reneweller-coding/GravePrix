@@ -191,7 +191,7 @@ struct TrackPiece
 /** @brief A thing placed along a track (pickups, hazards, obstacles, patches, props, rows, lamps, bridges). */
 struct TrackItem
 {
-    std::string m_type;     ///< pickup hazard obstacle patch prop row place lamps bridge
+    std::string m_type;     ///< pickup hazard obstacle patch prop row place lamps bridge gate
     std::string m_what;     ///< its kind or model
     Line        m_line;     ///< the line itself (at lat r len w side off rot every x z model)
 };
@@ -214,6 +214,7 @@ struct TrackDef
     std::string             m_where;
     std::string             m_weatherTo;      ///< the weather turns to (rain, fog) ...
     int                     m_weatherLap = 0; ///< ... when the leader starts this lap (0 never)
+    float                   m_medals[3] = { 0, 0, 0 };   ///< a driving school exercise: bronze, silver, gold (seconds)
 };
 
 /** @brief Lines said on events: event -> lines. */

@@ -87,7 +87,7 @@ add_test( NAME races COMMAND GravePrix --simall --difficulty 2 )
 # A career played through by the computer (the economy and the leagues hold together).
 add_test( NAME career COMMAND GravePrix --careersim --difficulty 2 )
 # The screens played through by scripts (a hidden window; the saves go to a test folder in the build).
-foreach( flow career quick extras )
+foreach( flow career quick extras more )
     add_test( NAME app_${flow} COMMAND GravePrix --apptest ${CMAKE_SOURCE_DIR}/tools/apptest_${flow}.txt )
     set_tests_properties( app_${flow} PROPERTIES ENVIRONMENT "GRAVE_HOME=${CMAKE_BINARY_DIR}/testhome_${flow}" )
 endforeach()

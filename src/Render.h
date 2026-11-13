@@ -127,6 +127,14 @@ public:
     } m_ghost;
     std::vector<Ghost> m_spirits;   ///< the dead rivals' ghosts (the race moves them), drawn pale green
 
+    /** @brief A point of the racing line on the road (the option): where, and its colour (green, yellow, red). */
+    struct GuidePoint
+    {
+        Vector2 m_pos = { 0, 0 };
+        Color   m_color = WHITE;
+    };
+    std::vector<GuidePoint> m_guide;   ///< the race sets it every frame (empty: none), drawn under the cars
+
     /** @brief The sponsor's sticker on a car's roof (text "" none). */
     void setSticker( const std::string &text, Color back, Color ink, int car );
 
@@ -170,6 +178,13 @@ public:
 
     /** @return the shared Forge (models built once for every renderer) */
     static Forge &forge();
+
+    /** @brief The stands, for the race's sound: how many, where each stands, how far it reaches. */
+    int     standCount() const { return (int)m_stands.size(); }
+    Vector2 standAt( int k ) const { return m_stands[(size_t)k].m_at; }
+    float   standReach( int k ) const { return m_stands[(size_t)k].m_r; }
+    /** @return the stands' joy after a finish (1 just then, fading over eight seconds) */
+    float   joy() const { return m_joy; }
 
 private:
     struct Chunk
@@ -325,6 +340,13 @@ private:
     void skyLights( const World &w );
     void drawFlyer( bool shadow );
     void drawBolt();
+    void drawBeam();                         ///< the helicopter's searchlight as a cone of light in the air (night)
+    /** @brief A mesh lit like the cars and props (the helicopter in the picture: its colours' alpha is their glow). */
+    void drawLit( const Mesh &m, Matrix xf );
+    void drawTow( const World &w, bool shadow );   ///< Graves & Sons' hook and cable over a wreck; the marshals
+    float m_tiltHalf = 0.2f;                 ///< the sharp band's half height (wider while a stand is in view)
+    Vector3 m_beamFrom = { 0, 0, 0 }, m_beamTo = { 0, 0, 0 };   ///< the searchlight this frame (skyLights)
+    float   m_beamOn = 0.0f;
     void bakeContact();
     void setContactUniforms( Shader &s, float up );
     struct Grade

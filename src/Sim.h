@@ -116,6 +116,9 @@ struct Car
     float m_hp = 100.0f;
     bool  m_wrecked = false;
     float m_wreckTime = 0.0f;
+    float   m_tow = -1.0f;          ///< Graves & Sons collect the wreck: seconds since their hook came down (< 0 not yet)
+    Vector2 m_towAt = { 0, 0 };     ///< where the wreck lay when the hook took it
+    bool    m_gone = false;         ///< lifted away: no longer on the track (its m_pos far off)
     int   m_hint = -1;            ///< the track sample it was near
     float m_s = 0.0f;             ///< where along the lap
     float m_dist = 0.0f;          ///< how far raced (laps x length + s, from the start line)
@@ -141,6 +144,7 @@ struct Car
     float    m_rpm = 0.0f, m_load = 0.0f, m_skid = 0.0f, m_scrape = 0.0f, m_steerVis = 0.0f, m_wheelTurn = 0.0f;
     float    m_lean = 0.0f, m_pitch = 0.0f, m_hitFlash = 0.0f;
     float    m_lock = 0.0f;     ///< the steering held, smoothed over a quarter of a second (0..1): what scrubs
+    float    m_gripUse = 0.0f;  ///< how much of the tyres' side grip the turn asks (1: they start to slide; smoothed)
     float    m_throttle = 0.0f, m_brakeLight = 0.0f, m_reverseLight = 0.0f;
     int      m_gear = 1;
     SurfaceE m_surface = SurfaceE::ASPHALT;
@@ -313,6 +317,8 @@ public:
      */
     void drive( int i, const CarInput &in );
 
+    static constexpr float TowAfter = 10.0f;    ///< seconds a wreck lies before Graves & Sons' hook comes (not in a derby)
+    static constexpr float TowLift = 3.5f;      ///< seconds from the hook to the wreck leaving the ground
     static constexpr float ResetWait = 5.0f;    ///< seconds between two resets of a car
     static constexpr float ResetGhost = 2.5f;   ///< seconds a reset car passes through the others
 
@@ -324,6 +330,16 @@ public:
      * @return false when not now (the countdown, wrecked, finished, too soon after the last one)
      */
     bool resetCar( int i );
+
+    /**
+     * @brief The speed a car may have at every sample of the lap on the racing line: what each bend's curvature
+     *        allows its tyres' side grip (and the ground there, and the rain), braked down to in time for the next
+     *        one (the racing line's colours on the road).
+     * @param[in]  i       the car
+     * @param[in]  corner  the share of the side grip to plan with
+     * @param[out] plan    m/s per Track sample
+     */
+    void speedPlan( int i, float corner, std::vector<float> &plan ) const;
 
     const Track          *m_track = nullptr;
     ModeE                 m_mode = ModeE::RACE;

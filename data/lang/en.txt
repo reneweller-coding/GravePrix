@@ -457,3 +457,92 @@ Showdown ab %d Punkten unter den ersten %d  ·  Saisontag %d/%d, danach beginnt 
 # The miniature look (RenderLook.cpp)
 Miniatur-Look: = Miniature look:
 Graves & Sons – Ihr letzter Boxenstopp = Graves & Sons – your last pit stop
+
+# The options' tabs and their help, the new options (App.cpp)
+Bild = Picture
+Ton = Sound
+Anzeige = Display
+Fahren = Driving
+LB / RB: Reiter = LB / RB: tabs
+Q / E: Reiter = Q / E: tabs
+automatisch = automatic
+Schnell rechnet das Bild kleiner und lässt Schatten und Spiegelungen weg. = Fast draws a smaller picture and leaves out shadows and reflections.
+Oben und unten unscharf, wie bei einer Modellbahn. Automatisch: aus, sobald die Bildrate nicht mehr hält. = The top and bottom blurred, like a model railway. Automatic: off as soon as the frame rate no longer holds.
+Leistungstest = Benchmark
+Fährt eine halbe Minute über die schwerste Strecke, misst die Bildrate mit und ohne Miniatur-Look und stellt beides passend ein. = Drives the heaviest track for half a minute, measures the frame rate with and without the miniature look and sets both to suit.
+Motoren, Waffen, das Publikum. = Engines, weapons, the crowd.
+Was die Rivalen und Ricky Rattle im Rennen sagen. = What the rivals and Ricky Rattle say in a race.
+Eine Tafel zeigt die nächste Kurve: ihre Form, wie weit und wie scharf (1 bis 4). = A board shows the next bend: its shape, how far and how sharp (1 to 4).
+Ideallinie: = Racing line:
+Die Linie auf der Straße: grün Vollgas, gelb vom Gas, rot bremsen. = The line on the road: green full throttle, yellow lift off, red brake.
+Wiederholung im Ziel: = Replay at the finish:
+Nach dem Rennen der Zieleinlauf noch einmal in Zeitlupe, aus Kameras an der Strecke. Eingabe überspringt. = After the race the finish once more in slow motion, from cameras at the track. Enter skips it.
+Hält den Wagen in der Spur. Mit Bremshilfe geht er vor zu schnellen Kurven selbst vom Gas. = Keeps the car on its line. With brake help it lifts off by itself before bends that are too fast.
+Spieltempo: = Game speed:
+Das ganze Rennen läuft langsamer ab: mehr Zeit für jede Kurve. Bestzeiten zählen dann nicht. = The whole race runs slower: more time for every bend. Best times do not count then.
+Reifen warnen: = Tyre warning:
+Kurz bevor die Reifen rutschen, singen sie, und das Pad brummt leise. = Just before the tyres slide they sing, and the pad hums softly.
+Stick zeigt Richtung: Der Wagen fährt dahin, wohin der Stick zeigt. = Stick points the way: the car drives where the stick points.
+Fahrschule = Driving School
+Zur Fahrschule = To the driving school
+Drei kurze Übungen für Lenkung und Bremse, mit Medaillen. = Three short exercises for steering and braking, with medals.
+Tasten und Pad-Knöpfe neu belegen. = Rebind keys and pad buttons.
+
+# Two players (App.cpp, AppRace.cpp)
+Spieler: = Players:
+1  (zu zweit: Rennen und Derby) = 1  (two players: race and derby)
+2  (Spieler 2 braucht ein Pad) = 2  (player 2 needs a pad)
+2  (geteilter Bildschirm) = 2  (split screen)
+Spieler 1 = Player 1
+Spieler 2 = Player 2
+%s %d  ·  Raketen %d  ·  Lachgas %d = %s %d  ·  rockets %d  ·  nitro %d
+
+# The race: Graves & Sons collect a wreck, the replay (AppRace.cpp)
+Graves & Sons holen %s ab = Graves & Sons collect %s
+WIEDERHOLUNG = REPLAY
+·  verschrottet = ·  wrecked
+·  im Ziel = ·  finished
+A überspringen = A skip
+Eingabe überspringen = Enter skip
+
+# The driving school (AppSchool.cpp)
+Slalom = Slalom
+Haarnadeln = Hairpins
+Kurvenkombination = Esses
+Fahr durch jedes Tor aus zwei Hütchen. Ein verpasstes Tor kostet 2 Sekunden, ein umgefahrenes Hütchen eine. = Drive through every gate of two cones. A missed gate costs 2 seconds, a cone knocked over one.
+Bremse, solange die Linie rot ist, lenk am Ende der Bremsung ein und gib am Scheitel wieder Gas. = Brake while the line is red, turn in as the braking ends and power on at the apex.
+Lenk früh und sanft und folge der Linie. Wer zu spät einlenkt, verliert die nächste Kurve. = Steer early and smoothly and follow the line. Turn in too late and you lose the next bend.
+keine Medaille = no medal
+Bronze = Bronze
+Silber = Silver
+Gold = Gold
+Drei Übungen auf dem Sperrgebiet. Die Ideallinie ist an, die Uhr läuft. = Three exercises in the Restricted Zone. The racing line is on, the clock is running.
+·   Bestzeit %.1f s = ·   best %.1f s
+A starten   ·   B zurück = A start   ·   B back
+Eingabe starten   ·   Esc zurück = Enter start   ·   Esc back
+Tor verpasst: +2 s = Gate missed: +2 s
+Hütchen umgefahren: +1 s = Cone knocked over: +1 s
+Fahrschule  ·  %s = Driving School  ·  %s
+Tore %d von %d  ·  verpasst %d  ·  Hütchen %d  ·  Strafzeit +%.0f s = Gates %d of %d  ·  missed %d  ·  cones %d  ·  penalty +%.0f s
+Gold %g s  ·  Silber %g s  ·  Bronze %g s = Gold %g s  ·  Silver %g s  ·  Bronze %g s
+Fahrschule: %s = Driving School: %s
+Übung abgebrochen = Exercise abandoned
+Die Uhr ist stehen geblieben. = The clock has stopped.
+Ohne Ziel keine Zeit. = No finish, no time.
+Fahrzeit = Driving time
+Tore verpasst: %d = Gates missed: %d
+Hütchen umgefahren: %d = Cones knocked over: %d
+Neue Bestzeit! = New best time!
+
+# The benchmark (AppSchool.cpp)
+Leistungstest  ·  mit Miniatur-Look = Benchmark  ·  with the miniature look
+Leistungstest  ·  ohne Miniatur-Look = Benchmark  ·  without the miniature look
+%.0f Bilder pro Sekunde = %.0f frames per second
+Die Bildrate hält auch mit dem Miniatur-Look. Er bleibt an. = The frame rate holds even with the miniature look. It stays on.
+Ohne den Miniatur-Look hält die Bildrate. Er ist jetzt aus (Einstellung: automatisch). = Without the miniature look the frame rate holds. It is off now (setting: automatic).
+Auch ohne den Miniatur-Look zu langsam: Er ist aus, und die Grafik steht eine Stufe tiefer. = Too slow even without the miniature look: it is off, and the graphics are one step lower.
+Auch ohne den Miniatur-Look zu langsam. Er ist aus; die Grafik steht schon auf Schnell. = Too slow even without the miniature look. It is off; the graphics are already on Fast.
+Mit Miniatur-Look:  %.0f Bilder pro Sekunde, die langsamsten 5 %%: %.0f = With the miniature look:  %.0f frames per second, the slowest 5 %%: %.0f
+Ohne Miniatur-Look:  %.0f Bilder pro Sekunde, die langsamsten 5 %%: %.0f = Without the miniature look:  %.0f frames per second, the slowest 5 %%: %.0f
+Ziel: %.0f Bilder pro Sekunde = Target: %.0f frames per second
+Miniatur-Look aus: die Bildrate hielt nicht = Miniature look off: the frame rate did not hold

@@ -802,8 +802,13 @@ void App::newsScreen()
         float size = i == 0 ? 52 : 34;
         // The front page's photo beside its text.
         float textW = colW;
+        static const char *raceEvents[] = { "player_win", "player_podium", "showdown_won", "boss_won", "record", "player_spree",
+                                            "player_clean", "player_lose", "showdown_lost", "rival_dead", "feud_end" };
+        bool fromRace = false;
+        for ( const char *e : raceEvents ) fromRace = fromRace || heads[0]->m_event == e;
+        const Texture2D *own = i == 0 && fromRace && m_racePhoto.id && m_racePhotoDay == m_career.m_day ? &m_racePhoto : nullptr;
         if ( i == 0 )
-            if ( const Texture2D *p = photo( heads[0]->m_event, (uint32_t)heads[0]->m_head.size() ) )
+            if ( const Texture2D *p = own ? own : photo( heads[0]->m_event, (uint32_t)heads[0]->m_head.size() ) )
             {
                 float pw = colW * 0.36f, ph = pw * p->height / std::max( 1, p->width );
                 Rectangle at = { 80 * k + colW - pw, y + 8 * k, pw, ph };

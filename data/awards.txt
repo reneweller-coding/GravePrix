@@ -261,3 +261,7 @@ award old_school
 award mourner
   title "Trauergast" title_en "Mourner"
   desc "Besuche den Ehrenfriedhof, wenn dort jemand liegt." desc_en "Visit the cemetery once someone lies there."
+
+award school_gold
+  title "Musterschüler" title_en "Model Pupil"
+  desc "Hol in allen drei Übungen der Fahrschule Gold." desc_en "Win gold in all three driving school exercises."

@@ -511,6 +511,120 @@ handbrake in a hairpin, shooting three barrels, a mine, nitro, a rocket, the lin
 `tut_8`, `tut_done`), a panel shows the step and its key. Passing it earns the licence (`Records::m_tutorial`). It
 heads the paddock's list on a career's first day and is on the title screen.
 
+## The driving school (`AppSchool.cpp`)
+
+From the options' driving tab, a screen of its own (`ScreenE::SCHOOL`): three exercises on the proving ground
+(`data/tracks/school.txt`, `test_` names: no career, quick race or menu backdrop takes them), one lap each, alone, a
+Rustbucket with engine, tyres and armour at level 2 and no weapons, the player's assist; the racing line is on and
+the game speed is ignored (`App::m_schoolOn`). A career is set aside meanwhile (`m_schoolCareer`).
+
+- **Slalom** (`test_school_slalom`): nine gates on the first straight, 30 m apart, their middles at 0.45 of the half
+  width left and right in turn, 4.6 m wide. A track line `gate at= lat= w=` makes a `GateSpot` and two cones in
+  `Track::m_loose` (they fly when hit). A gate counts as passed when the car's distance reaches it, by its offset from
+  the centre then (`App::schoolStep`); a missed gate costs 2 s, a cone knocked over (`EvE::LOOSE`, "cone") 1 s; gates
+  not reached at the finish count as missed.
+- **Hairpins** (`test_school_hairpin`): two 260 m straights joined by hairpins of 12.5 m.
+- **Esses** (`test_school_esses`): two strings of left 60°, right 120°, left 60° (radius 30, then 20).
+
+`school bronze= silver= gold=` gives the medals' times (seconds with the penalties), set from the computer drivers'
+best run on a free road (`--sim TRACK --laps 1 --car rustbucket`: 28.3, 22.6, 37.1 s) with a little for weaving: gold
+about 6 % above it, silver 12-15 %, bronze 28-30 %. The best time per exercise goes into `Records::m_bestLap`, the
+best medal into `Records::m_count["school_<track>"]`; three golds earn `school_gold`. A time trial's ghost (the best
+lap) runs along. App test word `school N` starts exercise N.
+
+## The racing line, the tyres' warning, the game speed
+
+**The racing line** (option "Ideallinie", off by default; always on in the driving school): `World::speedPlan` gives
+every sample of the lap the speed the car may have there: the racing line's curvature against 0.95 of its tyres' side
+grip on the ground there (and the rain), braked back from the next bend at its brakes on that ground (two passes
+round the lap), as the computer drivers' `cornerSpeed` plans it. `App::racingLine` puts points every 2 m from 4 m
+ahead of the nose to 4 s at the speed (60-170 m), each coloured by the car's speed now against the plan there: 1 m/s
+under it and more green, up to 1 m/s over yellow, 3 m/s over and more red (the plan brakes in time, so red starts
+where the braking must start). The renderer (`Renderer::m_guide`, `drawDecals`) draws a soft band 1.4 m wide under
+the cars, fading in near the car and out towards its end; the red-green palette draws blue, pale yellow and orange.
+
+**The tyres' warning** (option "Reifen warnen", on): the physics keeps `Car::m_gripUse`, the larger of the slip's
+share of the grip (it squeals from 0.9, so divided by 0.9) and the turn the steering asks against what the tyres carry
+(it scrubs from 1), smoothed over a tenth of a second. From 0.78 to 0.97 a thin whine fades in (`LoopE::TYRE_SING`,
+1640 Hz, higher as it rises) and the pad hums a little; above 1 the squeal takes over. Not off the road.
+
+**Game speed** (option "Spieltempo", 70-100 % in steps of 5): the race steps slower (`App::race` feeds the steps
+`dt x speed`; the renderer's effects too), the screen and the camera keep their pace. Best laps and ghosts are kept
+only at 100 %.
+
+## The options' tabs
+
+`App::options` builds its rows per tab (Bild, Ton, Anzeige, Fahren; Q/E, PageUp/PageDown, LB/RB or the mouse on the
+tab's name): a text, what left/right or accept does to it, a line of help shown in a panel beside the list, and
+whether the renderer, the sound or the text follow (`applySettings`). Buttons: the driving school, the controls, the
+benchmark; the last row of every tab goes back. The tab stays when the controls are left (`m_optTab`).
+
+## The replay
+
+`App::raceStep` keeps the last eight seconds of the race (480 whole `World` steps in a ring, 15-25 MB) while the option
+"Wiederholung im Ziel" is on (not in the school or the test drive); 1.5 s after a human's finish or wreck (in a derby
+after any wreck) it stops, so a long run-out cannot push the moment out, and a later moment starts it again. When the race ends `App::startReplay` looks for the
+moment: a human's finish, else a human's wreck, else the winner's finish, in a derby the last wreck; the clip runs
+from 2.5 s before it to 1.5 s after. `App::replay` plays it at 0.35 of the speed: each step's events go to the
+renderer once (the sparks, the confetti and the fireworks come again), three cameras at the track cut over it (one
+waiting where the moment happens at 30 m, one low behind the car at 20 m, one wide above the line rising from 36 m),
+bars at the top and the bottom, "WIEDERHOLUNG" with a blinking red dot, who it is; the applause or a slowed-down
+explosion at the moment. Enter, Esc or a click skip it. With two players it fills the screen. The app tests skip it
+unless the script says `replayon`.
+
+## Two players on one screen
+
+The quick race's row "Spieler: 1/2" (races and derbies; the second player needs a pad: with one pad the first player
+keeps the keys, with two the first takes the first pad and the keys, `Input::route`). The second human is the same car
+in another paint (`scheme( colour + 5 )`) beside the first on the grid (`App::m_player2`). Two renderers half the
+screen wide each (`App::splitViews`; `applySettings` keeps them split while racing), two cameras (`App::leadCamera`
+for each player: 12 % higher, the lead across the half 0.55 of the full one), each half its own display
+(`App::splitHud`: place, lap and time, armour, ammunition, gear, speed, a word when finished or wrecked), the map, the
+countdown and the announcer shared in the middle (`App::miniMap`). The pace notes, the shouts and the automatic
+miniature look's watch stay with one player. Both engines are heard close; the sound's ear is the first player's
+camera. App test word `split` (two players without a pad; `drive` gives both cars to the computer).
+
+## Graves & Sons collect the wrecks
+
+Not in a derby (its wrecks are the arena's furniture): `World::TowAfter` (10 s) after a car is wrecked
+`Car::m_tow` starts; the wreck stays where it lies (`m_towAt`). After `World::TowLift` (3.5 s) it leaves the ground
+(`m_gone`: its position far away, so nothing on the track meets it again; the computer drivers look past it). The
+pictures (`Renderer::drawTow`, `drawCar`): the hook (`tow_hook`, a black block with the firm's brass plate) comes down
+from above the picture on its cable in 2.5 s, sits on the roof, then rises with the wreck (1.8 t² + 0.6 t metres,
+turning slowly) out of the picture. From the wreck until it is gone two marshals (`fig_marshal`, `flag_yellow`) stand
+at the shoulder on its side, one beside it and one 30 m before it, waving yellow flags. The race says "Graves & Sons
+holen X ab" in the feed. Cars on the track: in `--simall --difficulty 2` the computer drivers stuck 36 times instead
+of 48, walls 365 instead of 394, 31.8 m/s instead of 31.4 (45 tracks). `--shot ... --tow SECONDS` wrecks the car
+nearest to the view and shows the hook that far in.
+
+## The crowd's voices
+
+`Renderer::standCount/standAt/standReach` and `joy` tell the race where the stands are. `App::crowdSound`: the roar
+of the nearest stand (`LoopE::CROWD`: noise through the vowels' formants, single shouts and finger whistles in it,
+10 s stereo), by its distance from the camera, louder while the stands cheer after a finish; a cheer
+(`SfxE::CHEER`) when a car faster than 58 km/h passes within 16 m of a stand near the camera (each stand at most every
+7 s); a gasp (`SfxE::GASP`, many voices' "oooh") at a crash harder than 14 or a wreck within 40 m of a stand (at most
+every 2 s); applause (`SfxE::APPLAUSE`) at the player's finish where there are stands. All synthesised (Audio.cpp:
+`crowdShout`, `fingerWhistle`, `crowdRoar`, `claps`).
+
+## The tabloid's photo
+
+On the career's results screen, 1.4 s in (the confetti in the air; at the latest when the screen is left),
+`App::takePhoto` copies the podium (3:2 round its middle), turns it into newsprint (grey, harder, a little grain, the paper's tint) and keeps it for the day. The tabloid's front
+page shows it instead of an archive picture when its top story is that race's (a win, a podium, a showdown, a record,
+a spree, a clean win, a loss, a rival's death or a feud's end).
+
+## The benchmark and the automatic miniature look
+
+The miniature look's setting has three values (`Settings::m_miniature`): off, on, automatic (the default). Automatic
+watches the frame rate in a race (`App::watchFrameRate`, from 6 s in, one player): in windows of five seconds, when
+in two in a row more than a quarter of the frames came later than 1.3 frames of the target (the frame limit, 60 when
+unlimited), the look goes off for good (`Settings::m_lookDropped`, until the option is changed) and the feed says so.
+The benchmark (picture tab, `ScreenE::BENCH`): `est_finale` (storm, rain, lightning, stands) with six computer
+drivers, the frame limit lifted; 2 s to settle and 8 s measured with the look, the same without. The look stays when
+the average holds 97 % of the target and the slowest 5 % of the frames 80 % (a hitch or two must not decide); else it goes (automatic, dropped), and
+when even without it the frame rate does not hold the graphics go one step down.
+
 ## Seeing the road, and getting back on it
 
 The user (13.11.2026): "Die Kurvensteuerung ist immer noch unterirdisch." One reason was that the bends came into
@@ -641,10 +755,12 @@ the darks and the lights (the colour is a tint: its brightness is taken out, onl
 their darks: keep it near 1.03 there) and `vignette` (the corners' darkening). Without the line the old film's
 grade: darks a little cooler, lights a little warmer.
 
-**Miniature look** (`Settings::m_miniature`, the option "Miniatur-Look", on by default): a tilt-shift lens. The post
-pass shrinks the picture to a half and a quarter (16-bit, before the tone curve) and blends towards them above and
-below a sharp band 0.4 of the picture high, which follows the player's car (the camera looks ahead of it); with the
-blur on, saturation x1.06 and contrast x1.02. Quality 0 (the Deck) has only the half-size step and 0.8 of the blur.
+**Miniature look** (`Settings::m_miniature`, the option "Miniatur-Look": off, on, automatic, the default; see "The
+benchmark and the automatic miniature look"): a tilt-shift lens. The post pass shrinks the picture to a half and a
+quarter (16-bit, before the tone curve) and blends towards them above and below a sharp band 0.4 of the picture high,
+which follows the player's car (the camera looks ahead of it); a stand in the picture widens the band to take it in
+(at most 0.9 of the picture, gliding; `Renderer::m_tiltHalf`), so its people are seen; with the blur on, saturation
+x1.06 and contrast x1.02. Quality 0 (the Deck) has only the half-size step and 0.8 of the blur.
 The garage's showroom never blurs.
 
 **Things flying over the track** (`Renderer::sky`): after the first 10 s of a race, every 35–75 s, the Graves & Sons
@@ -653,9 +769,14 @@ the camera and are never drawn in the picture, only into the shadow map: a direc
 wherever along the sun's ray a thing hangs, so they are drawn low on that ray (30–34 m above the shadow, inside the
 light's depth range). The airship (48 m) drifts east or west at 7.5 m/s across the track 160 m ahead of the car the
 camera follows, towing a banner whose letters ("GRAVES & SONS", the interface font's pixels as flat quads, laid
-west to east so the shadow reads) lie flat; the helicopter follows that car for 11 s, its shadow crossing over it
-from one side to the other, the four blades turning. At night its searchlight (a spot from the moon's side, at
-least 55° high) is on the car. `Renderer::m_hum` gives the race the loudness of `LoopE::ROTOR` and `LoopE::AIRSHIP`
+west to east so the shadow reads) lie flat; the helicopter films that car for 11 s: in from one side of the picture,
+near that edge for most of the time (0.85 of the way from the middle, cut by the frame a little; it keeps to the
+view, as the camera leads the car off the middle), out the same side, the four blades turning. Unlike the airship it is drawn in the picture
+too (`drawFlyer( false )`, lit like the cars, its red light blinking at night): hanging 24 m straight above that point
+(not on the sun's ray: with a low moon it would leave the picture; its shadow falls where the light puts it), it is
+seen at the picture's edge. At night its searchlight (a spot from the helicopter itself, 14° wide) is on the car, and the
+beam shows in the air as a cone of additive light (`drawBeam`: faint on a clear night, bright in rain, storm and
+fog). `Renderer::m_hum` gives the race the loudness of `LoopE::ROTOR` and `LoopE::AIRSHIP`
 (by the shadow's distance from the view, Doppler while it comes nearer).
 
 **Lightning** (weather `storm`): every 6–16 s a flash of a stroke and two return strokes (`flashCurve`, 1.2 s). The
@@ -859,7 +980,8 @@ switches to the venue's hot take (`tools/music_hot.json`). All three run on the 
 - `--trackshot NAME FILE.png`, `--trackshots DIR` — maps (CPU only, no window).
 - `--gallery FILE.png [prefix]` — the model sheet, drawn on the CPU (no window, no GPU; `--yaw DEG --cell N --cols N`).
 - `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place; `--sky 0|1|2` puts the
-  airship, the helicopter or a lightning strike into it, `--miniature 0` turns the tilt-shift blur off.
+  airship, the helicopter or a lightning strike into it, `--miniature 0` turns the tilt-shift blur off, `--tow SECONDS`
+  wrecks the car nearest to the view and shows Graves & Sons' hook that far in.
 - `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window (`--peaceful`, `--car NAME`,
   `--assist [LEVEL]`, `--hands 0..1`, `--novice 0..1`, `--flatout`: every driver alike); the lines count stuck cars and
   wall hits, `--simall` ends with the totals.

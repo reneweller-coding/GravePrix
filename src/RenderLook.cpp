@@ -24,6 +24,8 @@ namespace
 
 // Render.cpp's particle textures (its TexE): smoke and a spark.
 constexpr int TexSmoke = 1, TexSpark = 2;
+// The news helicopter's height (metres): low enough to be seen at the picture's edge, high above the stands.
+constexpr float HeliHeight = 24.0f;
 
 // ---------------------------------------------------------------------------------------------------- shaders
 
@@ -310,6 +312,7 @@ void Renderer::lookTrack()
                 m_grade.m_vignette = l.num( "vignette", m_grade.m_vignette );
             }
     m_tiltCentre = -1.0f;
+    m_tiltHalf = 0.2f;
     m_flyer = Flyer();
     m_flyerTimer = m_rng.range( 14.0f, 30.0f );
     m_bolt = Bolt();
@@ -349,7 +352,29 @@ void Renderer::lookFrame( const World &w )
         }
     Vector2 p = project( { at.x, 0.6f, at.y } );
     float   v = clampf( 1.0f - p.y / (float)m_h, 0.25f, 0.75f );
-    m_tiltCentre = m_tiltCentre < 0 ? v : m_tiltCentre + ( v - m_tiltCentre ) * 0.15f;
+    // A stand in the picture stays sharp: the band widens to take it in (its people are worth seeing).
+    float lo = v - 0.2f, hi = v + 0.2f;
+    for ( const Stand &st : m_stands )
+    {
+        if ( dist2( st.m_at, m_view.m_focus ) > ( m_view.m_height * 1.4f + st.m_r ) * ( m_view.m_height * 1.4f + st.m_r ) ) continue;
+        float sLo = 2.0f, sHi = -1.0f;
+        bool  seen = false;
+        for ( float dz : { -st.m_r * 0.7f, 0.0f, st.m_r * 0.7f } )
+        {
+            Vector2 q = project( { st.m_at.x, 2.5f, st.m_at.y + dz } );
+            if ( q.x < -40 || q.x > m_w + 40 ) continue;
+            float sv = 1.0f - q.y / (float)m_h;
+            seen = seen || ( sv > -0.05f && sv < 1.05f );
+            sLo = std::min( sLo, sv );
+            sHi = std::max( sHi, sv );
+        }
+        if ( !seen ) continue;
+        lo = std::min( lo, clampf( sLo - 0.04f, 0.05f, 0.95f ) );
+        hi = std::max( hi, clampf( sHi + 0.04f, 0.05f, 0.95f ) );
+    }
+    float centre = clampf( ( lo + hi ) * 0.5f, 0.25f, 0.75f ), half = clampf( ( hi - lo ) * 0.5f, 0.2f, 0.45f );
+    m_tiltCentre = m_tiltCentre < 0 ? centre : m_tiltCentre + ( centre - m_tiltCentre ) * 0.08f;
+    m_tiltHalf += ( half - m_tiltHalf ) * 0.08f;
 }
 
 void Renderer::miniaturePasses( bool tilt )
@@ -376,7 +401,7 @@ void Renderer::setPostUniforms( Shader &f, bool tilt )
     // The Deck's quality: the half-size picture only, a little less blur.
     const RenderTexture2D &far = m_blur[1].id ? m_blur[1] : m_blur[0];
     float   strength = !on ? 0.0f : m_blur[1].id ? 1.0f : 0.8f;
-    set3( "tilt", { strength, m_tiltCentre < 0 ? 0.45f : m_tiltCentre, 0.2f } );
+    set3( "tilt", { strength, m_tiltCentre < 0 ? 0.45f : m_tiltCentre, m_tiltHalf } );
     if ( on )
     {
         SetShaderValueTexture( f, GetShaderLocation( f, "blurTex" ), m_blur[0].texture );
@@ -463,13 +488,19 @@ void Renderer::strike( bool inView )
 namespace
 {
 
-/** @return where the helicopter's shadow wants to be at u (0..1) of its pass: from one side of the car to the other,
- *          slowest over it, a little ahead (it lags behind) */
-Vector2 heliGoal( const Car &c, float u, float side, float t )
+/**
+ * @return where the helicopter wants to hang at u (0..1) of its pass: in from one side of the picture, then near that
+ *         edge for most of the pass (it is seen, filming the car with its lens and at night its searchlight), out the
+ *         same side. It keeps to the view, not to the car: the camera leads the car off the middle, and a helicopter
+ *         beside the car would leave the picture. At 24 m up, 0.77 x (height - 20) m beside the focus is the edge; it
+ *         hangs at 0.85 of that, cut by the frame a little.
+ */
+Vector2 heliGoal( Vector2 focus, float height, float u, float side, float t )
 {
-    float   x = 2.0f * u - 1.0f, across = 48.0f * ( 0.6f * x * x * x + 0.4f * x );
-    Vector2 goal = add( add( c.m_pos, mul( c.right(), across * side ) ), mul( c.fwd(), 6.0f * std::sin( t * 0.8f ) ) );
-    return add( goal, mul( c.m_vel, 0.4f ) );
+    float x = 2.0f * u - 1.0f, x2 = x * x;
+    float edge = 0.77f * std::max( 10.0f, height - 20.0f );
+    float across = edge * 0.85f + 70.0f * x2 * x2 * x2;
+    return { focus.x + across * side + 2.5f * std::sin( t * 0.9f ), focus.y + height * 0.12f + 4.0f * std::sin( t * 0.6f ) };
 }
 
 }   // namespace
@@ -505,10 +536,10 @@ void Renderer::spawnFlyer( const World &w, int kind, float at )
     }
     else
     {
-        // The helicopter films the car: its shadow comes in from one side, crosses over the car, leaves.
+        // The helicopter films the car: in from one side of the picture, near that edge, out again.
         f.m_life = 11.0f;
         f.m_t = at * f.m_life;
-        f.m_ground = heliGoal( w.m_cars[car], at, f.m_side, f.m_t );
+        f.m_ground = heliGoal( focus, m_view.m_height, at, f.m_side, f.m_t );
         f.m_head = w.m_cars[car].m_head;
     }
 }
@@ -553,8 +584,7 @@ void Renderer::sky( const World &w, float dt )
         f.m_ground = { lerpf( f.m_from.x, f.m_to.x, u ), lerpf( f.m_from.y, f.m_to.y, u ) };
     else
     {
-        const Car &c = w.m_cars[std::clamp( f.m_car, 0, (int)w.m_cars.size() - 1 )];
-        Vector2    goal = heliGoal( c, u, f.m_side, f.m_t );
+        Vector2 goal = heliGoal( focus, m_view.m_height, u, f.m_side, f.m_t );
         f.m_ground = add( f.m_ground, mul( sub( goal, f.m_ground ), std::min( 1.0f, dt * 2.5f ) ) );
         f.m_rotor += dt * 2.0f * Pi * 4.3f;
     }
@@ -576,20 +606,21 @@ void Renderer::skyLights( const World &w )
 {
     // At night the news helicopter shines a searchlight on the car it films (from the moon's side, where it hangs).
     const Flyer &f = m_flyer;
+    m_beamOn = 0.0f;
     if ( !m_dark || f.m_kind != 1 || f.m_car < 0 || f.m_car >= (int)w.m_cars.size() || (int)m_spotPos.size() >= 8 )
         return;
     float   fade = clampf( std::min( f.m_t / 1.5f, ( f.m_life - f.m_t ) / 1.5f ), 0.0f, 1.0f );
     Vector2 c = w.m_cars[f.m_car].m_pos;
     Vector2 wob = { 3.0f * std::sin( m_time * 0.9f ), 3.0f * std::cos( m_time * 0.7f ) };
     Vector3 at = { c.x + wob.x, 0.0f, c.y + wob.y };
-    Vector3 toSun = Vector3Negate( m_sunDir );
-    Vector2 hz = norm( { toSun.x, toSun.z } );
-    float   el = std::max( std::asin( clampf( toSun.y, 0.0f, 1.0f ) ), 55.0f * Deg );
-    Vector3 back = { hz.x * std::cos( el ), std::sin( el ), hz.y * std::cos( el ) };
-    Vector3 from = Vector3Add( at, Vector3Scale( back, 26.0f ) );
-    Vector3 dir = Vector3Negate( back );
+    // From the helicopter itself (beside the car, at the picture's edge), so its beam in the air meets the spot.
+    Vector3 from = { f.m_ground.x, HeliHeight - 1.2f, f.m_ground.y };
+    Vector3 dir = Vector3Normalize( Vector3Subtract( at, from ) );
+    m_beamFrom = from;
+    m_beamTo = at;
+    m_beamOn = fade;
     m_spotPos.push_back( { from.x, from.y, from.z, 60.0f } );
-    m_spotDir.push_back( { dir.x, dir.y, dir.z, std::cos( 22.0f * Deg ) } );
+    m_spotDir.push_back( { dir.x, dir.y, dir.z, std::cos( 14.0f * Deg ) } );
     m_spotCol.push_back( { 0.92f, 0.96f, 1.0f, 3.5f * fade } );   // brighter and the wet streets turn white
 }
 
@@ -598,9 +629,33 @@ void Renderer::drawFlyer( bool shadow )
     // Only the shadow: the flyers are far above the camera. A directional light's shadow is the same wherever along
     // the sun's ray the thing hangs, so it is drawn low on that ray (inside the light's depth range), above the roofs.
     const Flyer &f = m_flyer;
-    if ( !shadow || f.m_kind < 0 ) return;
+    if ( f.m_kind < 0 ) return;
     Vector3 toSun = Vector3Negate( m_sunDir );
     if ( toSun.y < 0.08f ) return;
+    if ( !shadow )
+    {
+        // The helicopter is seen too: it hangs beside the car, at the picture's edge; at night its lights blink.
+        if ( f.m_kind != 1 ) return;
+        // Lit like everything else (the plain material would blend it away: its colours' alpha is their glow).
+        Vector3 at = { f.m_ground.x, HeliHeight, f.m_ground.y };
+        Matrix  body = MatrixMultiply( MatrixMultiply( MatrixRotateX( -0.12f ), MatrixRotateY( -f.m_head ) ), MatrixTranslate( at.x, at.y, at.z ) );
+        if ( s_look.m_heli.m_hasBase ) drawLit( s_look.m_heli.m_base, body );
+        if ( s_look.m_rotor.m_hasBase )
+            drawLit( s_look.m_rotor.m_base, MatrixMultiply( MatrixRotateY( f.m_rotor ), MatrixTranslate( at.x, at.y + 1.8f, at.z ) ) );
+        if ( m_dark && std::fmod( m_time, 1.1f ) < 0.12f )
+        {
+            Particle p;
+            p.m_pos = { at.x, at.y - 1.0f, at.z };
+            p.m_size0 = p.m_size1 = 1.4f;
+            p.m_c0 = { 255, 60, 50, 255 };
+            p.m_c1 = { 255, 60, 50, 0 };
+            p.m_life = 0.12f;
+            p.m_tex = 3;   // the flare
+            p.m_boost = 4.0f;
+            spawn( p );
+        }
+        return;
+    }
     auto onRay = [&]( Vector2 g, float height ) {
         float s = std::min( height / toSun.y, 80.0f );
         return Vector3Add( { g.x, 0.0f, g.y }, Vector3Scale( toSun, s ) );
@@ -624,10 +679,47 @@ void Renderer::drawFlyer( bool shadow )
     }
     else
     {
-        Vector3 at = onRay( f.m_ground, 30.0f );
+        // The helicopter is seen, so it hangs where it is drawn: its shadow falls where the light puts it.
+        Vector3 at = { f.m_ground.x, HeliHeight, f.m_ground.y };
         if ( s_look.m_heli.m_hasBase ) put( s_look.m_heli.m_base, at, f.m_head, 0.0f );
         if ( s_look.m_rotor.m_hasBase ) put( s_look.m_rotor.m_base, Vector3Add( at, { 0, 1.8f, 0 } ), f.m_rotor, 0.0f );
     }
+}
+
+void Renderer::drawBeam()
+{
+    // The searchlight in the air: a cone from the helicopter to the spot, faint on a clear night, bright in rain and fog.
+    if ( !m_dark || m_flyer.m_kind != 1 || m_beamOn <= 0.01f ) return;
+    float haze = ( m_venue && ( m_venue->m_weather == "rain" || m_venue->m_weather == "storm" || m_venue->m_weather == "fog" ) ) ? 1.0f : 0.45f;
+    haze = std::min( 1.0f, haze + m_wetRace * 0.5f + m_fogRace * 4.0f );
+    float   a = 0.13f * haze * m_beamOn;
+    Vector3 axis = Vector3Subtract( m_beamTo, m_beamFrom );
+    Vector3 mid = Vector3Scale( Vector3Add( m_beamFrom, m_beamTo ), 0.5f );
+    Vector3 side = Vector3Normalize( Vector3CrossProduct( axis, Vector3Subtract( m_cam.position, mid ) ) );
+    float   r0 = 0.35f, r1 = Vector3Length( axis ) * std::tan( 14.0f * Deg );
+    rlDrawRenderBatchActive();
+    rlDisableDepthMask();
+    BeginBlendMode( BLEND_ADDITIVE );
+    rlSetTexture( rlGetTextureIdDefault() );
+    rlBegin( RL_QUADS );
+    // Two layers: a soft wide one, a brighter core.
+    for ( int layer = 0; layer < 2; ++layer )
+    {
+        float w0 = r0 * ( layer ? 0.5f : 1.0f ), w1 = r1 * ( layer ? 0.45f : 1.0f ), k = a * ( layer ? 1.2f : 0.7f );
+        Vector3 p0 = Vector3Subtract( m_beamFrom, Vector3Scale( side, w0 ) ), p1 = Vector3Add( m_beamFrom, Vector3Scale( side, w0 ) );
+        Vector3 q1 = Vector3Add( m_beamTo, Vector3Scale( side, w1 ) ), q0 = Vector3Subtract( m_beamTo, Vector3Scale( side, w1 ) );
+        rlColor4f( 0.9f * k, 0.95f * k, 1.0f * k, 1.0f );
+        rlVertex3f( p0.x, p0.y, p0.z );
+        rlVertex3f( p1.x, p1.y, p1.z );
+        rlColor4f( 0.9f * k * 0.35f, 0.95f * k * 0.35f, k * 0.35f, 1.0f );
+        rlVertex3f( q1.x, q1.y, q1.z );
+        rlVertex3f( q0.x, q0.y, q0.z );
+    }
+    rlEnd();
+    rlSetTexture( 0 );
+    rlDrawRenderBatchActive();
+    EndBlendMode();
+    rlEnableDepthMask();
 }
 
 void Renderer::drawBolt()

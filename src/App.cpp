@@ -16,6 +16,7 @@
 #include <raylib.h>
 
 #include <algorithm>
+#include <functional>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
@@ -178,13 +179,40 @@ void App::applySettings()
     ui::setTextSize( m_set.m_textSize * ( m_deck ? 1.12f : 1.0f ) );
     ui::setPalette( m_set.m_palette );
     if ( !m_test ) SetTargetFPS( m_set.m_fps );
+    if ( m_racing && m_player2 >= 0 )
+    {
+        splitViews( true );
+        m_view.setTrack( m_track );
+        m_view2.setTrack( m_track );
+        return;
+    }
     int   q = quality();
     float s = QualityScale[q];
     m_view.shutdown();
     m_view.init( std::max( 320, (int)( GetScreenWidth() * s ) ), std::max( 200, (int)( GetScreenHeight() * s ) ), q );
-    m_view.m_miniature = m_set.m_miniature;
+    m_view.m_miniature = miniatureOn();
     if ( m_racing ) m_view.setTrack( m_track );
     else if ( m_atReady ) m_view.setTrack( m_atTrack );
+}
+
+void App::splitViews( bool on )
+{
+    // Two players: each renderer half the screen wide (the same scale as one would be); one: the second goes.
+    if ( !on )
+    {
+        m_view2.shutdown();
+        applySettings();
+        return;
+    }
+    int   q = quality();
+    float s = QualityScale[q];
+    int   w = std::max( 320, (int)( GetScreenWidth() * 0.5f * s ) ), h = std::max( 200, (int)( GetScreenHeight() * s ) );
+    for ( Renderer *r : { &m_view, &m_view2 } )
+    {
+        r->shutdown();
+        r->init( w, h, q );
+        r->m_miniature = miniatureOn();
+    }
 }
 
 void App::saveSettings()
@@ -200,7 +228,9 @@ void App::shutdown()
     if ( m_inCareer ) saveCareer();
     rumble::stop();
     m_view.shutdown();
+    m_view2.shutdown();
     m_show.shutdown();
+    if ( m_racePhoto.id ) UnloadTexture( m_racePhoto );
     m_podium.shutdown();
     for ( auto &p : m_photos )
         if ( p.second.id ) UnloadTexture( p.second );
@@ -247,7 +277,7 @@ void App::testStep()
 {
     static const char *names[] = { "title", "newgame", "hub", "offers", "garage", "market", "shark", "sponsor", "news", "table",
                                    "story", "race", "results", "quick", "options", "controls", "graveyard", "crypt", "slots",
-                                   "credits" };
+                                   "credits", "school", "bench", "replay" };
     // A hard limit: a script that hangs ends by itself.
     if ( ++m_testFrames > 30 * 60 * 8 )
     {
@@ -265,6 +295,7 @@ void App::testStep()
             return;
         }
         m_world.m_cars[m_player].m_setup.m_human = false;
+        if ( m_player2 >= 0 ) m_world.m_cars[m_player2].m_setup.m_human = false;
         m_acc += Dt * 40;
         return;
     }
@@ -315,10 +346,30 @@ void App::testStep()
         m_in.forcePad( true );
         return;
     }
+    if ( w == "split" )
+    {
+        // Two players in the next quick race without a pad (the second driven by the computer with "drive").
+        m_testSplit = true;
+        m_qPlayers = 2;
+        return;
+    }
+    if ( w == "replayon" )
+    {
+        // The replay after the race (the tests skip it otherwise).
+        m_testReplay = true;
+        return;
+    }
+    if ( w == "school" && m_testAt < m_testWords.size() )
+    {
+        // school N: the driving school's exercise N (0..2), a computer driver at the wheel ("race").
+        startSchool( atoi( m_testWords[m_testAt++].c_str() ) );
+        return;
+    }
     if ( w == "drive" )
     {
         // A computer driver takes the player's wheel at the race's own pace (pictures in the middle of a race).
         if ( m_racing ) m_world.m_cars[m_player].m_setup.m_human = false;
+        if ( m_racing && m_player2 >= 0 ) m_world.m_cars[m_player2].m_setup.m_human = false;
         return;
     }
     if ( w == "reset" )
@@ -398,7 +449,7 @@ void App::sound( SfxE s ) { m_audio.play( s, 0, 0.7f ); }
 void App::frame( float dt )
 {
     // Behind the menus a race of computer drivers (not while a race of ours waits behind a story or the options).
-    if ( m_screen != ScreenE::RACE && !m_racing ) attract( dt );
+    if ( m_screen != ScreenE::RACE && m_screen != ScreenE::BENCH && m_screen != ScreenE::REPLAY && !m_racing ) attract( dt );
     BeginDrawing();
     ClearBackground( BLACK );
     switch ( m_screen )
@@ -423,6 +474,9 @@ void App::frame( float dt )
     case ScreenE::CRYPT: crypt(); break;
     case ScreenE::SLOTS: slots(); break;
     case ScreenE::CREDITS: credits(); break;
+    case ScreenE::SCHOOL: school(); break;
+    case ScreenE::BENCH: bench(); break;
+    case ScreenE::REPLAY: replay( dt ); break;
     default: break;
     }
     toasts();
@@ -1223,6 +1277,8 @@ void App::quick()
         auto it = m_rec.m_bestLap.find( td->m_name + ( m_qReverse && !daily ? ":r" : "" ) );
         if ( it != m_rec.m_bestLap.end() ) best = tf( "  (Rekord %.2f s)", it->second );
     }
+    // Two players: races and derbies; the second needs a pad (the first keeps the keys or the first pad).
+    bool twoModes = m_qMode == 0 || m_qMode == 1, twoPads = IsGamepadAvailable( 0 ) || m_testSplit;
     std::string trackLabel = tour    ? std::string( T( "jede Runde eine neue Zufallsstrecke" ) )
                            : daily   ? tf( T( "Tagesstrecke vom %02u.%02u." ), day % 100, day / 100 % 100 ) + best
                            : random  ? tf( T( "Zufallsstrecke %u  (Eingabe: neu würfeln)" ), m_qSeed )
@@ -1238,6 +1294,10 @@ void App::quick()
         T( "Gegner: " ) + std::to_string( m_qMode == 2 || daily ? 0 : m_qCars - 1 ),
         std::string( T( "Runden: " ) ) + ( m_qMode == 1 || tour || daily ? std::string( "-" ) : std::to_string( m_qLaps ) ),
         T( "Schwierigkeit: " ) + g_data.difficulty( m_qDiff ).m_title.get(),
+        std::string( T( "Spieler: " ) ) + ( m_qPlayers == 2 && !twoModes ? std::string( T( "1  (zu zweit: Rennen und Derby)" ) )
+                                           : m_qPlayers == 2 && !twoPads ? std::string( T( "2  (Spieler 2 braucht ein Pad)" ) )
+                                           : m_qPlayers == 2             ? std::string( T( "2  (geteilter Bildschirm)" ) )
+                                                                         : std::string( "1" ) ),
         tour ? tf( T( "Start!   (Rekord: %d Runden)" ), m_rec.m_tourBest ) : std::string( T( "Start!" ) ),
     };
     int pick = menu( items, sel, { 96 * k, 210 * k, 860 * k, 700 * k }, 38 );
@@ -1256,6 +1316,7 @@ void App::quick()
         case 6: m_qCars = std::clamp( m_qCars + dir, 2, 8 ); break;
         case 7: m_qLaps = std::clamp( m_qLaps + dir, 1, 9 ); break;
         case 8: m_qDiff = std::clamp( m_qDiff + dir, 0, (int)g_data.m_difficulties.size() - 1 ); break;
+        case 9: m_qPlayers = 3 - m_qPlayers; break;
         default: break;
         }
     }
@@ -1291,7 +1352,12 @@ void App::quick()
         go( ScreenE::TITLE );
         return;
     }
-    if ( pick != 9 ) return;
+    if ( pick == 9 )
+    {
+        m_qPlayers = 3 - m_qPlayers;
+        sound( SfxE::UI_MOVE );
+    }
+    if ( pick != 10 ) return;
     if ( tour )
     {
         m_tour = 1;
@@ -1305,6 +1371,22 @@ void App::quick()
     auto field = quickField( vd, cd ? cd->m_name : cars[m_qCar], opponents, 3 );
     m_inCareer = false;
     ModeE mode = m_qMode == 1 ? ModeE::DERBY : m_qMode == 2 || daily ? ModeE::TRIAL : ModeE::RACE;
+    m_player2 = -1;
+    if ( m_qPlayers == 2 && twoModes && !daily )
+    {
+        if ( !twoPads )
+        {
+            sound( SfxE::UI_DENY );
+            return;
+        }
+        // The second player: the same car in another paint, beside the first on the grid.
+        CarSetup p2 = field.back();
+        p2.m_driver = T( "Spieler 2" );
+        p2.m_paint = scheme( m_qColor + 5 );
+        p2.m_pad = 1;
+        field.insert( field.end() - 1, p2 );
+        m_player2 = (int)field.size() - 2;
+    }
     startRace( td->m_name, m_qReverse && !daily, field, mode, m_qMode == 1 ? 1 : daily ? 3 : m_qLaps, (int)field.size() - 1 );
 }
 
@@ -1316,83 +1398,173 @@ void App::options()
     float k = ui::k();
     header( T( "Optionen" ) );
     int &sel = m_sel[(int)ScreenE::OPTIONS];
+    // Four tabs: the picture, the sound, the display and the driving. Each row is a text, what left/right (or
+    // accept) does to it and a line of help; the last row of every tab goes back.
+    static const char *tabs[] = { "Bild", "Ton", "Anzeige", "Fahren" };
+    bool prev = m_in.prevTab(), next = m_in.nextTab();
+    if ( prev || next )
+    {
+        m_optTab = ( m_optTab + ( next ? 1 : 3 ) ) % 4;
+        sel = 0;
+        sound( SfxE::UI_MOVE );
+    }
+    {
+        float tx = 96 * k;
+        for ( int i = 0; i < 4; ++i )
+        {
+            Rectangle hit = { tx - 8 * k, 180 * k, ui::width( T( tabs[i] ), 32 ) + 16 * k, 44 * k };
+            if ( i != m_optTab && CheckCollisionPointRec( GetMousePosition(), hit ) && IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
+            {
+                m_optTab = i;
+                sel = 0;
+                sound( SfxE::UI_MOVE );
+            }
+            float w = ui::text( T( tabs[i] ), tx, 186 * k, 32, i == m_optTab ? ui::Accent : ui::Dim );
+            tx += w + 40 * k;
+        }
+        ui::text( m_in.padUsed() ? T( "LB / RB: Reiter" ) : T( "Q / E: Reiter" ), tx + 20 * k, 192 * k, 24, ui::Dim );
+    }
     static const char *qual[] = { "Schnell", "Ausgewogen", "Fein" };
     static const char *palettes[] = { "wie gemacht", "Rot-Grün-Schwäche", "Blau-Gelb-Schwäche" };
+    static const char *looks[] = { "aus", "an", "automatisch" };
     static const int   rates[] = { 30, 40, 60, 0 };
     auto pct = []( float v ) { return std::to_string( (int)std::lround( v * 100 ) ) + " %"; };
-    std::vector<std::string> items = {
-        T( "Sprache: " ) + std::string( english() ? "English" : "Deutsch" ),
-        T( "Musik: " ) + pct( m_set.m_music ),
-        T( "Effekte: " ) + pct( m_set.m_effects ),
-        std::string( T( "Vollbild: " ) ) + ( m_set.m_fullscreen ? T( "an" ) : T( "aus" ) ),
-        std::string( T( "Grafik: " ) ) + T( qual[quality()] ) + ( m_set.m_quality < 0 ? T( " (automatisch)" ) : "" ),
-        T( "Kamerahöhe: " ) + pct( m_set.m_zoom ),
-        T( "Bildwackeln: " ) + pct( m_set.m_shake ),
-        std::string( T( "Vibration: " ) ) + ( m_set.m_rumble ? T( "an" ) : T( "aus" ) ),
-        std::string( T( "Sprüche im Rennen: " ) ) + ( m_set.m_speech ? T( "an" ) : T( "aus" ) ),
-        T( "Schriftgröße: " ) + pct( m_set.m_textSize ),
-        T( "Anzeige im Rennen: " ) + pct( m_set.m_hud ),
-        std::string( T( "Farbsicht: " ) ) + T( palettes[std::clamp( m_set.m_palette, 0, 2 )] ),
-        std::string( T( "Namen über den Autos: " ) ) + ( m_set.m_tags ? T( "an" ) : T( "aus" ) ),
-        std::string( T( "Bildrate: " ) ) + ( m_set.m_fps > 0 ? std::to_string( m_set.m_fps ) : std::string( T( "unbegrenzt" ) ) ),
-        std::string( T( "Fahrhilfe: " ) ) + ( m_set.m_assist == 0   ? T( "aus (rutschiger, für Könner)" )
-                                              : m_set.m_assist == 1 ? T( "an" )
-                                                                    : T( "an, mit Bremshilfe" ) ),
-        std::string( T( "Kurvenpfeile: " ) ) + ( m_set.m_paceNotes ? T( "an" ) : T( "aus" ) ),
-        std::string( T( "Lenkung: " ) ) + ( m_set.m_stickAims ? T( "Stick zeigt Richtung" ) : T( "Stick dreht" ) ),
-        std::string( T( "Miniatur-Look: " ) ) + ( m_set.m_miniature ? T( "an" ) : T( "aus" ) ),
-        T( "Steuerung" ),
-        T( "Zurück" ),
-    };
-    int pick = menu( items, sel, { 96 * k, 210 * k, 1000 * k, 800 * k }, 38 );
-    int dir = m_in.left() ? -1 : m_in.right() ? 1 : 0;
-    if ( dir || pick >= 0 )
+    auto onOff = []( bool v ) { return std::string( v ? T( "an" ) : T( "aus" ) ); };
+    struct Row
     {
-        if ( pick >= 0 && pick < 18 && dir == 0 ) dir = 1;
-        switch ( sel )
-        {
-        case 0:
-            setLanguage( english() ? "de" : "en" );
-            m_set.m_language = language();
-            loadUiTexts( m_opt.m_data );
-            break;
-        case 1: m_set.m_music = clampf( std::round( ( m_set.m_music + dir * 0.1f ) * 10 ) / 10, 0, 1 ); break;
-        case 2: m_set.m_effects = clampf( std::round( ( m_set.m_effects + dir * 0.1f ) * 10 ) / 10, 0, 1 ); break;
-        case 3:
-            ToggleBorderlessWindowed();
-            m_set.m_fullscreen = !m_set.m_fullscreen;
-            break;
-        case 4: m_set.m_quality = ( quality() + dir + 3 ) % 3; break;
-        case 5: m_set.m_zoom = clampf( m_set.m_zoom + dir * 0.1f, 0.6f, 1.6f ); break;
-        case 6: m_set.m_shake = clampf( m_set.m_shake + dir * 0.25f, 0, 1.5f ); break;
-        case 7: m_set.m_rumble = !m_set.m_rumble; break;
-        case 8: m_set.m_speech = !m_set.m_speech; break;
-        case 9: m_set.m_textSize = clampf( m_set.m_textSize + dir * 0.1f, 0.8f, 1.5f ); break;
-        case 10: m_set.m_hud = clampf( std::round( ( m_set.m_hud + dir * 0.1f ) * 10 ) / 10, 0.7f, 1.4f ); break;
-        case 11: m_set.m_palette = ( m_set.m_palette + dir + 3 ) % 3; break;
-        case 12: m_set.m_tags = !m_set.m_tags; break;
-        case 13:
-        {
-            int at = 0;
-            while ( at < 3 && rates[at] != m_set.m_fps ) ++at;
-            m_set.m_fps = rates[( at + dir + 4 ) % 4];
-            break;
-        }
-        case 14: m_set.m_assist = ( m_set.m_assist + dir + 3 ) % 3; break;
-        case 15: m_set.m_paceNotes = !m_set.m_paceNotes; break;
-        case 16: m_set.m_stickAims = !m_set.m_stickAims; break;
-        case 17:
-            m_set.m_miniature = !m_set.m_miniature;
-            m_view.m_miniature = m_set.m_miniature;
-            break;
-        default: break;
-        }
-        if ( sel <= 17 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 || sel == 11 || sel == 13 ) ) applySettings();
-        if ( sel <= 17 ) sound( SfxE::UI_MOVE );
+        std::string                m_text;
+        std::function<void( int )> m_change;          ///< dir -1 / +1; empty: a button
+        std::string                m_help;
+        bool                       m_apply = false;   ///< the renderer, the sound or the text size follow
+        int                        m_button = 0;      ///< 1 the controls, 2 the driving school, 3 the benchmark
+    };
+    std::vector<Row> rows;
+    if ( m_optTab == 0 )
+    {
+        rows.push_back( { std::string( T( "Vollbild: " ) ) + onOff( m_set.m_fullscreen ), [this]( int ) {
+                             ToggleBorderlessWindowed();
+                             m_set.m_fullscreen = !m_set.m_fullscreen;
+                         } } );
+        rows.push_back( { std::string( T( "Grafik: " ) ) + T( qual[quality()] ) + ( m_set.m_quality < 0 ? T( " (automatisch)" ) : "" ),
+                          [this]( int d ) { m_set.m_quality = ( quality() + d + 3 ) % 3; },
+                          T( "Schnell rechnet das Bild kleiner und lässt Schatten und Spiegelungen weg." ), true } );
+        rows.push_back( { std::string( T( "Bildrate: " ) ) + ( m_set.m_fps > 0 ? std::to_string( m_set.m_fps ) : std::string( T( "unbegrenzt" ) ) ),
+                          [this]( int d ) {
+                              int at = 0;
+                              while ( at < 3 && rates[at] != m_set.m_fps ) ++at;
+                              m_set.m_fps = rates[( at + d + 4 ) % 4];
+                          },
+                          "", true } );
+        rows.push_back( { std::string( T( "Miniatur-Look: " ) ) + T( looks[std::clamp( m_set.m_miniature, 0, 2 )] ),
+                          [this]( int d ) {
+                              m_set.m_miniature = ( m_set.m_miniature + d + 3 ) % 3;
+                              m_set.m_lookDropped = false;
+                              m_view.m_miniature = miniatureOn();
+                          },
+                          T( "Oben und unten unscharf, wie bei einer Modellbahn. Automatisch: aus, sobald die Bildrate nicht mehr hält." ) } );
+        rows.push_back( { T( "Kamerahöhe: " ) + pct( m_set.m_zoom ), [this]( int d ) { m_set.m_zoom = clampf( m_set.m_zoom + d * 0.1f, 0.6f, 1.6f ); } } );
+        rows.push_back( { T( "Bildwackeln: " ) + pct( m_set.m_shake ), [this]( int d ) { m_set.m_shake = clampf( m_set.m_shake + d * 0.25f, 0, 1.5f ); } } );
+        rows.push_back( { T( "Leistungstest" ), nullptr,
+                          T( "Fährt eine halbe Minute über die schwerste Strecke, misst die Bildrate mit und ohne Miniatur-Look "
+                             "und stellt beides passend ein." ),
+                          false, 3 } );
+    }
+    else if ( m_optTab == 1 )
+    {
+        rows.push_back( { T( "Musik: " ) + pct( m_set.m_music ),
+                          [this]( int d ) { m_set.m_music = clampf( std::round( ( m_set.m_music + d * 0.1f ) * 10 ) / 10, 0, 1 ); }, "", true } );
+        rows.push_back( { T( "Effekte: " ) + pct( m_set.m_effects ),
+                          [this]( int d ) { m_set.m_effects = clampf( std::round( ( m_set.m_effects + d * 0.1f ) * 10 ) / 10, 0, 1 ); },
+                          T( "Motoren, Waffen, das Publikum." ), true } );
+        rows.push_back( { std::string( T( "Sprüche im Rennen: " ) ) + onOff( m_set.m_speech ), [this]( int ) { m_set.m_speech = !m_set.m_speech; },
+                          T( "Was die Rivalen und Ricky Rattle im Rennen sagen." ) } );
+    }
+    else if ( m_optTab == 2 )
+    {
+        rows.push_back( { T( "Sprache: " ) + std::string( english() ? "English" : "Deutsch" ), [this]( int ) {
+                             setLanguage( english() ? "de" : "en" );
+                             m_set.m_language = language();
+                             loadUiTexts( m_opt.m_data );
+                         } } );
+        rows.push_back( { T( "Schriftgröße: " ) + pct( m_set.m_textSize ),
+                          [this]( int d ) { m_set.m_textSize = clampf( m_set.m_textSize + d * 0.1f, 0.8f, 1.5f ); }, "", true } );
+        rows.push_back( { T( "Anzeige im Rennen: " ) + pct( m_set.m_hud ),
+                          [this]( int d ) { m_set.m_hud = clampf( std::round( ( m_set.m_hud + d * 0.1f ) * 10 ) / 10, 0.7f, 1.4f ); } } );
+        rows.push_back( { std::string( T( "Farbsicht: " ) ) + T( palettes[std::clamp( m_set.m_palette, 0, 2 )] ),
+                          [this]( int d ) { m_set.m_palette = ( m_set.m_palette + d + 3 ) % 3; }, "", true } );
+        rows.push_back( { std::string( T( "Namen über den Autos: " ) ) + onOff( m_set.m_tags ), [this]( int ) { m_set.m_tags = !m_set.m_tags; } } );
+        rows.push_back( { std::string( T( "Kurvenpfeile: " ) ) + onOff( m_set.m_paceNotes ), [this]( int ) { m_set.m_paceNotes = !m_set.m_paceNotes; },
+                          T( "Eine Tafel zeigt die nächste Kurve: ihre Form, wie weit und wie scharf (1 bis 4)." ) } );
+        rows.push_back( { std::string( T( "Ideallinie: " ) ) + onOff( m_set.m_racingLine ), [this]( int ) { m_set.m_racingLine = !m_set.m_racingLine; },
+                          T( "Die Linie auf der Straße: grün Vollgas, gelb vom Gas, rot bremsen." ) } );
+        rows.push_back( { std::string( T( "Wiederholung im Ziel: " ) ) + onOff( m_set.m_replay ), [this]( int ) { m_set.m_replay = !m_set.m_replay; },
+                          T( "Nach dem Rennen der Zieleinlauf noch einmal in Zeitlupe, aus Kameras an der Strecke. Eingabe überspringt." ) } );
+    }
+    else
+    {
+        rows.push_back( { std::string( T( "Fahrhilfe: " ) ) + ( m_set.m_assist == 0   ? T( "aus (rutschiger, für Könner)" )
+                                                                : m_set.m_assist == 1 ? T( "an" )
+                                                                                      : T( "an, mit Bremshilfe" ) ),
+                          [this]( int d ) { m_set.m_assist = ( m_set.m_assist + d + 3 ) % 3; },
+                          T( "Hält den Wagen in der Spur. Mit Bremshilfe geht er vor zu schnellen Kurven selbst vom Gas." ) } );
+        rows.push_back( { T( "Spieltempo: " ) + pct( m_set.m_speed ),
+                          [this]( int d ) { m_set.m_speed = clampf( std::round( ( m_set.m_speed + d * 0.05f ) * 20 ) / 20, 0.7f, 1.0f ); },
+                          T( "Das ganze Rennen läuft langsamer ab: mehr Zeit für jede Kurve. Bestzeiten zählen dann nicht." ) } );
+        rows.push_back( { std::string( T( "Reifen warnen: " ) ) + onOff( m_set.m_gripWarn ), [this]( int ) { m_set.m_gripWarn = !m_set.m_gripWarn; },
+                          T( "Kurz bevor die Reifen rutschen, singen sie, und das Pad brummt leise." ) } );
+        rows.push_back( { std::string( T( "Lenkung: " ) ) + ( m_set.m_stickAims ? T( "Stick zeigt Richtung" ) : T( "Stick dreht" ) ),
+                          [this]( int ) { m_set.m_stickAims = !m_set.m_stickAims; },
+                          T( "Stick zeigt Richtung: Der Wagen fährt dahin, wohin der Stick zeigt." ) } );
+        rows.push_back( { std::string( T( "Vibration: " ) ) + onOff( m_set.m_rumble ), [this]( int ) { m_set.m_rumble = !m_set.m_rumble; } } );
+        rows.push_back( { T( "Fahrschule" ), nullptr, T( "Drei kurze Übungen für Lenkung und Bremse, mit Medaillen." ), false, 2 } );
+        rows.push_back( { T( "Steuerung" ), nullptr, T( "Tasten und Pad-Knöpfe neu belegen." ), false, 1 } );
+    }
+    rows.push_back( { T( "Zurück" ), nullptr } );
+    std::vector<std::string> items;
+    for ( const Row &r : rows ) items.push_back( r.m_text );
+    int pick = menu( items, sel, { 96 * k, 260 * k, 1000 * k, 720 * k }, 38 );
+    int dir = m_in.left() ? -1 : m_in.right() ? 1 : 0;
+    const Row &row = rows[(size_t)std::clamp( sel, 0, (int)rows.size() - 1 )];
+    bool back = m_in.back();
+    if ( row.m_change && ( dir || pick == sel ) )
+    {
+        row.m_change( dir ? dir : 1 );
+        if ( row.m_apply ) applySettings();
+        sound( SfxE::UI_MOVE );
         saveSettings();
     }
-    if ( pick == 18 ) go( ScreenE::CONTROLS );
-    if ( pick == 19 || m_in.back() )
+    else if ( pick >= 0 && !rows[(size_t)pick].m_change )
+    {
+        int button = rows[(size_t)pick].m_button;
+        if ( button == 1 ) go( ScreenE::CONTROLS );
+        else if ( button == 2 )
+        {
+            saveSettings();
+            go( ScreenE::SCHOOL );
+            return;
+        }
+        else if ( button == 3 )
+            startBenchmark();
+        else
+            back = true;
+    }
+    if ( !row.m_help.empty() )
+    {
+        Rectangle r = { 1140 * k, 260 * k, GetScreenWidth() - 1236 * k, 0 };
+        if ( r.width > 240 * k )
+        {
+            std::vector<std::string> lines = ui::wrap( row.m_help, r.width - 40 * k, 26 );
+            r.height = lines.size() * ui::height( 26 ) + 40 * k;
+            ui::panel( r, 0.75f );
+            float y = r.y + 20 * k;
+            for ( const std::string &l : lines )
+            {
+                ui::text( l, r.x + 20 * k, y, 26, ui::Ink );
+                y += ui::height( 26 );
+            }
+        }
+    }
+    if ( back )
     {
         saveSettings();
         go( m_racing ? ScreenE::RACE : m_inCareer ? ScreenE::HUB : ScreenE::TITLE );

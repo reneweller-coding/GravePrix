@@ -44,8 +44,15 @@ void Settings::load( const std::string &path )
         else if ( k == "bind" ) m_binds.push_back( line );
         else if ( k == "pacenotes" ) ss >> m_paceNotes;
         else if ( k == "stickaims" ) ss >> m_stickAims;
+        else if ( k == "racingline" ) ss >> m_racingLine;
+        else if ( k == "gripwarn" ) ss >> m_gripWarn;
+        else if ( k == "speed" ) ss >> m_speed;
+        else if ( k == "lookdropped" ) ss >> m_lookDropped;
+        else if ( k == "replay" ) ss >> m_replay;
     }
     m_assist = m_assist < 0 ? 0 : m_assist > 2 ? 2 : m_assist;
+    m_miniature = m_miniature < 0 ? 0 : m_miniature > 2 ? 2 : m_miniature;
+    m_speed = m_speed < 0.7f ? 0.7f : m_speed > 1.0f ? 1.0f : m_speed;
 }
 
 bool Settings::save( const std::string &path ) const
@@ -54,13 +61,15 @@ bool Settings::save( const std::string &path ) const
     if ( !f ) return false;
     fprintf( f, "music %.2f\neffects %.2f\nfullscreen %d\nwindow %d %d\nfps %d\nvsync %d\nquality %d\n", m_music, m_effects,
              m_fullscreen ? 1 : 0, m_width, m_height, m_fps, m_vsync ? 1 : 0, m_quality );
-    fprintf( f, "miniature %d\n", m_miniature ? 1 : 0 );
+    fprintf( f, "miniature %d\n", m_miniature );
     if ( !m_language.empty() ) fprintf( f, "language %s\n", m_language.c_str() );
     fprintf( f, "textsize %.2f\nrumble %d\nshake %.2f\nzoom %.2f\nspeech %d\n", m_textSize, m_rumble ? 1 : 0, m_shake, m_zoom,
              m_speech ? 1 : 0 );
     fprintf( f, "hud %.2f\npalette %d\ntags %d\nassist %d\n", m_hud, m_palette, m_tags ? 1 : 0, m_assist );
     for ( const std::string &b : m_binds ) fprintf( f, "%s\n", b.c_str() );
     fprintf( f, "pacenotes %d\nstickaims %d\n", m_paceNotes ? 1 : 0, m_stickAims ? 1 : 0 );
+    fprintf( f, "racingline %d\ngripwarn %d\nspeed %.2f\n", m_racingLine ? 1 : 0, m_gripWarn ? 1 : 0, m_speed );
+    fprintf( f, "lookdropped %d\nreplay %d\n", m_lookDropped ? 1 : 0, m_replay ? 1 : 0 );
     return endWrite( f, path );
 }
 

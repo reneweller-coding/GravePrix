@@ -44,6 +44,32 @@
 - **The podium:** after a race the first three stand on a pile of coffins below the results, the crowd cheering,
   Graves and Ricky Rattle beside them; a derby's runners-up smoke as the wrecks they are.
 - **Wind:** trees, reeds and flags sway, gentle on clear days, harder in the rain, wildly in the estate's storm.
+- **The junkyard's oil pools** shimmer in soft bands along their edges instead of a grid of coloured dots.
+- **The options in four tabs:** picture, sound, display and driving (Q/E or LB/RB), each setting with a line of help.
+- **The racing line** (option, display tab): a band on the road ahead, green where the car may stay on the throttle,
+  yellow where to lift, red where to brake, worked out from your car's grip and brakes and the rain.
+- **The tyres warn you** (option, driving tab, on): a thin singing just before they slide, and a soft hum in the pad.
+- **Game speed** (driving tab): the whole race at 70 to 100 % pace for more time in every bend; best times count
+  only at 100 %.
+- **The driving school** (driving tab): three exercises on the proving ground with the racing line on: a slalom
+  through cone gates, hairpins at the end of long straights, and two strings of esses. Bronze, silver and gold, a
+  best time each, and an epitaph for three golds.
+- **The crowd can be heard:** the stands roar when you come near, cheer when the field races past, gasp at a crash
+  and applaud your finish.
+- **Graves & Sons collect the wrecks:** ten seconds after a car is wrecked the hook comes down from their airship and
+  lifts it away (not in a derby). Marshals wave yellow flags beside it until it is gone.
+- **The replay** (option, on): after a race the finish (or your wreck) once more in slow motion from cameras at the
+  track. Enter skips it.
+- **The tabloid prints your podium:** after a career race the front page shows the real podium of that race in
+  newsprint.
+- **Two players on one screen** (quick race: race or derby): side by side, each with a camera and display of their
+  own; the second player needs a pad.
+- **Sharper stands:** the miniature look's sharp band widens to take in a stand in the picture.
+- **The news helicopter is seen:** it hangs beside your car at the picture's edge, its lights blinking at night, its
+  searchlight a cone of light in rain and fog.
+- **Benchmark** (picture tab): half a minute on the heaviest track with and without the miniature look; it sets the
+  look and, if needed, the graphics. The miniature look's new setting "automatic" (the default) turns it off by itself
+  when the frame rate does not hold in a race.
 
 ## [1.0.1] – 2026-11-02
 

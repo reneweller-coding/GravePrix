@@ -1,0 +1,68 @@
+# The driving school on the proving ground (App::startSchool, docs/DESIGN.md "The driving school"): three exercises,
+# one lap each, alone against the clock with the racing line on. "school" gives the medals' times in seconds (the
+# time with the penalties): bronze, silver, gold. Not raced in the career or the quick race (test_ names).
+
+# 1. Slalom: gates of two cones, now left, now right; a missed gate costs 2 s, a cone knocked over 1 s.
+track test_school_slalom
+  title "Fahrschule: Slalom" title_en "Driving School: Slalom"
+  venue proving
+  laps 1
+  width 14
+  shoulder 3
+  start 0 0 90
+  straight 330 surface=concrete
+  right 180 r=30
+  straight 330
+  right 180 r=30
+  close
+  gate at=50 lat=-0.45 w=4.6
+  gate at=80 lat=0.45 w=4.6
+  gate at=110 lat=-0.45 w=4.6
+  gate at=140 lat=0.45 w=4.6
+  gate at=170 lat=-0.45 w=4.6
+  gate at=200 lat=0.45 w=4.6
+  gate at=230 lat=-0.45 w=4.6
+  gate at=260 lat=0.45 w=4.6
+  gate at=290 lat=-0.45 w=4.6
+  school bronze=42 silver=37 gold=33
+  place start_gantry x=0 z=0 rot=90
+
+# 2. Hairpins: two long straights, each ending in a hairpin: brake while the line is red, power on at the apex.
+track test_school_hairpin
+  title "Fahrschule: Haarnadeln" title_en "Driving School: Hairpins"
+  venue proving
+  laps 1
+  width 12
+  shoulder 3
+  start 0 0 90
+  straight 260 surface=concrete
+  right 180 r=12.5
+  straight 260
+  right 180 r=12.5
+  close
+  school bronze=29 silver=26 gold=24
+  place start_gantry x=0 z=0 rot=90
+
+# 3. Esses: two strings of bends, the second tighter; steer early and smoothly along the line.
+track test_school_esses
+  title "Fahrschule: Kurvenkombination" title_en "Driving School: Esses"
+  venue proving
+  laps 1
+  width 12
+  shoulder 3
+  start 0 0 90
+  straight 80 surface=concrete
+  left 60 r=30
+  right 120 r=30
+  left 60 r=30
+  straight 50
+  left 60 r=20
+  right 120 r=20
+  left 60 r=20
+  straight 85
+  right 180 r=35
+  straight 388.2
+  right 180 r=35
+  close
+  school bronze=48 silver=42.5 gold=39.5
+  place start_gantry x=0 z=0 rot=90

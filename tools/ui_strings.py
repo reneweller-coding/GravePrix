@@ -8,7 +8,7 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FILES = ['src/App.cpp', 'src/AppRace.cpp', 'src/AppCareer.cpp', 'src/AppAwards.cpp', 'src/Input.cpp', 'src/Career.cpp']
+FILES = ['src/App.cpp', 'src/AppRace.cpp', 'src/AppCareer.cpp', 'src/AppAwards.cpp', 'src/AppSchool.cpp', 'src/Input.cpp', 'src/Career.cpp']
 LIT = re.compile(r'"((?:[^"\\]|\\.)*)"')
 WORDY = re.compile(r'[A-Za-zÄÖÜäöüß]{3,}')
 SKIP = re.compile(r'^(#|%|\.|/|[a-z_0-9]+$|[a-z_0-9]+\.[a-z]+$)')

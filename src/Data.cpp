@@ -386,12 +386,19 @@ void readTrack( const Block &b, TrackDef &t, std::vector<std::string> &errors )
         else if ( k == "arena" ) t.m_arena = l.argNum( 0, 1 ) != 0;
         else if ( k == "density" ) t.m_density = l.argNum( 0, 1 );
         else if ( k == "pickup" || k == "hazard" || k == "obstacle" || k == "patch" || k == "prop" || k == "row" ||
-                  k == "place" || k == "lamps" || k == "bridge" || k == "train" || k == "drawbridge" || k == "rockfall" )
+                  k == "place" || k == "lamps" || k == "bridge" || k == "train" || k == "drawbridge" || k == "rockfall" ||
+                  k == "gate" )
             t.m_items.push_back( { k, l.arg( 0 ), l } );
         else if ( k == "weather" )
         {
             t.m_weatherTo = l.arg( 0 );
             t.m_weatherLap = (int)l.num( "lap", 2 );
+        }
+        else if ( k == "school" )
+        {
+            t.m_medals[0] = l.num( "bronze", 0 );
+            t.m_medals[1] = l.num( "silver", 0 );
+            t.m_medals[2] = l.num( "gold", 0 );
         }
         else if ( k == "desc" || k == "desc_en" )
             ;

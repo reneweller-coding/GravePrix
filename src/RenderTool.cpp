@@ -181,6 +181,22 @@ int toolShot( const Options &opt )
     else
         v.m_focus = world.m_cars[world.m_leader].m_pos;
     v.m_height = opt.num( "--height", 80.0f );
+    if ( opt.has( "--tow" ) && !t.m_arena )
+    {
+        // Graves & Sons collecting a wreck: the car nearest to the view wrecked, the hook --tow seconds in (the
+        // marshals wave beside it), a little of the pictures' time run on so their flags move.
+        size_t near = 0;
+        for ( size_t i = 0; i < world.m_cars.size(); ++i )
+            if ( dist2( world.m_cars[i].m_pos, v.m_focus ) < dist2( world.m_cars[near].m_pos, v.m_focus ) ) near = i;
+        Car &c = world.m_cars[near];
+        c.m_wrecked = true;
+        c.m_wreckTime = World::TowAfter + 1.0f;
+        c.m_tow = opt.num( "--tow", 3.0f );
+        c.m_towAt = c.m_pos;
+        c.m_vel = { 0, 0 };
+        v.m_focus = c.m_pos;
+        for ( int k = 0; k < 20; ++k ) r.update( world, Dt );
+    }
     r.render( world, v );
     Image img = LoadImageFromTexture( r.texture() );
     ImageFlipVertical( &img );

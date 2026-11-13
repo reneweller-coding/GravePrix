@@ -47,7 +47,7 @@ const char *const SfxNames[] = {
     "mine_drop",    "mine_arm",    "spikes_drop", "oil_drop",     "smoke_drop", "nitro",           "tire_burst",
     "crash_light",  "crash_heavy", "crash_wall",  "metal_crunch", "glass",      "explosion_small", "explosion_big",
     "wreck",        "barrel",      "count_beep",  "count_go",     "lap",        "final_lap",       "finish",
-    "wrong_way",    "bell",        "funeral_march", "birds_up",   "dog_bark",    "thunder_near", "thunder_far", "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
+    "wrong_way",    "bell",        "funeral_march", "cheer", "gasp", "applause", "birds_up",   "dog_bark",    "thunder_near", "thunder_far", "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
     "pick_mystery", "horn_plain",  "horn_truck",  "horn_dixie",   "horn_ice",   "horn_funeral",    "horn_siren",
     "horn_klaxon",  "ui_move",     "ui_ok",       "ui_back",      "ui_buy",     "ui_deny",         "ui_cash",
     "ui_paper",     "ui_stamp"
@@ -55,7 +55,7 @@ const char *const SfxNames[] = {
 static_assert( sizeof( SfxNames ) / sizeof( SfxNames[0] ) == SfxCount, "one name per effect" );
 
 const char *const LoopNames[] = { "skid",      "skid_loose",     "scrape",       "gravel",       "flamer",
-                                  "fire",      "rain",           "wind",         "rotor",        "airship",      "amb_junkyard", "amb_cemetery",
+                                  "fire",      "rain",           "wind",         "rotor",        "airship",      "tyre_sing", "crowd", "amb_junkyard", "amb_cemetery",
                                   "amb_docks", "amb_desert",     "amb_refinery", "amb_swamp",    "amb_downtown",
                                   "amb_pass",  "amb_fairground", "amb_proving",  "amb_estate" };
 static_assert( sizeof( LoopNames ) / sizeof( LoopNames[0] ) == LoopCount, "one name per loop" );
@@ -804,6 +804,60 @@ void shatter( Fx &s, float t0, float amp )
 
 std::vector<float> thunder( uint32_t seed, float near );   // with the ambiences, below
 
+/** @brief One voice in a crowd: a shout ("hey", "oh", "ja") whose pitch slides, through a vowel's formants. */
+std::vector<float> crowdShout( uint32_t seed )
+{
+    Rand r;
+    r.seed( seed );
+    float d = r.range( 0.22f, 0.55f ), f0 = r.range( 160, 330 ), f1 = f0 * r.range( 0.75f, 1.3f );
+    Fx    s( d + 0.4f, seed );
+    s.voice( 0, d, [=]( float t ) { return f0 + ( f1 - f0 ) * t / d; }, 0.6f, { 0.025f, d * 0.4f, d * 0.25f }, Wv::SAW, 0.35f );
+    s.noise( 0, d, 0.12f, { 0.02f, d * 0.4f, d * 0.2f }, Flt::BP, 1800, 1800, 1, 1.5f );
+    static const float vowels[][2] = { { 730, 1090 }, { 570, 840 }, { 300, 870 }, { 530, 1840 }, { 660, 1720 } };
+    int                v = r.below( 5 );
+    s.formants( { { vowels[v][0], 4.0f }, { vowels[v][1], 5.0f }, { 2500, 6.0f } }, 0.05f );
+    s.reverb( 0.35f, 0.6f, 0.6f, 0.5f, 0.85f );
+    return s.finishPeak( 0 );
+}
+
+/** @brief Someone whistling through their fingers: one or two shrill notes. */
+std::vector<float> fingerWhistle( uint32_t seed )
+{
+    Rand r;
+    r.seed( seed );
+    float f = r.range( 2300, 3100 );
+    Fx    s( 1.3f, seed );
+    s.voice( 0, 0.42f, [=]( float t ) { return f * ( 0.88f + 0.12f * std::min( 1.0f, t / 0.07f ) ) * ( 1.0f + 0.008f * std::sin( 38 * t ) ); },
+             0.5f, { 0.015f, 0.3f, 0.05f }, Wv::SINE, 0.12f );
+    if ( r.unit() < 0.6f )
+        s.voice( 0.5f, 0.55f, [=]( float t ) { return f * 1.12f * ( 1.0f - 0.3f * t ); }, 0.5f, { 0.015f, 0.35f, 0.08f }, Wv::SINE, 0.12f );
+    s.noise( 0, 1.0f, 0.03f, { 0.02f, 0.8f, 0.1f }, Flt::BP, f, f, 1, 4 );
+    return s.finishPeak( 0 );
+}
+
+/** @brief Many voices at once: noise through the vowels' formants, the level following the envelope. */
+void crowdRoar( Fx &s, float t0, float len, float amp, Env e, float bright )
+{
+    s.noise( t0, len, amp, e, Flt::BP, 520, 560, len, 2.0f );
+    s.noise( t0, len, amp * 0.7f, e, Flt::BP, 1100 * bright, 1250 * bright, len, 2.4f );
+    s.noise( t0, len, amp * 0.35f, e, Flt::BP, 2500 * bright, 2700 * bright, len, 3.0f );
+    s.noise( t0, len, amp * 0.4f, e, Flt::LP, 280, 280, 1 );
+}
+
+/** @brief Hands clapping: short bright bursts at random, 'rate' a second at their thickest. */
+void claps( Fx &s, float t0, float len, float rate, float amp )
+{
+    float t = 0;
+    while ( true )
+    {
+        float k = std::sin( Pi * clampf( t / len, 0, 1 ) );   // swelling, then dying away
+        t += -std::log( 1.0f - s.m_rng.unit() * 0.9999f ) / std::max( 2.0f, rate * ( 0.25f + 0.75f * k ) );
+        if ( t >= len ) break;
+        float f = s.m_rng.range( 1100, 2600 );
+        s.noise( t0 + t, 0.02f, amp * s.m_rng.range( 0.4f, 1.0f ) * ( 0.3f + 0.7f * k ), { 0.0004f, 0.0f, 0.008f }, Flt::BP, f, f, 1, 1.3f );
+    }
+}
+
 /** @brief Makes one effect. */
 std::vector<float> makeSfx( SfxE e )
 {
@@ -1502,6 +1556,42 @@ std::vector<float> makeSfx( SfxE e )
         s.trem( 4.5f, 0.1f );
         s.filter( Flt::HP, 60 );
         return s.finish( -20 );
+    }
+    case SfxE::CHEER:
+    {
+        // The stand jumps up: the roar swells, shouts and whistles come out of it, a few claps.
+        Fx s( 3.6f, 201 );
+        crowdRoar( s, 0, 3.4f, 1.0f, { 0.25f, 1.0f, 0.5f }, 1.15f );
+        for ( int k = 0; k < 9; ++k ) s.mix( crowdShout( 2010 + k ), s.m_rng.range( 0.05f, 1.6f ), s.m_rng.range( 0.15f, 0.35f ) );
+        for ( int k = 0; k < 3; ++k ) s.mix( fingerWhistle( 2030 + k ), s.m_rng.range( 0.1f, 1.4f ), 0.18f );
+        claps( s, 0.4f, 2.8f, 40, 0.25f );
+        s.reverb( 0.3f, 0.8f, 0.6f, 0.5f );
+        return s.finish( -20 );
+    }
+    case SfxE::GASP:
+    {
+        // A crash before the stand: a long "oooh" of many voices, falling.
+        Fx s( 2.2f, 202 );
+        for ( int k = 0; k < 12; ++k )
+        {
+            float f0 = s.m_rng.range( 130, 300 ), st = s.m_rng.range( 0.0f, 0.15f );
+            s.voice( st, 1.5f, [=]( float t ) { return f0 * ( 1.06f - 0.12f * t ); }, 0.12f, { 0.18f, 0.35f, 0.35f }, Wv::SAW, 0.4f );
+        }
+        s.noise( 0, 1.8f, 0.25f, { 0.2f, 0.3f, 0.4f }, Flt::BP, 450, 380, 1.5f, 2.0f );
+        s.formants( { { 360, 4.0f }, { 760, 5.0f }, { 2400, 6.0f } }, 0.05f );
+        s.reverb( 0.35f, 0.8f, 0.6f, 0.5f );
+        return s.finish( -21 );
+    }
+    case SfxE::APPLAUSE:
+    {
+        // The finish: applause swelling and dying away, cheering under it.
+        Fx s( 5.0f, 203 );
+        claps( s, 0, 4.8f, 220, 0.5f );
+        crowdRoar( s, 0, 4.5f, 0.35f, { 0.3f, 2.0f, 0.6f }, 1.1f );
+        for ( int k = 0; k < 5; ++k ) s.mix( crowdShout( 2050 + k ), s.m_rng.range( 0.2f, 2.5f ), 0.2f );
+        s.mix( fingerWhistle( 2060 ), 0.6f, 0.15f );
+        s.reverb( 0.25f, 0.7f, 0.5f, 0.5f );
+        return s.finish( -21 );
     }
     case SfxE::UI_STAMP:
     {
@@ -2319,8 +2409,8 @@ struct LoopClip
 LoopClip makeShortLoop( LoopE l )
 {
     LoopClip c;
-    bool     stereo = l == LoopE::RAIN || l == LoopE::WIND;
-    Bed      b( 4.0f, 0.3f, stereo, 100 + (int)l );
+    bool     stereo = l == LoopE::RAIN || l == LoopE::WIND || l == LoopE::CROWD;
+    Bed      b( l == LoopE::CROWD ? 10.0f : 4.0f, l == LoopE::CROWD ? 1.0f : 0.3f, stereo, 100 + (int)l );
     switch ( l )
     {
     case LoopE::SKID:
@@ -2455,6 +2545,48 @@ LoopClip makeShortLoop( LoopE l )
         b.hum( 1180, 0.025f, &g, 0.3f );
         b.hum( 2360, 0.01f );
         c.data = b.finish( -18, -8 );
+        break;
+    }
+    case LoopE::TYRE_SING:
+    {
+        // Tyres near their limit: a thin, wavering whine, the squeal's first breath.
+        auto               jit = b.walk( 20, 90, 5 ), slow = b.walk( 1, 5, 3 );
+        std::vector<float> tone( b.n(), 0.0f );
+        double             f = b.snap( 1640.0f ), ph = 0;
+        for ( size_t i = 0; i < b.n(); ++i )
+        {
+            ph += f * ( 1.0 + 0.012 * jit[i] ) / Rate;
+            float p = (float)( TwoPiD * ( ph - std::floor( ph ) ) );
+            tone[i] = ( std::sin( p ) + 0.2f * std::sin( 2 * p ) ) * 0.4f * std::max( 0.0f, 0.8f + 0.2f * slow[i] );
+        }
+        b.place( tone, 0, 0, 1.0f );
+        b.noise( { .amp = 0.18f, .type = Flt::BP, .hz = 1640, .q = 12, .amod = &slow, .adepth = 0.4f } );
+        b.noise( { .amp = 0.06f, .type = Flt::BP, .hz = 2600, .q = 3 } );
+        c.data = b.finish( -20, -10 );
+        break;
+    }
+    case LoopE::CROWD:
+    {
+        // A stand full of people: many voices as a roar through the vowels' formants, ebbing and swelling, single
+        // shouts and whistles rising out of it, a clap here and there.
+        auto g1 = b.walk( 1, 4, 3 ), g2 = b.walk( 2, 8, 4 ), g3 = b.walk( 3, 12, 4 );
+        b.noise( { .amp = 0.5f, .type = Flt::BP, .hz = 520, .q = 2.2f, .amod = &g1, .adepth = 0.3f, .width = 0.9f } );
+        b.noise( { .amp = 0.35f,
+                   .type = Flt::BP,
+                   .hz = 1150,
+                   .q = 2.5f,
+                   .amod = &g2,
+                   .adepth = 0.35f,
+                   .fmod = &g3,
+                   .fratio = 1.15f,
+                   .width = 0.9f } );
+        b.noise( { .amp = 0.18f, .type = Flt::BP, .hz = 2500, .q = 3.0f, .amod = &g3, .adepth = 0.4f, .width = 0.9f } );
+        b.noise( { .amp = 0.25f, .type = Flt::LP, .hz = 260, .amod = &g1, .adepth = 0.2f } );
+        Rand &r = b.m_rng;
+        for ( int k = 0; k < 22; ++k ) b.place( crowdShout( 900 + k ), r.range( 0.0f, b.seconds() ), r.bi() * 0.8f, r.range( 0.05f, 0.14f ) );
+        for ( int k = 0; k < 3; ++k ) b.place( fingerWhistle( 950 + k ), r.range( 0.0f, b.seconds() ), r.bi() * 0.7f, 0.06f );
+        b.grains( 6, 0.15f, 1200, 2400, 0.002f, 0.006f, 0.8f );
+        c.data = b.finish( -21, -10 );
         break;
     }
     case LoopE::AIRSHIP:

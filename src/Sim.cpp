@@ -304,6 +304,34 @@ void World::step( const std::vector<CarInput> &inputs )
         if ( c.m_setup.m_assist >= 2 && !c.m_finished && !c.m_wrecked ) in = brakeHelp( (int)i, in );
         stepCar( (int)i, in );
     }
+    // Graves & Sons collect the wrecks (not in a derby, where they are the arena's furniture): the hook from their
+    // airship comes down on it, holds it still, and lifts it away; then it is gone from the track.
+    if ( m_mode != ModeE::DERBY )
+        for ( size_t i = 0; i < m_cars.size(); ++i )
+        {
+            Car &c = m_cars[i];
+            if ( !c.m_wrecked ) continue;
+            if ( c.m_gone )
+            {
+                c.m_tow += Dt;
+                continue;
+            }
+            if ( c.m_tow < 0 && c.m_wreckTime > TowAfter )
+            {
+                c.m_tow = 0.0f;
+                c.m_towAt = c.m_pos;
+            }
+            if ( c.m_tow < 0 ) continue;
+            c.m_tow += Dt;
+            c.m_pos = c.m_towAt;
+            c.m_vel = { 0, 0 };
+            c.m_yaw = 0;
+            if ( c.m_tow >= TowLift )
+            {
+                c.m_gone = true;
+                c.m_pos = { 1.0e6f + 100.0f * i, 1.0e6f };
+            }
+        }
     for ( size_t a = 0; a < m_cars.size(); ++a )
         for ( size_t b = a + 1; b < m_cars.size(); ++b ) collide( (int)a, (int)b );
     bullets();
@@ -362,6 +390,7 @@ void World::stepCar( int i, const CarInput &inRaw )
     if ( c.m_wrecked )
     {
         c.m_wreckTime += Dt;
+        if ( c.m_gone || c.m_tow >= 0 ) return;   // on the hook, or away
         c.m_vel = mul( c.m_vel, 0.94f );
         c.m_yaw *= 0.9f;
         c.m_pos = add( c.m_pos, mul( c.m_vel, Dt ) );
@@ -425,11 +454,12 @@ void World::physics( Car &c, const CarInput &in, float dt )
     // nothing, and short taps barely count (m_lock follows the steering over a quarter of a second: measured on the
     // wheels of a tenth of a second ago, a person's tapping hands lost the final against Graves for ever). The tyres
     // scrub no harder than they grip: on ice the car slides on instead.
-    float scrub = 0;
+    float scrub = 0, lockUse = 0;
     if ( !in.m_handbrake && sp > 4 )
     {
         float asked = c.m_lock * fullLock( c, sp );
         float carry = hold / sp;
+        lockUse = asked / std::max( carry, 1e-3f );
         if ( asked > carry )
         {
             scrub = ( asked - carry ) / asked;
@@ -467,6 +497,10 @@ void World::physics( Car &c, const CarInput &in, float dt )
     // leaves a small slip that settles at once; beyond it the car slides, and the slide scrubs speed too.
     float pull = std::fabs( vlat ) * ( 1.0f - std::exp( -bite * dt ) );
     float used = bite * std::fabs( vlat ) / std::max( hold, 0.1f );   // the share of the grip the slip asks for
+    // How close the tyres are to their limit (the warning before they slide): the slip's share (it squeals from 0.9)
+    // or the turn the steering asks against what they carry (it scrubs from 1).
+    float gripUse = std::max( used / 0.9f, lockUse );
+    c.m_gripUse += ( gripUse - c.m_gripUse ) * std::min( 1.0f, dt * 10 );
     float dl = std::min( pull, hold * dt );
     vlat -= vlat > 0 ? dl : -dl;
     sp = std::fabs( vl );

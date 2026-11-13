@@ -107,6 +107,14 @@ struct PropSpot
 };
 
 /** @brief A small thing on a shoulder that a car knocks over (a bin, a cone, a crate, a grave cross). */
+/** @brief A gate of the driving school's slalom: two cones across the road, to pass between. */
+struct GateSpot
+{
+    float m_s = 0.0f;     ///< where along the lap
+    float m_lat = 0.0f;   ///< its middle across the road (metres)
+    float m_w = 4.5f;     ///< its opening (metres)
+};
+
 struct LooseSpot
 {
     std::string m_model;
@@ -213,6 +221,7 @@ public:
     std::vector<PatchSpot>    m_patches;
     std::vector<PropSpot>     m_props;
     std::vector<LooseSpot>    m_loose;          ///< what stands on the shoulders and falls over
+    std::vector<GateSpot>     m_gates;          ///< the driving school's slalom gates (their cones are in m_loose)
     std::vector<Vector2>      m_problems;       ///< where the checks found something (drawn on the map)
     int                       m_crossings = 0;
     Rectangle                 m_bounds = { 0, 0, 0, 0 };   ///< the drivable ground's box (x, z)

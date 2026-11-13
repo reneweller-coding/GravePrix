@@ -26,6 +26,7 @@ expect title
 down accept
 expect options
 wait 10 shot options
+nexttab nexttab nexttab wait 10 shot options_driving
 up up accept
 expect controls
 wait 10 shot controls

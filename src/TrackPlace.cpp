@@ -94,6 +94,8 @@ void Track::place( const TrackDef &def, const Catalog &cat )
         }
         else if ( it.m_type == "obstacle" )
             m_obstacles.push_back( { pointAt( s, lat ), l.num( "r", 1.0f ), l.str( "model", "" ), l.num( "rot", 0 ) } );
+        else if ( it.m_type == "gate" )
+            m_gates.push_back( { s, lat, l.num( "w", 4.5f ) } );
         else if ( it.m_type == "patch" )
         {
             int   surf = surfaceOf( it.m_what );

@@ -90,6 +90,12 @@ inline float wrapRad( float a )
 inline float clampf( float v, float lo, float hi ) { return v < lo ? lo : ( v > hi ? hi : v ); }
 /** @return a mix of a and b */
 inline float lerpf( float a, float b, float t ) { return a + ( b - a ) * t; }
+/** @return 0 below e0, 1 above e1, a smooth S between */
+inline float smoothstepf( float e0, float e1, float x )
+{
+    float t = clampf( ( x - e0 ) / ( e1 - e0 ), 0.0f, 1.0f );
+    return t * t * ( 3.0f - 2.0f * t );
+}
 /** @return an angle in degrees brought into (-180, 180] */
 inline float wrapDeg( float a )
 {

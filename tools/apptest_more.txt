@@ -1,0 +1,59 @@
+# The additions of 13.11.2026 (ctest app_more): the options in tabs, the driving school, the benchmark, two players on
+# one screen and the replay after the race.
+expect title
+down down accept
+expect options
+wait 10 shot more_options_picture
+nexttab wait 5 shot more_options_sound
+nexttab wait 5 shot more_options_display
+nexttab wait 5 shot more_options_driving
+# The driving school: the row before the controls.
+up up up accept
+expect school
+wait 10 shot more_school
+accept
+expect race
+drive wait 400 shot more_school_slalom
+race
+expect results
+wait 30 shot more_school_result
+accept
+expect school
+down accept
+expect race
+drive wait 500 shot more_school_hairpin
+race
+expect results
+accept
+expect school
+back
+expect options
+# The benchmark: the picture tab's last row before Back.
+nexttab up up accept
+expect bench
+wait 150 shot more_bench_on
+wait 300 shot more_bench_off
+wait 300 shot more_bench_result
+accept
+expect options
+back
+expect title
+# Two players in a quick race (the computer drives both), then the finish once more in slow motion.
+up accept
+expect quick
+split replayon
+wait 5 shot more_quick_players
+up accept
+expect race
+drive wait 300 shot more_split
+race
+expect replay
+wait 40 shot more_replay_a
+wait 80 shot more_replay_b
+accept
+expect results
+wait 10 shot more_split_results
+accept
+expect quick
+back
+expect title

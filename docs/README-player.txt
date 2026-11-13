@@ -38,9 +38,12 @@ Career       five leagues, race days with three offers (and now and then a job f
              loan shark, sponsors, the tabloid
 Test drive   eight short lessons on the Graves & Sons yard, Ricky Rattle explaining: throttle, brakes, handbrake,
              guns, mines, nitro, rockets (from the title screen, and first on a new career's paddock)
+Driving school   three timed exercises with medals (Options > Driving): a slalom through cone gates (a missed gate
+             costs 2 s, a cone 1 s), hairpins, esses; the racing line shows where to brake
 The crypt    65 epitaphs to earn over all your races and careers, each a gravestone (title screen and paddock)
 Three career slots; the credits from the title screen (and after the final).
-Quick race   any track and car; race, derby (last car driving wins) or time trial; or a random track
+Quick race   any track and car; race, derby (last car driving wins) or time trial; or a random track.
+             Two players: race or derby side by side on one screen; the second player needs a pad
 Endless tournament   a new random track every round; finish in the top three to race on
 Daily challenge      the same random track and car for everyone today, a time trial against your ghost
 
@@ -74,9 +77,17 @@ at a standstill and the car backs round towards the stick.
 Back on track: stuck against a wall or facing the wrong way? Backspace, T or Select puts the car back on the racing
 line a few metres back, standing and facing the right way. It blinks and passes through the other cars for a moment;
 the next one waits five seconds.
-Miniature look (on by default): the top and the bottom of the picture blur a little, as in a photograph of a model
-railway, and a sharp band follows your car. Turn it off in the options for a picture sharp to the edges (on the
-Steam Deck the blur is lighter).
+Miniature look (automatic by default): the top and the bottom of the picture blur a little, as in a photograph of a
+model railway, and a sharp band follows your car (it widens for a stand full of people). "Automatic" turns it off by
+itself when the frame rate does not hold; "off" gives a picture sharp to the edges (on the Steam Deck the blur is
+lighter). The benchmark (Options > Picture) drives half a minute and sets it, and the graphics if needed.
+The options come in four tabs: picture, sound, display, driving (Q/E or LB/RB); each setting explains itself.
+Racing line (off by default, Options > Display): a band on the road ahead, green where you may stay on the
+throttle, yellow where to lift, red where to brake.
+Tyre warning (on): just before the tyres slide they sing and the pad hums softly.
+Game speed (Options > Driving): the whole race at 70 to 100 % pace, more time for every bend; best times count only
+at 100 %.
+Replay (on): after a race the finish once more in slow motion; Enter skips it.
 
 Graves' jobs
 ------------
@@ -100,7 +111,8 @@ Tips
   Graveyard of Honour, with their last words.
 - Dolores sells a used car most days, cheap and a third broken. Graves pays for the move up a league.
 - Each league's champion brings their own monster to the showdown.
-- Wrecks stay on the track and burn. Do not drive into them.
+- Wrecks burn on the track until Graves & Sons lift them away (ten seconds; marshals wave yellow flags meanwhile).
+  In a derby they stay. Do not drive into them.
 - Rivals who are wrecked may die. Their seat goes to a newcomer. Champions are harder to kill.
 - Cash, wrenches, ammo, nitro, mines, rockets and coffins (anything can be inside) lie on the track.
 - Sabotage on the black market leaves a rival's car half broken for the next race. Do not get caught.

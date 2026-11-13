@@ -25,3 +25,15 @@ model dog_body scale=1.35
 # a dog's leg, hanging from its hip at y = 0
 model dog_leg scale=1.35
   part box w=0.08 h=0.42 d=0.08 y=-0.21 color=#5a3e2c
+
+# A race marshal's yellow flag on its stick (the stick's foot at the origin, held in the raised hand; the race waves it)
+model flag_yellow
+  part box w=0.035 h=1.1 d=0.035 y=0.55 color=#3a3632
+  part box w=0.025 h=0.55 d=0.78 y=0.8 z=-0.41 color=#ffd21a emit=0.3
+
+# Graves & Sons' crane hook from their airship: a black block with the firm's brass plate, a heavy hook under it
+model tow_hook
+  part box w=0.62 h=0.7 d=0.42 y=0.55 color=#1c1a1a
+  part box w=0.5 h=0.16 d=0.03 y=0.62 z=-0.22 color=#c8a040 emit=0.2
+  part disc r=0.06 h=0.3 y=0.05 seg=6 color=#3a3a3a
+  part ring r=0.26 thick=0.09 y=-0.2 roll=90 seg=10 color=#4a4844

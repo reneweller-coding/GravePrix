@@ -470,8 +470,17 @@ void main()
         col *= 1.0 - 0.2 * rut * rutsOn * ( st == 2 || st == 4 || st == 7 || st == 8 ? 0.4 : 1.0 );
         if ( st == 1 )   // junkyard: oil pools with a sheen, bits of metal glinting
         {
-            float oil = smoothstep( 0.66, 0.72, fbm( w * 0.07 + 31.0 ) );
-            col = mix( col, vec3( 0.03, 0.025, 0.02 ) + 0.05 * vec3( sin( w.x * 2.0 ), sin( w.y * 2.3 + 1.0 ), sin( w.x * 1.7 + 2.0 ) ), oil * 0.9 );
+            float depth = fbm( w * 0.07 + 31.0 );
+            float oil = smoothstep( 0.66, 0.72, depth );
+            if ( oil > 0.0 )
+            {
+                // The sheen as a thin film: its colours run in soft bands along the pool's outline, gently warped,
+                // and fade towards the deep middle (a grid of coloured dots read as a picture fault).
+                float film = ( depth - 0.66 ) * 14.0 + 0.8 * fbm( w * 0.3 + 5.0 );
+                vec3  sheen = 0.5 + 0.5 * cos( 6.2831 * ( film + vec3( 0.0, 0.33, 0.67 ) ) );
+                float rim = 1.0 - 0.7 * smoothstep( 0.72, 0.8, depth );
+                col = mix( col, vec3( 0.03, 0.025, 0.02 ) + 0.06 * sheen * rim, oil * 0.9 );
+            }
             spec = max( spec, oil * 0.6 );
             rough = mix( rough, 90.0, oil );
             col += vec3( 0.25 ) * step( 0.992, hash( floor( w * 5.0 ) + 7.0 ) );
@@ -2990,10 +2999,23 @@ void Renderer::drawCar( const World &w, int i, bool shadow )
     const Car       &c = w.m_cars[i];
     // Just put back on the track (World::resetCar): it blinks while the others pass through it.
     if ( w.m_time < c.m_ghostUntil && std::fmod( c.m_ghostUntil - w.m_time, 0.25f ) < 0.09f ) return;
+    // On Graves & Sons' hook: it hangs still, then rises out of the picture, turning slowly.
+    Vector2 spot = c.m_pos;
+    float   lift = 0.0f, turn = 0.0f;
+    if ( c.m_tow >= 0 )
+    {
+        float up = std::max( 0.0f, c.m_tow - World::TowLift );
+        spot = c.m_towAt;
+        lift = 1.8f * up * up + 0.6f * up + ( c.m_tow > World::TowLift - 1.0f ? 0.05f * std::sin( c.m_tow * 23.0f ) : 0.0f );
+        turn = up * 0.35f;
+        if ( lift > m_view.m_height * 0.6f ) return;
+    }
+    else if ( c.m_gone )
+        return;
     const ModelMesh &m = g.m_forge.get( g_data, c.m_def->m_model, c.m_setup.m_paint );
     Matrix base = MatrixMultiply( MatrixMultiply( MatrixRotateZ( c.m_lean * 0.07f + ( c.m_wrecked ? 0.12f : 0.0f ) ),
                                                   MatrixRotateX( c.m_pitch * 0.04f + ( c.m_wrecked ? 0.05f : 0.0f ) ) ),
-                                  place( c.m_pos, c.m_head, c.m_wrecked ? -0.08f : 0.0f ) );
+                                  place( spot, c.m_head + turn, ( c.m_wrecked ? -0.08f : 0.0f ) + lift ) );
     Material &mat = shadow ? g.m_depthMat : g.m_litMat;
     float     hp = c.m_maxHp > 0 ? clampf( c.m_hp / c.m_maxHp, 0, 1 ) : 1.0f;
     if ( !shadow )
@@ -3237,6 +3259,7 @@ void Renderer::drawScene( const World &w, bool shadow )
         if ( m.m_hasBase ) DrawMesh( m.m_base, lit, place( r.m_pos, r.m_head, 0.9f ) );
     }
     for ( size_t i = 0; i < w.m_cars.size(); ++i ) drawCar( w, (int)i, shadow );
+    drawTow( w, shadow );
     if ( !shadow )
         for ( const Ghost &s : m_spirits )
         {
@@ -3253,6 +3276,58 @@ void Renderer::drawScene( const World &w, bool shadow )
         if ( m.m_hasBase ) DrawMesh( m.m_base, g.m_litMat, place( m_ghost.m_pos, m_ghost.m_head, 0.05f ) );
     }
     if ( !shadow ) setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
+}
+
+void Renderer::drawLit( const Mesh &m, Matrix xf )
+{
+    setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
+    DrawMesh( m, g.m_litMat, xf );
+}
+
+void Renderer::drawTow( const World &w, bool shadow )
+{
+    if ( !m_track || w.m_mode == ModeE::DERBY ) return;
+    Material &lit = shadow ? g.m_depthMat : g.m_litMat;
+    for ( const Car &c : w.m_cars )
+    {
+        if ( !c.m_wrecked ) continue;
+        Vector2 at = c.m_tow >= 0 ? c.m_towAt : c.m_pos;
+        // The marshals: from the wreck until it is gone, one beside it and one before it, waving yellow.
+        if ( c.m_tow < World::TowLift + 1.0f && !( c.m_gone && c.m_tow < 0 ) )
+        {
+            TrackPos           tp = m_track->locate( at, c.m_hint );
+            const TrackSample &ts = m_track->m_s[(size_t)tp.m_i];
+            float              side = tp.m_lat >= 0 ? 1.0f : -1.0f;
+            float              off = ts.m_shoulder >= 1.4f ? ts.m_half + ts.m_shoulder - 0.6f : ts.m_half + ts.m_shoulder + 1.2f;
+            const ModelMesh   &body = modelOf( "fig_marshal" ), &flag = modelOf( "flag_yellow" );
+            for ( int k = 0; k < 2; ++k )
+            {
+                float              s = m_track->wrap( tp.m_s - ( k == 0 ? 2.0f : 30.0f ) );
+                const TrackSample &ms = m_track->sampleAt( s );
+                Vector2            p = m_track->pointAt( s, side * off );
+                float              face = headingOf( mul( ms.m_right, -side ) );
+                Matrix             xf = MatrixMultiply( MatrixRotateY( -face ), MatrixTranslate( p.x, 0, p.y ) );
+                if ( body.m_hasBase ) DrawMesh( body.m_base, lit, xf );
+                if ( body.m_hasHead ) DrawMesh( body.m_head, lit, xf );
+                float  wave = 0.55f * std::sin( m_time * 7.0f + k * 1.7f );
+                Matrix fx = MatrixMultiply( MatrixMultiply( MatrixRotateZ( wave ), MatrixTranslate( 0.34f, 1.72f, 0.0f ) ), xf );
+                if ( flag.m_hasBase ) DrawMesh( flag.m_base, lit, fx );
+            }
+        }
+        if ( c.m_tow < 0 ) continue;
+        // The hook: down from Graves & Sons' airship (above the picture) in two and a half seconds, on the roof until
+        // the lift, then up with the wreck. The cable goes up out of sight.
+        float up = std::max( 0.0f, c.m_tow - World::TowLift );
+        float lift = 1.8f * up * up + 0.6f * up;
+        float top = std::min( 44.0f, m_view.m_height * 0.6f );
+        float d = std::min( 1.0f, c.m_tow / 2.5f );
+        float y = c.m_tow < 2.5f ? lerpf( top, 1.9f, d * d * ( 3.0f - 2.0f * d ) ) : 1.9f + lift;
+        if ( y > top ) continue;
+        const ModelMesh &hook = modelOf( "tow_hook" );
+        Matrix           hx = MatrixMultiply( MatrixRotateY( c.m_tow * 0.3f ), MatrixTranslate( at.x, y, at.y ) );
+        if ( hook.m_hasBase ) DrawMesh( hook.m_base, lit, hx );
+        if ( !shadow ) DrawCylinderEx( { at.x, y + 0.9f, at.y }, { at.x, top, at.y }, 0.05f, 0.05f, 5, { 26, 24, 24, 255 } );
+    }
 }
 
 void Renderer::drawDecals( const World &w )
@@ -3296,6 +3371,26 @@ void Renderer::drawDecals( const World &w )
         rlTexCoord2f( 0, 1 ); rlVertex3f( h.m_pos.x - r, 0.065f, h.m_pos.y + r );
         rlTexCoord2f( 1, 1 ); rlVertex3f( h.m_pos.x + r, 0.065f, h.m_pos.y + r );
         rlTexCoord2f( 1, 0 ); rlVertex3f( h.m_pos.x + r, 0.065f, h.m_pos.y - r );
+    }
+    // The racing line (the option): a soft band along its points, each corner in its own colour, joined at the
+    // bisectors so the band bends without gaps.
+    for ( size_t i = 0; i + 1 < m_guide.size(); ++i )
+    {
+        const GuidePoint &a = m_guide[i], &b = m_guide[i + 1];
+        Vector2           d = sub( b.m_pos, a.m_pos );
+        if ( len( d ) > 6.0f || len( d ) < 1e-3f ) continue;
+        auto side = [&]( size_t k ) {
+            Vector2 p = m_guide[k > 0 ? k - 1 : k].m_pos, q = m_guide[k + 1 < m_guide.size() ? k + 1 : k].m_pos;
+            Vector2 t = sub( q, p );
+            return mul( perp( len( t ) > 1e-3f ? norm( t ) : norm( d ) ), 0.7f );
+        };
+        Vector2 sa = side( i ), sb = side( i + 1 );
+        rlColor4ub( a.m_color.r, a.m_color.g, a.m_color.b, a.m_color.a );
+        rlTexCoord2f( 0.0f, 0.5f ); rlVertex3f( a.m_pos.x - sa.x, 0.07f, a.m_pos.y - sa.y );
+        rlTexCoord2f( 1.0f, 0.5f ); rlVertex3f( a.m_pos.x + sa.x, 0.07f, a.m_pos.y + sa.y );
+        rlColor4ub( b.m_color.r, b.m_color.g, b.m_color.b, b.m_color.a );
+        rlTexCoord2f( 1.0f, 0.5f ); rlVertex3f( b.m_pos.x + sb.x, 0.07f, b.m_pos.y + sb.y );
+        rlTexCoord2f( 0.0f, 0.5f ); rlVertex3f( b.m_pos.x - sb.x, 0.07f, b.m_pos.y - sb.y );
     }
     rlEnd();
     rlSetTexture( 0 );
@@ -3463,8 +3558,10 @@ void Renderer::render( const World &w, const View &v )
     rlActiveTextureSlot( 0 );
     rlDisableBackfaceCulling();
     if ( m_track ) drawScene( w, false );
+    if ( m_track ) drawFlyer( false );   // the helicopter, seen at the picture's edge (RenderLook.cpp)
     drawBullets( w );
     drawParticles();
+    drawBeam();
     drawBolt();
     rlEnableBackfaceCulling();
     EndMode3D();

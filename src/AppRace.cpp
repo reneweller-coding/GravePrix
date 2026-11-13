@@ -139,10 +139,28 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
     int difficulty = m_inCareer ? m_career.m_difficulty : m_qDiff;
     m_world.init( m_track, m_field, mode, difficulty, (uint32_t)( GetTime() * 1000 ) + 13 );
     m_hot = false;
+    m_replayHead = m_replayCount = 0;
+    m_replayFreeze = -1;
+    m_standCheer.clear();
+    m_lastGasp = -10.0f;
+    m_frameWatch = m_frameCount = m_slowFrames = 0.0f;
+    m_slowWindows = 0;
+    m_plan[0].clear();
+    m_plan[1].clear();
+    if ( m_player2 >= 0 ) splitViews( true );
     m_closeTime = 0.0f;
     m_lastQuip = -10.0f;
+    m_racing = true;   // before the views: applySettings (a window resized) keeps them split
     m_view.setTrack( m_track );
-    m_racing = true;
+    if ( m_player2 >= 0 )
+    {
+        m_view2.setTrack( m_track );
+        m_view2.setSlogan( T( "Graves & Sons – Ihr letzter Boxenstopp" ) );
+        const Car &p2 = m_world.m_cars[m_player2];
+        m_cam2.m_focus = m_camCar2 = m_camAnchor2 = p2.m_pos;
+        m_camLead2 = { 0, 0 };
+        m_cam2.m_height = 64.0f * m_set.m_zoom;
+    }
     m_paused = false;
     m_acc = 0;
     m_endTimer = 0;
@@ -330,7 +348,8 @@ void App::race( float dt )
             m_audio.quiet();
             sound( SfxE::UI_OK );
         }
-        m_acc += dt;
+        // The game speed (the option): the race steps slower, the screen keeps its pace.
+        m_acc += dt * ( m_schoolOn ? 1.0f : m_set.m_speed );
         int steps = 0;
         while ( m_acc >= Dt && steps++ < 5 && !m_paused )
         {
@@ -338,7 +357,9 @@ void App::race( float dt )
             raceStep();
         }
         if ( m_acc > Dt * 5 ) m_acc = 0;
-        m_view.update( m_world, dt );
+        m_view.update( m_world, dt * ( m_schoolOn ? 1.0f : m_set.m_speed ) );
+        if ( m_player2 >= 0 ) m_view2.update( m_world, dt * m_set.m_speed );
+        watchFrameRate( dt );
         for ( const Renderer::Cue &c : m_view.m_cues )
         {
             if ( c.m_kind >= 2 )   // thunder: heard however far away
@@ -357,6 +378,13 @@ void App::race( float dt )
         m_view.m_cues.clear();
         const Car &me = m_world.m_cars[m_player];
         raceCamera( dt );
+        racingLine( m_view, m_player );
+        if ( m_player2 >= 0 )
+        {
+            leadCamera( dt, m_player2, m_cam2, m_camCar2, m_camAnchor2, m_camLead2 );
+            racingLine( m_view2, m_player2 );
+            m_cam2.m_shake = std::min( 1.0f, m_shake ) * m_set.m_shake * 0.5f;
+        }
         m_shake = std::max( 0.0f, m_shake - dt * 2.5f );
         m_cam.m_shake = std::min( 1.0f, m_shake ) * m_set.m_shake;
         m_view.m_hurt = std::max( m_view.m_hurt - dt * 1.5f, me.m_hitFlash * 0.4f + ( me.m_hp < me.m_maxHp * 0.25f && !me.m_wrecked ? 0.25f + 0.1f * std::sin( m_time * 6 ) : 0.0f ) );
@@ -370,16 +398,35 @@ void App::race( float dt )
         // Rumble.
         m_rumbleLow = std::max( 0.0f, m_rumbleLow - dt * 3 );
         m_rumbleHigh = std::max( 0.0f, m_rumbleHigh - dt * 5 );
-        if ( m_set.m_rumble ) rumble::set( std::min( 1.0f, m_rumbleLow ), std::min( 1.0f, m_rumbleHigh + me.m_skid * 0.15f ) );
+        if ( m_set.m_rumble )
+            rumble::set( std::min( 1.0f, m_rumbleLow ), std::min( 1.0f, m_rumbleHigh + me.m_skid * 0.15f + m_gripSing * 0.12f ) );
         if ( m_world.humansDone() )
         {
             m_endTimer += dt;
             if ( m_endTimer > 4.0f || ( m_endTimer > 1.0f && m_in.accept() ) )
             {
-                endRace();
+                // The finish once more in slow motion (the option), then the results.
+                if ( startReplay() )
+                    go( ScreenE::REPLAY );
+                else
+                    endRace();
                 return;
             }
         }
+    }
+    if ( m_player2 >= 0 )
+    {
+        // Two players: side by side, a dark seam between them.
+        float W = (float)GetScreenWidth(), H = (float)GetScreenHeight();
+        m_view.render( m_world, m_cam );
+        m_view2.render( m_world, m_cam2 );
+        const Texture2D &a = m_view.texture(), &b = m_view2.texture();
+        DrawTexturePro( a, { 0, 0, (float)a.width, (float)-a.height }, { 0, 0, W * 0.5f, H }, { 0, 0 }, 0, WHITE );
+        DrawTexturePro( b, { 0, 0, (float)b.width, (float)-b.height }, { W * 0.5f, 0, W * 0.5f, H }, { 0, 0 }, 0, WHITE );
+        DrawRectangle( (int)( W * 0.5f ) - 2, 0, 4, (int)H, { 12, 10, 10, 255 } );
+        raceHud();
+        if ( m_paused ) racePause();
+        return;
     }
     m_view.render( m_world, m_cam );
     const Texture2D &t = m_view.texture();
@@ -388,7 +435,9 @@ void App::race( float dt )
     if ( m_paused ) racePause();
 }
 
-void App::raceCamera( float dt )
+void App::raceCamera( float dt ) { leadCamera( dt, m_player, m_cam, m_camCar, m_camAnchor, m_camLead ); }
+
+void App::leadCamera( float dt, int player, View &cam, Vector2 &camCar, Vector2 &anchor, Vector2 &lead )
 {
     // The camera leads the car the way it goes, so a bend shows in time (docs/DESIGN.md "Seeing the road"). It never
     // turns (turning makes people sick). The picture is tilted: from the focus it sees 0.65 of its height up the
@@ -396,31 +445,73 @@ void App::raceCamera( float dt )
     // as driving up: 61 m at 108 km/h either way (56 m up and 34 m down before), across the screen 84 m (66 m).
     // The lead follows the velocity, damped: a spin or a crash glides instead of jerking.
     constexpr float LeadUp = 0.18f, LeadDown = 0.465f, LeadSide = 0.35f;   // shares of the height
-    const Car &me = m_world.m_cars[m_player];
+    const Car &me = m_world.m_cars[player];
     float      speed = len( me.m_vel );
-    float      h = ( 58.0f + speed * 0.55f ) * m_set.m_zoom;
-    m_cam.m_height += ( h - m_cam.m_height ) * std::min( 1.0f, dt * 1.5f );
+    // Two players: each half is narrow, the camera a little higher.
+    float      h = ( 58.0f + speed * 0.55f ) * m_set.m_zoom * ( m_player2 >= 0 ? 1.12f : 1.0f );
+    cam.m_height += ( h - cam.m_height ) * std::min( 1.0f, dt * 1.5f );
     // The anchor goes with the car without trailing it; a jump (back on the track) glides.
-    Vector2 moved = sub( me.m_pos, m_camCar );
-    m_camCar = me.m_pos;
-    if ( len( moved ) < 3.0f + speed * 0.1f ) m_camAnchor = add( m_camAnchor, moved );
-    m_camAnchor = add( m_camAnchor, mul( sub( me.m_pos, m_camAnchor ), std::min( 1.0f, dt * 6.0f ) ) );
+    Vector2 moved = sub( me.m_pos, camCar );
+    camCar = me.m_pos;
+    if ( len( moved ) < 3.0f + speed * 0.1f ) anchor = add( anchor, moved );
+    anchor = add( anchor, mul( sub( me.m_pos, anchor ), std::min( 1.0f, dt * 6.0f ) ) );
     Vector2 want = { 0, 0 };
     if ( !me.m_wrecked && speed > 0.5f )
     {
         // The whole lead from 54 km/h, less while crawling (the start, a car stuck).
         Vector2 d = mul( me.m_vel, 1.0f / speed );
-        float   k = clampf( ( speed - 3.0f ) / 12.0f, 0, 1 ) * m_cam.m_height;
-        want = { d.x * LeadSide * k, d.y * ( d.y > 0 ? LeadDown : LeadUp ) * k };
+        float   k = clampf( ( speed - 3.0f ) / 12.0f, 0, 1 ) * cam.m_height;
+        want = { d.x * LeadSide * k * ( m_player2 >= 0 ? 0.55f : 1.0f ), d.y * ( d.y > 0 ? LeadDown : LeadUp ) * k };
     }
-    m_camLead = add( m_camLead, mul( sub( want, m_camLead ), std::min( 1.0f, dt * 1.6f ) ) );
-    m_cam.m_focus = add( m_camAnchor, m_camLead );
+    lead = add( lead, mul( sub( want, lead ), std::min( 1.0f, dt * 1.6f ) ) );
+    cam.m_focus = add( anchor, lead );
+}
+
+void App::racingLine( Renderer &view, int player )
+{
+    view.m_guide.clear();
+    if ( ( !m_set.m_racingLine && !m_schoolOn ) || m_mode == ModeE::DERBY || m_track.m_arena || m_track.m_s.empty() ) return;
+    const Car &me = m_world.m_cars[player];
+    if ( !me.racing() || me.m_wrongWay > 0.0f || m_world.m_phase == World::PhaseE::DONE ) return;
+    int slot = player == m_player ? 0 : 1;
+    std::vector<float> &plan = m_plan[slot];
+    if ( plan.size() != m_track.m_s.size() || std::fabs( m_planWet[slot] - m_world.m_wetness ) > 0.05f )
+    {
+        m_world.speedPlan( player, 0.95f, plan );
+        m_planWet[slot] = m_world.m_wetness;
+    }
+    // From just ahead of the nose as far as the camera leads; each point coloured by the speed the car has now against
+    // the speed the plan allows there (the plan already brakes down to the next bend: red starts where to brake).
+    float v = std::max( 0.0f, me.speed() ), look = clampf( v * 4.0f, 60.0f, 170.0f );
+    Color go = { 70, 210, 90, 255 }, lift = { 245, 205, 50, 255 }, stop = { 235, 55, 40, 255 };
+    if ( m_set.m_palette == 1 ) go = { 60, 140, 235, 255 }, lift = { 240, 228, 120, 255 }, stop = { 230, 110, 20, 255 };
+    for ( float d = 4.0f; d <= look; d += 2.0f )
+    {
+        float              s = m_track.wrap( me.m_s + d );
+        const TrackSample &ts = m_track.sampleAt( s );
+        float              allow = plan[(size_t)m_track.indexAt( s )];
+        float              t = clampf( ( v - allow + 1.0f ) / 4.0f, 0, 1 );
+        Color              c = t < 0.5f ? mixColor( go, lift, t * 2.0f ) : mixColor( lift, stop, t * 2.0f - 1.0f );
+        float              a = clampf( ( d - 4.0f ) / 6.0f, 0, 1 ) * clampf( ( look - d ) / ( look * 0.3f ), 0, 1 );
+        c.a = (unsigned char)( 215 * a );
+        view.m_guide.push_back( { m_track.pointAt( s, ts.m_line ), c } );
+    }
 }
 
 void App::raceStep()
 {
     std::vector<CarInput> inputs( m_world.m_cars.size() );
-    inputs[m_player] = m_in.car( 0, 1, m_set.m_stickAims ? &m_world.m_cars[m_player] : nullptr );
+    int                   players = m_player2 >= 0 ? 2 : 1;
+    inputs[m_player] = m_in.car( 0, players, m_set.m_stickAims ? &m_world.m_cars[m_player] : nullptr );
+    if ( m_player2 >= 0 )
+    {
+        inputs[m_player2] = m_in.car( 1, 2, m_set.m_stickAims ? &m_world.m_cars[m_player2] : nullptr );
+        if ( m_in.latched( ActE::RESET, 1 ) && m_world.resetCar( m_player2 ) )
+        {
+            m_audio.play( SfxE::PICK_MYSTERY, 0.5f, 0.7f, 0.6f );
+            m_camCar2 = m_world.m_cars[m_player2].m_pos;
+        }
+    }
     // Back on the track: the key asks, the race decides (not in the countdown, not wrecked, not too soon again).
     if ( m_in.latched( ActE::RESET, 0 ) )
     {
@@ -438,6 +529,33 @@ void App::raceStep()
     int leader = m_world.m_leader;
     int lapBefore = m_world.m_cars[m_player].m_lap;
     m_world.step( inputs );
+    // The replay keeps the last seconds (a ring of whole steps; the effects come again from their events).
+    if ( m_set.m_replay && !m_schoolOn && !m_tutorialOn && ( !m_test || m_testReplay ) )
+    {
+        // The moment worth keeping (a human's finish or wreck; in a derby any wreck, the last one ends it): the ring
+        // runs on 1.5 s after it and then stops, so a long run-out (the second player still racing, the field coming
+        // home) cannot push it out. A later moment starts it again.
+        for ( const Event &e : m_world.m_events )
+            if ( ( e.m_type == EvE::FINISH || e.m_type == EvE::WRECK ) &&
+                 ( e.m_car == m_player || ( m_player2 >= 0 && e.m_car == m_player2 ) || ( m_mode == ModeE::DERBY && e.m_type == EvE::WRECK ) ) )
+                m_replayFreeze = 90;
+        constexpr size_t Keep = 480;   // eight seconds
+        if ( m_replayBuf.size() != Keep ) m_replayBuf.resize( Keep );
+        if ( m_replayFreeze != 0 )
+        {
+            m_replayBuf[m_replayHead] = m_world;
+            m_replayHead = ( m_replayHead + 1 ) % Keep;
+            m_replayCount = std::min( m_replayCount + 1, Keep );
+            if ( m_replayFreeze > 0 ) --m_replayFreeze;
+        }
+    }
+    // Graves & Sons come for a wreck: the hook just came down.
+    for ( const Car &c : m_world.m_cars )
+        if ( c.m_tow > 0.0f && c.m_tow <= Dt * 1.5f )
+        {
+            m_feed.push_back( { tf( T( "Graves & Sons holen %s ab" ), c.m_setup.m_driver.c_str() ), 4.0f } );
+            if ( m_feed.size() > 5 ) m_feed.erase( m_feed.begin() );
+        }
     if ( m_mode == ModeE::TRIAL && m_world.m_phase != World::PhaseE::COUNTDOWN && !m_tutorialOn )
     {
         // The ghost: this lap recorded, the best one played back from the lap's start.
@@ -445,7 +563,7 @@ void App::raceStep()
         if ( c.m_lap != lapBefore )
         {
             bool best = c.m_lastLap > 0 && c.m_lastLap <= c.m_bestLap + 1e-4f && lapBefore >= 0 && m_ghostRec.size() > 60;
-            if ( best && ( m_ghost.empty() || c.m_lastLap < m_ghostTime ) )
+            if ( best && m_set.m_speed >= 0.999f && ( m_ghost.empty() || c.m_lastLap < m_ghostTime ) )
             {
                 if ( !m_ghost.empty() ) award( "ghost_beaten" );
                 m_ghost = m_ghostRec;
@@ -481,7 +599,9 @@ void App::raceStep()
             m_stuckTime = 0.0f;
     }
     m_view.events( m_world );
+    if ( m_player2 >= 0 ) m_view2.events( m_world );
     raceEvents();
+    schoolStep();
     awardsEvents();
     spirits();
     if ( m_tutorialOn ) tutorial();
@@ -596,6 +716,7 @@ void App::raceEvents()
         case EvE::CRASH:
         {
             bool me2 = mine || e.m_other == m_player;
+            if ( e.m_power > 14 ) crowdGasp( e.m_pos );
             play( e.m_power > 12 ? SfxE::CRASH_HEAVY : SfxE::CRASH_LIGHT, e.m_pos, clampf( e.m_power / 15.0f, 0.3f, 1.0f ) );
             if ( e.m_power > 18 ) play( SfxE::METAL_CRUNCH, e.m_pos, 0.8f );
             if ( me2 )
@@ -628,6 +749,7 @@ void App::raceEvents()
         case EvE::WRECK:
         {
             play( SfxE::WRECK, e.m_pos, 1.0f );
+            crowdGasp( e.m_pos );
             const Car  &victim = m_world.m_cars[e.m_car];
             std::string killer = e.m_other >= 0 ? m_world.m_cars[e.m_other].m_setup.m_driver : std::string( "" );
             m_feed.push_back( { killer.empty() ? victim.m_setup.m_driver + T( " ist verschrottet" )
@@ -786,6 +908,7 @@ void App::raceEvents()
             }
             break;
         case EvE::FINISH:
+            if ( mine && m_view.standCount() > 0 ) m_audio.play( SfxE::APPLAUSE, 0, 0.55f );
             if ( mine )
             {
                 m_audio.play( SfxE::FINISH, 0, 0.9f );
@@ -940,7 +1063,7 @@ void App::raceSound( float dt )
     {
         const Car &c = m_world.m_cars[i];
         float      d = len( sub( c.m_pos, m_cam.m_focus ) );
-        bool       me = (int)i == m_player;
+        bool       me = (int)i == m_player || (int)i == m_player2;
         float      vol = me ? 0.85f : 0.75f / ( 1.0f + d / 22.0f );
         if ( c.m_wrecked ) vol = 0;
         float pan = clampf( ( c.m_pos.x - m_cam.m_focus.x ) / 45.0f, -1, 1 );
@@ -954,6 +1077,15 @@ void App::raceSound( float dt )
     }
     const Car &me = m_world.m_cars[m_player];
     m_audio.loop( LoopE::SKID, skid * 0.7f, 0.9f + skid * 0.2f );
+    // The warning before the tyres let go (the option): they sing from 80 % of their grip, the squeal takes over.
+    float sing = 0.0f;
+    if ( m_set.m_gripWarn && me.racing() && !me.m_offRoad )
+    {
+        float u = me.m_gripUse, sp0 = len( me.m_vel );
+        sing = smoothstepf( 0.78f, 0.97f, u ) * ( 1.0f - smoothstepf( 1.0f, 1.15f, u ) ) * clampf( ( sp0 - 6.0f ) / 10.0f, 0, 1 );
+    }
+    m_gripSing = sing;
+    m_audio.loop( LoopE::TYRE_SING, sing * 0.45f, 0.92f + 0.25f * clampf( me.m_gripUse, 0, 1.2f ) );
     m_audio.loop( LoopE::SKID_LOOSE, skidLoose * 0.6f );
     m_audio.loop( LoopE::SCRAPE, me.m_scrape * 0.8f );
     float sp = len( me.m_vel );
@@ -969,7 +1101,53 @@ void App::raceSound( float dt )
     // What flies over the track (the renderer moves it): the helicopter's rotor, the airship's engines.
     m_audio.loop( LoopE::ROTOR, m_view.m_hum.m_rotor * 0.75f, m_view.m_hum.m_pitch );
     m_audio.loop( LoopE::AIRSHIP, m_view.m_hum.m_airship * 0.6f, m_view.m_hum.m_pitch );
+    crowdSound();
     (void)dt;
+}
+
+void App::crowdSound()
+{
+    // The stands near the camera: their roar (louder while they cheer after a finish), and a cheer when a fast car
+    // comes by (each stand at most every seven seconds).
+    int n = m_view.standCount();
+    if ( (int)m_standCheer.size() != n ) m_standCheer.assign( (size_t)n, 0.0f );
+    float best = 0.0f, dt = GetFrameTime();
+    for ( int k = 0; k < n; ++k )
+    {
+        m_standCheer[k] = std::max( 0.0f, m_standCheer[k] - dt );
+        Vector2 at = m_view.standAt( k );
+        float   r = m_view.standReach( k );
+        float   d = std::max( 0.0f, len( sub( at, m_cam.m_focus ) ) - r );
+        float   near = 1.0f / ( 1.0f + d / 30.0f );
+        best = std::max( best, near );
+        if ( m_standCheer[k] > 0 || near < 0.25f || m_world.m_phase != World::PhaseE::RACE ) continue;
+        for ( const Car &c : m_world.m_cars )
+            if ( !c.m_wrecked && len( c.m_vel ) > 16.0f && len( sub( c.m_pos, at ) ) < r + 16.0f )
+            {
+                float pan = clampf( ( at.x - m_cam.m_focus.x ) / 60.0f, -1, 1 );
+                m_audio.play( SfxE::CHEER, pan, 0.7f * near, 0.94f + GetRandomValue( 0, 12 ) / 100.0f );
+                m_standCheer[k] = 7.0f;
+                break;
+            }
+    }
+    m_audio.loop( LoopE::CROWD, best * ( 0.3f + 0.3f * m_view.joy() ), 1.0f );
+}
+
+void App::crowdGasp( Vector2 at )
+{
+    // A crash before a stand: a long "oooh" (not more than one every two seconds).
+    if ( m_world.m_time - m_lastGasp < 2.0f ) return;
+    for ( int k = 0; k < m_view.standCount(); ++k )
+    {
+        Vector2 st = m_view.standAt( k );
+        if ( len( sub( st, at ) ) > m_view.standReach( k ) + 40.0f ) continue;
+        float d = std::max( 0.0f, len( sub( st, m_cam.m_focus ) ) - m_view.standReach( k ) );
+        float near = 1.0f / ( 1.0f + d / 30.0f );
+        if ( near < 0.2f ) continue;
+        m_audio.play( SfxE::GASP, clampf( ( st.x - m_cam.m_focus.x ) / 60.0f, -1, 1 ), 0.7f * near );
+        m_lastGasp = m_world.m_time;
+        return;
+    }
 }
 
 // ---------------------------------------------------------------------------------------------------- HUD
@@ -1006,9 +1184,115 @@ void App::raceHud()
         DrawRectangleRec( { p.x - w * 0.5f, p.y - 34 * ui::k(), w, 28 * ui::k() }, { 120, 20, 16, 200 } );
         ui::text( tag, p.x, p.y - 33 * ui::k(), 22, ui::Ink, ui::AlignE::CENTER );
     }
+    if ( m_player2 >= 0 )
+    {
+        float W = (float)GetScreenWidth(), H = (float)GetScreenHeight();
+        ui::setScale( m_set.m_hud * 0.85f );
+        splitHud( m_player, { 0, 0, W * 0.5f, H } );
+        splitHud( m_player2, { W * 0.5f, 0, W * 0.5f, H } );
+        float k = ui::k();
+        // Shared: the map at the top in the middle, the countdown, the announcer.
+        float size = 210 * k;
+        miniMap( { W * 0.5f - size * 0.5f, 14 * k, size, size } );
+        if ( m_centerTime > 0 && !m_center.empty() )
+        {
+            float a = std::min( 1.0f, m_centerTime * 2.0f );
+            ui::text( m_center, W * 0.5f, H * 0.3f, 96, { 240, 60, 40, (unsigned char)( 255 * a ) }, ui::AlignE::CENTER );
+        }
+        if ( m_announceTime > 0 && !m_announce.empty() )
+        {
+            float a = std::min( 1.0f, m_announceTime );
+            float w = ui::width( m_announce, 26 ) + 60 * k;
+            DrawRectangle( (int)( W * 0.5f - w * 0.5f ), (int)( H - 84 * k ), (int)w, (int)( 46 * k ), { 0, 0, 0, (unsigned char)( 150 * a ) } );
+            ui::text( m_announce, W * 0.5f, H - 77 * k, 26, faded( ui::Gold, a ), ui::AlignE::CENTER );
+        }
+        ui::setScale( 1.0f );
+        return;
+    }
     ui::setScale( m_set.m_hud );
     raceHudPanels();
     ui::setScale( 1.0f );
+}
+
+void App::splitHud( int player, Rectangle area )
+{
+    float      k = ui::k();
+    const Car &me = m_world.m_cars[player];
+    int        n = (int)m_world.m_cars.size();
+    bool       left = area.x < 1.0f;
+    // Top: place, lap, time, under the player's name (the map takes the middle).
+    Rectangle top = { area.x + ( left ? 20 * k : area.width - 360 * k ), 14 * k, 340 * k, 132 * k };
+    ui::panel( top, 0.6f );
+    ui::text( player == m_player ? T( "Spieler 1" ) : T( "Spieler 2" ), top.x + 16 * k, top.y + 8 * k, 22,
+              player == m_player ? ui::Gold : ui::Accent );
+    if ( m_mode == ModeE::DERBY )
+    {
+        int alive = 0;
+        for ( const Car &c : m_world.m_cars ) alive += c.m_wrecked ? 0 : 1;
+        ui::text( tf( "Noch %d", alive ), top.x + 16 * k, top.y + 38 * k, 56, ui::Ink );
+    }
+    else
+    {
+        ui::text( tf( "%d/%d", me.m_place, n ), top.x + 16 * k, top.y + 34 * k, 60, ui::Ink );
+        int lap = std::clamp( me.m_lap + 1, 1, m_world.m_laps );
+        ui::text( tf( "Runde %d/%d", lap, m_world.m_laps ), top.x + 170 * k, top.y + 44 * k, 28, ui::Gold );
+        ui::text( clock( m_world.m_time - me.m_lapStart ), top.x + 170 * k, top.y + 80 * k, 26, ui::Ink );
+    }
+    // Bottom: armour, ammunition, the gear; the speed on the outer side.
+    Rectangle bl = { area.x + ( left ? 20 * k : 20 * k ), area.height - 140 * k, 400 * k, 120 * k };
+    ui::panel( bl, 0.6f );
+    float hp = me.m_maxHp > 0 ? me.m_hp / me.m_maxHp : 0;
+    ui::text( T( "Panzerung" ), bl.x + 14 * k, bl.y + 10 * k, 22, ui::Dim );
+    ui::bar( { bl.x + 140 * k, bl.y + 14 * k, 240 * k, 18 * k }, hp, hp < 0.25f ? ui::Warn : hp < 0.5f ? ui::Gold : ui::Good );
+    bool flame = me.m_gun->m_heat > 0;
+    ui::text( flame ? T( "Hitze" ) : T( "Munition" ), bl.x + 14 * k, bl.y + 42 * k, 22, ui::Dim );
+    ui::bar( { bl.x + 140 * k, bl.y + 46 * k, 240 * k, 18 * k },
+             flame ? me.m_heat : me.m_maxAmmo > 0 ? me.m_ammo / me.m_maxAmmo : 0, flame && me.m_heat > 0.8f ? ui::Warn : ui::Gold );
+    static const char *rearNames[] = { "Minen", "Krähenfüße", "Öl", "Nebel" };
+    ui::text( tf( "%s %d  ·  Raketen %d  ·  Lachgas %d", T( rearNames[me.m_rearSel] ), me.m_rear[me.m_rearSel], me.m_rockets, me.m_nitro ),
+              bl.x + 14 * k, bl.y + 80 * k, 22, ui::Ink );
+    float kmh = len( me.m_vel ) * 3.6f;
+    ui::text( TextFormat( "%d", (int)kmh ), area.x + area.width - 70 * k, area.height - 120 * k, 72, ui::Ink, ui::AlignE::RIGHT );
+    ui::text( "km/h", area.x + area.width - 20 * k, area.height - 70 * k, 22, ui::Dim, ui::AlignE::RIGHT );
+    // Finished or wrecked: a word over the half.
+    if ( me.m_finished || me.m_wrecked )
+    {
+        std::string s = me.m_wrecked ? std::string( T( "VERSCHROTTET" ) ) : me.m_place == 1 ? std::string( T( "SIEG!" ) ) : tf( "ZIEL  ·  Platz %d", me.m_place );
+        ui::text( s, area.x + area.width * 0.5f, area.height * 0.42f, 64, { 240, 60, 40, 230 }, ui::AlignE::CENTER );
+    }
+}
+
+void App::miniMap( Rectangle box )
+{
+    float k = ui::k();
+    float size = box.width;
+    ui::panel( box, 0.85f );
+    Rectangle b = m_track.m_bounds;
+    float     sc = std::min( ( size - 30 * k ) / b.width, ( box.height - 30 * k ) / b.height );
+    float     ox = box.x + ( size - b.width * sc ) * 0.5f, oy = box.y + ( box.height - b.height * sc ) * 0.5f;
+    auto      P = [&]( Vector2 p ) { return Vector2{ ox + ( p.x - b.x ) * sc, oy + ( p.y - b.y ) * sc }; };
+    int       ns = (int)m_track.m_s.size();
+    for ( int i = 0; i < ns; i += 2 )
+    {
+        const TrackSample &a = m_track.m_s[i], &c = m_track.m_s[( i + 2 ) % ns];
+        DrawLineEx( P( a.m_pos ), P( c.m_pos ), std::max( 3.0f, a.m_half * 2 * sc ), { 200, 190, 178, 235 } );
+    }
+    DrawCircleV( P( m_track.m_s[0].m_pos ), 4 * k, WHITE );
+    for ( size_t i = 0; i < m_world.m_cars.size(); ++i )
+    {
+        const Car &c = m_world.m_cars[i];
+        if ( c.m_wrecked ) continue;
+        bool  human = (int)i == m_player || (int)i == m_player2;
+        float r = human ? 7 * k : 5 * k;
+        DrawCircleV( P( c.m_pos ), r + 1.5f * k, BLACK );
+        DrawCircleV( P( c.m_pos ), r, (int)i == m_player ? ui::Gold : (int)i == m_player2 ? ui::Accent : c.m_setup.m_paint.m_c[0] );
+    }
+    float fy = box.y + box.height + 12 * k;
+    for ( auto &f : m_feed )
+    {
+        ui::text( f.first, box.x + size * 0.5f, fy, 22, { 230, 200, 180, (unsigned char)( 255 * std::min( 1.0f, f.second ) ) }, ui::AlignE::CENTER );
+        fy += 28 * k;
+    }
 }
 
 void App::raceHudPanels()
@@ -1108,6 +1392,7 @@ void App::raceHudPanels()
     }
     if ( !m_tutorialOn ) jobHud();
     tutorialHud();
+    schoolHud();
     // The middle: countdown, laps, wreck.
     if ( m_centerTime > 0 && !m_center.empty() )
     {
@@ -1130,7 +1415,7 @@ void App::raceHudPanels()
             m_hudFade = std::min( 1.0f, m_hudFade + GetFrameTime() * 6.0f );
     }
     float fade = clampf( m_hudFade, 0, 1 );
-    float panels = m_tutorialOn ? 162 * k : m_inCareer && m_offer.m_job != JobE::NONE ? 112 * k : 20 * k;
+    float panels = m_tutorialOn ? 162 * k : m_schoolOn ? 156 * k : m_inCareer && m_offer.m_job != JobE::NONE ? 112 * k : 20 * k;
     float bottom = H - 212 * k;   // above the panels at the bottom (the armour reaches up to H - 200)
     float notes = paceNotes( m_hudLow ? bottom : panels, m_hudLow, fade );
     // Shouts.
@@ -1290,8 +1575,8 @@ void App::racePause()
     ui::panel( r, 0.92f );
     ui::text( T( "Pause" ), r.x + 40 * k, r.y + 24 * k, 56, ui::Ink );
     bool                     booked = m_inCareer && !m_tutorialOn;
-    std::vector<std::string> items = { T( "Weiter" ), booked ? T( "Aufgeben (letzter Platz)" ) : T( "Neu starten" ),
-                                       T( "Optionen" ), booked ? T( "Aufgeben und Speichern" ) : T( "Zum Hauptmenü" ) };
+    std::vector<std::string> items = { T( "Weiter" ), booked ? T( "Aufgeben (letzter Platz)" ) : T( "Neu starten" ), T( "Optionen" ),
+                                       booked ? T( "Aufgeben und Speichern" ) : m_schoolOn ? T( "Zur Fahrschule" ) : T( "Zum Hauptmenü" ) };
     int pick = menu( items, m_pauseSel, { r.x + 50 * k, r.y + 120 * k, r.width - 80 * k, 320 * k }, 40 );
     // The key that paused is still down in this frame: it must not unpause at once.
     if ( m_time - m_pausedAt > 0.05f && ( m_in.back() || m_in.pause() ) ) pick = 0;
@@ -1314,6 +1599,11 @@ void App::racePause()
             me.m_finished = false;
             m_paused = false;
             endRace();
+        }
+        else if ( m_schoolOn )
+        {
+            m_paused = false;
+            startSchool( m_schoolEx );   // the gates and the penalties from the start
         }
         else
             startRace( m_trackName, m_trackReverse, m_field, m_mode, m_track.m_laps, m_player );
@@ -1345,6 +1635,20 @@ void App::racePause()
             m_audio.quiet();
             rumble::stop();
             m_atReady = false;
+            if ( m_player2 >= 0 )
+            {
+                m_player2 = -1;
+                splitViews( false );
+            }
+            if ( m_schoolOn )
+            {
+                // Out of the driving school: back to its screen, the career (if any) as it was.
+                m_schoolOn = false;
+                m_inCareer = m_schoolCareer;
+                m_audio.music( m_inCareer ? "garage" : "title" );
+                go( ScreenE::SCHOOL );
+                return;
+            }
             m_audio.music( "title" );
             go( ScreenE::TITLE );
         }
@@ -1383,9 +1687,17 @@ void App::endRace()
 {
     m_audio.quiet();
     rumble::stop();
+    m_replayClip.clear();
+    int p2 = m_player2 >= 0 ? m_player2 : m_splitWas;
+    bool split = m_player2 >= 0;
+    m_player2 = -1;   // first: applySettings keeps the views split while there is a second player
+    m_splitWas = -1;
+    if ( split ) splitViews( false );
+    if ( m_schoolOn ) schoolFinish();
     const Car  &me = m_world.m_cars[m_player];
     std::string key = m_trackName + ( m_trackReverse ? ":r" : "" );
-    if ( me.m_bestLap > 0 && !m_tutorialOn && ( m_rec.m_bestLap[key] <= 0 || me.m_bestLap < m_rec.m_bestLap[key] ) )
+    if ( me.m_bestLap > 0 && !m_tutorialOn && !m_schoolOn && m_set.m_speed >= 0.999f &&
+         ( m_rec.m_bestLap[key] <= 0 || me.m_bestLap < m_rec.m_bestLap[key] ) )
         m_rec.m_bestLap[key] = me.m_bestLap;
     awardsRace();
     if ( m_inCareer && !m_tutorialOn )
@@ -1407,25 +1719,180 @@ void App::endRace()
             l.m_car = c.m_def ? c.m_def->m_title.get() : c.m_setup.m_car;
             l.m_place = (int)p + 1;
             l.m_wrecked = c.m_wrecked;
-            l.m_player = o[p] == m_player;
+            l.m_player = o[p] == m_player || o[p] == p2;
             l.m_time = c.m_finished ? c.m_finishTime : 0.0f;
             l.m_wrecks = c.m_wrecks;
             if ( l.m_player ) m_report.m_place = l.m_place;
             m_report.m_lines.push_back( l );
         }
-        if ( m_report.m_place == 1 && !me.m_wrecked ) ( m_mode == ModeE::DERBY ? m_rec.m_derbyWins : m_rec.m_quickWins )++;
+        if ( m_report.m_place == 1 && !me.m_wrecked && !m_schoolOn ) ( m_mode == ModeE::DERBY ? m_rec.m_derbyWins : m_rec.m_quickWins )++;
     }
     m_rec.save( userDir() + "records.txt" );
     m_racing = false;
     m_atReady = false;
-    m_audio.music( m_report.m_place == 1 ? "win" : "results" );
+    m_audio.music( m_schoolOn ? ( m_schoolMedal > 0 ? "win" : "results" ) : m_report.m_place == 1 ? "win" : "results" );
+    m_resultsTime = 0.0f;
     go( ScreenE::RESULTS );
+}
+
+// ---------------------------------------------------------------------------------------------------- the replay
+
+bool App::startReplay()
+{
+    if ( !m_set.m_replay || m_schoolOn || m_tutorialOn || m_replayCount < 60 || ( m_test && !m_testReplay ) ) return false;
+    // The moment: the player's finish; else the player's wreck; else the winner's finish; in a derby the last wreck.
+    size_t Keep = m_replayBuf.size(), first = ( m_replayHead + Keep - m_replayCount ) % Keep;
+    auto   at = [&]( size_t i ) -> const World & { return m_replayBuf[( first + i ) % Keep]; };
+    long   found = -1;
+    int    car = -1;
+    int    humans[2] = { m_player, m_player2 };
+    for ( int pass = 0; pass < 3 && found < 0; ++pass )
+        for ( size_t i = 0; i < m_replayCount; ++i )
+            for ( const Event &e : at( i ).m_events )
+            {
+                bool human = e.m_car == humans[0] || ( humans[1] >= 0 && e.m_car == humans[1] );
+                bool hit = pass == 0 ? e.m_type == EvE::FINISH && human
+                         : pass == 1 ? e.m_type == EvE::WRECK && human
+                                     : ( e.m_type == EvE::FINISH && e.m_kind == 1 ) || ( m_mode == ModeE::DERBY && e.m_type == EvE::WRECK );
+                if ( hit && ( found < 0 || pass == 2 ) )
+                {
+                    found = (long)i;
+                    car = e.m_car;
+                }
+            }
+    if ( found < 0 || car < 0 ) return false;
+    // Two and a half seconds before it, one and a half after.
+    size_t from = (size_t)std::max( 0L, found - 150 ), to = std::min( m_replayCount, (size_t)found + 90 );
+    if ( to <= from + 30 ) return false;
+    m_replayClip.clear();
+    m_replayClip.reserve( to - from );
+    for ( size_t i = from; i < to; ++i ) m_replayClip.push_back( at( i ) );
+    m_replayMoment = (size_t)found - from;
+    m_replayCar = car;
+    m_replayAt = 0.0f;
+    m_replaySaid = false;
+    // Two players: the replay fills the screen.
+    if ( m_player2 >= 0 )
+    {
+        m_splitWas = m_player2;
+        m_player2 = -1;
+        splitViews( false );
+    }
+    m_audio.quiet();
+    m_replayCam.m_focus = m_replayClip[m_replayMoment].m_cars[(size_t)car].m_pos;
+    m_replayCam.m_height = 26.0f;
+    return true;
+}
+
+void App::replay( float dt )
+{
+    if ( m_replayClip.empty() )
+    {
+        endRace();
+        return;
+    }
+    // Slow motion: a step of the race takes nearly three frames. Each step's events once (the effects come again).
+    constexpr float Slow = 0.35f;
+    size_t          before = (size_t)m_replayAt;
+    m_replayAt += dt * 60.0f * Slow;
+    size_t now = std::min( (size_t)m_replayAt, m_replayClip.size() - 1 );
+    for ( size_t s = before + 1; s <= now; ++s ) m_view.events( m_replayClip[s] );
+    m_view.m_cues.clear();   // the birds and the dogs of the replay stay silent
+    const World &w = m_replayClip[now];
+    m_view.update( w, dt * Slow );
+    // The cameras at the track: one waiting where the moment happens, one low behind the car, one wide above the line.
+    const Car &c = w.m_cars[(size_t)std::clamp( m_replayCar, 0, (int)w.m_cars.size() - 1 )];
+    const Car &cm = m_replayClip[m_replayMoment].m_cars[(size_t)std::clamp( m_replayCar, 0, (int)w.m_cars.size() - 1 )];
+    long       t = (long)now - (long)m_replayMoment;
+    View       want;
+    if ( t < -70 )
+    {
+        // Waiting ahead: the car comes into the picture.
+        want.m_focus = add( cm.m_pos, mul( cm.fwd(), -10.0f ) );
+        want.m_height = 30.0f;
+    }
+    else if ( t < 45 )
+    {
+        want.m_focus = add( c.m_pos, mul( c.m_vel, 0.3f ) );
+        want.m_height = 20.0f;
+    }
+    else
+    {
+        want.m_focus = add( cm.m_pos, mul( cm.fwd(), 8.0f ) );
+        want.m_height = 36.0f + ( t - 45 ) * 0.1f;
+    }
+    bool cut = ( t == -70 || t == 45 ) && (size_t)m_replayAt != before;
+    float glide = cut ? 1.0f : std::min( 1.0f, dt * 3.0f );
+    m_replayCam.m_focus = add( m_replayCam.m_focus, mul( sub( want.m_focus, m_replayCam.m_focus ), glide ) );
+    m_replayCam.m_height += ( want.m_height - m_replayCam.m_height ) * glide;
+    // The moment heard: the crowd for a finish, the crash for a wreck (slowed down too).
+    if ( !m_replaySaid && t >= 0 )
+    {
+        m_replaySaid = true;
+        bool wreck = c.m_wrecked;
+        m_audio.play( wreck ? SfxE::EXPLOSION_BIG : SfxE::APPLAUSE, 0, 0.7f, wreck ? 0.6f : 0.85f );
+        if ( !wreck ) m_audio.play( SfxE::CHEER, 0, 0.6f, 0.8f );
+    }
+    m_view.render( w, m_replayCam );
+    float            W = (float)GetScreenWidth(), H = (float)GetScreenHeight(), k = ui::k();
+    const Texture2D &tex = m_view.texture();
+    DrawTexturePro( tex, { 0, 0, (float)tex.width, (float)-tex.height }, { 0, 0, W, H }, { 0, 0 }, 0, WHITE );
+    // A television's replay: bars, the word, who it is.
+    DrawRectangle( 0, 0, (int)W, (int)( H * 0.08f ), BLACK );
+    DrawRectangle( 0, (int)( H * 0.92f ), (int)W, (int)( H * 0.08f ) + 1, BLACK );
+    if ( std::fmod( m_time, 1.0f ) < 0.6f ) DrawCircleV( { 50 * k, H * 0.04f }, 11 * k, { 220, 30, 30, 255 } );
+    ui::text( T( "WIEDERHOLUNG" ), 74 * k, H * 0.04f - 18 * k, 32, ui::Ink );
+    std::string who = c.m_setup.m_driver + ( c.m_wrecked ? std::string( T( "  ·  verschrottet" ) ) : std::string( T( "  ·  im Ziel" ) ) );
+    ui::text( who, W - 40 * k, H * 0.04f - 16 * k, 28, ui::Gold, ui::AlignE::RIGHT );
+    ui::text( m_in.padUsed() ? T( "A überspringen" ) : T( "Eingabe überspringen" ), W * 0.5f, H * 0.96f - 14 * k, 24, ui::Dim, ui::AlignE::CENTER );
+    if ( m_in.accept() || m_in.back() || IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) || now + 1 >= m_replayClip.size() ) endRace();
+}
+
+// ---------------------------------------------------------------------------------------------------- the tabloid's photo
+
+void App::takePhoto( const Texture2D &t, Rectangle src )
+{
+    // The podium as the results show it, in the tabloid's newsprint: grey, hard, a little grain, the paper's tint.
+    m_racePhotoDay = m_career.m_day;
+    Image img = LoadImageFromTexture( t );
+    if ( !img.data ) return;
+    ImageFlipVertical( &img );
+    // A press photo's 3:2 round the middle of the scene (the results' strip is too flat for a front page), as tall as
+    // the results show it at most.
+    float     ch = std::min( (float)img.height, std::max( std::fabs( src.height ), img.height * 0.75f ) );
+    float     cw = std::min( (float)img.width, ch * 1.5f );
+    ch = cw / 1.5f;
+    Rectangle crop = { ( img.width - cw ) * 0.5f, ( img.height - ch ) * 0.5f, cw, ch };
+    ImageCrop( &img, crop );
+    ImageFormat( &img, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 );
+    ImageColorGrayscale( &img );
+    ImageFormat( &img, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 );
+    ImageColorContrast( &img, 28 );
+    Color *px = (Color *)img.data;
+    Rng    r;
+    r.seed( (uint32_t)m_career.m_day * 7919u + 3u );
+    for ( int i = 0; i < img.width * img.height; ++i )
+    {
+        float v = px[i].r / 255.0f;
+        v = clampf( v * 0.92f + 0.05f + ( r.unit() - 0.5f ) * 0.08f, 0, 1 );
+        px[i] = { (unsigned char)( v * 238 ), (unsigned char)( v * 230 ), (unsigned char)( v * 214 ), 255 };
+    }
+    if ( m_racePhoto.id ) UnloadTexture( m_racePhoto );
+    m_racePhoto = LoadTextureFromImage( img );
+    SetTextureFilter( m_racePhoto, TEXTURE_FILTER_BILINEAR );
+    UnloadImage( img );
 }
 
 void App::results()
 {
     backdrop();
     float k = ui::k();
+    m_resultsTime += m_test ? 1.0f / 30.0f : GetFrameTime();
+    if ( m_schoolOn )
+    {
+        schoolResults();
+        return;
+    }
     if ( m_tutorialOn )
         header( m_tutStep >= 8 ? T( "Probefahrt bestanden" ) : T( "Probefahrt abgebrochen" ),
                 m_tutStep >= 8 ? T( "Graves & Sons stellen dir einen Führerschein aus. Auf Probe, versteht sich." )
@@ -1478,6 +1945,10 @@ void App::results()
             Rectangle src = { ( t.width - sw ) * 0.5f, ( t.height - sh ) * 0.5f, sw, -sh };
             DrawTexturePro( t, src, box, { 0, 0 }, 0, WHITE );
             DrawRectangleLinesEx( box, std::max( 1.0f, 2 * k ), { 60, 54, 48, 255 } );
+            // The tabloid's photographer: the podium when the confetti is in the air (the career's front page); at the
+            // latest when the screen is left.
+            m_photoSrc = src;
+            if ( m_inCareer && m_racePhotoDay != m_career.m_day && m_resultsTime > 1.4f ) takePhoto( t, src );
         }
     }
     // Last words of the departed.
@@ -1532,6 +2003,9 @@ void App::results()
     if ( m_in.accept() || IsMouseButtonPressed( MOUSE_BUTTON_LEFT ) )
     {
         sound( SfxE::UI_OK );
+        if ( m_inCareer && !m_tutorialOn && m_racePhotoDay != m_career.m_day && m_photoSrc.width > 0 )
+            takePhoto( m_podium.texture(), m_photoSrc );   // left before the photographer was ready: the podium as it is
+        m_photoSrc = {};
         if ( m_tutorialOn )
         {
             m_tutorialOn = false;

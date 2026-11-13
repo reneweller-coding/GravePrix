@@ -103,6 +103,17 @@ bool Track::build( const TrackDef &def, const VenueDef *venue, bool reverse, boo
     scatter( g_data );
     litter( g_data );
     loose( g_data );
+    // The slalom's gates: a cone on either side, knocked flying when hit.
+    for ( const GateSpot &g : m_gates )
+        for ( int side = -1; side <= 1; side += 2 )
+        {
+            LooseSpot l;
+            l.m_model = "cone";
+            l.m_pos = pointAt( g.m_s, g.m_lat + side * g.m_w * 0.5f );
+            l.m_r = 0.3f;
+            l.m_h = 0.75f;
+            m_loose.push_back( l );
+        }
     return true;
 }
 

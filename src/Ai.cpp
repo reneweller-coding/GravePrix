@@ -68,6 +68,36 @@ float World::cornerSpeed( int i, const TrackPos &tp, float corner, float &decel 
     return want;
 }
 
+void World::speedPlan( int i, float corner, std::vector<float> &plan ) const
+{
+    const Car   &c = m_cars[i];
+    const Track &T = *m_track;
+    int          n = (int)T.m_s.size();
+    plan.assign( (size_t)n, c.m_top );
+    if ( n == 0 ) return;
+    // As cornerSpeed plans it, for the whole lap at once: each sample's limit, then braked back from the next one.
+    auto gripOf = [&]( SurfaceE sf, float extra ) {
+        float g = std::min( surfaceGrip( sf ), extra );
+        return surfaceLoose( sf ) ? std::min( 1.05f, g * c.m_offroad ) : g;
+    };
+    float              decelFull = BrakeAccel * c.m_brakeF * 0.82f;
+    float              side = sideGrip( c ) * corner;
+    std::vector<float> dec( (size_t)n );
+    for ( int k = 0; k < n; ++k )
+    {
+        const TrackSample &s = T.m_s[k];
+        float g = gripOf( s.m_surface, s.m_lineGrip ) * ( surfaceLoose( s.m_surface ) ? 1.0f : 1.0f - 0.16f * m_wetness );
+        dec[k] = decelFull * ( 0.45f + 0.55f * std::min( g, 1.0f ) );
+        plan[k] = std::min( c.m_top, std::sqrt( side * g / std::max( s.m_lineCurv, 1e-4f ) ) );
+    }
+    for ( int pass = 0; pass < 2; ++pass )
+        for ( int k = n - 1; k >= 0; --k )
+        {
+            float next = plan[(size_t)( ( k + 1 ) % n )];
+            plan[k] = std::min( plan[k], std::sqrt( next * next + 2.0f * dec[k] * T.m_step ) );
+        }
+}
+
 CarInput World::brakeHelp( int i, const CarInput &own )
 {
     // The computer drivers' plan for the bends, at nearly the whole grip: above it the throttle goes, a little more
@@ -187,7 +217,7 @@ CarInput World::ai( int i )
         float myLat = tp.m_lat;
         for ( size_t k = 0; k < m_cars.size(); ++k )
         {
-            if ( (int)k == i ) continue;
+            if ( (int)k == i || m_cars[k].m_gone ) continue;
             const Car &o = m_cars[k];
             float      ds = T.delta( c.m_s, o.m_s );
             if ( ds < 0 || ds > 28 ) continue;
@@ -320,7 +350,7 @@ CarInput World::ai( int i )
         float myLat = here.m_line + a.m_lane;
         for ( size_t k = 0; k < m_cars.size(); ++k )
         {
-            if ( (int)k == i ) continue;
+            if ( (int)k == i || m_cars[k].m_gone ) continue;
             const Car &o = m_cars[k];
             float      ds = T.delta( c.m_s, o.m_s );
             if ( ds <= 0 || ds > 45 ) continue;

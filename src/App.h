@@ -26,7 +26,7 @@ namespace grave
 enum class ScreenE : int
 {
     TITLE, NEWGAME, HUB, OFFERS, GARAGE, MARKET, SHARK, SPONSOR, NEWS, TABLE, STORY, RACE, RESULTS, QUICK, OPTIONS,
-    CONTROLS, GRAVEYARD, CRYPT, SLOTS, CREDITS, COUNT
+    CONTROLS, GRAVEYARD, CRYPT, SLOTS, CREDITS, SCHOOL, BENCH, REPLAY, COUNT
 };
 
 /** @brief The game. */
@@ -76,6 +76,9 @@ private:
     int  quality() const;
     void applySettings();
     void saveSettings();
+    int  m_optTab = 0;            ///< the options' tab: 0 picture, 1 sound, 2 display, 3 driving
+    /** @return whether the miniature look is on now (on, or automatic while the frame rate holds) */
+    bool miniatureOn() const { return m_set.m_miniature == 1 || ( m_set.m_miniature == 2 && !m_set.m_lookDropped ); }
 
     // AppRace.cpp: the race.
     void startRace( const std::string &track, bool reverse, const std::vector<CarSetup> &field, ModeE mode, int laps,
@@ -143,6 +146,71 @@ private:
     ScreenE m_tutFrom = ScreenE::TITLE;
     bool    m_hubTutorial = false;   ///< the paddock offered the test drive last frame
 
+    // The driving school (AppSchool.cpp): three exercises on the proving ground, timed, with medals.
+    void  school();                ///< the screen: the exercises, their best times and medals
+    void  startSchool( int k );    ///< starts exercise k (0 slalom, 1 hairpins, 2 esses)
+    void  schoolStep();            ///< every race step: the gates, the penalties
+    void  schoolHud();
+    void  schoolFinish();          ///< at the end: the time, the medal, the record
+    void  schoolResults();         ///< the results screen after an exercise
+    bool  m_schoolOn = false;
+    int   m_schoolEx = 0;          ///< the exercise running
+    int   m_schoolGate = 0;        ///< the next slalom gate
+    int   m_schoolMissed = 0, m_schoolCones = 0;
+    float m_schoolTime = 0.0f;     ///< the result: the time with the penalties
+    int   m_schoolMedal = 0;       ///< 0 none, 1 bronze, 2 silver, 3 gold
+    bool  m_schoolBest = false;    ///< a new best time
+
+    // The benchmark (AppSchool.cpp): half a minute on the heaviest track, with and without the miniature look.
+    void  startBenchmark();
+    void  bench();                 ///< the screen: the drive, then the verdict
+    Track m_benchTrack;
+    World m_benchWorld;
+    View  m_benchCam;
+    float m_benchTime = 0.0f;
+    int   m_benchPhase = 0;        ///< 0 with the look, 1 without, 2 the verdict
+    std::vector<float> m_benchFrames[2];
+    std::string        m_benchVerdict;
+    /** @brief The automatic miniature look: off for good when the frame rate does not hold in a race. */
+    void  watchFrameRate( float dt );
+    float m_slowFrames = 0.0f, m_frameWatch = 0.0f, m_frameCount = 0.0f;
+    int   m_slowWindows = 0;       ///< windows of five seconds in a row in which the frame rate did not hold
+    bool  m_schoolCareer = false;  ///< the driving school was started from the career (it is left aside meanwhile)
+
+    // The crowd's voices (AppRace.cpp): its roar near the stands, cheers when cars pass, a gasp at a crash.
+    void               crowdSound();
+    void               crowdGasp( Vector2 at );   ///< a crash there: the stands near it gasp
+    std::vector<float> m_standCheer;   ///< per stand: seconds until it may cheer again
+    float              m_lastGasp = -10.0f;
+    float              m_gripSing = 0.0f;   ///< the tyres' warning this frame (0..1)
+
+    // The replay (AppRace.cpp): the last seconds of the race kept, the finish played again in slow motion from
+    // cameras at the track.
+    std::vector<World> m_replayBuf;    ///< a ring of the last steps
+    size_t             m_replayHead = 0, m_replayCount = 0;
+    std::vector<World> m_replayClip;   ///< what is played: the steps round the moment, in order
+    float              m_replayAt = 0.0f;   ///< steps into the clip
+    size_t             m_replayMoment = 0;  ///< the clip's step of the moment (the finish, the wreck)
+    int                m_replayCar = -1;    ///< the car the cameras watch
+    bool               startReplay();       ///< false: nothing to show
+    void               replay( float dt );  ///< the screen
+    View               m_replayCam;
+    int                m_replayFreeze = -1;    ///< steps the ring still records after the moment (-1 not yet, 0 stopped)
+    bool               m_replaySaid = false;   ///< the moment's sound played
+    bool               m_testReplay = false;   ///< the app test asked for the replay ("replayon")
+    bool               m_testSplit = false;    ///< the app test's two players without a pad ("split")
+
+    // Two players on one screen (AppRace.cpp): side by side, each with a camera and a display of their own.
+    int      m_player2 = -1;             ///< the second human's car (-1 alone)
+    int      m_qPlayers = 1;             ///< the quick race's players
+    Renderer m_view2;
+    View     m_cam2;
+    Vector2  m_camCar2 = { 0, 0 }, m_camAnchor2 = { 0, 0 }, m_camLead2 = { 0, 0 };
+    void     splitViews( bool on );
+    void     splitHud( int player, Rectangle area );
+    void     miniMap( Rectangle box );   ///< the track and the cars, the feed under it (two players)
+    int      m_splitWas = -1;            ///< the second player of a race whose replay runs full screen
+
     // The dead rivals' ghosts (AppRace.cpp): along the racing line on the cemetery's tracks and at the final.
     struct Spirit
     {
@@ -159,6 +227,14 @@ private:
     Vector2 m_camAnchor = { 0, 0 };   ///< the point the camera keeps with the car (it glides after a jump)
     Vector2 m_camLead = { 0, 0 };     ///< metres it looks ahead of the car (damped)
     void    raceCamera( float dt );
+    /** @brief One player's camera: it leads the car the way it goes (raceCamera for each player). */
+    void    leadCamera( float dt, int player, View &cam, Vector2 &car, Vector2 &anchor, Vector2 &lead );
+    /** @brief The podium's picture taken for the tabloid: cut as shown, turned into newsprint. */
+    void      takePhoto( const Texture2D &t, Rectangle src );
+    Texture2D m_racePhoto = {};       ///< the podium of the last race, for the tabloid (newsprint)
+    int       m_racePhotoDay = -1;    ///< the career's day it was taken
+    Rectangle m_photoSrc = {};        ///< the podium's part the results show (the photo's frame)
+    float     m_resultsTime = 0.0f;   ///< seconds on the results screen (the photo waits for the confetti)
 
     // Pace notes (AppRace.cpp): the bends of the racing line ahead, as arrows in the display.
     struct Bend
@@ -179,6 +255,15 @@ private:
      * @return the height they took (0: no bend ahead)
      */
     float paceNotes( float y, bool low, float alpha );
+    /**
+     * @brief The racing line on the road ahead of a player's car (the option, or the driving school), coloured by
+     *        what its speed now would need there: green fine, yellow lift, red brake.
+     * @param[in,out] view    the renderer that draws it
+     * @param[in]     player  the car
+     */
+    void               racingLine( Renderer &view, int player );
+    std::vector<float> m_plan[2];          ///< per player: World::speedPlan along the lap
+    float              m_planWet[2] = { -1.0f, -1.0f };
     bool  m_hudLow = false;     ///< the messages in the middle sit at the bottom (the car drives high on the screen)
     float m_hudFade = 1.0f;     ///< their fade while they change sides
     float m_stuckTime = 0.0f;   ///< seconds the player stood still trying to drive, or drove the wrong way (the hint)
