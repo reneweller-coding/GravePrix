@@ -15,10 +15,9 @@ import subprocess
 
 import numpy as np
 
-CLIPS1 = ["A_TPose", "Idle_Loop", "Crouch_Idle_Loop", "Dance_Loop", "Roll", "Death01", "Idle_Talking_Loop",
-          "Idle_Torch_Loop", "Jump_Loop", "Interact", "Sitting_Idle_Loop"]
-CLIPS2 = ["A_TPose", "Idle_Rail_Call", "Idle_TalkingPhone_Loop", "Yes", "Idle_FoldArms_Loop", "Hit_Knockback",
-          "LayToIdle", "Idle_No_Loop"]
+# Only the clips src/People.cpp plays (A_TPose is the reference the retargeting measures from).
+CLIPS1 = ["A_TPose", "Idle_Loop", "Idle_Talking_Loop", "Death01"]
+CLIPS2 = ["A_TPose", "Idle_FoldArms_Loop", "LayToIdle"]
 CTYPE = {5120: np.int8, 5121: np.uint8, 5122: np.int16, 5123: np.uint16, 5125: np.uint32, 5126: np.float32}
 NCOMP = {"SCALAR": 1, "VEC2": 2, "VEC3": 3, "VEC4": 4, "MAT4": 16}
 
