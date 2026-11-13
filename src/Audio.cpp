@@ -47,7 +47,7 @@ const char *const SfxNames[] = {
     "mine_drop",    "mine_arm",    "spikes_drop", "oil_drop",     "smoke_drop", "nitro",           "tire_burst",
     "crash_light",  "crash_heavy", "crash_wall",  "metal_crunch", "glass",      "explosion_small", "explosion_big",
     "wreck",        "barrel",      "count_beep",  "count_go",     "lap",        "final_lap",       "finish",
-    "wrong_way",    "bell",        "funeral_march", "birds_up",   "dog_bark",    "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
+    "wrong_way",    "bell",        "funeral_march", "birds_up",   "dog_bark",    "thunder_near", "thunder_far", "pick_cash",   "pick_wrench",  "pick_ammo",  "pick_nitro",      "pick_weapon",
     "pick_mystery", "horn_plain",  "horn_truck",  "horn_dixie",   "horn_ice",   "horn_funeral",    "horn_siren",
     "horn_klaxon",  "ui_move",     "ui_ok",       "ui_back",      "ui_buy",     "ui_deny",         "ui_cash",
     "ui_paper",     "ui_stamp"
@@ -55,7 +55,7 @@ const char *const SfxNames[] = {
 static_assert( sizeof( SfxNames ) / sizeof( SfxNames[0] ) == SfxCount, "one name per effect" );
 
 const char *const LoopNames[] = { "skid",      "skid_loose",     "scrape",       "gravel",       "flamer",
-                                  "fire",      "rain",           "wind",         "amb_junkyard", "amb_cemetery",
+                                  "fire",      "rain",           "wind",         "rotor",        "airship",      "amb_junkyard", "amb_cemetery",
                                   "amb_docks", "amb_desert",     "amb_refinery", "amb_swamp",    "amb_downtown",
                                   "amb_pass",  "amb_fairground", "amb_proving",  "amb_estate" };
 static_assert( sizeof( LoopNames ) / sizeof( LoopNames[0] ) == LoopCount, "one name per loop" );
@@ -802,6 +802,8 @@ void shatter( Fx &s, float t0, float amp )
     s.noise( t0, 0.6f, 0.3f * amp, { 0.001f, 0.02f, 0.12f }, Flt::HP, 5000, 5000, 1 );
 }
 
+std::vector<float> thunder( uint32_t seed, float near );   // with the ambiences, below
+
 /** @brief Makes one effect. */
 std::vector<float> makeSfx( SfxE e )
 {
@@ -1455,6 +1457,22 @@ std::vector<float> makeSfx( SfxE e )
         }
         s.filter( Flt::BP, 850, 0.8f );
         s.saturate( 2.2f );
+        return s.finish( -20 );
+    }
+    case SfxE::THUNDER_NEAR:
+    {
+        // A strike in view: the crack at once, the roll after it, a little of the valley's echo.
+        Fx s( 8.0f, 95 );
+        s.mix( thunder( 7101, 1.0f ), 0.0f, 1.0f );
+        s.reverb( 0.25f, 0.8f, 0.6f, 0.4f );
+        return s.finish( -14, -2 );
+    }
+    case SfxE::THUNDER_FAR:
+    {
+        // Lightning in the clouds: only the low roll, from far off.
+        Fx s( 7.0f, 96 );
+        s.mix( thunder( 7202, 0.2f ), 0.0f, 1.0f );
+        s.filter( Flt::LP, 700 );
         return s.finish( -20 );
     }
     case SfxE::FUNERAL_MARCH:
@@ -2425,6 +2443,31 @@ LoopClip makeShortLoop( LoopE l )
                    .width = 0.6f } );
         b.noise( { .amp = 0.15f, .type = Flt::BP, .hz = 1500, .q = 4, .amod = &w, .adepth = 0.6f } );
         c.data = b.finish( -21, -10 );
+        break;
+    }
+    case LoopE::ROTOR:
+    {
+        // The news helicopter: four blades slapping the air 17 times a second, the turbine's whine, the tail rotor.
+        auto g = b.walk( 1, 5, 3 );
+        b.noise( { .amp = 0.9f, .type = Flt::LP, .hz = 520, .amod = &g, .adepth = 0.15f, .pulse = 17.2f, .sharp = 6 } );
+        b.noise( { .amp = 0.7f, .type = Flt::LP, .hz = 110, .pulse = 17.2f, .sharp = 3 } );
+        b.noise( { .amp = 0.12f, .type = Flt::BP, .hz = 900, .q = 2, .pulse = 61.0f, .sharp = 2 } );
+        b.hum( 1180, 0.025f, &g, 0.3f );
+        b.hum( 2360, 0.01f );
+        c.data = b.finish( -18, -8 );
+        break;
+    }
+    case LoopE::AIRSHIP:
+    {
+        // The airship's two propellers, a little apart in speed so they beat, over the engines' low drone.
+        auto g = b.walk( 1, 4, 3 );
+        b.noise( { .amp = 0.6f, .type = Flt::LP, .hz = 260, .amod = &g, .adepth = 0.2f, .pulse = 8.6f, .sharp = 3 } );
+        b.noise( { .amp = 0.5f, .type = Flt::LP, .hz = 240, .pulse = 9.1f, .sharp = 3 } );
+        b.noise( { .amp = 0.25f, .type = Flt::LP, .hz = 420, .amod = &g, .adepth = 0.3f } );
+        b.hum( 46, 0.2f, &g, 0.2f );
+        b.hum( 92, 0.12f );
+        b.hum( 138, 0.05f );
+        c.data = b.finish( -20, -9 );
         break;
     }
     default: break;

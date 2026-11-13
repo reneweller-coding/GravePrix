@@ -45,6 +45,10 @@ int toolDeckCheck( const Options &opt );
 int toolSim( const Options &opt );
 /** @brief --handling [--car NAME]: a car alone on open ground: reversing, turning circles at each speed. */
 int toolHandling( const Options &opt );
+/** @brief --aim [--car NAME]: the stick that points the way tried on open ground (ControlsTool.cpp). */
+int toolAim( const Options &opt );
+/** @brief --resets: a car put back on the track again and again on every track; 1 when one lands badly. */
+int toolResets( const Options &opt );
 /** @brief --careersim: a career played by the computer. */
 int toolCareerSim( const Options &opt );
 /** @brief The game. */

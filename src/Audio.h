@@ -28,6 +28,8 @@ enum class SfxE : int
     COUNT_BEEP, COUNT_GO, LAP, FINAL_LAP, FINISH, WRONG_WAY, BELL, FUNERAL_MARCH,
     // the roadside
     BIRDS_UP, DOG_BARK,
+    // the sky (the storm's lightning)
+    THUNDER_NEAR, THUNDER_FAR,
     // pickups
     PICK_CASH, PICK_WRENCH, PICK_AMMO, PICK_NITRO, PICK_WEAPON, PICK_MYSTERY,
     // horns (one per horn kind in the car data)
@@ -48,6 +50,8 @@ enum class LoopE : int
     FIRE,           ///< burning wrecks nearby
     RAIN,           ///< rain on the car
     WIND,           ///< wind (snow, desert, storms)
+    ROTOR,          ///< the news helicopter overhead
+    AIRSHIP,        ///< the airship's engines overhead
     // one ambience per venue
     AMB_JUNKYARD, AMB_CEMETERY, AMB_DOCKS, AMB_DESERT, AMB_REFINERY, AMB_SWAMP, AMB_DOWNTOWN, AMB_PASS,
     AMB_FAIRGROUND, AMB_PROVING, AMB_ESTATE,

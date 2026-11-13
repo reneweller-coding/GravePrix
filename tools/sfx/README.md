@@ -9,7 +9,7 @@ build/<yours>/Release/GraveSfx.exe work/sfx
 python tools/measure_sfx.py work/sfx [--spectra work/sfx_spectra]
 ```
 
-- `<effect>.wav` — every `SfxE` (51), as played.
+- `<effect>.wav` — every `SfxE` (53), as played.
 - `loop_<name>.wav` — every `LoopE`: the short loops 4 s, the ambiences 20 s (their bed with a few of their random
   events folded in, so the file still loops).
 - `engine_<kind>.wav` — every `EngineE` as a 6 s sweep: idle 1 s, full throttle to the limiter (reached at 3.6 s,
@@ -32,7 +32,9 @@ through a horn speaker, its tape warbling (own tune); *funeral* two bars of a mo
 **Loops** (`makeShortLoop`, `makeAmbience`, the `Bed`): noise layers are rendered a little longer than the loop and
 crossfaded (equal power) over the seam; tones, chirps and placed events are periodic (their frequencies snapped to a
 whole number of cycles per loop, the events wrapped round), so they need no crossfade. Slow movements (gusts, swells)
-are sums of sines with whole cycles per loop. Each **ambience** is a 20 s stereo bed plus 4-7 event clips (crows,
+are sums of sines with whole cycles per loop. The flyers overhead: *rotor* four blades' slap (noise chopped 17 times
+a second), a turbine's whine and the tail rotor; *airship* two propellers a little apart in speed, beating, over a
+low engine drone. Each **ambience** is a 20 s stereo bed plus 4-7 event clips (crows,
 crushers, owls, bells, gulls, foghorns, frogs, sirens, a broken calliope, artillery, thunder, ...), each made distant
 (lowpass and reverb). The mixer drops these events in at random gaps, pans and pitches, so a venue never repeats in
 an obvious way. An ambience is made on a worker thread the first time `loop()` asks for it (~0.3 s); until then it

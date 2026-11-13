@@ -17,8 +17,10 @@ namespace grave
 namespace
 {
 
-constexpr float LatAccel = 15.0f;
 constexpr float BrakeAccel = 13.0f;
+constexpr float SteerGain = 1.3f;   ///< the wheels a little beyond the turn the arc asks (the tyres slip)
+constexpr float HelpGrip = 0.95f;   ///< the brake help: the share of the side grip it plans the bends with
+constexpr float HelpSlack = 1.0f;   ///< the brake help: m/s over that speed before it brakes (it lifts at once)
 
 /** @return the rear slot of a liked gear name (-1 none) */
 int rearOf( const std::string &likes )
@@ -31,6 +33,57 @@ int rearOf( const std::string &likes )
 }
 
 }   // namespace
+
+float World::cornerSpeed( int i, const TrackPos &tp, float corner, float &decel ) const
+{
+    const Car   &c = m_cars[i];
+    const Track &T = *m_track;
+    int          n = (int)T.m_s.size();
+    float        v = c.speed();
+    // Braking as the ground allows (the physics brakes at 45 % plus 55 % of the grip), with a margin.
+    auto gripOf = [&]( SurfaceE sf, float extra ) {
+        float g = std::min( surfaceGrip( sf ), extra );
+        return surfaceLoose( sf ) ? std::min( 1.05f, g * c.m_offroad ) : g;
+    };
+    float gMin = gripOf( c.m_surface, 1.0f );
+    float decelFull = BrakeAccel * c.m_brakeF * 0.82f;
+    decel = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
+    float side = sideGrip( c ) * corner;
+    float want = c.m_top * 1.2f;
+    float reach = v * v / ( 2 * decel ) + 25.0f;
+    int   steps = std::min( n, (int)( reach / T.m_step ) + 2 );
+    float d = 0;
+    for ( int k = 0; k < steps; ++k )
+    {
+        const TrackSample &s = T.m_s[( tp.m_i + k ) % n];
+        float g = gripOf( s.m_surface, s.m_lineGrip ) *
+                  ( surfaceLoose( s.m_surface ) ? 1.0f : 1.0f - 0.16f * m_wetness );
+        gMin = std::min( gMin, g );
+        float dec = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
+        float vmax = std::sqrt( side * g / std::max( s.m_lineCurv, 1e-4f ) );
+        float allowed = std::sqrt( vmax * vmax + 2 * dec * d );
+        want = std::min( want, allowed );
+        d += T.m_step;
+    }
+    return want;
+}
+
+CarInput World::brakeHelp( int i, const CarInput &own )
+{
+    // The computer drivers' plan for the bends, at nearly the whole grip: above it the throttle goes, a little more
+    // and the brake comes on. Never more throttle than the driver gives, never less brake.
+    const Car &c = m_cars[i];
+    CarInput   in = own;
+    float      v = c.speed();
+    if ( m_phase != PhaseE::RACE || m_mode == ModeE::DERBY || v < 8.0f || in.m_handbrake ) return in;
+    TrackPos tp = m_track->locate( c.m_pos, c.m_hint );
+    if ( dot( c.fwd(), m_track->m_s[tp.m_i].m_dir ) < 0.5f ) return in;   // across or against the road: no plan fits
+    float decel = 0;
+    float want = cornerSpeed( i, tp, HelpGrip, decel );
+    if ( v > want ) in.m_throttle = 0;
+    if ( v > want + HelpSlack ) in.m_brake = std::max( in.m_brake, clampf( ( v - want ) / 5.0f, 0.25f, 1.0f ) );
+    return in;
+}
 
 CarInput World::ai( int i )
 {
@@ -87,7 +140,16 @@ CarInput World::ai( int i )
             in.m_steer = ang > 0 ? -1.0f : 1.0f;
             return in;
         }
-        in.m_steer = clampf( ang * 2.5f - c.m_yaw * 0.1f, -1, 1 );
+        // Far round: full lock (and the handbrake when fast); else the arc to the target, as on a race track, but no
+        // more lock than the tyres carry (scrubbing would cost the speed the ram needs).
+        float lock = std::max( fullLock( c, v ), 0.3f );
+        float sp = std::max( std::fabs( v ), 4.0f );
+        float turn = 2.0f * sp * std::sin( clampf( ang, -1.5f, 1.5f ) ) / std::max( dl, 3.0f );
+        float carry = clampf( sideGrip( c ) * std::min( surfaceGrip( c.m_surface ), 1.0f ) / sp / lock, 0.2f, 1.0f );
+        if ( std::fabs( ang ) > 1.4f )
+            in.m_steer = ang > 0 ? 1.0f : -1.0f;
+        else
+            in.m_steer = clampf( SteerGain * turn / lock - ( c.m_yaw - turn ) * 0.1f, -carry, carry );
         in.m_throttle = std::fabs( ang ) > 2.2f && dl < 15 ? 0.3f : 1.0f;
         in.m_handbrake = std::fabs( ang ) > 1.4f && v > 10;
         if ( std::fabs( v ) < 1.5f && in.m_throttle > 0.5f ) a.m_stuck += Dt;
@@ -164,7 +226,7 @@ CarInput World::ai( int i )
         {
             TrackPos rp = T.locate( r.m_pos, c.m_hint );
             float    ds = T.delta( c.m_s, rp.m_s );
-            if ( ds < 0 || ds > 45 ) continue;
+            if ( ds < -c.m_len - r.m_r || ds > 45 ) continue;   // also beside it: else it backs out and drives in again
             float lineLat = here.m_line + a.m_lane;
             if ( std::fabs( rp.m_lat - lineLat ) < r.m_r + 2.5f )
                 goal = ( rp.m_lat > 0 ? rp.m_lat - r.m_r - 3.0f : rp.m_lat + r.m_r + 3.0f ) - here.m_line;
@@ -173,7 +235,7 @@ CarInput World::ai( int i )
         {
             TrackPos op = T.locate( o.m_pos, c.m_hint );
             float    ds = T.delta( c.m_s, op.m_s );
-            if ( ds < 0 || ds > 45 ) continue;
+            if ( ds < -c.m_len - o.m_r || ds > 45 ) continue;
             float lineLat = here.m_line + a.m_lane;
             if ( std::fabs( op.m_lat - lineLat ) < o.m_r + 2.5f )
                 goal = ( op.m_lat > 0 ? op.m_lat - o.m_r - 3.0f : op.m_lat + o.m_r + 3.0f ) - here.m_line;
@@ -220,36 +282,25 @@ CarInput World::ai( int i )
     float   st = tp.m_s + look;
     const TrackSample &ahead = T.sampleAt( st );
     float   lat = clampf( ahead.m_line + a.m_lane, -( ahead.m_half - 1.4f ), ahead.m_half - 1.4f );
+    // The arc from where the car is going (its path: the nose slips a little ahead in a bend) through that point asks
+    // for a turn; full lock turns the nose at a known rate (fullLock), so the wheels turn by that share, a little more
+    // to make up for the tyres' slip, the nose's own swing damped. (Holding the lock to what the tyres carry, as in a
+    // derby, cost 4 % of the pace and half again as many wall hits: the line needs its corrections.)
     Vector2 P = T.pointAt( st, lat );
-    float   ang = wrapRad( headingOf( sub( P, c.m_pos ) ) - c.m_head );
-    in.m_steer = clampf( ang * 2.6f - c.m_yaw * 0.12f + ( a.m_wobbleTime > 0 ? a.m_wobble : 0.0f ), -1, 1 );
+    Vector2 to = sub( P, c.m_pos );
+    float   path = std::fabs( v ) > 3.0f ? headingOf( c.m_vel ) : c.m_head;
+    float   ang = clampf( wrapRad( headingOf( to ) - path ), -1.5f, 1.5f );
+    float   turn = 2.0f * std::max( std::fabs( v ), 4.0f ) * std::sin( ang ) / std::max( len( to ), 2.0f );
+    in.m_steer = clampf( SteerGain * turn / std::max( fullLock( c, v ), 0.3f ) - ( c.m_yaw - turn ) * 0.1f +
+                             ( a.m_wobbleTime > 0 ? a.m_wobble : 0.0f ),
+                         -1, 1 );
     if ( c.m_smoked > 0 ) in.m_steer = clampf( in.m_steer + m_rng.range( -0.7f, 0.7f ), -1, 1 );
 
     // The speed the corners ahead allow.
-    // Braking as the ground allows (the physics brakes at 45 % plus 55 % of the grip), with a margin.
-    auto  gripOf = [&]( SurfaceE sf, float extra ) {
-        float g = std::min( surfaceGrip( sf ), extra );
-        return surfaceLoose( sf ) ? std::min( 1.05f, g * c.m_offroad ) : g;
-    };
-    float gMin = gripOf( c.m_surface, 1.0f );
-    float decelFull = BrakeAccel * c.m_brakeF * 0.82f;
-    float decel = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
     float corner = ( 0.8f + 0.2f * skill ) * ( 1.0f - 0.14f * c.m_setup.m_novice ) * ( 1.0f - 0.5f * c.m_slip );
-    float want = c.m_top * 1.2f;
-    float reach = v * v / ( 2 * decel ) + 25.0f;
-    int   steps = std::min( n, (int)( reach / T.m_step ) + 2 );
-    float d = 0;
-    for ( int k = 0; k < steps; ++k )
-    {
-        const TrackSample &s = T.m_s[( tp.m_i + k ) % n];
-        float g = gripOf( s.m_surface, s.m_lineGrip ) * ( surfaceLoose( s.m_surface ) ? 1.0f : 1.0f - 0.16f * m_wetness );
-        gMin = std::min( gMin, g );
-        float dec = decelFull * ( 0.45f + 0.55f * std::min( gMin, 1.0f ) );
-        float vmax = std::sqrt( LatAccel * c.m_grip * g * corner / std::max( s.m_lineCurv, 1e-4f ) );
-        float allowed = std::sqrt( vmax * vmax + 2 * dec * d );
-        want = std::min( want, allowed );
-        d += T.m_step;
-    }
+    if ( c.m_setup.m_flatOut ) corner = 50.0f;
+    float decel = 0;
+    float want = cornerSpeed( i, tp, corner, decel );
     // Trains and raised bridges ahead: stop short of them (a beginner a little late).
     for ( const MoverSpot &m : T.m_movers )
     {

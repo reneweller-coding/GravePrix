@@ -89,7 +89,7 @@ model mausoleum
   part box w=0.4 h=1.8 d=0.04 x=2.95 y=2.5 z=-3.52 color=#4a5a32
 
 # a 10 m cemetery cypress
-model cypress
+model cypress sway=0.35
   part gun r=0.18 r2=0.28 len=1.6 y=0.8 pitch=90 seg=6 color=#3a2a1e
   part sphere r=1.15 y=4.4 color=#1c3020 ry=3.4 rz=1.1 seg=8
   part sphere r=0.9 x=0.12 y=7 color=#203820 ry=2.3 seg=8
@@ -97,7 +97,7 @@ model cypress
   part cone r=0.5 len=1.4 x=0.1 y=9.5 pitch=90 seg=7 color=#20381f
 
 # a 7 m dead tree
-model tree_dead
+model tree_dead sway=0.15
   part gun r=0.224 r2=0.32 len=3.175 x=-0.111 y=1.575 z=-0.167 pitch=82.76 rot=-33.63 seg=7 color=#3a3430
   part gun r=0.06 r2=0.176 len=0.932 x=0.345 y=0.175 z=-0.481 pitch=-22.05 rot=35.65 seg=5 color=#3a3430
   part gun r=0.06 r2=0.176 len=0.932 x=0.481 y=0.175 z=0.345 pitch=-22.05 rot=125.65 seg=5 color=#3a3430

@@ -80,6 +80,10 @@ Bildwackeln: = Screen shake:
 Vibration: = Rumble:
 Sprüche im Rennen: = Trash talk in races:
 Schriftgröße: = Text size:
+Kurvenpfeile: = Corner arrows:
+Lenkung: = Steering:
+Stick dreht = stick turns
+Stick zeigt Richtung = stick points the way
 Steuerung = Controls
 Zurück = Back
 Links/Rechts ändern   ·   F11 Vollbild   ·   F12 Bildschirmfoto = Left/Right change   ·   F11 full screen   ·   F12 screenshot
@@ -98,6 +102,8 @@ Lachgas = Nitro
 Heckware wechseln = Switch rear gear
 Hupe = Horn
 Pause = Pause
+Zurück auf die Strecke = Back on track
+Festgefahren? %s: zurück auf die Strecke = Stuck? %s: back on track
 Standard wiederherstellen = Restore defaults
 Pad-Knopf drücken ... = Press a pad button ...
 Taste drücken ... (Esc bricht ab) = Press a key ... (Esc cancels)
@@ -338,7 +344,8 @@ Start!   (Rekord: %d Runden) = Start!   (record: %d rounds)
 Jede Runde eine neue Strecke irgendwo im Grave Prix. Wer unter die ersten drei kommt, fährt weiter. Wer nicht, bekommt einen Kranz. = Every round a new track somewhere in the Grave Prix. Finish in the top three and you race on. If not, you get a wreath.
 Heute für alle dieselbe Strecke und dasselbe Auto. Zeitfahren gegen deinen eigenen Geist. = Today the same track and the same car for everyone. A time trial against your own ghost.
 Fahrhilfe: = Driving assist:
-aus (rutschig wie früher) = off (slippery, the old way)
+aus (rutschiger, für Könner) = off (more slide, for experts)
+an, mit Bremshilfe = on, with brake help
 
 # 1.0.0: Graves' jobs, the upgrades' price, the epitaphs, the crypt, the test drive
 Probefahrt beim Bestatter = Test Drive at the Undertaker's
@@ -446,3 +453,7 @@ Bis bald. = See you soon.
 A schneller   ·   B zurück = A faster   ·   B back
 Leertaste schneller   ·   Esc zurück = Space faster   ·   Esc back
 Showdown ab %d Punkten unter den ersten %d  ·  Saisontag %d/%d, danach beginnt die Tabelle von vorn = Showdown from %d points in the top %d  ·  season day %d/%d, then the table starts afresh
+
+# The miniature look (RenderLook.cpp)
+Miniatur-Look: = Miniature look:
+Graves & Sons – Ihr letzter Boxenstopp = Graves & Sons – your last pit stop

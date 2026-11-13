@@ -82,6 +82,24 @@ int toolCareerSim( const Options &opt )
     Career   c;
     Paint    paint;
     c.start( "Bot", paint, difficulty, seed );
+    // --final CAR: straight into the final against Graves in that car, fully upgraded and rich, until it is won (the
+    // final's balance without a whole career before it).
+    if ( opt.has( "--final" ) )
+    {
+        const CarDef *fc = g_data.car( opt.value( "--final", "reaper" ) );
+        if ( !fc )
+        {
+            printf( "error: no car \"%s\"\n", opt.value( "--final" ).c_str() );
+            return 1;
+        }
+        c.m_car = fc->m_name;
+        c.m_up[(int)UpE::ENGINE] = fc->m_upEngine;
+        c.m_up[(int)UpE::TIRES] = fc->m_upTires;
+        c.m_up[(int)UpE::ARMOR] = fc->m_upArmor;
+        c.m_up[(int)UpE::GUN] = fc->m_upGun;
+        c.m_league = 0;
+        c.m_money = 3000000;
+    }
     if ( c.m_offers.empty() )
     {
         printf( "error: no offers on day 1 (no tracks or leagues?)\n" );
@@ -131,7 +149,7 @@ int toolCareerSim( const Options &opt )
         field[player].m_skill = (float)opt.num( "--skill", 0.85f );
         field[player].m_novice = (float)opt.num( "--novice", 0.0f );
         field[player].m_hands = (float)opt.num( "--hands", 0.0f );
-        field[player].m_assist = opt.num( "--assist", 1.0f ) != 0.0f;
+        field[player].m_assist = std::clamp( (int)opt.num( "--assist", 1.0f ), 0, 2 );   // 0 off, 1 on, 2 brake help
         field[player].m_aggression = 0.5f;
         field[player].m_weapons = 0.7f;
         World world;
@@ -146,12 +164,19 @@ int toolCareerSim( const Options &opt )
         const CarDef *cd = g_data.car( c.m_car );
         std::string kind = duel ? "SHOWDOWN" : o.m_job != JobE::NONE ? std::string( "job_" ) + jobKey( o.m_job ) + ( r.m_jobDone ? "(done)" : "(failed)" )
                          : o.m_derby ? "derby" : o.m_tier == 0 ? "small" : o.m_tier == 1 ? "main" : "big";
-        printf( "%3d %6d %8lld %7lld  %-14s %4d %4d  %s %s place %d%s%s +%d\n", c.m_day - 1, before, c.m_money, c.m_loan,
+        // How far behind the winner (a race the player finished and did not win): the balance's finer measure.
+        const Car &me = world.m_cars[(size_t)player];
+        float      gap = 0;
+        if ( me.m_finished && !world.m_finishOrder.empty() && world.m_finishOrder[0] != player )
+            gap = me.m_finishTime - world.m_cars[(size_t)world.m_finishOrder[0]].m_finishTime;
+        printf( "%3d %6d %8lld %7lld  %-14s %4d %4d  %s %s place %d%s%s +%d", c.m_day - 1, before, c.m_money, c.m_loan,
                 cd ? cd->m_name.c_str() : "?", c.rank(), [&] {
                     for ( auto &e : c.table() )
                         if ( std::get<2>( e ).empty() ) return std::get<1>( e );
                     return 0;
                 }(), kind.c_str(), o.m_track.c_str(), r.m_place, r.m_wrecked ? " (wrecked)" : "", r.m_dead.empty() ? "" : " +dead", r.m_total );
+        if ( gap > 0 ) printf( "  %.1f s behind", gap );
+        printf( "\n" );
         if ( c.m_league != lastLeague )
         {
             printf( "    league %d done in %d days\n", lastLeague, c.m_day - leagueStart );

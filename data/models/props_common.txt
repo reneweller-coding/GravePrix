@@ -352,43 +352,31 @@ model start_gantry lamp=1
   part sphere r=0.22 x=0.7 y=5.3 z=1 color=#ff2a14 emit=1
   part sphere r=0.22 x=1.4 y=5.3 z=1 color=#ff2a14 emit=1
 
-# 28 m stand, steps rising away from the road, a crowd, a half roof over the back
+# 28 m stand, steps rising away from the road, benches and a crowd of fans and mourners (part crowd: they
+# cheer when cars pass, stand up for the wave, take pictures at night), a canopy over the two back rows with the
+# sponsor's banner on it (part banner), flags flying from its back edge
 model grandstand lamp=1
   part box w=28 h=0.6 d=1.22 y=0.3 z=-4.4 color=#86827a
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=0.6 z=-4.5 color=#8a2a2a seed=11
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=0.6 z=-4.5 color=#3a6a3a seed=31
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=0.6 z=-4.5 color=#5a3a6a seed=61
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=0.6 z=-4.5 color=#c8b070 seed=81
+  part box w=27.6 h=0.42 d=0.42 y=0.81 z=-4.04 color=#5a1c1c
+  part crowd n=50 w=27.2 d=0.16 y=0.6 z=-4.4 seated=0.75 fill=0.88 seed=11
   part box w=28 h=1.22 d=1.22 y=0.61 z=-3.2 color=#7e7a72
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=1.22 z=-3.3 color=#2a4a8a seed=12
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=1.22 z=-3.3 color=#d0d0c8 seed=32
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=1.22 z=-3.3 color=#c06020 seed=62
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=1.22 z=-3.3 color=#3a6a3a seed=82
+  part box w=27.6 h=0.42 d=0.42 y=1.43 z=-2.84 color=#2a2a30
+  part crowd n=50 w=27.2 d=0.16 y=1.22 z=-3.2 seated=0.75 fill=0.88 seed=12
   part box w=28 h=1.84 d=1.22 y=0.92 z=-2 color=#86827a
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=1.84 z=-2.1 color=#c8b070 seed=13
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=1.84 z=-2.1 color=#5a3a6a seed=33
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=1.84 z=-2.1 color=#303034 seed=63
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=1.84 z=-2.1 color=#d0d0c8 seed=83
+  part box w=27.6 h=0.42 d=0.42 y=2.05 z=-1.64 color=#5a1c1c
+  part crowd n=50 w=27.2 d=0.16 y=1.84 z=-2 seated=0.75 fill=0.88 seed=13
   part box w=28 h=2.46 d=1.22 y=1.23 z=-0.8 color=#7e7a72
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=2.46 z=-0.9 color=#3a6a3a seed=14
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=2.46 z=-0.9 color=#c06020 seed=34
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=2.46 z=-0.9 color=#8a2a2a seed=64
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=2.46 z=-0.9 color=#5a3a6a seed=84
+  part box w=27.6 h=0.42 d=0.42 y=2.67 z=-0.44 color=#2a2a30
+  part crowd n=50 w=27.2 d=0.16 y=2.46 z=-0.8 seated=0.75 fill=0.88 seed=14
   part box w=28 h=3.08 d=1.22 y=1.54 z=0.4 color=#86827a
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=3.08 z=0.3 color=#d0d0c8 seed=15
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=3.08 z=0.3 color=#303034 seed=35
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=3.08 z=0.3 color=#2a4a8a seed=65
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=3.08 z=0.3 color=#c06020 seed=85
+  part box w=27.6 h=0.42 d=0.42 y=3.29 z=0.76 color=#5a1c1c
+  part crowd n=50 w=27.2 d=0.16 y=3.08 z=0.4 seated=0.75 fill=0.88 seed=15
   part box w=28 h=3.7 d=1.22 y=1.85 z=1.6 color=#7e7a72
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=3.7 z=1.5 color=#5a3a6a seed=16
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=3.7 z=1.5 color=#8a2a2a seed=36
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=3.7 z=1.5 color=#c8b070 seed=66
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=3.7 z=1.5 color=#303034 seed=86
+  part box w=27.6 h=0.42 d=0.42 y=3.91 z=1.96 color=#2a2a30
+  part crowd n=50 w=27.2 d=0.16 y=3.7 z=1.6 seated=0.75 fill=0.6 seed=16
   part box w=28 h=4.32 d=1.22 y=2.16 z=2.8 color=#86827a
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=4.32 z=2.7 color=#c06020 seed=17
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=-7 y=4.32 z=2.7 color=#2a4a8a seed=37
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=4.32 z=2.7 color=#3a6a3a seed=67
-  part greeble n=16 w=12.6 d=0.6 size=0.45 x=7 y=4.32 z=2.7 color=#8a2a2a seed=87
+  part box w=27.6 h=0.42 d=0.42 y=4.53 z=3.16 color=#5a1c1c
+  part crowd n=50 w=27.2 d=0.16 y=4.32 z=2.8 seated=0.75 fill=0.6 seed=17
   part box w=28.4 h=1.1 d=0.25 y=0.55 z=-5.15 color=#5e5a54
   part box w=3.4 h=0.62 d=0.06 x=-12 y=0.61 z=-5.3 color=#7a1414   # boards
   part box w=3.4 h=0.62 d=0.06 x=-8 y=0.61 z=-5.3 color=#efe9da
@@ -403,32 +391,41 @@ model grandstand lamp=1
   part box w=0.3 h=7.6 d=0.3 x=-4.6 y=3.8 z=4.2 color=#3a3a3e
   part box w=0.3 h=7.6 d=0.3 x=4.6 y=3.8 z=4.2 color=#3a3a3e
   part box w=0.3 h=7.6 d=0.3 x=13.8 y=3.8 z=4.2 color=#3a3a3e
-  part box w=29 h=0.25 d=6.2 y=7.75 z=1.6 color=#2a2a2e pitch=-5
-  part box w=3.4 h=0.06 d=6 x=-12.25 y=7.92 z=1.6 color=#7a1414 pitch=-5   # roof stripes
-  part box w=3.4 h=0.06 d=6 x=-8.75 y=7.92 z=1.6 color=#d8d0bc pitch=-5
-  part box w=3.4 h=0.06 d=6 x=-5.25 y=7.92 z=1.6 color=#7a1414 pitch=-5
-  part box w=3.4 h=0.06 d=6 x=-1.75 y=7.92 z=1.6 color=#d8d0bc pitch=-5
-  part box w=3.4 h=0.06 d=6 x=1.75 y=7.92 z=1.6 color=#7a1414 pitch=-5
-  part box w=3.4 h=0.06 d=6 x=5.25 y=7.92 z=1.6 color=#d8d0bc pitch=-5
-  part box w=3.4 h=0.06 d=6 x=8.75 y=7.92 z=1.6 color=#7a1414 pitch=-5
-  part box w=3.4 h=0.06 d=6 x=12.25 y=7.92 z=1.6 color=#d8d0bc pitch=-5
-  part box w=1.2 h=0.35 d=0.5 x=-9 y=7.45 z=-1.4 color=#fff4dc pitch=-25 emit=0.9
-  part box w=1.2 h=0.35 d=0.5 x=9 y=7.45 z=-1.4 color=#fff4dc pitch=-25 emit=0.9
-  part light r=0.15 y=7 z=-2 color=#fff0d8
+  part box w=29 h=0.25 d=3.8 y=7.75 z=2.5 color=#2a2a2e pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=-12.25 y=7.92 z=2.5 color=#7a1414 pitch=-5   # roof stripes
+  part box w=3.4 h=0.06 d=3.6 x=-8.75 y=7.92 z=2.5 color=#d8d0bc pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=-5.25 y=7.92 z=2.5 color=#7a1414 pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=-1.75 y=7.92 z=2.5 color=#d8d0bc pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=1.75 y=7.92 z=2.5 color=#7a1414 pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=5.25 y=7.92 z=2.5 color=#d8d0bc pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=8.75 y=7.92 z=2.5 color=#7a1414 pitch=-5
+  part box w=3.4 h=0.06 d=3.6 x=12.25 y=7.92 z=2.5 color=#d8d0bc pitch=-5
+  part box w=1.2 h=0.35 d=0.5 x=-9 y=7.4 z=0.9 color=#fff4dc pitch=-25 emit=0.9
+  part box w=1.2 h=0.35 d=0.5 x=9 y=7.4 z=0.9 color=#fff4dc pitch=-25 emit=0.9
+  part light r=0.15 y=7 z=0.4 color=#fff0d8
+  part banner w=22.4 h=2.8 y=7.99 z=2.5 pitch=-5 ad=sponsor
+  part box w=0.1 h=3 d=0.1 x=-13.6 y=9.4 z=4.2 color=#3a3a3e
+  part box w=1.4 h=0.9 d=0.03 x=-12.85 y=10.4 z=4.2 color=#8a1818 group=flag pole=-13.6,4.2 flutter=0.8
+  part box w=0.1 h=3 d=0.1 x=-4.6 y=9.4 z=4.2 color=#3a3a3e
+  part box w=1.4 h=0.9 d=0.03 x=-3.85 y=10.4 z=4.2 color=#e6dcc2 group=flag pole=-4.6,4.2 flutter=0.8
+  part box w=0.1 h=3 d=0.1 x=4.6 y=9.4 z=4.2 color=#3a3a3e
+  part box w=1.4 h=0.9 d=0.03 x=3.85 y=10.4 z=4.2 color=#18181a group=flag pole=4.6,4.2 flutter=0.8
+  part box w=0.1 h=3 d=0.1 x=13.6 y=9.4 z=4.2 color=#3a3a3e
+  part box w=1.4 h=0.9 d=0.03 x=12.85 y=10.4 z=4.2 color=#d8a830 group=flag pole=13.6,4.2 flutter=0.8
 
 # 7.5 m pole, the black GRAVE PRIX flag with a skull
 model flag_pole
   part disc r=0.16 h=0.3 y=0.15 seg=8 color=#4a4a4e
   part gun r=0.045 r2=0.07 len=7.3 y=3.95 pitch=90 seg=6 color=#c0c2c6
   part sphere r=0.11 y=7.68 color=#d8b040
-  part plate pts="0,0;0.85,0.02;0.85,1.12;0,1.1" thick=0.02 pitch=-90 x=0.05 y=6.3 color=#121214
-  part plate pts="0,0.02;0.85,-0.05;0.85,1.05;0,1.12" thick=0.02 pitch=-90 rot=22 x=0.9 y=6.3 color=#121214
-  part plate pts="0.3,0.86;0.47,0.79;0.54,0.62;0.47,0.45;0.3,0.38;0.13,0.45;0.06,0.62;0.13,0.79" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8
-  part plate pts="0.2,0.25;0.42,0.25;0.42,0.42;0.2,0.42" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8
-  part plate pts="0.15,0.58;0.27,0.58;0.27,0.7;0.15,0.7" thick=0.07 pitch=-90 x=0.05 y=6.3 color=#121214
-  part plate pts="0.33,0.58;0.45,0.58;0.45,0.7;0.33,0.7" thick=0.07 pitch=-90 x=0.05 y=6.3 color=#121214
-  part plate pts="0.05,0.08;0.55,0.32;0.55,0.38;0.05,0.14" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8
-  part plate pts="0.05,0.38;0.55,0.14;0.55,0.08;0.05,0.32" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8
+  part plate pts="0,0;0.85,0.02;0.85,1.12;0,1.1" thick=0.02 pitch=-90 x=0.05 y=6.3 color=#121214 group=flag
+  part plate pts="0,0.02;0.85,-0.05;0.85,1.05;0,1.12" thick=0.02 pitch=-90 rot=22 x=0.9 y=6.3 color=#121214 group=flag
+  part plate pts="0.3,0.86;0.47,0.79;0.54,0.62;0.47,0.45;0.3,0.38;0.13,0.45;0.06,0.62;0.13,0.79" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8 group=flag
+  part plate pts="0.2,0.25;0.42,0.25;0.42,0.42;0.2,0.42" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8 group=flag
+  part plate pts="0.15,0.58;0.27,0.58;0.27,0.7;0.15,0.7" thick=0.07 pitch=-90 x=0.05 y=6.3 color=#121214 group=flag
+  part plate pts="0.33,0.58;0.45,0.58;0.45,0.7;0.33,0.7" thick=0.07 pitch=-90 x=0.05 y=6.3 color=#121214 group=flag
+  part plate pts="0.05,0.08;0.55,0.32;0.55,0.38;0.05,0.14" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8 group=flag
+  part plate pts="0.05,0.38;0.55,0.14;0.55,0.08;0.05,0.32" thick=0.05 pitch=-90 x=0.05 y=6.3 color=#ece6d8 group=flag
 
 # a green money bag and two bundles of notes
 model pickup_cash

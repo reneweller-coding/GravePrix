@@ -83,6 +83,6 @@ league 0
   venues estate
   purse 150000
   entry 0
-  pace 0.9
+  pace 0.89
   skill 0.9
   intro boss

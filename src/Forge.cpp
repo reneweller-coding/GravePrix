@@ -30,7 +30,14 @@ void MeshBuilder::tri( Vector3 a, Vector3 b, Vector3 c, Color col, Vector3 insid
     float k = m_noise > 0 ? 1.0f + m_rng.range( -m_noise, m_noise ) : 1.0f;
     Color fc = { (unsigned char)clampf( col.r * k, 0, 255 ), (unsigned char)clampf( col.g * k, 0, 255 ),
                  (unsigned char)clampf( col.b * k, 0, 255 ), col.a };
-    for ( const Vector3 &v : { a, b, c } ) vert( v, n, fc );
+    for ( const Vector3 &v : { a, b, c } ) vert( v, n, fc, m_mark, m_mark2 );
+}
+
+bool MeshBuilder::marked() const
+{
+    for ( size_t i = 0; i < m_uv.size(); i += 2 )
+        if ( m_uv[i] >= 0.999f ) return true;
+    return false;
 }
 
 void MeshBuilder::quad( Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color col, Vector3 inside )
@@ -75,6 +82,10 @@ void MeshBuilder::box( Vector3 center, Vector3 half, float yaw, Color col, float
 void MeshBuilder::append( const Mesh &m, Matrix xf, Color tint )
 {
     Matrix nm = MatrixTranspose( MatrixInvert( xf ) );
+    // The marks (MarkE) move with the model: the anchors to where it stands, the lengths by its scale; the crowd's
+    // place along its stand gets m_markShift, which tells the stands of a chunk apart (each its own wave).
+    bool  marks = m_withUv && m.texcoords && m.texcoords2;
+    float scale = Vector3Length( { xf.m0, xf.m1, xf.m2 } );
     for ( int i = 0; i < m.vertexCount; ++i )
     {
         Vector3 p = Vector3Transform( { m.vertices[i * 3], m.vertices[i * 3 + 1], m.vertices[i * 3 + 2] }, xf );
@@ -83,7 +94,18 @@ void MeshBuilder::append( const Mesh &m, Matrix xf, Color tint )
                                 nm.m2 * n.x + nm.m6 * n.y + nm.m10 * n.z } );
         Color c = { (unsigned char)( m.colors[i * 4] * tint.r / 255 ), (unsigned char)( m.colors[i * 4 + 1] * tint.g / 255 ),
                     (unsigned char)( m.colors[i * 4 + 2] * tint.b / 255 ), m.colors[i * 4 + 3] };
-        vert( p, n, c );
+        Vector2 uv = { 0, 0 }, uv2 = { 0, 0 };
+        int     kind = marks ? (int)std::floor( m.texcoords[i * 2] + 1e-4f ) : 0;
+        if ( kind > MARK_NONE )
+        {
+            float   share = m.texcoords[i * 2] - kind, len = m.texcoords[i * 2 + 1] * scale;
+            Vector3 at = Vector3Transform( { m.texcoords2[i * 2], 0, m.texcoords2[i * 2 + 1] }, xf );
+            if ( kind == MARK_SEATED_ARM || kind == MARK_STANDING_ARM ) share = std::min( 0.99f, share * scale );
+            if ( kind != MARK_WIND && kind != MARK_FLAG ) len += m_markShift;
+            uv = { kind + share, len };
+            uv2 = { at.x, at.z };
+        }
+        vert( p, n, c, uv, uv2 );
     }
 }
 
@@ -177,6 +199,217 @@ Vector2 superellipse( float a, float round )
     return { ( c < 0 ? -1.0f : 1.0f ) * std::pow( std::fabs( c ), e ), ( s < 0 ? -1.0f : 1.0f ) * std::pow( std::fabs( s ), e ) };
 }
 
+/** @brief Gives the vertices from 'from' on a mark (MarkE): uv.x = kind + share, uv.y, the anchor at. */
+void markFrom( MeshB &mb, int from, int kind, float share, float len, Vector2 at )
+{
+    for ( int i = from; i < mb.count(); ++i )
+    {
+        mb.m_uv[i * 2] = kind + clampf( share, 0.0f, 0.99f );
+        mb.m_uv[i * 2 + 1] = len;
+        mb.m_uv2[i * 2] = at.x;
+        mb.m_uv2[i * 2 + 1] = at.y;
+    }
+}
+
+/**
+ * @brief A row of spectators (part crowd, docs/DESIGN.md "Models"): seated and standing fans in their team's
+ *        colours and casual clothes, mourners in black, hats, scarves, umbrellas and little flags; built of few
+ *        facets (about 75 triangles a person), every vertex marked for the shader's crowd (MarkE).
+ *
+ *        The row runs along x over w metres at the part's place, its people face -z; y = 0 is the floor they stand
+ *        on (seated ones sit on a bench 0.42 m high behind it, as on a grandstand's step). n seats, fill of them
+ *        taken, seated of the people sitting, mourners of them in black, umbrella and flags shares, team= colours.
+ *        The part must not be pitched or rolled (the marks measure heights in the model's y).
+ */
+void buildCrowd( MeshB &mb, const Line &p, const Xf &xf, ModelMesh &out )
+{
+    int   n = std::clamp( p.integer( "n", 40 ), 1, 400 );
+    float w = p.num( "w", 20.0f ), depth = p.num( "d", 0.3f );
+    float fill = clampf( p.num( "fill", 0.85f ), 0.0f, 1.0f ), seatedShare = clampf( p.num( "seated", 0.7f ), 0.0f, 1.0f );
+    float mourners = clampf( p.num( "mourners", 0.25f ), 0.0f, 1.0f ), umbrellas = clampf( p.num( "umbrella", 0.06f ), 0.0f, 1.0f );
+    float flags = clampf( p.num( "flags", 0.06f ), 0.0f, 1.0f );
+    Rng   r;
+    r.seed( (uint32_t)p.integer( "seed", 7 ) * 7919u + 11u );
+    static const Color skins[] = { { 224, 184, 154, 255 }, { 200, 144, 112, 255 }, { 154, 106, 74, 255 }, { 106, 74, 50, 255 },
+                                   { 240, 204, 176, 255 } };
+    static const Color hairs[] = { { 26, 22, 18, 255 },   { 58, 42, 26, 255 },  { 106, 74, 42, 255 }, { 200, 168, 96, 255 },
+                                   { 150, 150, 150, 255 }, { 138, 58, 26, 255 } };
+    static const Color casual[] = { { 58, 74, 106, 255 },  { 106, 106, 106, 255 }, { 106, 74, 50, 255 }, { 90, 90, 58, 255 },
+                                    { 216, 216, 208, 255 }, { 160, 48, 40, 255 },  { 208, 176, 48, 255 }, { 106, 138, 170, 255 },
+                                    { 58, 106, 74, 255 },   { 122, 58, 106, 255 },  { 200, 96, 32, 255 } };
+    static const Color trousers[] = { { 42, 52, 72, 255 }, { 26, 26, 30, 255 }, { 138, 122, 90, 255 }, { 74, 74, 80, 255 } };
+    static const Color brollies[] = { { 160, 32, 32, 255 }, { 36, 52, 90, 255 }, { 216, 176, 48, 255 }, { 40, 90, 60, 255 },
+                                      { 230, 226, 214, 255 } };
+    std::vector<Color> team;
+    {
+        std::string s = p.str( "team", "#8a1818,#e6dcc2,#d8a830,#24345a" );
+        size_t      a = 0;
+        while ( a < s.size() )
+        {
+            size_t b = s.find( ',', a );
+            Line   one = parseLine( "c color=" + s.substr( a, b == std::string::npos ? std::string::npos : b - a ) );
+            team.push_back( one.color( "color", { 138, 24, 24, 255 } ) );
+            if ( b == std::string::npos ) break;
+            a = b + 1;
+        }
+    }
+    const Color black = { 22, 20, 24, 255 }, pick = { 0, 0, 0, 0 };
+    auto any = [&]( const Color *c, int k ) { return c[r.below( k )]; };
+    mb.m_noise = 0.05f;
+    for ( int seat = 0; seat < n; ++seat )
+    {
+        if ( !r.chance( fill ) ) continue;
+        bool  seated = r.chance( seatedShare ), mourner = r.chance( mourners );
+        bool  umbrella = r.chance( mourner ? umbrellas * 2.5f : umbrellas ), flag = !mourner && !umbrella && r.chance( flags );
+        bool  calm = mourner || umbrella;
+        float s = r.range( 0.92f, 1.07f ) * ( r.chance( 0.06f ) ? 0.78f : 1.0f );   // now and then a child
+        float fx = -w * 0.5f + ( seat + 0.5f ) * w / n + r.range( -0.08f, 0.08f );
+        float fz = r.range( -depth, depth ) * 0.5f;
+        float yaw = r.range( -0.3f, 0.3f );
+        // The look: fans in the team's colours (a shirt or a scarf), others casual; mourners black from top to toe.
+        Color skin = any( skins, 5 ), hair = any( hairs, 6 ), legs = any( trousers, 4 );
+        Color coat = r.chance( 0.5f ) ? team[r.below( (int)team.size() )] : any( casual, 11 );
+        Color scarf = r.chance( 0.6f ) ? team[r.below( (int)team.size() )] : coat;
+        int   hat = r.below( 10 );   // 0-3 none, 4-5 cap, 6 beanie, 7 sun hat, 8 bald, 9 hood
+        Color hatColor = r.chance( 0.6f ) ? team[r.below( (int)team.size() )] : any( casual, 11 );
+        if ( mourner )
+        {
+            coat = scaleColor( black, r.range( 0.85f, 1.3f ) );
+            legs = black;
+            scarf = r.chance( 0.3f ) ? Color{ 220, 216, 206, 255 } : coat;   // a white collar
+            hat = r.chance( 0.45f ) ? 10 : r.chance( 0.3f ) ? 11 : 0;          // 10 top hat, 11 veil
+            hatColor = black;
+        }
+        if ( hat == 9 ) hatColor = coat;   // a hood
+        Color brolly = mourner ? scaleColor( black, 0.7f ) : any( brollies, 5 );
+        // The figure's own frame: its feet (or seat) at (fx, 0, fz), facing -z, turned a little.
+        float   cy = std::cos( yaw ), sy = std::sin( yaw );
+        Vector3 base = { fx, 0, fz };
+        auto    P = [&]( Vector3 l ) { return xf( { base.x + l.x * cy - l.z * sy, l.y, base.z + l.x * sy + l.z * cy } ); };
+        Vector3 anchor3 = xf( base );
+        Vector2 at = { anchor3.x, anchor3.z };
+        float   floorY = anchor3.y;
+        // A box of the figure: middle, half sizes, the colour of its sides, its top and its bottom (no bottom: pick).
+        auto box = [&]( Vector3 c, Vector3 h, Color side, Color top, Color bottom, float taper ) {
+            Vector3 v[8];
+            for ( int k = 0; k < 8; ++k )
+            {
+                float t = ( k & 4 ) ? 1.0f - taper : 1.0f;
+                v[k] = P( { c.x + ( ( k & 1 ) ? h.x : -h.x ) * t, c.y + ( ( k & 4 ) ? h.y : -h.y ),
+                            c.z + ( ( k & 2 ) ? h.z : -h.z ) * t } );
+            }
+            Vector3 in = P( c );
+            mb.quad( v[4], v[5], v[7], v[6], top, in );
+            mb.quad( v[0], v[1], v[5], v[4], side, in );
+            mb.quad( v[2], v[3], v[7], v[6], side, in );
+            mb.quad( v[0], v[2], v[6], v[4], side, in );
+            mb.quad( v[1], v[3], v[7], v[5], side, in );
+            if ( bottom.a ) mb.quad( v[0], v[1], v[3], v[2], bottom, in );
+        };
+        // A head of six facets round and a crown: the face to the front, the crown and the back in the hair (or the
+        // hat); a bald head is skin all over.
+        auto head = [&]( Vector3 c, float rad ) {
+            Color   crown = hat == 8 ? skin : ( hat >= 4 && hat != 8 && hat != 10 ) ? hatColor : hat == 10 ? black : hair;
+            Color   back = hat == 8 ? skin : hat == 9 || hat == 11 ? hatColor : hair;
+            Vector3 top = P( { c.x, c.y + rad, c.z } ), in = P( c );
+            for ( int j = 0; j < 6; ++j )
+            {
+                float   a0 = j * Pi / 3, a1 = ( j + 1 ) * Pi / 3, am = ( j + 0.5f ) * Pi / 3;
+                Vector3 u0 = P( { c.x + std::cos( a0 ) * rad * 0.87f, c.y + rad * 0.45f, c.z + std::sin( a0 ) * rad * 0.87f } );
+                Vector3 u1 = P( { c.x + std::cos( a1 ) * rad * 0.87f, c.y + rad * 0.45f, c.z + std::sin( a1 ) * rad * 0.87f } );
+                Vector3 l0 = P( { c.x + std::cos( a0 ) * rad * 0.78f, c.y - rad * 0.62f, c.z + std::sin( a0 ) * rad * 0.78f } );
+                Vector3 l1 = P( { c.x + std::cos( a1 ) * rad * 0.78f, c.y - rad * 0.62f, c.z + std::sin( a1 ) * rad * 0.78f } );
+                mb.tri( top, u0, u1, crown, in );
+                mb.quad( u0, u1, l1, l0, std::sin( am ) > 0.3f ? back : skin, in );   // +z is the back
+            }
+            if ( hat == 4 || hat == 5 )   // a cap's peak
+                box( { c.x, c.y + rad * 0.3f, c.z - rad * 1.05f }, { rad * 0.7f, 0.012f, rad * 0.45f }, hatColor, hatColor, pick, 0 );
+            else if ( hat == 7 )          // a sun hat's brim
+                box( { c.x, c.y + rad * 0.35f, c.z }, { rad * 1.7f, 0.012f, rad * 1.7f }, hatColor, hatColor, pick, 0 );
+            else if ( hat == 10 )         // a top hat
+            {
+                box( { c.x, c.y + rad * 0.45f, c.z }, { rad * 1.35f, 0.012f, rad * 1.35f }, black, black, pick, 0 );
+                box( { c.x, c.y + rad * 1.35f, c.z }, { rad * 0.8f, rad * 0.9f, rad * 0.8f }, black, scaleColor( black, 1.3f ),
+                     pick, 0.06f );
+            }
+        };
+        int   v0 = mb.count(), legsEnd = v0;
+        int   kind = calm ? MARK_CALM : seated ? MARK_SEATED : MARK_STANDING;
+        float shoulder, headY, headZ, along = at.x;
+        if ( seated )
+        {
+            // On a bench behind its feet: shins down to the floor, thighs forward, the body upright.
+            box( { 0, 0.22f * s, -0.17f }, { 0.16f * s, 0.22f * s, 0.06f }, legs, legs, pick, 0 );
+            box( { 0, 0.49f * s, 0.03f }, { 0.17f * s, 0.07f * s, 0.22f }, legs, legs, pick, 0 );
+            legsEnd = mb.count();
+            shoulder = 1.13f * s;
+            headY = 1.27f * s;
+            headZ = 0.2f;
+            box( { 0, 0.85f * s, 0.22f }, { 0.22f * s, 0.29f * s, 0.13f * s }, coat, scarf, pick, 0.12f );
+        }
+        else
+        {
+            for ( float side : { -1.0f, 1.0f } )
+                box( { side * 0.1f * s, 0.43f * s, 0 }, { 0.075f * s, 0.43f * s, 0.09f * s }, legs, legs, pick, 0 );
+            shoulder = 1.41f * s;
+            headY = 1.56f * s;
+            headZ = 0.0f;
+            box( { 0, 1.12f * s, 0 }, { 0.23f * s, 0.3f * s, 0.13f * s }, coat, scarf, pick, 0.12f );
+        }
+        float armZ = seated ? 0.14f : 0.0f;
+        head( { 0, headY, headZ }, 0.135f * s );
+        if ( umbrella )
+        {
+            // An umbrella over the head: eight panels round a point.
+            Vector3 tip = P( { 0.1f, headY + 0.55f * s, headZ - 0.05f } );
+            for ( int j = 0; j < 8; ++j )
+            {
+                float a0 = j * Pi / 4, a1 = ( j + 1 ) * Pi / 4;
+                mb.tri( tip, P( { 0.1f + std::cos( a0 ) * 0.56f, headY + 0.3f * s, headZ - 0.05f + std::sin( a0 ) * 0.56f } ),
+                        P( { 0.1f + std::cos( a1 ) * 0.56f, headY + 0.3f * s, headZ - 0.05f + std::sin( a1 ) * 0.56f } ),
+                        j % 2 ? brolly : scaleColor( brolly, 0.85f ), P( { 0.1f, headY, headZ } ) );
+            }
+        }
+        int arms = mb.count();
+        // The body takes all of the rising; a seated one's legs their share of it (the feet stay on the floor).
+        markFrom( mb, v0, kind, 0.99f, along, at );
+        for ( int i = v0; i < legsEnd; ++i )
+            mb.m_uv[i * 2] = kind + clampf( ( mb.m_pos[i * 3 + 1] - floorY ) / ( 0.56f * s ), 0.0f, 0.99f );
+        for ( float side : { -1.0f, 1.0f } )
+        {
+            if ( flag && side > 0 )
+            {
+                // A little flag held up high, in the team's colours: the arm stays up, the flag goes with the body.
+                box( { side * 0.29f * s, shoulder + 0.27f * s, armZ }, { 0.055f * s, 0.27f * s, 0.06f * s }, coat, skin, pick, 0 );
+                const Color stick = { 60, 50, 40, 255 };
+                box( { side * 0.3f * s, shoulder + 0.75f * s, armZ }, { 0.012f, 0.32f * s, 0.012f }, stick, stick, pick, 0 );
+                Color   fc = team[r.below( (int)team.size() )];
+                float   fx0 = side * 0.3f * s, fy0 = shoulder + 0.8f * s, fy1 = shoulder + 1.05f * s;
+                Vector3 a = P( { fx0, fy1, armZ } ), b = P( { fx0 + 0.42f, fy1, armZ } );
+                Vector3 c = P( { fx0 + 0.42f, fy0, armZ } ), d = P( { fx0, fy0, armZ } );
+                mb.quad( a, b, c, d, fc, P( { side * 0.3f * s + 0.2f, shoulder + 0.9f * s, armZ + 0.3f } ) );
+                markFrom( mb, arms, kind, 0.99f, along, at );
+                arms = mb.count();
+                continue;
+            }
+            box( { side * 0.3f * s, shoulder - 0.29f * s, armZ }, { 0.06f * s, 0.29f * s, 0.065f * s }, coat, coat, skin, 0 );
+            int armKind = calm ? MARK_CALM : seated ? MARK_SEATED_ARM : MARK_STANDING_ARM;
+            for ( int i = arms; i < mb.count(); ++i )
+            {
+                // An arm's vertex knows how far below the shoulder it hangs: raised, it mirrors above it.
+                float d = calm ? 0.99f : clampf( shoulder + floorY - mb.m_pos[i * 3 + 1], 0.0f, 0.99f );
+                mb.m_uv[i * 2] = armKind + d;
+                mb.m_uv[i * 2 + 1] = along;
+                mb.m_uv2[i * 2] = at.x;
+                mb.m_uv2[i * 2 + 1] = at.y;
+            }
+            arms = mb.count();
+        }
+        if ( !calm ) out.m_crowd.push_back( P( { 0, headY, headZ } ) );
+        for ( int i = v0; i < mb.count(); ++i ) mb.m_col[i * 4 + 3] = 0;   // nobody glows
+    }
+}
+
 /** @brief Builds one part into a builder. */
 void buildPart( MeshB &mb, const Line &p, const Xf &xf, ModelMesh &out )
 {
@@ -192,6 +425,25 @@ void buildPart( MeshB &mb, const Line &p, const Xf &xf, ModelMesh &out )
         float   r = p.num( "r", 0.32f ), w = p.num( "w", 0.22f );
         Vector3 at = xf( { 0, p.has( "y" ) ? 0.0f : r, 0 } );
         out.m_wheels.push_back( { at, r, w, p.integer( "front", 0 ) != 0, p.color( "hub", { 170, 172, 178, 255 } ) } );
+        return;
+    }
+    if ( k == "crowd" )
+    {
+        buildCrowd( mb, p, xf, out );
+        return;
+    }
+    if ( k == "banner" )
+    {
+        // A board the renderer prints on, lying in the x-z plane (pitch it up): the text's top towards -z, its left
+        // at -x as seen from above. No facets of its own: it lies on something.
+        float      w = p.num( "w", 8.0f ) * 0.5f, h = p.num( "h", 1.0f ) * 0.5f;
+        BannerSpot b;
+        b.m_c[0] = xf( { -w, 0, h } );
+        b.m_c[1] = xf( { w, 0, h } );
+        b.m_c[2] = xf( { w, 0, -h } );
+        b.m_c[3] = xf( { -w, 0, -h } );
+        b.m_ad = p.str( "ad", "sponsor" ) == "slogan" ? 1 : 0;
+        out.m_banners.push_back( b );
         return;
     }
     if ( k == "bar" )
@@ -594,6 +846,7 @@ ModelMesh Forge::build( const ModelDef &def, bool upload, const Paint &paint )
     base.m_rng.seed( h );
     head.m_rng.seed( h + 1 );
     spin.m_rng.seed( h + 2 );
+    for ( MeshB *mb : { &base, &head, &spin } ) mb->m_withUv = true;   // for the marks; dropped when there are none
     float reach = 1.0f;
     for ( const Line &part : def.m_parts )
     {
@@ -641,8 +894,37 @@ ModelMesh Forge::build( const ModelDef &def, bool upload, const Paint &paint )
             xf.m_roll = p.num( "roll", 0.0f );
             xf.m_flip = m == 1;
             size_t before = mb.m_pos.size();
+            size_t crowd = out.m_crowd.size(), banners = out.m_banners.size();
             buildPart( mb, p, xf, out );
+            int from = (int)( before / 3 );
+            // Parts that move with the wind: group=sway bends (its height is the model's, filled in below),
+            // group=flag flutters about its pole (pole=x,z, the model's middle by default).
+            if ( group == "sway" ) markFrom( mb, from, MARK_WIND, p.num( "sway", 0.5f ), 0.0f, { 0, 0 } );
+            if ( group == "flag" )
+            {
+                float px = 0, pz = 0;
+                if ( p.has( "pole" ) ) sscanf( p.str( "pole" ).c_str(), "%f,%f", &px, &pz );
+                if ( m == 1 ) px = -px;
+                float far = 0.2f;
+                for ( int i = from; i < mb.count(); ++i )
+                    far = std::max( far, std::hypot( mb.m_pos[i * 3] - px, mb.m_pos[i * 3 + 2] - pz ) );
+                markFrom( mb, from, MARK_FLAG, p.num( "flutter", 0.6f ), far, { px, pz } );
+            }
             for ( size_t i = before; i < mb.m_pos.size(); ++i ) mb.m_pos[i] *= def.m_scale;
+            if ( def.m_scale != 1.0f )
+                for ( size_t i = (size_t)from; i < (size_t)mb.count(); ++i )
+                {
+                    int kind = (int)std::floor( mb.m_uv[i * 2] + 1e-4f );
+                    if ( kind == MARK_NONE ) continue;
+                    if ( kind == MARK_SEATED_ARM || kind == MARK_STANDING_ARM )
+                        mb.m_uv[i * 2] = kind + std::min( 0.99f, ( mb.m_uv[i * 2] - kind ) * def.m_scale );
+                    mb.m_uv[i * 2 + 1] *= def.m_scale;
+                    mb.m_uv2[i * 2] *= def.m_scale;
+                    mb.m_uv2[i * 2 + 1] *= def.m_scale;
+                }
+            for ( size_t i = crowd; i < out.m_crowd.size(); ++i ) out.m_crowd[i] = Vector3Scale( out.m_crowd[i], def.m_scale );
+            for ( size_t i = banners; i < out.m_banners.size(); ++i )
+                for ( Vector3 &c : out.m_banners[i].m_c ) c = Vector3Scale( c, def.m_scale );
         }
     }
     for ( Vector3 &e : out.m_engines ) e = Vector3Scale( e, def.m_scale );
@@ -662,6 +944,15 @@ ModelMesh Forge::build( const ModelDef &def, bool upload, const Paint &paint )
     out.m_height = 0.0f;
     for ( MeshB *mb : { &base, &head, &spin } )
         for ( size_t i = 1; i < mb->m_pos.size(); i += 3 ) out.m_height = std::max( out.m_height, mb->m_pos[i] );
+    // A swaying model (sway= in its head line): all of its base bends, the top most; the swaying parts learn the
+    // model's height. Models without marks keep no texture coordinates.
+    for ( int i = 0; i < base.count(); ++i )
+    {
+        float &u = base.m_uv[i * 2];
+        if ( u < 0.999f && def.m_sway > 0 ) u = (float)MARK_WIND + std::min( 0.99f, def.m_sway );
+        if ( u >= 0.999f && u < 1.999f && base.m_uv[i * 2 + 1] <= 0 ) base.m_uv[i * 2 + 1] = out.m_height;
+    }
+    for ( MeshB *mb : { &base, &head, &spin } ) mb->m_withUv = mb->marked();
     out.m_hasBase = !base.m_pos.empty();
     out.m_hasHead = !head.m_pos.empty();
     out.m_hasSpin = !spin.m_pos.empty();

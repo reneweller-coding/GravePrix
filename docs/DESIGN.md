@@ -6,7 +6,7 @@ follows it. When the engine changes a format, it changes this file first.
 ## The game
 
 GRAVE PRIX is a top-down combat racer for PC and Steam Deck (C++20, raylib 5.5, real-time 3D seen from above,
-fixed north-up camera that zooms out with speed). Six cars race on closed circuits with walls; every car has a front
+fixed north-up camera that zooms out with speed and looks ahead the way the car goes). Six cars race on closed circuits with walls; every car has a front
 gun and can carry mines, rockets, spikes, oil, smoke and nitro. Wrecks stay on the track, burning.
 
 The **career** is the heart of it: an underground racing league run by **Mortimer Graves**, owner of the funeral
@@ -111,6 +111,8 @@ engines and guns with x ≠ 0 mirror by default).
 | `crystal` | `r len seg` — a double pyramid along z |
 | `plate` | `pts="x,z;x,z;..." thick` — a flat outline |
 | `greeble` | `n w d size seed` — random small boxes on an area |
+| `crowd` | `n w d seated fill mourners umbrella flags team="#c,#c,.." seed` — a row of spectators along x over `w` metres, facing -z, standing on y = 0 (the seated ones on a bench 0.42 m high just behind): `n` seats, `fill` of them taken, `seated` of the people sitting, `mourners` of them in black (top hats, veils, black umbrellas), `umbrella` and `flags` the shares holding one, fans in the `team` colours (shirts, scarves, caps) or casual clothes; about 75 triangles a person, every vertex marked for the shader's crowd (see "Life on the stands, wind"). Not pitched or rolled |
+| `banner` | `w h ad=sponsor\|slogan` — a board the renderer prints on, lying in the x-z plane (pitch it onto a roof), the text's top towards -z: the player's sponsor (Graves & Sons when there is none; every other stand Graves & Sons' slogan) or the slogan. No facets of its own |
 
 Car colours: `paint` (main), `paint2` (second), `paint3` (trim) are replaced by the driver's colours (the player
 picks theirs; rivals have their own). A car model should use `paint` on most of the body, `paint2` on stripes,
@@ -257,6 +259,7 @@ venue cemetery
   sun dir=40 height=35 color=#8090c0 power=0.35      # direction (degrees), elevation, colour, strength
   ambient #202838 power=0.6
   fog #1a2030 density=0.012
+  grade shadows=#8aa0c0 highlights=#e6f0ff amount=0.8 sat=0.85 contrast=1.03 vignette=0.8   # the picture's colour
   ground grass color=#2c3a24 color2=#3a3020          # what lies beside the road (grass dirt sand snow mud concrete gravel water)
   road asphalt color=#3a3a40 line=#c8c8b0            # the default road surface and its marking colour
   shoulder gravel color=#4a4438                      # the strip between road and wall
@@ -347,31 +350,89 @@ Check a track with `GravePrix --trackshot <name> work/maps/<name>.png` (a map: r
 100 m, pickups and props, warnings drawn in red) and `GravePrix --sim <name>` (six computer drivers race it; prints
 lap times and where cars got stuck). `--validate` must report 0 errors for every track.
 
-## Driving assist
+## Driving and the assist
 
-`CarSetup::m_assist` (the player's car, `Settings::m_assist`, on by default): while the car slides less than 2.5 m/s
-sideways its tyres hold 40 % more (20 % more once it slides), it turns at most as fast as the held grip carries
-(1.4 x grip / speed + 0.1 rad/s, against 1.2 x + 0.25 without), and full lock ploughs (below). Without it the early
-cars (grip 0.88-0.95) slid like on ice and the tyre upgrades made the game easier as it went on (the first assist,
-01.11.2026: hold 1.3 / 1.05, turn 1.15 x + 0.08: the slide over all tracks dropped from 1.02 to 0.29 m/s).
-`--careersim --assist 0`, `--sim --assist`.
+The arcade model (13.11.2026, the user: "Die Kurvensteuerung ist immer noch unterirdisch"; `World::physics`, the
+constants at the top of Sim.cpp). Until 1.0.1 the nose turned no faster than the grip carried (1.4 x grip x 15 m/s²
+/ speed with the assist): at 108 km/h the first car turned on a 39 m radius, nine car lengths, and every track had a
+bend that asked for the brake down to 36-76 % of top speed long before it. Top-down racers of the kind turn on two
+to four car lengths. Now, for every car, the player's and the computer's:
 
-Full lock ploughs (02.11.2026, the user: "nicht maximal einschlagen, der Wenderadius ist riesig"): turning only as
-fast as the grip carries made a held steering key draw ever wider circles with the throttle down (the U-turn of the
-first car at full throttle from 36, 72 and 108 km/h was 49, 87 and 109 m wide; 25, 41 and 49 m without the assist).
-Now front wheels (`Car::m_steerVis`, a tenth of a second behind the key) that ask for more than 1.2 x the turn the
-tyres carry scrub: the car slows by 0.8 m/s² per m/s² of the excess until the turn fits, as a real car ploughs on
-full lock. The U-turns are 24, 33 and 38 m wide, coasting 8, 17 and 22 m.
+- **The nose** turns as fast as the steering asks at any speed: full lock is 2.4 rad/s, a third less at full speed
+  (`steerShare`), times the car's `steer` with half its spread (`SteerSpread`: 1.22 turns 11 % quicker, 0.8 10 %
+  slower; at speed it now turns the nose too, the reaper's taps were too coarse for a keyboard). `fullLock`. Nothing
+  holds the nose to the grip any more.
+- **The tyres** swing the path round to the nose: they take the slip (the speed across the nose) away at `TyreBite`
+  per second, at most with `TyreHold` x 15 m/s² x the car's grip x the ground's grip (`sideGrip`). A turn within the
+  grip leaves a small slip that settles at once; beyond it the car slides. The nose swings back towards the path by
+  itself (`TyreAlign` per second per radian of slide) unless the steering holds it, as a real car's front wheels
+  straighten a slide: let go of the key and the slide is over (`--handling`'s "settle"). The straightening is what
+  a keyboard needs: every tap leaves a slip, and the hands of a person (`World::hands`) lap the final's hedge maze
+  6.8 % quicker with 5 than with 3.5 and 20 % slower with 2.
+- **Scrub:** steering held beyond the turn the tyres carry at this speed (hold / speed) slows the car, as a real car
+  ploughs: 1 m/s² per m/s² of the excess, at most as hard as the tyres hold, and the drive slips by the same share.
+  A bend taken too fast costs speed in the bend instead of the wall or the brake long before it. What counts is the
+  steering held over a quarter of a second (`Car::m_lock`), so short taps steer without scrubbing and a held key
+  scrubs (measured on the wheels of a tenth of a second ago, the tapping hands of the career's test driver lost the
+  final against Graves for ever: two Blechschaden careers of six, 190 finals each). On ice the tyres scrub no harder
+  than they grip: the car slides on.
+- The handbrake: the rear holds 35 %, the nose turns half again as fast, no scrub, nothing straightens: the drift.
+  Oil (grip x 0.18), spikes (x 0.55), the surfaces, rain and the engine upgrades' `slip` scale hold and bite as
+  before; reversing (the brake held at a standstill) and the reversing lights are unchanged.
 
-The price: the old assist gave a held key the ideal arc at the grip, and a keyboard holds full lock through corners
-the grip would carry; ploughing there costs pace. With the old hold (1.3 / 1.05) the person's hands lost 0.3-2 % over
-all tracks (ploughing from 1.0 x or harder cost more), 1.5 % on the final (est_finale with the reaper), and the career
-sweep at Blechschaden (h0.3, six seeds, 260 days) fell from 6/6 won (42-153 days) to 2/6: the test driver reached
-Graves and came second forever. The grip that makes up for it, 1.4 / 1.2: 6/6 won in 83-120 days; over all tracks
-the hands +0.5 % (stuck 48 times instead of 376), the clean bot (smooth steering, like a pad) +0.4 %.
-(`--simall --assist --hands 0.3 --peaceful`, `tools/careersweep.py --days 260 --tag NAME`.)
-`GravePrix --handling [--car NAME] [--level N] [--wall]` prints the table (reversing, 90 degrees and U-turns at each
-speed, with and without the assist; `--wall` drives into a wall and backs out).
+| rustbucket, stock (`--handling`) | 1.0.1 assist on | assist on | assist off |
+|---|---|---|---|
+| U-turn at full throttle from 36 / 72 / 108 km/h (width) | 24.5 / 33.8 / 39.1 m | 16.0 / 19.6 / 21.7 m | 13.9 / 16.4 / 17.8 m |
+| full lock held 5 s at full throttle: circle, speed | 2.0 m at 24 km/h | 7.5 m at 45 km/h | 6.1 m at 38 km/h |
+| a 0.1 s tap at 90 km/h turns the car | 5.1 deg | 8.2 deg | 8.6 deg |
+| slide gone (< 1 m/s) after letting go of 1.5 s of full lock (1.0.1 off: 0.95 s) | 0.15 s | 0.08 s | 0.18 s |
+| half a second of handbrake and full lock from 72 km/h | | car 70 deg, path 5 deg | car 70 deg, path 4 deg |
+| two seconds of full lock on ice from 72 km/h | | car 90 deg, path 46 deg | car 114 deg, path 50 deg |
+
+Bigger, stronger cars carry more speed round a held full lock (the mausoleum at engine level 4: a 13 m circle at
+71 km/h, its U-turn from 108 km/h 33 m wide). `GravePrix --handling [--car NAME] [--level N] [--wall]` prints the
+table (reversing, 90 degrees, U-turns and the circle at each speed, the settling slide, the handbrake, ice and a tap,
+with and without the assist; `--wall` drives into a wall and backs out); `--handling --tracks` lists every race
+track's slowest bend for that car (the speed its tyres carry on the racing line's tightest curve against its top
+speed) and the bends' radii (10 % 15 m, median 40 m: the first car's slowest bends carry 38-79 % of top, median 53 %,
+with the assist: the hold is about the old one, a too fast entry scrubs instead).
+
+**The assist** (`Settings::m_assist`, `CarSetup::m_assist`), three levels, the options cycle them:
+
+- **0 off**, for experts: hold 1.3, bite 10/s, align 2.5: the tyres every computer driver has; the car slides
+  further and longer and holds less. A career race won so earns "Wie früher" (`old_school`).
+- **1 on** (the default): hold 1.5, bite 16/s, align 5: grippy, a slide settles as soon as the key is let go.
+- **2 on with the brake help** (`World::brakeHelp`): as 1, and the car lifts the throttle when it is faster than the
+  bends ahead allow and brakes when it is more than 1 m/s faster (as hard as the excess / 5 m/s, at least a quarter):
+  the computer drivers' plan for the bends (`World::cornerSpeed`: the racing line's curvature against the side grip
+  on the ground there, with room to brake) at 95 % of the grip. It only ever takes away (never more throttle than the
+  driver gives, never less brake) and keeps out of reversing, the handbrake, derbies and a car across the road. A
+  driver who never lifts for a bend (`--flatout`, with a person's hands) hit the walls 3763 times over all tracks
+  with the assist and 1365 times with the brake help (28.8 against 30.2 m/s; a careful driver 1252 times at 30.2).
+
+Settings files from before the levels (`assist 1` / `assist 0`) read as on / off. `--careersim --assist 0|1|2`,
+`--sim --assist [LEVEL]` (1 without a level), `tools/careersweep.py --assist`.
+
+**The computer drivers** steer by the arc from where the car is going (its path, not its nose) through the point
+ahead: the turn it asks over `fullLock` is the share of lock, 1.3 times that for the tyres' slip and the
+straightening, the nose's swing damped (holding the lock to what the tyres carry cost 4 % of the pace and half again
+as many wall hits: the line needs its corrections). Their bends are planned with `sideGrip` (`World::cornerSpeed`).
+In a derby they hunt with no more lock than the tyres carry, unless the target is far round (scrubbing would cost the
+ram its speed). The obstacles (posts, tank traps, rocks, barrels) collide with the car's whole box, not eight points
+of it: a tank trap between the points held cars on prv_shellshock for good (324 times in one race of the field).
+
+Measured over all 45 race tracks (`--simall --peaceful`, 1.0.1 against now): the computer field 30.25 -> 31.67 m/s,
+stuck 372 -> 26 (48 without prv_shellshock's tank trap), wall hits 1533 -> 1430; a person's hands with the assist
+(`--assist --hands 0.3`) 28.54 -> 30.22 m/s, stuck 48 -> 26, wall hits 1443 -> 1252; the clean bot with the assist
+30.80 -> 32.84 m/s, wall hits 1155 -> 1209. So the hands keep about their distance to the field (94.3 -> 95.4 %), the
+clean bot (a pad) gains 2 %. Derbies last longer (18 armed: 2257 -> 2858 s, 84 wrecks both): the grippier cars get
+away from a ram more often. The career (`tools/careersweep.py`, the practised hands 0.3 and the clean bot, the same
+seeds as for 1.0.1): Schonfrist 3/3 won in 56-79 days (53-83), Blechschaden six seeds 6/6 in 80-151 days (83-120, the
+mean 104 both), Totalschaden 0/3 (bankrupt in league 3; before stopped in leagues 3-4); the clean bot wins d0-d2 3/3
+(29-52 days), over six seeds d3 5/6 and d4 4/6 (1.0.1: 6/6 and 3/6). Graves at the final drives at 0.89 instead of
+0.9: the car the test driver mostly reaches him in, the reaper with every upgrade (`--careersim --final reaper --hands
+0.3`, Blechschaden, eight seeds), needed 7-16 finals with 0.88, 17-39 with 0.9 and 10-27 with 1.0.1 (two seeds of
+eight more than 40 each).
 
 ## Balance: a person's hands, steeper leagues, upgrades with a price
 
@@ -382,8 +443,8 @@ of a second, a little too much), the pedals only all or nothing. `--careersim --
 with it; the clean bot (no hands) hardly needs it.
 
 The leagues get steeper (`data/leagues.txt` `pace` and `skill`: the rivals' engines and driving): league 5 is gentle
-(0.86 / 0.78), league 1 harsher (0.96 / 0.95), Graves at the final 0.9 / 0.9; Sargnagel and Totentanz drive 1.5 %
-faster to make up for it. Measured with the practised hands (0.3, three seeds): Schonfrist won in 77 to 143 days,
+(0.86 / 0.78), league 1 harsher (0.96 / 0.95), Graves at the final 0.89 / 0.9 (0.9 / 0.9 before the arcade model,
+"Driving and the assist"); Sargnagel and Totentanz drive 1.5 % faster to make up for it. Measured with the practised hands (0.3, three seeds): Schonfrist won in 77 to 143 days,
 the places rising from about 2 in league 5 to about 3 in league 1; Blechschaden reaches league 1 (place 3.5 to 4
 there with the 3.3 t mausoleum the bot buys); Totalschaden reaches leagues 3 and 2; Sargnagel and Totentanz are for
 the clean bot. The career bot is no judge of cars: a person would pick a lighter one. And every upgrade has its price on the road (`data/upgrades.txt`):
@@ -450,6 +511,68 @@ handbrake in a hairpin, shooting three barrels, a mine, nitro, a rocket, the lin
 `tut_8`, `tut_done`), a panel shows the step and its key. Passing it earns the licence (`Records::m_tutorial`). It
 heads the paddock's list on a career's first day and is on the title screen.
 
+## Seeing the road, and getting back on it
+
+The user (13.11.2026): "Die Kurvensteuerung ist immer noch unterirdisch." One reason was that the bends came into
+view too late, another that a pad's stick steers mirrored when the car drives down the screen.
+
+**The race camera** (`App::raceCamera`): north up and never turning (turning makes people sick), its height
+(58 + 0.55 x speed) x the "Kamerahöhe" option as before. It leads the car the way it goes: the lead follows the
+velocity, damped (0.6 s, so a spin or a crash glides), whole from 54 km/h and less while crawling, a share of the
+height: 0.18 up the screen, 0.465 down, 0.35 across. Up and down differ because the picture is tilted
+(`Renderer::render`: the eye 0.36 of the height behind the focus, the target 0.06 ahead): from the focus it sees 0.65
+of the height up the screen and 0.36 down. The car itself is followed without lag (the old camera trailed it by a
+quarter of its speed); a jump (back on the track) glides. Metres from the car to the picture's edge the way it drives,
+before → after (`tools/camera_view.py`: the camera's geometry, fovy 45, settled on a straight; 16:9 and 16:10
+differ only across):
+
+| speed | up | down | across 16:9 | across 16:10 |
+|---|---|---|---|---|
+| 54 km/h | 47 → 55 | 27 → 54 | 56 → 75 | 51 → 70 |
+| 108 km/h | 56 → 62 | 34 → 61 | 66 → 84 | 60 → 78 |
+| 180 km/h | 69 → 71 | 44 → 70 | 80 → 97 | 74 → 90 |
+
+Driving down the screen the car sits 14 % below the top edge (up: 77 %, across: 25-28 % from the side it comes from).
+So the messages in the middle of the display (the pace notes, the rivals' shouts) move to the bottom while the car is
+high on the screen (above 36 % of the height, back above 50 %; they fade over) and never cover it.
+
+**Pace notes** (`App::findBends`, `App::paceNotes`; the option "Kurvenpfeile", on by default; not in arenas): a panel
+at the top of the display (under the job's or the test drive's panel), not boards in the world: it reads the same on
+every ground, at night and in fog, and boards would first have to come into view, which was the trouble. The bends
+are found once per race: where the centre line (its curvature smoothed over 14 m) bends one way with a radius under
+250 m (a short straight between two arcs the same way belongs to the bend), its turn (the summed curvature) and the
+racing line's tightest radius in it and 12 m around. Kinks (under 15 degrees and wider than 40 m) are left out, and so
+are bends the player's car takes flat out (sqrt(18 x grip x radius) at least 97 % of its top speed). Shown: the next
+bend within 140 m or 4.5 s, and the one after it when it begins less than 60 m after the first ends ("into"); each as
+an arrow of its shape seen from above, north up like the picture (a stem the way in, an arc through its real turn, so
+a hairpin is a U), the distance in 10 m steps, and its grade in colour and one to four marks: 1 a radius of 75 m and
+more (Good), 2 40-75 m (Gold), 3 22-40 m (orange), 4 tighter (Warn; the colour-vision palettes change Good and Warn).
+The HUD size option scales it.
+
+**The stick points the way** (`Input::aimSteer`; the option "Lenkung: Stick dreht / Stick zeigt Richtung", the
+default turns): with a pad the left stick's direction on the screen is where the nose should point. A controller on
+the angle between the heading and that direction steers (gain 3.6 per radian, so full lock from about 16 degrees off,
+damped by the car's own turn, 0.32 s), and the nose comes round without swinging past: `GravePrix --aim [--car NAME]
+[--level N]` turns the stick by 30 to 180 degrees at 6 to 35 m/s with the throttle held and prints the seconds to
+settle within 5 degrees, the swing past and the steering's changes of side (all 21 cars at level 4: no swing; 90
+degrees at 15 m/s in 1.0-1.3 s, as quick as full lock). A round dead zone (0.3); a stick held straight back keeps
+turning the way it began; backing up (the brake at a standstill) the steering is mirrored, so the nose still comes
+round to the stick. Throttle and brake stay on the triggers; the keys, the cross and the computer drivers are not
+touched. `App::raceStep` hands `Input::car` the player's car when the option is on.
+
+**Back on the track** (`World::resetCar`; the action "Zurück auf die Strecke": Backspace or T, the pad's Select/View):
+the car goes onto the racing line 8 m behind where it is along the lap (further back or beside the line when a car, a
+wreck, an obstacle, a rock, a barrel or something dropped stands there; never onto a level crossing or a drawbridge),
+facing the way of travel, standing. The price: the standstill and the metres back (the lap's distance goes back with
+it, so nothing is gained), and the next reset waits 5 s (`World::ResetWait`); not in the countdown, not wrecked or
+finished. For 2.5 s (`World::ResetGhost`, `Car::m_ghostUntil`) it passes through the other cars (`World::collide`
+skips it) and blinks (`Renderer::drawCar`). In an arena it goes to the spot farthest from the others.
+`GravePrix --resets` puts the first of six computer drivers back every 6 s on every track, both ways (2244 resets:
+all inside the walls with room, facing along the track, at most 62 m back). When the player has stood still for 2.5 s
+trying to drive, or driven the wrong way for 2 s, the display names the key. A pause ends with the presses it saw
+forgotten (Backspace leaves the pause menu). App test words: `drive` (a computer driver takes the player's wheel at
+the race's pace, for pictures in the middle of a race), `reset`.
+
 ## Ghosts and stickers
 
 On the cemetery's tracks and at the final the last two rivals to die race along as ghosts (`App::spirits`): along
@@ -465,6 +588,42 @@ last place), `player_clean`, `player_spree` (the third wreck of a race), `player
 `player_wreck` (now and then), the jobs (`job_*`), the ghosts (`ghost`) and the test drive; five takes of his most
 frequent lines.
 
+## Life on the stands, wind
+
+The crowds of the stands and the wind move in the vertex shaders (the lit one and the shadow's: `AnimGlsl` in
+Render.cpp), never per figure on the CPU and never with a draw call of their own. The Forge marks the vertices in their
+texture coordinates (`MarkE` in Forge.h): uv.x = the kind + a share, uv.y = a length, uv2 = the anchor on the ground
+(x, z) the vertex belongs to (a person, a tree, a flag's pole). The marks ride into the baked prop chunks
+(`MeshBuilder::append` moves the anchors with the prop, scales the lengths and gives each stand its own number);
+`Chunk::m_anim` turns the shader's `anim` on for chunks that carry marks (a mesh without texture coordinates reads
+garbage there, so it stays off for everything else). Models without marks keep no texture coordinates.
+
+- **The crowd** (`part crowd`): the fans sway and breathe; a fast car within ~45 m and they cheer (the eager ones
+  first): the seated stand up, the standing hop, arms go up in a V (an arm vertex knows how far below the shoulder it
+  hangs and mirrors above it). Now and then a wave (la ola) runs along a stand at 11 m/s, each stand on its own clock;
+  mourners and people under umbrellas only sway. `crowdJoy` makes everyone cheer: after a finish (`Renderer::m_joy`,
+  fading over eight seconds) and on the podium. Uniforms: `animTime`, `crowdCars[8]` (x, z, speed), `crowdJoy`, `wind`.
+- **Night**: camera flashes from the stands (`Renderer::crowdLife`: a few sprites a second per stand at random fans'
+  heads, sixteen a second while a fast car passes).
+- **The finish**: when the winner or the player crosses the line, confetti cannons on both sides of it and eight
+  fireworks from behind them (`Renderer::celebrate`; confetti lies where it lands).
+- **Banners** (`part banner`): `Renderer::buildBanners` prints the sponsor's name and Graves & Sons' slogan
+  (`setSlogan`) into a texture of two rows; they are drawn unlit, fading into the fog, the text turned so it reads from
+  the camera's side.
+- **Wind**: `model <name> sway=0..1` bends the whole model, the top most (how pliant: reeds 1, cypresses 0.35, dead
+  trees 0.15), and parts with `group=sway` (`sway=` on the part) alone; `group=flag` cloth flutters about its pole
+  (`pole=x,z`, the model's middle by default; `flutter=0..1`). The strength by the venue's weather: fog 0.12, clear
+  0.3, snow 0.5, rain and dust 0.65 (+0.15 on the pass), the estate's storm 1; rain that comes during a race adds to
+  it. It blows the way the rain falls. There are no indoor scenes or tunnels to calm it.
+- **The podium** (`Renderer::podium`, the results screen below the table): the first three cars on Graves & Sons'
+  coffins stacked three, two and one high (the top ones gilded, silvered, bronzed), a derby's runners-up as smoking
+  wrecks, the `podium_crowd` cheering behind, Mortimer Graves (`fig_graves`) beside the winner, Ricky Rattle
+  (`fig_ricky`) at the microphone, confetti and fireworks; its own renderer (`App::m_podium`, 1280 x 256). Not after
+  the test drive or a time trial.
+
+The grandstand (`data/models/props_common.txt`): seven steps with benches and a crowd row each (about 22,400
+triangles, 280 people), a canopy over the two back rows carrying the banner, four flags. Its old crowd was 448 boxes.
+
 ## Turning props and the ground
 
 A model's parts with `group=spin` turn while the race runs (Ferris wheel, carousel, radar dish): the first of them
@@ -473,6 +632,53 @@ venue in the surface shader (`landStyle`): tyre tracks and specks everywhere; oi
 cracked hardpan (desert), gravel paths (cemetery, estate, whose lawn is also mown in stripes), concrete slabs with
 stains and yellow lines (docks, refinery), drifts (pass), black water (swamp), pavement tiles and manholes (downtown),
 sawdust paths and confetti (fairground), craters (proving ground).
+
+## The miniature look, the sky and contact shadows (`src/RenderLook.cpp`)
+
+**Grade.** A venue's `grade` line colours the finished picture after the tone curve: `shadows` and `highlights` tint
+the darks and the lights (the colour is a tint: its brightness is taken out, only its hue and strength count;
+`amount` how much of them), then `sat` (saturation), `contrast` (round a dark grey, 0.3, so that night venues keep
+their darks: keep it near 1.03 there) and `vignette` (the corners' darkening). Without the line the old film's
+grade: darks a little cooler, lights a little warmer.
+
+**Miniature look** (`Settings::m_miniature`, the option "Miniatur-Look", on by default): a tilt-shift lens. The post
+pass shrinks the picture to a half and a quarter (16-bit, before the tone curve) and blends towards them above and
+below a sharp band 0.4 of the picture high, which follows the player's car (the camera looks ahead of it); with the
+blur on, saturation x1.06 and contrast x1.02. Quality 0 (the Deck) has only the half-size step and 0.8 of the blur.
+The garage's showroom never blurs.
+
+**Things flying over the track** (`Renderer::sky`): after the first 10 s of a race, every 35–75 s, the Graves & Sons
+airship (daylight venues with the sun above ~20°) or the Sensenblatt's news helicopter (everywhere). They fly above
+the camera and are never drawn in the picture, only into the shadow map: a directional light casts the same shadow
+wherever along the sun's ray a thing hangs, so they are drawn low on that ray (30–34 m above the shadow, inside the
+light's depth range). The airship (48 m) drifts east or west at 7.5 m/s across the track 160 m ahead of the car the
+camera follows, towing a banner whose letters ("GRAVES & SONS", the interface font's pixels as flat quads, laid
+west to east so the shadow reads) lie flat; the helicopter follows that car for 11 s, its shadow crossing over it
+from one side to the other, the four blades turning. At night its searchlight (a spot from the moon's side, at
+least 55° high) is on the car. `Renderer::m_hum` gives the race the loudness of `LoopE::ROTOR` and `LoopE::AIRSHIP`
+(by the shadow's distance from the view, Doppler while it comes nearer).
+
+**Lightning** (weather `storm`): every 6–16 s a flash of a stroke and two return strokes (`flashCurve`, 1.2 s). The
+flash is a cold light from the sky that throws the moon's shadows (it goes through the shadow map) and lights the
+haze and the background. Two flashes in five strike in view: a jagged channel of additive quads from the ground up
+to about half the camera's height, a light, sparks, smoke and a scorch; `SfxE::THUNDER_NEAR` follows after the
+sound's time from the strike, else `SfxE::THUNDER_FAR` after 1.2–4 s (`Renderer::Cue` kinds 2 and 3). The estate's
+ambience keeps its own distant thunder.
+
+**Contact shadows** (`Renderer::bakeContact`, once per track): the walls, the prop chunks, the obstacles and the
+people by the road are drawn from straight above into a map over the track and its props (0.22 m a texel, 0.3 on
+the Deck; at most 2048 / 3072 / 4096 texels). Seen from above a wall's sides have no area, so the vertex shader
+pushes the vertices near the ground out along their faces (a skirt of two texels, at least 0.3 m): r marks such
+feet of things at least ankle-high and the whole top of low things (up to 3–5 m: gravestones, walls, parked cars),
+g the tops of tall things (2.5–24 m: buildings, tree crowns). A separable bell-shaped blur spreads r over about
+0.45 m and g over 1.3 m, then r is doubled and g raised by 1.4 (a lone skirt is thin; blurred, its edge would be
+pale). (A weighted maximum instead of the blur kept the skirts' full strength but turned the rasterised stair steps
+of a diagonal wall into a row of beads.) The lighting reads it (`contactAt`): the sky's light is darkened by
+0.55 x r + 0.3 x g (0.62 / 0.34 at night, where the sky's light is most of what there is), the sun's (0.7 of that)
+only down to what the shadow map has not taken already (`min( shadow, ... )`, so a place in shadow does not get
+darker twice); models only near the ground (fading out by 2.5 m) and their upward faces hardly. Loose things,
+barrels and pickups move and are left out. Cost: one texture read per pixel and no draw call while racing; the bake
+runs once when the track is set up.
 
 ## Scenes (`data/scenes/<venue>.txt`)
 
@@ -632,8 +838,9 @@ sabotage_caught sabotage_done record bought_car day` (filler). Placeholders in t
 ## Sound (Audio.h)
 
 The engine synthesises every sound at start (no sample files): effects (`SfxE`), loops (`LoopE`: tyre squeal,
-scraping, gravel, flamer, fire, rain, wind and one ambience per venue) and engine voices (up to 8 cars at once,
-`EngineE` kinds as in the car list, pitch and timbre following rpm and load). Music is streamed from
+scraping, gravel, flamer, fire, rain, wind, the helicopter's rotor and the airship's engines overhead, and one
+ambience per venue) and engine voices (up to 8 cars at once, `EngineE` kinds as in the car list, pitch and timbre
+following rpm and load). Music is streamed from
 `assets/music/<name>.ogg`. `GraveSfx <dir>` writes every effect, loop and engine sample as WAV.
 
 ## Voice and pictures
@@ -651,17 +858,25 @@ switches to the venue's hot take (`tools/music_hot.json`). All three run on the 
 - `--validate` — reads and checks all data; exits 1 on errors.
 - `--trackshot NAME FILE.png`, `--trackshots DIR` — maps (CPU only, no window).
 - `--gallery FILE.png [prefix]` — the model sheet, drawn on the CPU (no window, no GPU; `--yaw DEG --cell N --cols N`).
-- `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place.
-- `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window.
-- `--handling [--car NAME] [--level N] [--wall]` — a car alone on open ground: reversing, turning circles.
-- `--careersim [--days N] [--seed N] [--skill 0..1] [--hands 0..1] [--novice 0..1] [--assist 0|1] [--jobs]` — a career
-  played by the computer (the economy's test).
-- `--deckcheck [TRACK] [--frames N]` — frame times at the Steam Deck's 1280 x 800 and quality 0 and 1 (hidden window).
-- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1] [--hands 0..1] [--days N]
-  [--exe COPY] [--tag NAME]` —
+- `--shot TRACK FILE.png [--at METRES] [--car NAME]` — a picture of the race at a place; `--sky 0|1|2` puts the
+  airship, the helicopter or a lightning strike into it, `--miniature 0` turns the tilt-shift blur off.
+- `--sim TRACK [--laps n] [--seed n]`, `--simall` — computer races without a window (`--peaceful`, `--car NAME`,
+  `--assist [LEVEL]`, `--hands 0..1`, `--novice 0..1`, `--flatout`: every driver alike); the lines count stuck cars and
+  wall hits, `--simall` ends with the totals.
+- `--handling [--car NAME] [--level N] [--wall]` — a car alone on open ground: reversing, turning circles, slides.
+- `--handling --tracks [--car NAME] [--level N]` — every race track's slowest bend for that car and the bends' radii.
+- `--careersim [--days N] [--seed N] [--skill 0..1] [--hands 0..1] [--novice 0..1] [--assist 0|1|2] [--jobs]` — a career
+  played by the computer (the economy's test); a race lost also tells how far behind the winner. `--final CAR`
+  starts at the final against Graves in that car with every upgrade and races it until it is won (the final's balance).
+- `--deckcheck [TRACK] [--frames N] [--miniature 0]` — frame times at the Steam Deck's 1280 x 800 and quality 0 and 1
+  (hidden window).
+- `--aim [--car NAME] [--level N]` — the stick that points the way, tried on open ground (see "Seeing the road").
+- `--resets` — a car put back on the track every 6 s on every track, both ways; exits 1 when one lands badly.
+- `tools/careersweep.py [--difficulties ..] [--seeds ..] [--skills ..] [--novice 0..1] [--hands 0..1] [--assist 0|1|2]
+  [--days N] [--exe COPY] [--tag NAME] [--workers N]` —
   `--careersim` for every difficulty and seed, three at a time at low priority, one line per career with the average
-  place per league. `--exe` runs a copy of the game (with a copy of `data` beside it, the measurement stays fixed while
-  the work goes on).
+  place per league and the number of finals raced against Graves. `--exe` runs a copy of the game (with a copy of
+  `data` beside it, the measurement stays fixed while the work goes on).
 - `--apptest SCRIPT` — the screens played by a script (tools/apptest_*.txt; a hidden window; set GRAVE_HOME).
 - `--shot` refuses while G:/Tools/Games/GPU_BELEGT.txt exists (another session's GPU job).
 - `.\build.ps1` builds into bin\msvc; `.\build.ps1 -Dir <name>` into build\<name> (for a second worker).

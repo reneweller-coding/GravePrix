@@ -24,6 +24,7 @@ struct Settings
     int         m_fps = 60;                  ///< 0: no limit
     bool        m_vsync = true;
     int         m_quality = -1;              ///< 0 fast, 1 balanced, 2 fine (-1: by the machine)
+    bool        m_miniature = true;          ///< the miniature look: the picture's top and bottom blurred
     std::string m_language;                  ///< de, en ("" the system's)
     float       m_textSize = 1.0f;
     bool        m_rumble = true;
@@ -33,8 +34,10 @@ struct Settings
     float       m_hud = 1.0f;                ///< the race display's size
     int         m_palette = 0;               ///< colour vision: 0 as made, 1 red-green, 2 blue-yellow
     bool        m_tags = false;              ///< names over the rivals' cars
-    bool        m_assist = true;             ///< the driving assist for the player's car
+    int         m_assist = 1;                ///< the player's driving assist: 0 off, 1 on, 2 on with the brake help
     std::vector<std::string> m_binds;        ///< Input's lines
+    bool        m_paceNotes = true;          ///< the corner arrows in the race (pace notes)
+    bool        m_stickAims = false;         ///< the pad's stick points the way (else it turns the wheels)
 
     /** @brief Reads them (missing values stay at their defaults). */
     void load( const std::string &path );

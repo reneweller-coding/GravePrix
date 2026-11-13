@@ -163,6 +163,7 @@ bool App::init( const Options &o )
     ui::init( o.m_root + "/assets" );
     applySettings();
     m_show.init( 640, 480, 2 );
+    m_podium.init( 1280, 256, 1 );
     crash::install( userDir() + "crashes/", "" );
     m_newName = PresetNames[0];
     m_qDiff = 2;
@@ -181,6 +182,7 @@ void App::applySettings()
     float s = QualityScale[q];
     m_view.shutdown();
     m_view.init( std::max( 320, (int)( GetScreenWidth() * s ) ), std::max( 200, (int)( GetScreenHeight() * s ) ), q );
+    m_view.m_miniature = m_set.m_miniature;
     if ( m_racing ) m_view.setTrack( m_track );
     else if ( m_atReady ) m_view.setTrack( m_atTrack );
 }
@@ -199,6 +201,7 @@ void App::shutdown()
     rumble::stop();
     m_view.shutdown();
     m_show.shutdown();
+    m_podium.shutdown();
     for ( auto &p : m_photos )
         if ( p.second.id ) UnloadTexture( p.second );
     m_photos.clear();
@@ -310,6 +313,24 @@ void App::testStep()
     if ( w == "pad" )
     {
         m_in.forcePad( true );
+        return;
+    }
+    if ( w == "drive" )
+    {
+        // A computer driver takes the player's wheel at the race's own pace (pictures in the middle of a race).
+        if ( m_racing ) m_world.m_cars[m_player].m_setup.m_human = false;
+        return;
+    }
+    if ( w == "reset" )
+    {
+        // The player's car back on the track (the reset key's World::resetCar); a failure when the race refuses.
+        if ( !m_racing || !m_world.resetCar( m_player ) )
+        {
+            printf( "apptest: word %zu: the car was not put back on the track\n", m_testAt );
+            ++m_testFails;
+        }
+        else
+            m_camCar = m_world.m_cars[m_player].m_pos;
         return;
     }
     if ( w == "graves" )
@@ -1314,7 +1335,12 @@ void App::options()
         std::string( T( "Farbsicht: " ) ) + T( palettes[std::clamp( m_set.m_palette, 0, 2 )] ),
         std::string( T( "Namen über den Autos: " ) ) + ( m_set.m_tags ? T( "an" ) : T( "aus" ) ),
         std::string( T( "Bildrate: " ) ) + ( m_set.m_fps > 0 ? std::to_string( m_set.m_fps ) : std::string( T( "unbegrenzt" ) ) ),
-        std::string( T( "Fahrhilfe: " ) ) + ( m_set.m_assist ? T( "an" ) : T( "aus (rutschig wie früher)" ) ),
+        std::string( T( "Fahrhilfe: " ) ) + ( m_set.m_assist == 0   ? T( "aus (rutschiger, für Könner)" )
+                                              : m_set.m_assist == 1 ? T( "an" )
+                                                                    : T( "an, mit Bremshilfe" ) ),
+        std::string( T( "Kurvenpfeile: " ) ) + ( m_set.m_paceNotes ? T( "an" ) : T( "aus" ) ),
+        std::string( T( "Lenkung: " ) ) + ( m_set.m_stickAims ? T( "Stick zeigt Richtung" ) : T( "Stick dreht" ) ),
+        std::string( T( "Miniatur-Look: " ) ) + ( m_set.m_miniature ? T( "an" ) : T( "aus" ) ),
         T( "Steuerung" ),
         T( "Zurück" ),
     };
@@ -1322,7 +1348,7 @@ void App::options()
     int dir = m_in.left() ? -1 : m_in.right() ? 1 : 0;
     if ( dir || pick >= 0 )
     {
-        if ( pick >= 0 && pick < 15 && dir == 0 ) dir = 1;
+        if ( pick >= 0 && pick < 18 && dir == 0 ) dir = 1;
         switch ( sel )
         {
         case 0:
@@ -1352,15 +1378,21 @@ void App::options()
             m_set.m_fps = rates[( at + dir + 4 ) % 4];
             break;
         }
-        case 14: m_set.m_assist = !m_set.m_assist; break;
+        case 14: m_set.m_assist = ( m_set.m_assist + dir + 3 ) % 3; break;
+        case 15: m_set.m_paceNotes = !m_set.m_paceNotes; break;
+        case 16: m_set.m_stickAims = !m_set.m_stickAims; break;
+        case 17:
+            m_set.m_miniature = !m_set.m_miniature;
+            m_view.m_miniature = m_set.m_miniature;
+            break;
         default: break;
         }
-        if ( sel <= 14 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 || sel == 11 || sel == 13 ) ) applySettings();
-        if ( sel <= 14 ) sound( SfxE::UI_MOVE );
+        if ( sel <= 17 && ( sel == 4 || sel == 9 || sel == 1 || sel == 2 || sel == 11 || sel == 13 ) ) applySettings();
+        if ( sel <= 17 ) sound( SfxE::UI_MOVE );
         saveSettings();
     }
-    if ( pick == 15 ) go( ScreenE::CONTROLS );
-    if ( pick == 16 || m_in.back() )
+    if ( pick == 18 ) go( ScreenE::CONTROLS );
+    if ( pick == 19 || m_in.back() )
     {
         saveSettings();
         go( m_racing ? ScreenE::RACE : m_inCareer ? ScreenE::HUB : ScreenE::TITLE );
@@ -1392,7 +1424,8 @@ void App::controls()
             m_bindAct = -1;
     }
     static const char *names[] = { "Gas", "Bremse / Rückwärts", "Links", "Rechts", "Handbremse", "Bordkanone", "Heckware abwerfen",
-                                   "Rakete", "Lachgas", "Heckware wechseln", "Hupe", "Pause" };
+                                   "Rakete", "Lachgas", "Heckware wechseln", "Hupe", "Pause",
+                                   "Zurück auf die Strecke" };
     std::vector<std::string> items;
     for ( int a = 0; a < (int)ActE::COUNT; ++a )
         items.push_back( std::string( T( names[a] ) ) + ":   " + m_in.label( (ActE)a, false ) + "   |   " + m_in.label( (ActE)a, true ) );
@@ -1416,8 +1449,8 @@ void App::controls()
         menu( items, sel, { 96 * k, 210 * k, 1500 * k, 760 * k }, 34 );
     // The pad's buttons drawn as on the pad, beside the list.
     {
-        float px = GetScreenWidth() - 380 * k, py = 220 * k;
-        ui::panel( { px - 20 * k, py - 16 * k, 340 * k, ( (float)ActE::COUNT * 46 + 24 ) * k }, 0.7f );
+        float px = GetScreenWidth() - 420 * k, py = 220 * k;
+        ui::panel( { px - 20 * k, py - 16 * k, 380 * k, ( (float)ActE::COUNT * 46 + 24 ) * k }, 0.7f );
         for ( int a = 0; a < (int)ActE::COUNT; ++a )
         {
             const Bind &b = m_in.m_binds[a];

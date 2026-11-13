@@ -1,5 +1,50 @@
 # Changelog
 
+## [Unreleased]
+
+- **New steering for every car:** the nose turns quickly at any speed and the tyres decide how fast the car follows.
+  Turn harder than they grip and the car slides and scrubs speed off in the bend instead of running wide into the
+  wall: a U-turn at full throttle from 108 km/h is 22 m wide instead of 39 m, held full lock circles on two car
+  lengths, and a slide settles as soon as you let go of the key. The handbrake drift, ice, oil and mud stay slippery.
+- **Brake help:** a third level of the driving assist lifts the throttle and brakes by itself when the car is too fast
+  for the bends ahead. It only ever takes speed away; your own brake works as always.
+- **Assist off is for experts now:** the same tyres as the computer drivers, more drift. Old settings keep their choice.
+- **The computer drivers** steer and plan their bends for the new tyres and corner faster; they no longer get stuck
+  on posts in the road. The career stays as hard as it was (Graves drives a touch slower at the final).
+- **The camera looks ahead:** it leads your car the way it drives, and further when you drive down the screen, where
+  the tilted view sees less: at 108 km/h 61 m of road ahead up or down the screen (56 and 34 m before), 84 m across
+  (66 m). It never turns, and a spin or a crash glides instead of jerking.
+- **Corner arrows:** the next bend at the top of the display, its shape as seen from above, how far and how sharp
+  (one to four marks, green to red), and the bend right after it. The messages in the middle move to the bottom while
+  you drive down the screen. Option "Corner arrows" (on); not in arenas.
+- **Steering that points the way:** with a pad the car can head where the left stick points on the screen, whichever
+  way it faces (option "Steering: stick points the way"; the default still turns the wheels). Backing up, the nose
+  comes round to the stick as well.
+- **Back on track:** stuck against a wall or turned round? Backspace, T or the pad's Select/View puts the car back on
+  the racing line a few metres back, standing, facing the right way; it blinks and passes through the other cars for
+  a moment, and the next one waits five seconds. The display offers it when you stand stuck.
+- **Miniature look:** the top and the bottom of the picture blur like a photograph of a model, with a sharp band
+  round your car (Options > Miniature look; lighter on the Steam Deck).
+- **Every venue has its own colours:** cold blue night at the cemetery, teal and orange in the docks, bleached noon
+  in the desert, neon violet downtown, a cold storm light at the estate.
+- **Things that stand sit on the ground:** soft contact shadows at the foot of walls, buildings, gravestones,
+  trees and parked cars, darker at night.
+- **Shadows from above:** now and then the Graves & Sons airship drifts over the track towing its banner (read the
+  shadow), or the Sensenblatt's news helicopter follows your car, its rotor's shadow sweeping over you; at night
+  its searchlight is on you. Both can be heard overhead.
+- **Lightning over the estate:** the storm's flashes light the whole scene and throw the shadows for a moment;
+  sometimes a bolt strikes beside the road and scorches it, and the thunder comes a moment later.
+- **Real spectators on the stands:** seated and standing fans in team colours, scarves, caps and little flags, next to
+  mourners in black with top hats and umbrellas, instead of coloured blocks. The stand's roof now covers only the back
+  rows.
+- **The crowd comes alive:** fans jump up and raise their arms when cars race past, a wave runs along the stands now
+  and then, camera flashes go off at night, flags flutter.
+- **Confetti and fireworks** at the line when the winner and when you finish.
+- **Your sponsor's name on the stands' roofs** (Graves & Sons' slogan on every other one, and in quick races).
+- **The podium:** after a race the first three stand on a pile of coffins below the results, the crowd cheering,
+  Graves and Ricky Rattle beside them; a derby's runners-up smoke as the wrecks they are.
+- **Wind:** trees, reeds and flags sway, gentle on clear days, harder in the rain, wildly in the estate's storm.
+
 ## [1.0.1] – 2026-11-02
 
 Steering you can lean on.

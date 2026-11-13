@@ -26,12 +26,93 @@ constexpr int MaxSpots = 8;
 
 // ---------------------------------------------------------------------------------------------------- shaders
 
-const char *LitVs = R"(#version 330
+// What moves in the vertex shaders (the lit one and the shadow's): the marked vertices of the Forge's models and the
+// baked prop chunks (MarkE, docs/DESIGN.md "Life on the stands, wind"). Off (anim 0) for everything else: a mesh
+// without texture coordinates reads garbage there.
+const char *AnimGlsl = R"(
+in vec2 vertexTexCoord;
+in vec2 vertexTexCoord2;
+uniform float anim;          // 1: this mesh carries marks
+uniform float animTime;
+uniform vec4 wind;           // xy: where it blows to (x, z), z: how strong (0 calm .. 1 storm)
+uniform vec4 crowdCars[8];   // the cars: x, z, speed
+uniform int crowdCarCount;
+uniform float crowdJoy;      // 0..1: every fan cheers (a finish, the podium)
+float animHash( vec2 p )
+{
+    vec3 p3 = fract( vec3( p.xyx ) * 0.1031 );
+    p3 += dot( p3, p3.yzx + 33.33 );
+    return fract( ( p3.x + p3.y ) * p3.z );
+}
+void animate( inout vec3 p, inout vec3 n )
+{
+    if ( anim < 0.5 ) return;
+    float kind = floor( vertexTexCoord.x + 0.0001 );
+    if ( kind < 0.5 || kind > 7.5 ) return;
+    float share = vertexTexCoord.x - kind;
+    vec2  at = vertexTexCoord2;
+    float r = animHash( at * 3.7 + 0.31 );
+    if ( kind < 1.5 )   // wind: the top bends most, in gusts, a little across as well
+    {
+        float H = max( vertexTexCoord.y, 0.4 );
+        float k = clamp( p.y / H, 0.0, 1.2 );
+        float gust = 0.6 + 0.4 * sin( animTime * 0.73 + dot( at, vec2( 0.031, 0.023 ) ) ) * sin( animTime * 0.29 + r * 4.0 );
+        float push = wind.z * ( 0.55 * gust + 0.45 * sin( animTime * ( 1.4 + r ) + r * 6.28 ) );
+        vec2  off = wind.xy * push + vec2( -wind.y, wind.x ) * 0.3 * wind.z * sin( animTime * 2.3 + r * 9.0 );
+        p.xz += off * k * k * sqrt( H ) * ( 0.04 + 0.2 * share );
+        return;
+    }
+    if ( kind > 4.5 && kind < 5.5 )   // a flag: waves run out from the pole, wider at the loose end
+    {
+        float L = max( vertexTexCoord.y, 0.2 );
+        vec2  rel = p.xz - at;
+        float d = length( rel );
+        vec2  across = d > 0.01 ? vec2( -rel.y, rel.x ) / d : vec2( 0.0 );
+        float wave = sin( d * 4.5 - animTime * ( 6.0 + 4.0 * wind.z ) + r * 6.28 );
+        p.xz += across * wave * ( d / L ) * L * ( 0.05 + 0.15 * share ) * ( 0.3 + wind.z );
+        return;
+    }
+    // The crowd. How excited: a fast car near, a finish; the eager ones first.
+    float along = vertexTexCoord.y;
+    float stand = floor( ( along + 500.0 ) / 1000.0 );
+    along -= stand * 1000.0;
+    float ex = crowdJoy;
+    for ( int i = 0; i < crowdCarCount; ++i )
+        ex = max( ex, ( 1.0 - smoothstep( 14.0, 46.0, length( crowdCars[i].xy - at ) ) ) * smoothstep( 6.0, 24.0, crowdCars[i].z ) );
+    // Now and then a wave (la ola) runs along a stand, each stand its own.
+    float period = 24.0, tw = animTime + animHash( vec2( stand, 7.1 ) ) * period;
+    float cycle = floor( tw / period ), front = -32.0 + ( tw - cycle * period ) * 11.0;
+    float ola = step( 0.45, animHash( vec2( stand, cycle ) ) ) * exp( -( along - front ) * ( along - front ) * 0.12 );
+    bool  calm = kind > 3.5 && kind < 4.5;
+    bool  arm = kind > 2.5 && kind < 3.5 || kind > 6.5;
+    bool  seated = kind < 4.5;
+    float cheer = calm ? 0.0 : clamp( ex * ( 1.5 - 0.9 * r ), 0.0, 1.0 );
+    if ( calm ) ola = 0.0;
+    float hop = abs( sin( animTime * ( 6.0 + 4.0 * r ) + r * 50.0 ) );
+    float w = arm ? 1.0 : ( kind > 5.5 ? 1.0 : share );
+    float lift = seated ? w * ( max( cheer, ola ) * 0.4 + cheer * hop * 0.1 ) : cheer * hop * 0.24 + ola * 0.3;
+    // Idle: the weight shifts from foot to foot, a breath; mourners sway a little more, slowly.
+    float idle = sin( animTime * ( 0.8 + 0.6 * r ) + r * 30.0 );
+    p.x += idle * ( calm ? 0.05 : 0.03 ) * w;
+    p.y += lift + w * 0.012 * sin( animTime * 1.7 + r * 12.0 );
+    if ( arm )
+    {
+        // Arms up: the arm mirrors above the shoulder and opens a little (a V); some keep them down.
+        float up = max( cheer * step( 0.25, r + ex * 0.3 ), ola ) * ( 0.85 + 0.15 * hop );
+        float d = share;
+        vec2  side = p.xz - at;
+        float sl = length( side );
+        p.y += 2.0 * d * up;
+        if ( sl > 0.01 ) p.xz += side / sl * d * 0.5 * up;
+        n.y *= 1.0 - 2.0 * up;
+    }
+}
+)";
+
+const char *LitVsHead = R"(#version 330
 in vec3 vertexPosition;
 in vec3 vertexNormal;
 in vec4 vertexColor;
-in vec2 vertexTexCoord;
-in vec2 vertexTexCoord2;
 uniform mat4 mvp;
 uniform mat4 matModel;
 uniform mat4 matNormal;
@@ -40,14 +121,19 @@ out vec3 fragNormal;
 out vec4 fragColor;
 out vec2 fragUV;
 out vec2 fragUV2;
+)";
+
+const char *LitVsMain = R"(
 void main()
 {
-    fragPos = ( matModel * vec4( vertexPosition, 1.0 ) ).xyz;
-    fragNormal = normalize( ( matNormal * vec4( vertexNormal, 0.0 ) ).xyz );
+    vec3 p = vertexPosition, n = vertexNormal;
+    animate( p, n );
+    fragPos = ( matModel * vec4( p, 1.0 ) ).xyz;
+    fragNormal = normalize( ( matNormal * vec4( n, 0.0 ) ).xyz );
     fragColor = vertexColor;
     fragUV = vertexTexCoord;
     fragUV2 = vertexTexCoord2;
-    gl_Position = mvp * vec4( vertexPosition, 1.0 );
+    gl_Position = mvp * vec4( p, 1.0 );
 }
 )";
 
@@ -72,6 +158,20 @@ uniform sampler2D shadowMap;
 uniform mat4 lightVP;
 uniform float shadowOn;
 uniform float flash;
+// The baked contact shadows (RenderLook.cpp): r beside things standing on the ground, g under and beside tall ones.
+uniform sampler2D contactMap;
+uniform vec4 contactRect;   // x0, z0, 1 / size, on
+uniform vec3 contactK;      // how dark beside things, under tall ones; how much an upward face keeps of the sky
+float contactAt( vec3 p, vec3 n )
+{
+    if ( contactRect.w <= 0.0 ) return 1.0;
+    vec2 uv = ( p.xz - contactRect.xy ) * contactRect.z;
+    if ( uv.x <= 0.0 || uv.y <= 0.0 || uv.x >= 1.0 || uv.y >= 1.0 ) return 1.0;
+    vec2 c = texture( contactMap, uv ).rg;
+    float ao = max( 1.0 - contactK.x * c.r - contactK.y * c.g, 0.2 );
+    ao = mix( ao, 1.0, max( n.y, 0.0 ) * contactK.z );        // a model's tops see the sky
+    return mix( ao, 1.0, smoothstep( 0.0, 2.5, p.y ) );        // only near the ground
+}
 float shadowAt( vec3 p, vec3 n )
 {
     if ( shadowOn < 0.5 ) return 1.0;
@@ -91,9 +191,13 @@ vec3 lighting( vec3 p, vec3 n, vec3 albedo, float spec, float rough )
     vec3 l = -sunDir;
     float ndl = max( dot( n, l ), 0.0 );
     float sh = shadowAt( p, n );
-    vec3 col = albedo * ( ambient * ( 0.6 + 0.4 * n.y ) + sunColor * ndl * sh );
+    // The contact shadow takes the sky's light; of the sun's only what the shadow map has not taken already (the
+    // two must not darken a place twice).
+    float ao = contactAt( p, n );
+    float sd = min( sh, mix( 1.0, ao, 0.7 ) );
+    vec3 col = albedo * ( ambient * ( 0.6 + 0.4 * n.y ) * ao + sunColor * ndl * sd );
     vec3 h = normalize( l + v );
-    col += sunColor * pow( max( dot( n, h ), 0.0 ), rough ) * spec * sh;
+    col += sunColor * pow( max( dot( n, h ), 0.0 ), rough ) * spec * sd;
     for ( int i = 0; i < lightCount; ++i )
     {
         vec3 L = lightPos[i].xyz - p;
@@ -116,7 +220,8 @@ vec3 lighting( vec3 p, vec3 n, vec3 albedo, float spec, float rough )
         vec3 lc = spotCol[i].rgb * spotCol[i].a * edge * att;
         col += albedo * lc * max( dot( n, Ld ), 0.0 ) + lc * pow( max( dot( n, normalize( Ld + v ) ), 0.0 ), rough ) * spec;
     }
-    col += albedo * flash * vec3( 0.7, 0.75, 1.0 );
+    // Lightning: a cold light from the sky that throws the shadows of the moon's direction for a moment.
+    col += albedo * flash * vec3( 0.7, 0.75, 1.0 ) * ( 0.3 + 0.7 * sh ) * ao;
     return col;
 }
 vec3 fogged( vec3 col, vec3 p )
@@ -475,10 +580,19 @@ void main()
 }
 )";
 
-const char *DepthVs = R"(#version 330
+const char *DepthVsHead = R"(#version 330
 in vec3 vertexPosition;
+in vec3 vertexNormal;
 uniform mat4 mvp;
-void main() { gl_Position = mvp * vec4( vertexPosition, 1.0 ); }
+)";
+
+const char *DepthVsMain = R"(
+void main()
+{
+    vec3 p = vertexPosition, n = vertexNormal;
+    animate( p, n );
+    gl_Position = mvp * vec4( p, 1.0 );
+}
 )";
 
 const char *DepthFs = R"(#version 330
@@ -563,7 +677,15 @@ uniform float exposure;
 uniform float bloom;
 uniform float hurt;
 uniform float fade;
-uniform float grade;
+// The miniature look (RenderLook.cpp): the picture blurred towards its top and bottom, sharp in a band round the
+// player's car (a tilt-shift lens), and the venue's colour grade.
+uniform sampler2D blurTex;    // the picture at half its size
+uniform sampler2D blurTex2;   // at a quarter
+uniform vec2 blurTexel;       // a texel of blurTex2
+uniform vec3 tilt;            // strength (0 off), the sharp band's middle and its half height (texture v)
+uniform vec3 gradeLo;         // the tint of the darks
+uniform vec3 gradeHi;         // of the lights
+uniform vec4 gradeK;          // how much of the tints, saturation, contrast, vignette
 out vec4 finalColor;
 vec3 aces( vec3 x )
 {
@@ -572,13 +694,28 @@ vec3 aces( vec3 x )
 void main()
 {
     vec2 uv = fragTexCoord;
-    vec3 c = texture( texture0, uv ).rgb * exposure + texture( bloomTex, uv ).rgb * bloom;
+    vec3 c = texture( texture0, uv ).rgb;
+    float a = clamp( ( abs( uv.y - tilt.y ) - tilt.z ) / 0.3, 0.0, 1.0 ) * tilt.x;
+    if ( a > 0.0 )
+    {
+        vec3 h1 = texture( blurTex, uv ).rgb;
+        vec3 h2 = 0.25 * ( texture( blurTex2, uv + blurTexel * vec2( -0.7, -0.7 ) ).rgb +
+                           texture( blurTex2, uv + blurTexel * vec2( 0.7, -0.7 ) ).rgb +
+                           texture( blurTex2, uv + blurTexel * vec2( -0.7, 0.7 ) ).rgb +
+                           texture( blurTex2, uv + blurTexel * vec2( 0.7, 0.7 ) ).rgb );
+        a = a * a * ( 3.0 - 2.0 * a );
+        c = a < 0.5 ? mix( c, h1, a * 2.0 ) : mix( h1, h2, a * 2.0 - 1.0 );
+    }
+    c = c * exposure + texture( bloomTex, uv ).rgb * bloom;
     c = aces( c * 1.05 );
-    // A touch of the old film: the darks a little cooler, the lights a little warmer.
+    // The venue's grade: the darks and the lights tinted, then saturation and contrast.
     float l = dot( c, vec3( 0.3, 0.55, 0.15 ) );
-    c = mix( c, c * mix( vec3( 0.92, 0.96, 1.08 ), vec3( 1.06, 1.0, 0.92 ), smoothstep( 0.2, 0.7, l ) ), grade );
+    c = mix( c, c * mix( gradeLo, gradeHi, smoothstep( 0.15, 0.7, l ) ), gradeK.x );
+    l = dot( c, vec3( 0.3, 0.55, 0.15 ) );
+    c = max( mix( vec3( l ), c, gradeK.y ), 0.0 );
+    c = max( ( c - 0.3 ) * gradeK.z + 0.3, 0.0 );   // round a dark grey: night venues keep their darks
     vec2 q = uv - 0.5;
-    c *= 1.0 - dot( q, q ) * 0.7;
+    c *= 1.0 - dot( q, q ) * gradeK.w;
     float r = smoothstep( 0.25, 0.75, length( q ) ) * hurt;
     c = mix( c, vec3( 0.75, 0.04, 0.03 ), r * 0.6 );
     c *= 1.0 - fade;
@@ -590,11 +727,18 @@ void main()
 
 enum TexE : int
 {
-    T_SOFT, T_SMOKE, T_SPARK, T_FLARE, T_STREAK, T_RING, T_FLAME, T_DROP, T_COUNT
+    T_SOFT, T_SMOKE, T_SPARK, T_FLARE, T_STREAK, T_RING, T_FLAME, T_DROP, T_CHIP, T_COUNT
+};
+
+/** @brief Where the animation's uniforms sit in a shader (the lit one and the shadow's). */
+struct AnimLoc
+{
+    int m_on = -1, m_time = -1, m_wind = -1, m_cars = -1, m_count = -1, m_joy = -1;
 };
 
 struct Shared
 {
+    AnimLoc   m_anim[2];   ///< the lit shader's, the depth shader's
     int       m_users = 0;
     Shader    m_lit = {}, m_surface = {}, m_depth = {}, m_sprite = {}, m_prefilter = {}, m_down = {}, m_up = {}, m_final = {};
     Material  m_litMat = {}, m_surfMat = {}, m_depthMat = {};
@@ -638,7 +782,8 @@ Texture2D makeTex( int size, float ( *f )( float x, float y ) )
 Shader loadLit( const char *body )
 {
     std::string fs = std::string( "#version 330\n" ) + LightGlsl + body;
-    Shader      s = LoadShaderFromMemory( LitVs, fs.c_str() );
+    std::string vs = std::string( LitVsHead ) + AnimGlsl + LitVsMain;
+    Shader      s = LoadShaderFromMemory( vs.c_str(), fs.c_str() );
     s.locs[SHADER_LOC_MATRIX_MODEL] = GetShaderLocation( s, "matModel" );
     s.locs[SHADER_LOC_MATRIX_NORMAL] = GetShaderLocation( s, "matNormal" );
     return s;
@@ -674,7 +819,19 @@ void makeShared()
 {
     g.m_lit = loadLit( LitFsBody );
     g.m_surface = loadLit( SurfaceFsBody );
-    g.m_depth = LoadShaderFromMemory( DepthVs, DepthFs );
+    std::string depthVs = std::string( DepthVsHead ) + AnimGlsl + DepthVsMain;
+    g.m_depth = LoadShaderFromMemory( depthVs.c_str(), DepthFs );
+    for ( int k = 0; k < 2; ++k )
+    {
+        Shader   s = k == 0 ? g.m_lit : g.m_depth;
+        AnimLoc &l = g.m_anim[k];
+        l.m_on = GetShaderLocation( s, "anim" );
+        l.m_time = GetShaderLocation( s, "animTime" );
+        l.m_wind = GetShaderLocation( s, "wind" );
+        l.m_cars = GetShaderLocation( s, "crowdCars" );
+        l.m_count = GetShaderLocation( s, "crowdCarCount" );
+        l.m_joy = GetShaderLocation( s, "crowdJoy" );
+    }
     g.m_sprite = LoadShaderFromMemory( nullptr, SpriteFs );
     g.m_prefilter = LoadShaderFromMemory( nullptr, PrefilterFs );
     g.m_down = LoadShaderFromMemory( nullptr, DownFs );
@@ -711,6 +868,9 @@ void makeShared()
         return clampf( ( 1.0f - d ) * 1.4f, 0, 1 ) * ( 0.6f + 0.6f * noise2( x * 5 + 3, y * 5 ) );
     } );
     g.m_tex[T_DROP] = makeTex( 32, []( float x, float y ) { return std::exp( -x * x * 30.0f ) * clampf( 1 - std::fabs( y ), 0, 1 ); } );
+    g.m_tex[T_CHIP] = makeTex( 16, []( float x, float y ) {   // confetti
+        return std::fabs( x ) < 0.9f && std::fabs( y ) < 0.5f ? 1.0f : 0.0f;
+    } );
     builtins();
 }
 
@@ -852,12 +1012,17 @@ void Renderer::init( int w, int h, int quality )
     m_cam.fovy = 45.0f;
     m_cam.projection = CAMERA_PERSPECTIVE;
     m_rng.seed( 1234 );
+    lookInit();
 }
 
 void Renderer::shutdown()
 {
     if ( m_w == 0 ) return;
     clearTrack();
+    lookShutdown();
+    if ( m_bannerTex.id ) UnloadRenderTexture( m_bannerTex );
+    m_bannerTex = {};
+    m_bannerDirty = true;
     UnloadRenderTexture( m_out );
     rlUnloadFramebuffer( m_shadow.id );
     rlUnloadTexture( m_shadow.depth.id );
@@ -888,6 +1053,9 @@ void Renderer::clearTrack()
         if ( m_walls.vertexCount ) UnloadMesh( m_walls );
         for ( Chunk &c : m_chunks ) UnloadMesh( c.m_mesh );
     }
+    if ( m_contact.id ) UnloadRenderTexture( m_contact );
+    m_contact = {};
+    m_contactRect = { 0, 0, 0, 0 };
     m_chunks.clear();
     m_lamps.clear();
     m_parts.clear();
@@ -910,11 +1078,21 @@ void Renderer::setTrack( const Track &t )
     float az = ( v ? v->m_sunDir : 40.0f ) * Deg, el = ( v ? v->m_sunHeight : 45.0f ) * Deg;
     Vector3 toSun = { std::sin( az ) * std::cos( el ), std::sin( el ), -std::cos( az ) * std::cos( el ) };
     m_sunDir = Vector3Negate( Vector3Normalize( toSun ) );
+    // The wind by the weather: a breeze, gusts in the rain and on the pass, the estate's storm.
+    {
+        std::string we = v ? v->m_weather : "clear";
+        m_windBase = we == "storm" ? 1.0f : we == "rain" || we == "dust" ? 0.65f : we == "snow" ? 0.5f : we == "fog" ? 0.12f : 0.3f;
+        if ( v && v->m_name == "pass" ) m_windBase = std::min( 1.0f, m_windBase + 0.15f );
+    }
+    m_shells.clear();
+    m_joy = 0.0f;
     buildGround();
     buildRoad();
     buildWalls();
     buildProps();
     buildLife();
+    lookTrack();
+    bakeContact();
     m_marks.assign( m_quality == 0 ? 3000 : 6000, Mark{ { 0, 0 }, { 0, 0 }, 0, 0, BLANK } );
     m_markNext = 0;
     m_hasScene = true;
@@ -1299,6 +1477,7 @@ void Renderer::setSticker( const std::string &text, Color back, Color ink, int c
     m_stickerBack = back;
     m_stickerInk = ink;
     m_stickerDirty = !text.empty();
+    m_bannerDirty = true;   // the stands advertise the same sponsor
 }
 
 void Renderer::buildSticker()
@@ -1337,6 +1516,453 @@ void Renderer::dropCoffin( const World &w, int car )
     d.m_paint = { 182, 182, 182, 255 };
     m_debris.push_back( d );
     m_roofCoffin = -1;
+}
+
+// ---------------------------------------------------------------------------------------------------- the stands
+
+void Renderer::setSlogan( const std::string &text )
+{
+    if ( text == m_slogan ) return;
+    m_slogan = text;
+    m_bannerDirty = true;
+}
+
+void Renderer::setAnimUniforms( const World *w, float joy )
+{
+    // The venue's wind, stronger when rain came during the race; it blows the way the rain falls.
+    float   strength = clampf( m_windBase + m_wetRace * 0.35f, 0.0f, 1.0f );
+    Vector4 wind = { 0.447f, 0.894f, strength, 0.0f };
+    Vector4 cars[8] = {};
+    int     n = 0;
+    if ( w )
+        for ( const Car &c : w->m_cars )
+            if ( !c.m_wrecked && n < 8 ) cars[n++] = { c.m_pos.x, c.m_pos.y, len( c.m_vel ), 0.0f };
+    float off = 0.0f, j = clampf( joy, 0.0f, 1.0f );
+    for ( int k = 0; k < 2; ++k )
+    {
+        Shader         s = k == 0 ? g.m_lit : g.m_depth;
+        const AnimLoc &l = g.m_anim[k];
+        SetShaderValue( s, l.m_on, &off, SHADER_UNIFORM_FLOAT );
+        SetShaderValue( s, l.m_time, &m_time, SHADER_UNIFORM_FLOAT );
+        SetShaderValue( s, l.m_wind, &wind, SHADER_UNIFORM_VEC4 );
+        if ( n ) SetShaderValueV( s, l.m_cars, cars, SHADER_UNIFORM_VEC4, n );
+        SetShaderValue( s, l.m_count, &n, SHADER_UNIFORM_INT );
+        SetShaderValue( s, l.m_joy, &j, SHADER_UNIFORM_FLOAT );
+    }
+}
+
+void Renderer::setAnimOn( bool shadow, bool on )
+{
+    float v = on ? 1.0f : 0.0f;
+    SetShaderValue( shadow ? g.m_depth : g.m_lit, g.m_anim[shadow ? 1 : 0].m_on, &v, SHADER_UNIFORM_FLOAT );
+}
+
+void Renderer::crowdLife( const World &w, float dt )
+{
+    m_joy = std::max( 0.0f, m_joy - dt / 8.0f );
+    ageShells( dt );
+    if ( !m_dark ) return;
+    // At night the fans take pictures: now and then anywhere, a storm of flashes where a fast car comes by. A few
+    // sprites a second per stand, never per fan.
+    Vector2 f = m_view.m_focus;
+    float   reach = m_view.m_height * 1.2f + 20.0f;
+    for ( const Stand &st : m_stands )
+    {
+        if ( st.m_heads.empty() || dist2( st.m_at, f ) > ( reach + st.m_r ) * ( reach + st.m_r ) ) continue;
+        float near = m_joy * 0.6f;
+        for ( const Car &c : w.m_cars )
+            if ( !c.m_wrecked )
+                near = std::max( near, clampf( 1.0f - ( len( sub( c.m_pos, st.m_at ) ) - st.m_r ) / 30.0f, 0.0f, 1.0f ) *
+                                           clampf( len( c.m_vel ) / 20.0f, 0.0f, 1.0f ) );
+        for ( float left = ( 0.6f + near * 16.0f ) * dt; left > 0; left -= 1.0f )
+        {
+            if ( !m_rng.chance( std::min( 1.0f, left ) ) ) break;
+            const Vector3 &h = st.m_heads[(size_t)m_rng.below( (int)st.m_heads.size() )];
+            Particle p;
+            p.m_pos = { h.x, h.y + 0.35f, h.z };
+            p.m_size0 = 1.1f;
+            p.m_size1 = 0.3f;
+            p.m_c0 = { 235, 242, 255, 255 };
+            p.m_c1 = { 200, 220, 255, 0 };
+            p.m_life = 0.08f;
+            p.m_tex = T_FLARE;
+            p.m_boost = 5.0f;
+            spawn( p );
+        }
+    }
+}
+
+void Renderer::celebrate()
+{
+    if ( !m_track ) return;
+    m_joy = 1.0f;
+    // Confetti cannons on both sides of the line, fireworks from behind them.
+    const TrackSample &ts = m_track->sampleAt( 0.0f );
+    static const Color confetti[] = { { 230, 190, 60, 255 }, { 240, 236, 226, 255 }, { 200, 40, 40, 255 }, { 60, 120, 220, 255 },
+                                      { 80, 190, 90, 255 },  { 230, 120, 200, 255 } };
+    int n = m_quality == 0 ? 90 : 160;
+    for ( int k = 0; k < n; ++k )
+    {
+        float   sd = k % 2 ? 1.0f : -1.0f;
+        Vector2 at = m_track->pointAt( m_rng.range( -3.0f, 3.0f ), sd * ( ts.m_half + 0.5f ) );
+        Vector2 in = mul( ts.m_right, -sd * m_rng.range( 2.0f, 6.0f ) );
+        Particle p;
+        p.m_pos = { at.x, 1.2f, at.y };
+        p.m_vel = { in.x + m_rng.range( -2.0f, 2.0f ), m_rng.range( 9.0f, 15.0f ), in.y + m_rng.range( -2.0f, 2.0f ) };
+        p.m_size0 = p.m_size1 = m_rng.range( 0.1f, 0.15f );
+        p.m_c0 = confetti[m_rng.below( 6 )];
+        p.m_c1 = { p.m_c0.r, p.m_c0.g, p.m_c0.b, 0 };
+        p.m_life = m_rng.range( 7.0f, 10.0f );
+        p.m_tex = T_CHIP;
+        p.m_add = false;
+        p.m_drag = 2.4f;
+        p.m_rise = -2.0f;   // with the drag: falls at 0.8 m/s, fluttering
+        p.m_rot = m_rng.range( 0.0f, 6.28f );
+        p.m_spin = m_rng.range( -9.0f, 9.0f );
+        spawn( p );
+    }
+    static const Color colours[] = { { 255, 200, 90, 255 }, { 255, 90, 70, 255 }, { 120, 200, 255, 255 }, { 200, 255, 140, 255 },
+                                     { 255, 140, 230, 255 } };
+    for ( int k = 0; k < 8; ++k )
+    {
+        float   sd = k % 2 ? 1.0f : -1.0f;
+        Vector2 at = m_track->pointAt( m_rng.range( -8.0f, 8.0f ), sd * ( ts.m_half + ts.m_shoulder + 6.0f ) );
+        Shell   s;
+        s.m_pos = { at.x, 0.5f, at.y };
+        s.m_vel = { m_rng.range( -2.0f, 2.0f ), m_rng.range( 20.0f, 25.0f ), m_rng.range( -2.0f, 2.0f ) };
+        s.m_wait = k * 0.45f + m_rng.range( 0.0f, 0.3f );
+        s.m_fuse = m_rng.range( 1.0f, 1.3f );
+        s.m_color = colours[m_rng.below( 5 )];
+        m_shells.push_back( s );
+    }
+}
+
+void Renderer::ageShells( float dt )
+{
+    for ( Shell &s : m_shells )
+    {
+        if ( s.m_wait > 0 )
+        {
+            s.m_wait -= dt;
+            continue;
+        }
+        s.m_fuse -= dt;
+        s.m_vel.y -= 9.0f * dt;
+        s.m_pos = Vector3Add( s.m_pos, Vector3Scale( s.m_vel, dt ) );
+        Particle t;   // the trail
+        t.m_pos = s.m_pos;
+        t.m_size0 = 0.35f;
+        t.m_size1 = 0.05f;
+        t.m_c0 = { 255, 220, 160, 255 };
+        t.m_c1 = { 255, 120, 40, 0 };
+        t.m_life = 0.35f;
+        t.m_tex = T_SPARK;
+        t.m_boost = 2.0f;
+        spawn( t );
+        if ( s.m_fuse > 0 ) continue;
+        // The burst: a ball of sparks falling slowly, a flash of light.
+        Color c = s.m_color;
+        int   n = m_quality == 0 ? 36 : 64;
+        for ( int k = 0; k < n; ++k )
+        {
+            Vector3 d = Vector3Normalize( { m_rng.range( -1.0f, 1.0f ), m_rng.range( -1.0f, 1.0f ), m_rng.range( -1.0f, 1.0f ) } );
+            Particle p;
+            p.m_pos = s.m_pos;
+            p.m_vel = Vector3Scale( d, m_rng.range( 8.0f, 12.0f ) );
+            p.m_drag = 1.3f;
+            p.m_rise = -3.0f;
+            p.m_size0 = 0.5f;
+            p.m_size1 = 0.1f;
+            p.m_c0 = c;
+            p.m_c1 = { c.r, c.g, (unsigned char)( c.b / 2 ), 0 };
+            p.m_life = m_rng.range( 1.0f, 1.6f );
+            p.m_tex = T_SPARK;
+            p.m_boost = 3.0f;
+            spawn( p );
+        }
+        Particle glow;
+        glow.m_pos = s.m_pos;
+        glow.m_size0 = 6.0f;
+        glow.m_size1 = 2.0f;
+        glow.m_c0 = c;
+        glow.m_c1 = { c.r, c.g, c.b, 0 };
+        glow.m_life = 0.3f;
+        glow.m_tex = T_SOFT;
+        glow.m_boost = 2.5f;
+        spawn( glow );
+        m_glows.push_back( { s.m_pos, c, 40.0f, 3.5f, 0, 0.5f } );
+    }
+    m_shells.erase( std::remove_if( m_shells.begin(), m_shells.end(), []( const Shell &s ) { return s.m_wait <= 0 && s.m_fuse <= 0; } ),
+                    m_shells.end() );
+}
+
+void Renderer::buildBanners()
+{
+    // Two rows of 1024 x 128: the player's sponsor (or Graves & Sons when there is none), Graves & Sons' slogan.
+    m_bannerDirty = false;
+    if ( m_bannerTex.id ) UnloadRenderTexture( m_bannerTex );
+    m_bannerTex = LoadRenderTexture( 1024, 256 );
+    bool        sponsor = !m_sticker.empty();
+    std::string texts[2] = { sponsor ? m_sticker : "GRAVES & SONS", m_slogan.empty() ? "GRAVES & SONS" : m_slogan };
+    Color       backs[2] = { sponsor ? m_stickerBack : Color{ 18, 18, 20, 255 }, { 230, 222, 200, 255 } };
+    Color       inks[2] = { sponsor ? m_stickerInk : Color{ 216, 176, 64, 255 }, { 24, 20, 22, 255 } };
+    BeginTextureMode( m_bannerTex );
+    ClearBackground( BLACK );
+    Font f = ui::font();
+    if ( !f.texture.id ) f = GetFontDefault();   // the tools (--shot, --deckcheck) load no interface font
+    for ( int k = 0; k < 2; ++k )
+    {
+        float y0 = k * 128.0f;
+        DrawRectangle( 0, (int)y0, 1024, 128, backs[k] );
+        DrawRectangleLinesEx( { 10, y0 + 10, 1004, 108 }, 6, inks[k] );
+        float   size = 84;
+        Vector2 m = MeasureTextEx( f, texts[k].c_str(), size, 0 );
+        while ( m.x > 950 && size > 20 )
+        {
+            size -= 3;
+            m = MeasureTextEx( f, texts[k].c_str(), size, 0 );
+        }
+        DrawTextEx( f, texts[k].c_str(), { 512 - m.x * 0.5f, y0 + 64 - m.y * 0.5f }, size, 0, inks[k] );
+    }
+    EndTextureMode();
+    GenTextureMipmaps( &m_bannerTex.texture );
+    SetTextureFilter( m_bannerTex.texture, TEXTURE_FILTER_TRILINEAR );
+}
+
+void Renderer::drawBanners()
+{
+    if ( m_banners.empty() || !m_bannerTex.id ) return;
+    // Printed boards: unlit (the stands' floodlights), the text turned to read from the camera's side (north is up);
+    // then the fog laid over them as over the rest (the lit shader's fogged()).
+    Vector2 f = m_view.m_focus;
+    float   reach = m_view.m_height * 1.3f + 40.0f;
+    float   density = ( m_venue ? m_venue->m_fogDensity : 0.004f ) + m_fogRace;
+    float   lum = ( m_dark ? 0.62f : 0.95f ) + m_flash * 0.5f;
+    Color   fogColor = m_venue ? m_venue->m_fog : Color{ 120, 130, 140, 255 };
+    std::vector<std::pair<const BannerSpot *, float>> near;
+    for ( const BannerSpot &b : m_banners )
+    {
+        Vector2 mid = { ( b.m_c[0].x + b.m_c[2].x ) * 0.5f, ( b.m_c[0].z + b.m_c[2].z ) * 0.5f };
+        if ( dist2( mid, f ) <= reach * reach )
+            near.push_back( { &b, clampf( 1.0f - std::exp( -len( sub( mid, f ) ) * density ), 0.0f, 0.97f ) } );
+    }
+    if ( near.empty() ) return;
+    rlDrawRenderBatchActive();
+    BeginBlendMode( BLEND_ALPHA );
+    for ( int pass = 0; pass < 2; ++pass )
+    {
+        if ( pass == 0 ) rlDisableColorBlend();   // the print is opaque (its glyphs' edges carry alpha)
+        else rlEnableColorBlend();
+        rlSetTexture( pass == 0 ? m_bannerTex.texture.id : g.m_tex[T_SOFT].id );
+        rlBegin( RL_QUADS );
+        for ( const auto &[b, fog] : near )
+        {
+            // A render texture stands on its head: the drawn row's top is the larger v.
+            float   top = b->m_ad == 0 ? 0.995f : 0.495f, bottom = top - 0.49f;
+            bool    turn = b->m_c[3].z - b->m_c[0].z > 0.0f;   // the text's top points down the screen
+            Vector2 uv[4] = { { 0, bottom }, { 1, bottom }, { 1, top }, { 0, top } };
+            if ( pass == 0 )
+                rlColor4f( lum, lum, lum, 1.0f );
+            else
+                rlColor4ub( fogColor.r, fogColor.g, fogColor.b, (unsigned char)( fog * 255 ) );
+            for ( int k = 0; k < 4; ++k )
+            {
+                Vector2 t = pass == 0 ? uv[turn ? ( k + 2 ) % 4 : k] : Vector2{ 0.5f, 0.5f };   // the soft dot's middle: plain
+                rlTexCoord2f( t.x, t.y );
+                rlVertex3f( b->m_c[k].x, b->m_c[k].y + pass * 0.005f, b->m_c[k].z );
+            }
+        }
+        rlEnd();
+        rlDrawRenderBatchActive();
+    }
+    rlSetTexture( 0 );
+    EndBlendMode();
+}
+
+void Renderer::podium( const std::vector<PodiumCar> &cars, float dt )
+{
+    dt = clampf( dt, 0.0f, 0.05f );
+    m_time += dt;
+    m_podiumTime += dt;
+    m_view.m_focus = { 0, 0 };
+    m_view.m_height = 30.0f;
+    // Confetti from above all the time, a firework from behind the crowd now and then.
+    static const Color confetti[] = { { 230, 190, 60, 255 }, { 240, 236, 226, 255 }, { 200, 40, 40, 255 }, { 60, 120, 220, 255 },
+                                      { 80, 190, 90, 255 },  { 230, 120, 200, 255 } };
+    // (The first picture starts with it already in the air.)
+    for ( float left = m_parts.empty() ? 220.0f : dt * 45.0f; left > 0; left -= 1.0f )
+    {
+        if ( !m_rng.chance( std::min( 1.0f, left ) ) ) break;
+        Particle p;
+        p.m_pos = { m_rng.range( -11.0f, 11.0f ), m_rng.range( left > 100.0f ? 0.2f : 4.5f, 6.0f ), m_rng.range( -7.0f, 5.0f ) };
+        p.m_vel = { m_rng.range( -0.5f, 0.5f ), -0.5f, m_rng.range( -0.5f, 0.5f ) };
+        p.m_size0 = p.m_size1 = m_rng.range( 0.06f, 0.09f );
+        p.m_c0 = confetti[m_rng.below( 6 )];
+        p.m_c1 = { p.m_c0.r, p.m_c0.g, p.m_c0.b, 0 };
+        p.m_life = m_rng.range( 8.0f, 11.0f );
+        p.m_tex = T_CHIP;
+        p.m_add = false;
+        p.m_drag = 2.4f;
+        p.m_rise = -2.0f;
+        p.m_rot = m_rng.range( 0.0f, 6.28f );
+        p.m_spin = m_rng.range( -9.0f, 9.0f );
+        spawn( p );
+    }
+    if ( m_shells.size() < 3 && m_rng.chance( dt * 1.2f ) )
+    {
+        static const Color colours[] = { { 255, 200, 90, 255 }, { 255, 90, 70, 255 }, { 120, 200, 255, 255 }, { 200, 255, 140, 255 } };
+        Shell s;
+        s.m_pos = { m_rng.range( -11.0f, 11.0f ), 0.0f, m_rng.range( -18.0f, -14.0f ) };
+        s.m_vel = { m_rng.range( -1.5f, 1.5f ), m_rng.range( 11.0f, 13.0f ), 0.0f };
+        s.m_fuse = m_rng.range( 0.75f, 0.9f );
+        s.m_color = colours[m_rng.below( 4 )];
+        m_shells.push_back( s );
+    }
+    for ( GlowLight &l : m_glows ) l.m_age += dt;
+    m_glows.erase( std::remove_if( m_glows.begin(), m_glows.end(), []( const GlowLight &l ) { return l.m_age >= l.m_life; } ),
+                   m_glows.end() );
+    ageShells( dt );
+    for ( Particle &p : m_parts )
+    {
+        p.m_age += dt;
+        p.m_vel = Vector3Scale( p.m_vel, std::max( 0.0f, 1.0f - p.m_drag * dt ) );
+        p.m_vel.y += p.m_rise * dt;
+        p.m_pos = Vector3Add( p.m_pos, Vector3Scale( p.m_vel, dt ) );
+        p.m_rot += p.m_spin * dt;
+        if ( p.m_tex == T_CHIP && p.m_pos.y < 0.03f )
+        {
+            p.m_pos.y = 0.03f;
+            p.m_vel = { 0, 0, 0 };
+            p.m_spin = 0;
+        }
+    }
+    m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(), []( const Particle &p ) { return p.m_age >= p.m_life; } ), m_parts.end() );
+    // The light: a spot on every step, a warm key from the front, a cold one behind, the fireworks' flashes.
+    m_frameLights.clear();
+    m_frameColors.clear();
+    m_spotPos.clear();
+    m_spotDir.clear();
+    m_spotCol.clear();
+    m_frameLights.push_back( { -6, 4, 8, 22 } );
+    m_frameColors.push_back( { 1.0f, 0.8f, 0.6f, 1.2f } );
+    m_frameLights.push_back( { 5, 6, -8, 20 } );
+    m_frameColors.push_back( { 0.5f, 0.6f, 1.0f, 1.0f } );
+    for ( const GlowLight &l : m_glows )
+    {
+        m_frameLights.push_back( { l.m_pos.x, l.m_pos.y, l.m_pos.z, l.m_radius } );
+        m_frameColors.push_back( { l.m_color.r / 255.0f, l.m_color.g / 255.0f, l.m_color.b / 255.0f, l.m_power * ( 1.0f - l.m_age / l.m_life ) } );
+        if ( m_frameLights.size() >= 8 ) break;
+    }
+    const float stepX[3] = { 0.0f, -4.4f, 4.4f };
+    for ( int i = 0; i < 3; ++i )
+    {
+        Vector3 at = { stepX[i] * 0.6f, 11.0f, 7.0f }, to = { stepX[i], 1.5f, 0.0f };
+        Vector3 d = Vector3Normalize( Vector3Subtract( to, at ) );
+        m_spotPos.push_back( { at.x, at.y, at.z, 30.0f } );
+        m_spotDir.push_back( { d.x, d.y, d.z, std::cos( 13.0f * Deg ) } );
+        m_spotCol.push_back( { 1.0f, 0.95f, 0.85f, i == 0 ? 4.0f : 3.0f } );
+    }
+    const VenueDef *keep = m_venue;
+    m_venue = nullptr;
+    m_dark = true;
+    m_sunDir = Vector3Normalize( { -0.3f, -0.8f, -0.5f } );
+    m_cam.target = { 1.2f, 1.9f, 0 };
+    m_cam.position = { 1.2f, 3.1f, 12.0f };
+    m_cam.up = { 0, 1, 0 };
+    m_cam.fovy = 19.0f;
+    BeginTextureMode( m_hdr );
+    ClearBackground( { 10, 10, 18, 255 } );
+    rlSetClipPlanes( 0.5, 300.0 );
+    BeginMode3D( m_cam );
+    setLookUniforms();
+    for ( Shader s : { g.m_lit, g.m_surface } )
+    {
+        setFloat( s, "shadowOn", 0.0f );
+        setFloat( s, "fogDensity", 0.012f );
+        setVec3( s, "fogColor", { 0.04f, 0.04f, 0.07f } );
+        setVec3( s, "ambient", { 0.22f, 0.22f, 0.3f } );
+        setVec3( s, "sunColor", { 0.5f, 0.48f, 0.55f } );
+    }
+    setAnimUniforms( nullptr, 1.0f );
+    rlDisableBackfaceCulling();
+    // The floor: a pool of light on the dark.
+    rlDrawRenderBatchActive();
+    BeginBlendMode( BLEND_ALPHA );
+    rlSetTexture( g.m_tex[T_SOFT].id );
+    rlBegin( RL_QUADS );
+    rlColor4ub( 70, 62, 58, 255 );
+    rlTexCoord2f( 0, 0 ); rlVertex3f( -16, 0.0f, -14 );
+    rlTexCoord2f( 0, 1 ); rlVertex3f( -16, 0.0f, 10 );
+    rlTexCoord2f( 1, 1 ); rlVertex3f( 16, 0.0f, 10 );
+    rlTexCoord2f( 1, 0 ); rlVertex3f( 16, 0.0f, -14 );
+    rlEnd();
+    rlSetTexture( 0 );
+    rlDrawRenderBatchActive();
+    EndBlendMode();
+    // The steps: Graves & Sons' coffins, three, two and one high, the top ones gilded, silvered and bronzed.
+    const ModelMesh &coffin = modelOf( "_coffin" );
+    const int        layers[3] = { 3, 2, 1 };
+    const Vector4    lids[3] = { { 1.7f, 1.3f, 0.45f, 0.06f }, { 1.35f, 1.35f, 1.45f, 0.03f }, { 1.4f, 0.9f, 0.55f, 0.02f } };
+    const float      layerH = 0.52f;
+    for ( int i = 0; i < 3; ++i )
+        for ( int l = 0; l < layers[i]; ++l )
+        {
+            setVec4( g.m_lit, "tint", l == layers[i] - 1 ? lids[i] : Vector4{ 0.8f, 0.72f, 0.66f, 0.0f } );
+            for ( int a = -1; a <= 1; ++a )
+                for ( int b = -1; b <= 1; b += 2 )
+                    if ( coffin.m_hasBase )
+                        DrawMesh( coffin.m_base, g.m_litMat, MatrixTranslate( stepX[i] + a * 0.84f, l * layerH, b * 0.97f ) );
+        }
+    setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
+    // The cars on top, turned a little towards the camera; a wreck sooty and dented, smoking.
+    for ( size_t i = 0; i < cars.size() && i < 3; ++i )
+    {
+        const PodiumCar &pc = cars[i];
+        if ( pc.m_model.empty() ) continue;
+        const ModelMesh &m = g.m_forge.get( g_data, pc.m_model, pc.m_paint );
+        float  top = layers[i] * layerH;
+        float  yaw = ( i == 1 ? 0.5f : i == 2 ? -0.5f : 0.25f ) + 0.06f * std::sin( m_podiumTime * 0.7f + i );
+        Matrix xf = MatrixMultiply( MatrixRotateY( Pi + yaw ), MatrixTranslate( stepX[i], top + ( pc.m_wreck ? -0.06f : 0.0f ), 0 ) );
+        float  k = pc.m_wreck ? 0.3f : 1.0f;
+        setVec4( g.m_lit, "tint", { k, k * 0.92f, k * 0.86f, 0 } );
+        setFloat( g.m_lit, "specular", pc.m_wreck ? 0.05f : 0.6f );
+        setFloat( g.m_lit, "dent", pc.m_wreck ? 1.0f : 0.0f );
+        setVec4( g.m_lit, "dentFrame", { stepX[i], 0, std::cos( yaw ), std::sin( yaw ) } );
+        if ( m.m_hasBase ) DrawMesh( m.m_base, g.m_litMat, xf );
+        if ( m.m_hasHead ) DrawMesh( m.m_head, g.m_litMat, xf );
+        if ( m.m_hasSpin ) DrawMesh( m.m_spin, g.m_litMat, xf );
+        setFloat( g.m_lit, "dent", 0.0f );
+        for ( const WheelSpot &ws : m.m_wheels )
+        {
+            Matrix wm = MatrixMultiply( MatrixScale( ws.m_w, ws.m_r, ws.m_r ), MatrixTranslate( ws.m_pos.x, ws.m_pos.y, ws.m_pos.z ) );
+            setVec4( g.m_lit, "tint", { ws.m_hub.r / 255.0f * k, ws.m_hub.g / 255.0f * k, ws.m_hub.b / 255.0f * k, 0 } );
+            DrawMesh( g.m_forge.wheel(), g.m_litMat, MatrixMultiply( wm, xf ) );
+        }
+        if ( pc.m_wreck && m_rng.chance( dt * 6.0f ) )
+            puff( { stepX[i], top + 1.2f, 0.3f }, 1, 0.6f, 0.8f, { 40, 38, 36, 200 }, { 50, 48, 46, 0 }, 2.5f, T_SMOKE, false );
+    }
+    setVec4( g.m_lit, "tint", { 1, 1, 1, 0 } );
+    setFloat( g.m_lit, "specular", 0.25f );
+    // The crowd behind, all cheering; Graves beside his winner, Ricky Rattle at the microphone.
+    const ModelMesh &crowd = modelOf( "podium_crowd" );
+    if ( crowd.m_hasBase )
+    {
+        setAnimOn( false, true );
+        DrawMesh( crowd.m_base, g.m_litMat, MatrixIdentity() );
+        setAnimOn( false, false );
+    }
+    const ModelMesh &graves = modelOf( "fig_graves" ), &ricky = modelOf( "fig_ricky" );
+    if ( graves.m_hasBase ) DrawMesh( graves.m_base, g.m_litMat, MatrixMultiply( MatrixRotateY( Pi - 0.5f ), MatrixTranslate( -2.2f, 0, 2.2f ) ) );
+    if ( ricky.m_hasBase )
+        DrawMesh( ricky.m_base, g.m_litMat,
+                  MatrixMultiply( MatrixRotateY( Pi + 0.6f + 0.15f * std::sin( m_podiumTime * 1.3f ) ), MatrixTranslate( 7.3f, 0, 2.0f ) ) );
+    drawParticles();
+    rlEnableBackfaceCulling();
+    EndMode3D();
+    rlSetClipPlanes( RL_CULL_DISTANCE_NEAR, RL_CULL_DISTANCE_FAR );
+    EndTextureMode();
+    m_venue = keep;
+    post();
 }
 
 void Renderer::buildLife()
@@ -1601,6 +2227,8 @@ void Renderer::buildProps()
     std::map<std::pair<int, int>, MeshBuilder> cells;
     std::map<std::string, ModelMesh>           cpu;
     m_people.clear();
+    m_stands.clear();
+    m_banners.clear();
     for ( const PropSpot &p : t.m_props )
     {
         // People near the road are drawn apart: they throw themselves aside when a car comes.
@@ -1674,6 +2302,25 @@ void Renderer::buildProps()
         std::pair<int, int> key = { (int)std::floor( p.m_pos.x / cell ), (int)std::floor( p.m_pos.y / cell ) };
         MeshBuilder &mb = cells[key];
         mb.m_noise = 0;
+        mb.m_withUv = true;   // the marks of crowds, trees and flags (dropped below for chunks without any)
+        // A stand: where its fans' heads are (camera flashes), its own wave (the shift along it), its banners.
+        mb.m_markShift = 0.0f;
+        if ( !m.m_crowd.empty() )
+        {
+            Stand st;
+            for ( const Vector3 &h : m.m_crowd ) st.m_heads.push_back( Vector3Transform( h, xf ) );
+            st.m_at = p.m_pos;
+            st.m_r = m.m_radius * p.m_scale;
+            m_stands.push_back( st );
+            mb.m_markShift = 1000.0f * (float)m_stands.size();
+        }
+        for ( const BannerSpot &b : m.m_banners )
+        {
+            BannerSpot w = b;
+            for ( Vector3 &c : w.m_c ) c = Vector3Transform( c, xf );
+            if ( b.m_ad == 0 && m_stands.size() % 2 == 0 ) w.m_ad = 1;   // every other stand Graves & Sons' slogan
+            m_banners.push_back( w );
+        }
         for ( const Mesh *mesh : { &m.m_base, &m.m_head, &m.m_spin } )
             if ( mesh->vertexCount && !( mesh == &m.m_spin && !p.m_car ) ) mb.append( *mesh, xf );
         if ( m.m_hasSpin && !p.m_car ) m_turning.push_back( { p.m_model, xf } );   // drawn turning every frame
@@ -1695,6 +2342,8 @@ void Renderer::buildProps()
     {
         if ( mb.count() == 0 ) continue;
         Chunk c;
+        c.m_anim = mb.marked();
+        mb.m_withUv = c.m_anim;
         c.m_mesh = mb.mesh( true );
         c.m_box = { key.first * cell - 20, key.second * cell - 20, cell + 40, cell + 40 };
         m_chunks.push_back( c );
@@ -1706,6 +2355,8 @@ void Renderer::buildProps()
                 MemFree( mesh->vertices );
                 MemFree( mesh->normals );
                 MemFree( mesh->colors );
+                MemFree( mesh->texcoords );
+                MemFree( mesh->texcoords2 );
             }
 }
 
@@ -1896,6 +2547,11 @@ void Renderer::events( const World &w )
             puff( at, 8, 5.0f, 0.3f, { 30, 30, 30, 255 }, { 30, 30, 30, 0 }, 0.6f, T_SOFT, false );
             puff( at, 3, 2.0f, 1.0f, { 200, 200, 200, 120 }, { 200, 200, 200, 0 }, 1.0f, T_SMOKE, false );
             break;
+        case EvE::FINISH:
+            // The winner, and the player whatever their place: confetti and fireworks at the line, the stands cheer.
+            if ( e.m_kind == 1 || ( e.m_car >= 0 && e.m_car < (int)w.m_cars.size() && w.m_cars[e.m_car].m_setup.m_player ) )
+                celebrate();
+            break;
         case EvE::ROCKET:
         case EvE::MINE_DROP:
         case EvE::SMOKE:
@@ -1927,6 +2583,7 @@ void Renderer::update( const World &w, float dt )
     m_wetRace = w.m_wetness;
     m_fogRace = w.m_fogAdd;
     life( w, dt );
+    crowdLife( w, dt );
     // The ghosts leave a pale mist behind.
     for ( const Ghost &s : m_spirits )
         if ( s.m_on && m_rng.chance( std::min( 1.0f, dt * 24.0f ) ) )
@@ -1997,6 +2654,12 @@ void Renderer::update( const World &w, float dt )
             p.m_vel.y = -p.m_vel.y * 0.3f;
         }
         p.m_rot += p.m_spin * dt;
+        if ( p.m_tex == T_CHIP && p.m_pos.y < 0.03f )   // confetti lies where it lands
+        {
+            p.m_pos.y = 0.03f;
+            p.m_vel = { 0, 0, 0 };
+            p.m_spin = 0;
+        }
     }
     m_parts.erase( std::remove_if( m_parts.begin(), m_parts.end(), []( const Particle &p ) { return p.m_age >= p.m_life; } ), m_parts.end() );
     for ( GlowLight &l : m_glows ) l.m_age += dt;
@@ -2165,17 +2828,8 @@ void Renderer::update( const World &w, float dt )
             }
             spawn( p );
         }
-        if ( we == "storm" )
-        {
-            m_flashTimer -= dt;
-            if ( m_flashTimer <= 0 )
-            {
-                m_flash = 1.0f;
-                m_flashTimer = m_rng.range( 6.0f, 16.0f );
-            }
-        }
     }
-    m_flash = std::max( 0.0f, m_flash - dt * 3.0f );
+    sky( w, dt );   // lightning and what flies over the track (RenderLook.cpp)
 }
 
 // ---------------------------------------------------------------------------------------------------- drawing
@@ -2246,6 +2900,7 @@ void Renderer::lights( const World &w )
     for ( const Pickup &p : w.m_pickups )
         if ( p.m_respawn <= 0 && dist2( p.m_pos, m_view.m_focus ) < 2500 )
             light( { p.m_pos.x, 1.2f, p.m_pos.y }, p.m_kind == "cash" ? Color{ 90, 255, 120, 255 } : Color{ 255, 200, 90, 255 }, 5.0f, 0.8f );
+    skyLights( w );   // the news helicopter's searchlight at night (RenderLook.cpp)
 }
 
 void Renderer::setLookUniforms()
@@ -2263,7 +2918,8 @@ void Renderer::setLookUniforms()
         setVec3( s, "sunColor", v3( sun, sunP * 1.6f ) );
         setVec3( s, "ambient", v3( amb, ambP * 1.3f ) );
         setVec3( s, "camPos", m_cam.position );
-        setVec3( s, "fogColor", v3( fog ) );
+        // A lightning flash lights the haze as well: the sky over the track.
+        setVec3( s, "fogColor", Vector3Add( v3( fog ), Vector3Scale( { 0.45f, 0.5f, 0.65f }, m_flash ) ) );
         setFloat( s, "fogDensity", fogD + m_fogRace );
         setVec2( s, "focus", m_view.m_focus );
         int lc = (int)m_frameLights.size(), sc = (int)m_spotPos.size();
@@ -2285,6 +2941,7 @@ void Renderer::setLookUniforms()
         setFloat( s, "flash", m_flash );
         int slot = 10;
         SetShaderValue( s, GetShaderLocation( s, "shadowMap" ), &slot, SHADER_UNIFORM_INT );
+        setContactUniforms( s, s.id == g.m_lit.id ? 0.8f : 0.0f );
     }
     setVec3( g.m_surface, "lineColor", v3( v ? v->m_lineColor : Color{ 210, 210, 190, 255 } ) );
     setVec3( g.m_surface, "groundA", v3( v ? v->m_groundColor : Color{ 60, 80, 50, 255 } ) );
@@ -2322,6 +2979,7 @@ void Renderer::shadowPass( const World &w )
     m_lightVP = MatrixMultiply( rlGetMatrixModelview(), rlGetMatrixProjection() );
     rlDisableBackfaceCulling();
     drawScene( w, true );
+    drawFlyer( true );   // the airship's or the helicopter's shadow (RenderLook.cpp)
     EndMode3D();
     EndTextureMode();
     rlSetClipPlanes( RL_CULL_DISTANCE_NEAR, RL_CULL_DISTANCE_FAR );
@@ -2330,6 +2988,8 @@ void Renderer::shadowPass( const World &w )
 void Renderer::drawCar( const World &w, int i, bool shadow )
 {
     const Car       &c = w.m_cars[i];
+    // Just put back on the track (World::resetCar): it blinks while the others pass through it.
+    if ( w.m_time < c.m_ghostUntil && std::fmod( c.m_ghostUntil - w.m_time, 0.25f ) < 0.09f ) return;
     const ModelMesh &m = g.m_forge.get( g_data, c.m_def->m_model, c.m_setup.m_paint );
     Matrix base = MatrixMultiply( MatrixMultiply( MatrixRotateZ( c.m_lean * 0.07f + ( c.m_wrecked ? 0.12f : 0.0f ) ),
                                                   MatrixRotateX( c.m_pitch * 0.04f + ( c.m_wrecked ? 0.05f : 0.0f ) ) ),
@@ -2430,8 +3090,11 @@ void Renderer::drawScene( const World &w, bool shadow )
     {
         float cx = clampf( f.x, c.m_box.x, c.m_box.x + c.m_box.width ), cz = clampf( f.y, c.m_box.y, c.m_box.y + c.m_box.height );
         if ( dist2( { cx, cz }, f ) > reach * reach ) continue;
+        if ( c.m_anim ) setAnimOn( shadow, true );
         DrawMesh( c.m_mesh, lit, MatrixIdentity() );
+        if ( c.m_anim ) setAnimOn( shadow, false );
     }
+    if ( !shadow ) drawBanners();
     // Parts that came off the cars: tinted in their car's paint.
     for ( const Debris &d : m_debris )
     {
@@ -2779,11 +3442,16 @@ void Renderer::render( const World &w, const View &v )
     m_cam.position = Vector3Add( { v.m_focus.x, h, v.m_focus.y + h * 0.36f }, jitter );
     m_cam.up = { 0, 1, 0 };
     m_cam.fovy = 45.0f;
+    lookFrame( w );
     lights( w );
     if ( m_stickerDirty ) buildSticker();
+    if ( m_bannerDirty && !m_banners.empty() ) buildBanners();
+    setAnimUniforms( &w, m_joy * 1.5f );
     if ( m_track ) shadowPass( w );
     BeginTextureMode( m_hdr );
     Color fog = m_venue ? m_venue->m_fog : Color{ 30, 30, 36, 255 };
+    auto lit = [&]( unsigned char c, float add ) { return (unsigned char)std::min( 255.0f, c + add * m_flash ); };
+    if ( m_flash > 0 ) fog = { lit( fog.r, 110 ), lit( fog.g, 120 ), lit( fog.b, 150 ), 255 };   // lightning lights the sky
     ClearBackground( fog );
     // The near plane well away from the eye: raylib's 0.01 m left ~3 cm depth steps at 70 m, and the road's layers
     // (road, patches, decals, a centimetre apart) flickered through each other.
@@ -2797,6 +3465,7 @@ void Renderer::render( const World &w, const View &v )
     if ( m_track ) drawScene( w, false );
     drawBullets( w );
     drawParticles();
+    drawBolt();
     rlEnableBackfaceCulling();
     EndMode3D();
     rlSetClipPlanes( RL_CULL_DISTANCE_NEAR, RL_CULL_DISTANCE_FAR );
@@ -2869,7 +3538,12 @@ void Renderer::showroom( const std::string &model, const Paint &paint, float yaw
     EndMode3D();
     EndTextureMode();
     m_venue = keep;
+    // The garage's floor: no miniature's blur, the plain film grade.
+    Grade grade = m_grade;
+    m_grade = Grade();
+    m_tiltNow = false;
     post();
+    m_grade = grade;
 }
 
 void Renderer::post()
@@ -2900,15 +3574,16 @@ void Renderer::post()
         EndBlendMode();
         EndTextureMode();
     }
+    miniaturePasses( m_tiltNow );
     BeginTextureMode( m_out );
     Shader &f = g.m_final;
     setFloat( f, "exposure", 1.0f + m_flash * 0.8f );
     setFloat( f, "bloom", 0.5f );
     setFloat( f, "hurt", m_hurt );
     setFloat( f, "fade", m_fade );
-    setFloat( f, "grade", 0.6f );
     BeginShaderMode( f );
     SetShaderValueTexture( f, GetShaderLocation( f, "bloomTex" ), m_bloom[0].texture );
+    setPostUniforms( f, m_tiltNow );
     DrawTexturePro( src, { 0, 0, (float)src.width, (float)-src.height }, { 0, 0, (float)m_w, (float)m_h }, { 0, 0 }, 0, WHITE );
     EndShaderMode();
     EndTextureMode();

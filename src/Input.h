@@ -1,7 +1,8 @@
 /**
  * @file Input.h
  * @brief Keys and pads: the drivers' actions (each with two keys and two pad buttons, rebound in the options), the
- *        pad's stick and triggers for steering and pedals, the menus' fixed keys with repeat, and which pad belongs
+ *        pad's stick (it turns the wheels, or points the way) and triggers for steering and pedals, the menus' fixed
+ *        keys with repeat, and which pad belongs
  *        to which driver (one driver: the keys and every pad; two: the first pad or the keys, and the second pad).
  *        Presses are kept until a step of the race takes them, so a quick tap is never lost between steps.
  * @author Rene Weller
@@ -19,7 +20,7 @@ namespace grave
 /** @brief What can be bound. */
 enum class ActE : int
 {
-    ACCEL, BRAKE, LEFT, RIGHT, HANDBRAKE, FIRE, DROP, ROCKET, NITRO, CYCLE, HORN, PAUSE, COUNT
+    ACCEL, BRAKE, LEFT, RIGHT, HANDBRAKE, FIRE, DROP, ROCKET, NITRO, CYCLE, HORN, PAUSE, RESET, COUNT
 };
 
 /** @brief One action's keys and pad buttons (0: none). */
@@ -42,9 +43,25 @@ public:
      * @brief A driver's input for the next step.
      * @param[in] i        0 or 1
      * @param[in] players  how many drive
+     * @param[in] aim      the car the pad's stick points the way for (Settings::m_stickAims; nullptr: the stick turns
+     *                     the wheels, left and right)
      * @return the input (the presses since the last step included)
      */
-    CarInput car( int i, int players );
+    CarInput car( int i, int players, const Car *aim = nullptr );
+
+    /**
+     * @brief The stick points the way: the steering that turns a car's nose to a direction on the screen, a controller
+     *        on the angle between them, damped by the turn the car already has (so it settles without swinging), the
+     *        other way round while the car backs up.
+     * @param[in]     want  the way (radians, 0 up the screen, clockwise)
+     * @param[in]     car   the car
+     * @param[in,out] side  the way it turned last (-1 left, 1 right): a stick held straight back keeps turning that way
+     * @return the steering (-1 left .. 1 right)
+     */
+    static float aimSteer( float want, const Car &car, int &side );
+
+    /** @return whether an action was pressed since the last step (the presses a step takes: drop, rocket, ... reset) */
+    bool latched( ActE a, int i ) const { return m_latch[i & 1][(int)a]; }
 
     /** @brief Forgets the kept presses (a step took them). */
     void consumed();
@@ -117,6 +134,7 @@ private:
     float m_rep[4] = { 0, 0, 0, 0 };
     bool  m_prev[4] = { false, false, false, false };
     bool  m_latch[2][(int)ActE::COUNT] = {};
+    int   m_aimSide[2] = { 0, 0 };   ///< aimSteer's side per driver
     bool  m_padUsed = false;
     bool  m_trigPrev[4][2] = {};
     bool  m_trigNow[4][2] = {};

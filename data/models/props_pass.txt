@@ -1,7 +1,7 @@
 # Mountain pass props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_town_pass.py.
 
 # an 11 m fir
-model fir_tree
+model fir_tree sway=0.3
   part gun r=0.275 r2=0.385 len=3.3 y=1.65 pitch=90 seg=6 color=#3a2a1e
   part disc r=2.64 r2=0.317 h=3.3 y=3.19 seg=8 color=#1e3a28 rot=0
   part disc r=2.26 r2=0.271 h=3.069 y=4.79 seg=8 color=#1e3a28 rot=17
@@ -11,7 +11,7 @@ model fir_tree
   part cone r=0.475 len=1.32 y=10.56 pitch=90 seg=8 color=#1e3a28
 
 # a 10 m fir with snow on every tier
-model fir_snow
+model fir_snow sway=0.25
   part gun r=0.25 r2=0.35 len=3 y=1.5 pitch=90 seg=6 color=#3a2a1e
   part disc r=2.4 r2=0.288 h=3 y=2.9 seg=8 color=#24402c rot=0
   part disc r=1.872 r2=0.24 h=1.26 y=3.83 seg=8 color=#e8eef8 rot=0

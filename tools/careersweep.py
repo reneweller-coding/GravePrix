@@ -34,6 +34,8 @@ def run(difficulty, seed, skill, novice, assist="1", hands="0"):
     for m in re.finditer(r"^\s*\d+\s+(\d)\s.*? place (\d+)", text, re.M):
         places.setdefault(m.group(1), []).append(int(m.group(2)))
     avg = " ".join(f"P{l}:{sum(p) / len(p):.1f}" for l, p in sorted(places.items(), reverse=True))
+    finals = len(re.findall(r"^\s*\d+\s+0\s.*SHOWDOWN", text, re.M))   # the races against Graves
+    avg += f" finals:{finals}"
     return difficulty, seed, skill, " ".join(f"L{l}:{d}" for l, d in leagues), (last[0] if last else "no result") + "  " + avg
 
 
@@ -44,7 +46,7 @@ def main():
     ap.add_argument("--skills", default="0.85")
     ap.add_argument("--novice", default="0")
     ap.add_argument("--hands", default="0", help="the test driver's person's hands (0..1, World::hands)")
-    ap.add_argument("--assist", default="1", help="the driving assist for the player's car (1 on, 0 off)")
+    ap.add_argument("--assist", default="1", help="the driving assist for the player's car (0 off, 1 on, 2 brake help)")
     ap.add_argument("--workers", type=int, default=3)
     ap.add_argument("--exe", default="", help="a copy of the game to run (so a build can replace bin/msvc meanwhile)")
     ap.add_argument("--days", default="160", help="the longest career")

@@ -53,13 +53,15 @@ float g_dmg[6] = {};
 struct SimResult
 {
     float m_time = 0, m_avg = 0, m_bestLap = 0;
-    int   m_finished = 0, m_wrecked = 0, m_stuck = 0, m_knocked = 0;
+    int   m_finished = 0, m_wrecked = 0, m_stuck = 0, m_knocked = 0, m_walls = 0;
     bool  m_timeout = false;
     std::map<int, int> m_stuckAt;   ///< where (100 m bins) cars backed out
 };
 
-bool   g_assist = false;   ///< --assist: every car with the driving assist
+int    g_assist = 0;       ///< --assist [LEVEL]: every car with the driving assist (1 when no level is given)
 float  g_hands = 0.0f;     ///< --hands: every car driven by a person's hands (World::hands)
+float  g_novice = 0.0f;    ///< --novice: every car with a beginner's misjudged corners
+bool   g_flatOut = false;  ///< --flatout: every driver keeps the throttle down in the bends (the brake help's test)
 double g_slide = 0, g_slideN = 0;
 
 SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool verbose, const std::string &car,
@@ -79,6 +81,8 @@ SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool
     {
         s.m_assist = g_assist;
         s.m_hands = g_hands;
+        s.m_novice = g_novice;
+        s.m_flatOut = g_flatOut;
     }
     w.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, difficulty, seed );
     std::vector<CarInput> none( field.size() );
@@ -100,11 +104,21 @@ SimResult runRace( const Track &t, int difficulty, uint32_t seed, int cars, bool
             {
                 ++r.m_stuck;
                 r.m_stuckAt[(int)( c.m_s / 100.0f )]++;
-                if ( verbose ) printf( "  %6.1fs %s stuck at s=%.0f m\n", w.m_time, c.m_setup.m_driver.c_str(), c.m_s );
+                if ( verbose )
+                {
+                    TrackPos tp = t.locate( c.m_pos, c.m_hint );
+                    printf( "  %6.1fs %s stuck at s=%.0f m, %.1f m right of the centre (line %.1f, lane %.1f), facing %.0f deg off\n",
+                            w.m_time, c.m_setup.m_driver.c_str(), c.m_s, tp.m_lat, t.m_s[tp.m_i].m_line, c.m_ai.m_lane,
+                            std::fabs( wrapRad( c.m_head - headingOf( t.m_s[tp.m_i].m_dir ) ) ) / Deg );
+                }
             }
             lastReverse[i] = c.m_ai.m_reverse;
         }
-        for ( const Event &e : w.m_events ) r.m_knocked += e.m_type == EvE::LOOSE ? 1 : 0;
+        for ( const Event &e : w.m_events )
+        {
+            r.m_knocked += e.m_type == EvE::LOOSE ? 1 : 0;
+            r.m_walls += e.m_type == EvE::WALL ? 1 : 0;   // hits hard enough to hurt (above 7 m/s)
+        }
         if ( verbose )
             for ( const Event &e : w.m_events )
                 if ( e.m_type == EvE::WRECK )
@@ -152,14 +166,17 @@ int toolSim( const Options &opt )
     int         cars = (int)opt.num( "--cars", 6 );
     std::string car = opt.value( "--car" );
     bool        noWeapons = opt.has( "--peaceful" );
-    g_assist = opt.has( "--assist" );
+    g_assist = opt.has( "--assist" ) ? std::clamp( (int)opt.num( "--assist", 1.0f ), 0, 2 ) : 0;
     g_hands = (float)opt.num( "--hands", 0.0f );
+    g_novice = (float)opt.num( "--novice", 0.0f );
+    g_flatOut = opt.has( "--flatout" );
     std::vector<std::string> names;
     if ( opt.has( "--simall" ) )
         names = g_data.m_trackOrder;
     else
         names.push_back( opt.value( "--sim" ) );
-    int bad = 0;
+    int    bad = 0, stuckAll = 0, wallsAll = 0, races = 0;
+    double paceAll = 0;
     for ( const std::string &name : names )
     {
         ensureTrack( name );
@@ -183,9 +200,16 @@ int toolSim( const Options &opt )
         if ( verbose ) printf( "%s (%.0f m, %d laps)\n", name.c_str(), t.m_length, t.m_laps );
         SimResult r = runRace( t, difficulty, seed, cars, verbose, car, noWeapons );
         bool      fail = r.m_timeout || ( !t.m_arena && r.m_finished == 0 );
-        printf( "%-22s %5.0f m  %s %6.1f s  avg %4.1f m/s  best lap %6.2f  finished %d  wrecked %d  stuck %d  knocked %d/%d", name.c_str(),
-                t.m_length, t.m_arena ? "derby" : "race ", r.m_time, r.m_avg, r.m_bestLap, r.m_finished, r.m_wrecked, r.m_stuck,
-                r.m_knocked, (int)t.m_loose.size() );
+        printf( "%-22s %5.0f m  %s %6.1f s  avg %4.1f m/s  best lap %6.2f  finished %d  wrecked %d  stuck %d  walls %d  knocked %d/%d",
+                name.c_str(), t.m_length, t.m_arena ? "derby" : "race ", r.m_time, r.m_avg, r.m_bestLap, r.m_finished, r.m_wrecked,
+                r.m_stuck, r.m_walls, r.m_knocked, (int)t.m_loose.size() );
+        stuckAll += r.m_stuck;
+        wallsAll += r.m_walls;
+        if ( !t.m_arena )
+        {
+            paceAll += r.m_avg;
+            ++races;
+        }
         if ( !r.m_stuckAt.empty() )
         {
             printf( "  (stuck near" );
@@ -195,6 +219,9 @@ int toolSim( const Options &opt )
         printf( "%s\n", fail ? "  FAILED" : "" );
         if ( fail ) ++bad;
     }
+    if ( names.size() > 1 )
+        printf( "all: %d races at %.2f m/s on average, stuck %d, walls %d\n", races, races ? paceAll / races : 0.0, stuckAll,
+                wallsAll );
     float total = 0;
     for ( float d : g_dmg ) total += d;
     if ( total > 0 )
@@ -213,6 +240,60 @@ int toolHandling( const Options &opt )
     std::string car = opt.value( "--car" );
     if ( car.empty() ) car = "rustbucket";
     int lv = (int)opt.num( "--level", 0 );
+    if ( opt.has( "--tracks" ) )
+    {
+        // What the tracks ask of that car: the bends of the racing line and the speed its tyres carry there (with the
+        // assist) against its top speed.
+        const CarDef *cd = g_data.car( car );
+        if ( !cd ) return 1;
+        CarSetup s;
+        s.m_car = car;
+        s.m_engine = s.m_tires = lv;
+        s.m_assist = 1;
+        CarStats st = carStats( s );
+        Car      probe;
+        probe.m_setup = s;
+        probe.m_grip = st.m_grip;
+        float    side = sideGrip( probe );
+        double   all = 0, slow90 = 0, slow70 = 0, slow50 = 0, widthSum = 0;
+        std::vector<float> radii, slowest;
+        for ( const std::string &name : g_data.m_trackOrder )
+        {
+            ensureTrack( name );
+            const TrackDef *td = g_data.track( name );
+            std::vector<std::string> e, w;
+            Track                    tr;
+            if ( !td || !tr.build( *td, g_data.venue( td->m_venue ), false, false, e, w ) || tr.m_arena ) continue;
+            float least = 1e9f;
+            for ( const TrackSample &ts : tr.m_s )
+            {
+                float R = 1.0f / std::max( ts.m_lineCurv, 1e-4f );
+                float v = std::sqrt( side * R );
+                all += 1;
+                widthSum += ts.m_half * 2;
+                if ( v < st.m_top * 0.9f ) slow90 += 1;
+                if ( v < st.m_top * 0.7f ) slow70 += 1;
+                if ( v < st.m_top * 0.5f ) slow50 += 1;
+                if ( R < 200 ) radii.push_back( R );
+                least = std::min( least, v );
+            }
+            slowest.push_back( least / st.m_top );
+            printf( "%-22s slowest bend %5.1f m/s (%3.0f %% of top)\n", name.c_str(), least, least / st.m_top * 100 );
+        }
+        std::sort( radii.begin(), radii.end() );
+        std::sort( slowest.begin(), slowest.end() );
+        auto q = [&]( float f ) { return radii.empty() ? 0.0f : radii[(size_t)( f * ( radii.size() - 1 ) )]; };
+        printf( "%s level %d: top %.1f m/s, grip %.2f, side grip %.1f m/s2\n", car.c_str(), lv, st.m_top, st.m_grip, side );
+        if ( !slowest.empty() )
+            printf( "slowest bend of a track: %.0f .. %.0f %% of top, median %.0f %%\n", slowest.front() * 100, slowest.back() * 100,
+                    slowest[slowest.size() / 2] * 100 );
+        printf( "road %.1f m wide on average; of the racing line's length the tyres carry less than 90 %% of top on %.0f %%, "
+                "less than 70 %% on %.0f %%, less than 50 %% on %.0f %%\n",
+                widthSum / all, slow90 / all * 100, slow70 / all * 100, slow50 / all * 100 );
+        printf( "bends (radius < 200 m): radius 10 %% %.0f m, 25 %% %.0f m, median %.0f m, 75 %% %.0f m\n", q( 0.1f ), q( 0.25f ),
+                q( 0.5f ), q( 0.75f ) );
+        return 0;
+    }
     ensureTrack( "test_undertaker" );
     const TrackDef *def = g_data.track( "test_undertaker" );
     if ( !def ) return 1;
@@ -224,7 +305,7 @@ int toolHandling( const Options &opt )
         CarSetup s;
         s.m_car = car;
         s.m_human = s.m_player = true;
-        s.m_assist = assist != 0;
+        s.m_assist = assist;
         s.m_engine = s.m_tires = lv;
         World w;
         w.init( t, { s }, ModeE::TRIAL, 2, 1 );
@@ -235,9 +316,13 @@ int toolHandling( const Options &opt )
             c.m_pos = { 0, 0 };
             c.m_head = 0;
             c.m_yaw = 0;
+            c.m_steerVis = c.m_lock = 0;
             c.m_vel = mul( c.fwd(), v );
             c.m_surface = SurfaceE::ASPHALT;
         };
+        // How far the path has turned (radians, clockwise) and the slide (m/s sideways).
+        auto pathDir = [&] { return headingOf( w.m_cars[0].m_vel ); };
+        auto slide = [&] { return std::fabs( dot( w.m_cars[0].m_vel, w.m_cars[0].right() ) ); };
         printf( "%s, upgrades %d, assist %s\n", car.c_str(), lv, assist ? "on" : "off" );
         reset( 0 );
         CarInput back;
@@ -248,7 +333,7 @@ int toolHandling( const Options &opt )
             w.drive( 0, back );
             if ( k % 60 == 0 ) printf( "  %d s %.1f m/s", k / 60, w.m_cars[0].speed() );
         }
-        printf( "\n  speed  throttle  90 deg after  U-turn: time  width  speed after\n" );
+        printf( "\n  speed  throttle  90 deg after  U-turn: time  width  speed after   full lock 5 s: radius  speed\n" );
         for ( float v : { 6.0f, 10.0f, 15.0f, 20.0f, 25.0f, 30.0f } )
             for ( int thr = 1; thr >= 0; --thr )
             {
@@ -256,22 +341,87 @@ int toolHandling( const Options &opt )
                 CarInput in;
                 in.m_steer = 1;
                 in.m_throttle = (float)thr;
-                float turned = 0, t90 = 0, t180 = 0, width = 0, after = 0;
-                for ( int k = 1; k <= 60 * 12 && t180 == 0; ++k )
+                float turned = 0, t90 = 0, t180 = 0, width = 0, after = 0, dirAt = 0, radius = 0, circleV = 0;
+                for ( int k = 1; k <= 60 * 5; ++k )
                 {
                     float before = w.m_cars[0].m_head;
                     w.drive( 0, in );
                     turned += wrapRad( w.m_cars[0].m_head - before );
                     if ( t90 == 0 && turned >= Pi / 2 ) t90 = k * Dt;
-                    if ( turned >= Pi )
+                    if ( t180 == 0 && turned >= Pi )
                     {
                         t180 = k * Dt;
                         width = std::fabs( w.m_cars[0].m_pos.x );
                         after = len( w.m_cars[0].m_vel );
                     }
+                    // The circle it settles on: the path's turn over the last half second.
+                    if ( k == 60 * 5 - 30 ) dirAt = pathDir();
+                    if ( k == 60 * 5 )
+                    {
+                        circleV = len( w.m_cars[0].m_vel );
+                        float rate = std::fabs( wrapRad( pathDir() - dirAt ) ) / 0.5f;
+                        radius = rate > 1e-3f ? circleV / rate : 999.0f;
+                    }
                 }
-                printf( "  %5.0f  %8s  %10.2f s  %10.2f s  %5.1f m  %5.1f m/s\n", v, thr ? "full" : "off", t90, t180, width, after );
+                printf( "  %5.0f  %8s  %10.2f s  %10.2f s  %5.1f m  %5.1f m/s  %19.1f m  %5.1f m/s\n", v, thr ? "full" : "off", t90,
+                        t180, width, after, radius, circleV );
             }
+        // A slide settles: 1.5 s of full lock at full throttle from 25 m/s, then straight on.
+        {
+            reset( 25 );
+            CarInput in;
+            in.m_throttle = 1;
+            in.m_steer = 1;
+            for ( int k = 0; k < 90; ++k ) w.drive( 0, in );
+            float at = slide(), settle = 0;
+            in.m_steer = 0;
+            for ( int k = 1; k <= 60 * 4 && settle == 0; ++k )
+            {
+                w.drive( 0, in );
+                if ( slide() < 1.0f ) settle = k * Dt;
+            }
+            printf( "  settle: sliding %.1f m/s after 1.5 s of full lock from 25 m/s; below 1 m/s %.2f s after letting go\n", at,
+                    settle );
+        }
+        // The handbrake: half a second of it with full lock from 20 m/s, then the throttle.
+        {
+            reset( 20 );
+            CarInput in;
+            in.m_steer = 1;
+            in.m_handbrake = true;
+            for ( int k = 0; k < 30; ++k ) w.drive( 0, in );
+            printf( "  handbrake: half a second with full lock from 20 m/s turns the car %.0f deg, the path %.0f deg, %.1f m/s left\n",
+                    w.m_cars[0].m_head / Deg, pathDir() / Deg, len( w.m_cars[0].m_vel ) );
+        }
+        // Ice: full lock at full throttle from 20 m/s for two seconds.
+        {
+            reset( 20 );
+            CarInput in;
+            in.m_steer = 1;
+            in.m_throttle = 1;
+            for ( int k = 0; k < 120; ++k )
+            {
+                w.m_cars[0].m_surface = SurfaceE::ICE;
+                w.drive( 0, in );
+            }
+            printf( "  ice: two seconds of full lock from 20 m/s turn the car %.0f deg, the path %.0f deg, %.1f m/s left\n",
+                    w.m_cars[0].m_head / Deg, pathDir() / Deg, len( w.m_cars[0].m_vel ) );
+        }
+        // A tap: a tenth of a second of full lock at 25 m/s, full throttle.
+        {
+            reset( 25 );
+            CarInput in;
+            in.m_throttle = 1;
+            float most = 0;
+            for ( int k = 0; k < 120; ++k )
+            {
+                in.m_steer = k < 6 ? 1.0f : 0.0f;
+                w.drive( 0, in );
+                most = std::max( most, slide() );
+            }
+            printf( "  tap: 0.1 s of full lock at 25 m/s turns the car %.1f deg, the path %.1f deg (slide at most %.1f m/s)\n",
+                    w.m_cars[0].m_head / Deg, pathDir() / Deg, most );
+        }
     }
     if ( opt.has( "--wall" ) )
     {

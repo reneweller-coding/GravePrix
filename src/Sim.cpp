@@ -18,18 +18,39 @@ namespace
 
 constexpr float LatAccel = 15.0f;     ///< side grip of an ordinary car on asphalt (m/s²)
 constexpr float BrakeAccel = 13.0f;   ///< braking of an ordinary car (m/s²)
-constexpr float SteerRate = 2.4f;     ///< turning at low speed (radians a second)
-constexpr float AssistHold = 1.4f;    ///< with the assist: the tyres' grip while the car barely slides (times LatAccel)
-constexpr float AssistSlide = 1.2f;   ///< with the assist: their grip once it slides
-constexpr float AssistTurn = 1.4f;    ///< with the assist: the turn the held tyres carry (times LatAccel)
-constexpr float PloughFrom = 1.2f;    ///< with the assist: front wheels asking more than this times that plough
-constexpr float Plough = 0.8f;        ///< with the assist: slowing (m/s²) per m/s² of asked turn beyond that
+constexpr float SteerRate = 2.4f;     ///< full lock at low speed (radians a second)
+constexpr float SteerSpread = 0.5f;   ///< how much of a car's `steer` counts (1.22 turns 11 % quicker, not 22 %)
+// The arcade tyres (docs/DESIGN.md "Driving and the assist"), by tyre row: 0 without the assist (and every computer
+// driver), 1 with it.
+constexpr float TyreHold[2] = { 1.3f, 1.5f };     ///< the most they hold sideways (times LatAccel)
+constexpr float TyreBite[2] = { 10.0f, 16.0f };   ///< how quickly they swing the path round to the nose (1/s)
+constexpr float TyreAlign[2] = { 2.5f, 5.0f };    ///< how firmly they swing the nose back to the path (1/s per radian)
+constexpr float Scrub = 1.0f;         ///< slowing (m/s²) per m/s² of held turn beyond what the tyres carry
+constexpr float ScrubMost = 1.0f;     ///< the most that slowing takes (times the side grip)
+constexpr float ScrubDrive = 1.0f;    ///< the share of the drive lost: this times the share of the turn not carried
+constexpr float LockRate = 4.0f;      ///< how quickly held steering counts for the scrub (1/s): taps barely do
 
-/** @return the share of the steering rate at a speed: quick at low speed, calmer at full speed */
+/** @return the share of the steering rate at a speed: quick at low speed, only a little calmer at full speed */
 float steerShare( float sp, float top )
 {
-    return clampf( sp / 6.0f, 0, 1 ) * ( 1.0f - 0.45f * clampf( sp / ( top * 1.1f ), 0, 1 ) );
+    return clampf( sp / 6.0f, 0, 1 ) * ( 1.0f - 0.35f * clampf( sp / ( top * 1.1f ), 0, 1 ) );
 }
+
+/** @return a car's tyre row: 0 without the assist (every computer driver), 1 with it */
+int tyreRow( const Car &c ) { return c.m_setup.m_assist > 0 ? 1 : 0; }
+
+}   // namespace
+
+float sideGrip( const Car &c ) { return LatAccel * TyreHold[tyreRow( c )] * c.m_grip; }
+
+float fullLock( const Car &c, float speed )
+{
+    // Half of a car's `steer` counts: it used to tell only at low speed, now it turns the nose at every speed too.
+    return SteerRate * ( 1.0f + SteerSpread * ( c.m_steerF - 1.0f ) ) * steerShare( std::fabs( speed ), c.m_top );
+}
+
+namespace
+{
 
 /** @return the first gear of a kind (nullptr none) */
 const GearDef *gearOf( GearE kind )
@@ -280,6 +301,7 @@ void World::step( const std::vector<CarInput> &inputs )
         CarInput in = c.m_setup.m_human && !c.m_finished && i < inputs.size() ? inputs[i] : ai( (int)i );
         if ( !c.m_setup.m_human && c.m_setup.m_hands > 0 && !c.m_finished ) in = hands( (int)i, in );
         if ( m_noAi && !c.m_setup.m_human ) in = CarInput();
+        if ( c.m_setup.m_assist >= 2 && !c.m_finished && !c.m_wrecked ) in = brakeHelp( (int)i, in );
         stepCar( (int)i, in );
     }
     for ( size_t a = 0; a < m_cars.size(); ++a )
@@ -385,25 +407,42 @@ void World::physics( Car &c, const CarInput &in, float dt )
     float top = c.m_top * ( nitro ? 1.18f : 1.0f ) * ( c.m_spiked > 0 ? 0.8f : 1.0f );
     float a = 0;
     float thr = clampf( in.m_throttle, 0, 1 ), brk = clampf( in.m_brake, 0, 1 );
+    float sp = std::fabs( vl );
+    int   row = tyreRow( c );
+    // The tyres: the most they hold sideways (a tuned engine on full throttle pushes the rear out; lift off and it
+    // bites again) and how quickly they swing the path round to the nose. The handbrake lets the rear go.
+    float hold = LatAccel * TyreHold[row] * c.m_grip * gS * ( in.m_handbrake ? 0.35f : 1.0f );
+    float bite = TyreBite[row] * std::min( gS, 1.0f ) * ( in.m_handbrake ? 0.35f : 1.0f );
+    if ( c.m_slip > 0 )
+    {
+        float lost = 1.0f - c.m_slip * thr * clampf( sp / std::max( 1.0f, c.m_top ), 0.3f, 1.0f );
+        hold *= lost;
+        bite *= lost;
+    }
+    // Full lock: the nose turns at nearly the same rate at any speed (below), and steering held for more turn than the
+    // tyres carry at this speed scrubs, as a real car ploughs: the car slows (and the drive slips) until the turn fits,
+    // instead of drawing wide circles or asking for the brake long before the bend. A turn the grip carries costs
+    // nothing, and short taps barely count (m_lock follows the steering over a quarter of a second: measured on the
+    // wheels of a tenth of a second ago, a person's tapping hands lost the final against Graves for ever). The tyres
+    // scrub no harder than they grip: on ice the car slides on instead.
+    float scrub = 0;
+    if ( !in.m_handbrake && sp > 4 )
+    {
+        float asked = c.m_lock * fullLock( c, sp );
+        float carry = hold / sp;
+        if ( asked > carry )
+        {
+            scrub = ( asked - carry ) / asked;
+            a -= ( vl > 0 ? 1.0f : -1.0f ) * std::min( { sp / dt, Scrub * ( asked - carry ) * sp, ScrubMost * hold } );
+        }
+    }
     if ( thr > 0 )
     {
         if ( vl < -0.5f )
             a += c.m_brakeF * BrakeAccel * thr;
         else
-            a += c.m_power * thr * std::max( 0.0f, 1.0f - ( vl / top ) * ( vl / top ) ) * ( 0.55f + 0.45f * std::min( gS, 1.0f ) );
-    }
-    // The assist's full lock: front wheels turned well beyond what the tyres carry at this speed scrub, as a real car
-    // ploughs on full lock, and the car slows until the turn fits. So a held key turns tight instead of drawing ever
-    // wider circles with the throttle down; a corner taken near the grip costs nothing (a short tap barely turns the
-    // wheels). The U-turn at full throttle from 36, 72 and 108 km/h: 24, 33 and 38 m wide instead of 49, 87 and 109 m
-    // (docs/DESIGN.md "Driving assist").
-    if ( c.m_setup.m_assist && !in.m_handbrake && std::fabs( vl ) > 4 )
-    {
-        float sp = std::fabs( vl );
-        float asked = std::fabs( c.m_steerVis ) * SteerRate * c.m_steerF * steerShare( sp, c.m_top );
-        float carry = ( LatAccel * c.m_grip * gS * AssistTurn / sp + 0.1f ) * PloughFrom;
-        if ( asked > carry )
-            a -= ( vl > 0 ? 1.0f : -1.0f ) * std::min( std::fabs( vl ) / dt, Plough * ( asked - carry ) * sp );
+            a += c.m_power * thr * std::max( 0.0f, 1.0f - ( vl / top ) * ( vl / top ) ) *
+                 ( 0.55f + 0.45f * std::min( gS, 1.0f ) ) * ( 1.0f - ScrubDrive * scrub );
     }
     if ( nitro )
     {
@@ -424,40 +463,33 @@ void World::physics( Car &c, const CarInput &in, float dt )
     if ( thr <= 0 && brk <= 0 ) a -= ( vl > 0 ? 1.0f : -1.0f ) * std::min( std::fabs( vl ) / dt, 1.4f );
     if ( in.m_handbrake ) a -= ( vl > 0 ? 1.0f : -1.0f ) * std::min( std::fabs( vl ) / dt, 3.5f );
     vl += a * dt;
-    float maxLat = LatAccel * c.m_grip * gS * ( in.m_handbrake ? 0.35f : 1.0f );
-    // The assist: while the car barely slides the tyres hold more (static against sliding friction), so it stays
-    // planted until it is really pushed; once it slides they still hold a little more.
-    // (A person's late, all-or-nothing hands slid 2.7 m/s without it, 0.5 m/s with it: --simall --hands 1.)
-    if ( c.m_setup.m_assist && !in.m_handbrake ) maxLat *= std::fabs( vlat ) < 2.5f ? AssistHold : AssistSlide;
-    // A tuned engine on full throttle pushes the rear out; lift off and it bites again.
-    if ( c.m_slip > 0 ) maxLat *= 1.0f - c.m_slip * thr * clampf( std::fabs( vl ) / std::max( 1.0f, c.m_top ), 0.3f, 1.0f );
-    float dl = clampf( vlat, -maxLat * dt, maxLat * dt );
-    vlat -= dl;
-    float slide = std::fabs( vlat );
+    // The path follows the nose as quickly as the tyres bite, at most as hard as they hold: a turn within the grip
+    // leaves a small slip that settles at once; beyond it the car slides, and the slide scrubs speed too.
+    float pull = std::fabs( vlat ) * ( 1.0f - std::exp( -bite * dt ) );
+    float used = bite * std::fabs( vlat ) / std::max( hold, 0.1f );   // the share of the grip the slip asks for
+    float dl = std::min( pull, hold * dt );
+    vlat -= vlat > 0 ? dl : -dl;
+    sp = std::fabs( vl );
     float spin = ( thr > 0.9f && vl < 12.0f && vl > -1 && gS < 0.95f ) ? 0.5f : 0.0f;
-    float skid = clampf( ( slide - 1.5f ) / 7.0f, 0, 1 ) + spin + ( in.m_handbrake && std::fabs( vl ) > 6 ? 0.6f : 0.0f );
+    float skid = clampf( ( used - 0.9f ) * 2.0f, 0, 1 ) + clampf( scrub * 1.5f, 0, 1 ) * clampf( sp / 15.0f, 0, 1 ) +
+                 spin + ( in.m_handbrake && sp > 6 ? 0.6f : 0.0f );
     if ( brk > 0.6f && vl > 18 && gS < 0.9f ) skid += 0.3f;
     c.m_skid += ( clampf( skid, 0, 1 ) - c.m_skid ) * std::min( 1.0f, dt * 12 );
     c.m_vel = add( mul( f, vl ), mul( r, vlat ) );
-    // Steering: quick at low speed, calmer at full speed, held to what the tyres can carry (the handbrake lets go).
-    float sp = std::fabs( vl );
-    float sf = steerShare( sp, c.m_top );
+    // Steering: full lock turns the nose at nearly the same rate at any speed (a little calmer at full speed); the
+    // tyres decide how the path follows (above). The nose swings back to the path by itself while the slide is not
+    // held, as a real car's front wheels straighten it: with the assist firmly, so a slide settles as soon as the key
+    // is let go. The handbrake lets the rear swing out.
     float dir = vl >= -0.3f ? 1.0f : -1.0f;
-    float target = clampf( in.m_steer, -1, 1 ) * SteerRate * c.m_steerF * sf * dir * ( in.m_handbrake ? 1.5f : 1.0f );
-    if ( !in.m_handbrake && sp > 4 )
-    {
-        // Without the assist a car turns up to a fifth faster than its tyres carry (and a little more at any speed):
-        // the slides of the old top-down racers. With it, it turns as much as the held tyres carry and no more, so a
-        // hard turn bites instead of sliding, and much more lock ploughs (both above).
-        float lim = c.m_setup.m_assist ? LatAccel * c.m_grip * gS * AssistTurn / sp + 0.1f : LatAccel * c.m_grip * gS * 1.2f / sp + 0.25f;
-        target = clampf( target, -lim, lim );
-    }
+    float target = clampf( in.m_steer, -1, 1 ) * fullLock( c, sp ) * dir * ( in.m_handbrake ? 1.5f : 1.0f );
+    if ( !in.m_handbrake && vl > 2 ) target += TyreAlign[row] * std::min( gS, 1.0f ) * std::atan2( vlat, vl );
     float resp = clampf( dt * 9.0f * ( 0.35f + 0.65f * std::min( gS, 1.0f ) ), 0, 1 );
     c.m_yaw += ( target - c.m_yaw ) * resp;
     c.m_head = wrapRad( c.m_head + c.m_yaw * dt );
     c.m_pos = add( c.m_pos, mul( c.m_vel, dt ) );
     // What it feels like.
     c.m_steerVis += ( in.m_steer - c.m_steerVis ) * std::min( 1.0f, dt * 10 );
+    c.m_lock += ( std::fabs( clampf( in.m_steer, -1, 1 ) ) - c.m_lock ) * std::min( 1.0f, dt * LockRate );
     c.m_wheelTurn += vl * dt / 0.33f;
     c.m_lean += ( clampf( vl * c.m_yaw / 18.0f, -1, 1 ) - c.m_lean ) * std::min( 1.0f, dt * 6 );
     c.m_pitch += ( clampf( -a / 20.0f, -1, 1 ) - c.m_pitch ) * std::min( 1.0f, dt * 6 );
@@ -547,34 +579,57 @@ void World::obstacles( Car &c, int i )
 {
     Vector2 f = c.fwd(), r = c.right();
     float   hl = c.m_len * 0.5f, hw = c.m_wid * 0.5f;
-    const Vector2 pts[8] = { { hw, hl }, { -hw, hl }, { hw, -hl }, { -hw, -hl }, { hw, 0 }, { -hw, 0 }, { 0, hl }, { 0, -hl } };
     auto resolve = [&]( Vector2 o, float rad ) {
         if ( dist2( o, c.m_pos ) > ( rad + hl + 1 ) * ( rad + hl + 1 ) ) return false;
-        bool hit = false;
-        for ( const Vector2 &q : pts )
+        // The point of the car's box nearest the obstacle (not only its corners and the middles of its sides: a post
+        // between them went into the car and held it fast, the computer drivers backing out and in for ever).
+        Vector2 q = local( c, o );
+        Vector2 k = { clampf( q.x, -hw, hw ), clampf( q.y, -hl, hl ) };
+        Vector2 out;   // from the obstacle towards the car, in the car's frame
+        float   d;
+        if ( std::fabs( q.x ) < hw && std::fabs( q.y ) < hl )
         {
-            Vector2 rc = add( mul( r, q.x ), mul( f, q.y ) );
-            Vector2 p = add( c.m_pos, rc );
-            float   d = len( sub( p, o ) ) - rad;
-            if ( d >= 0 ) continue;
-            hit = true;
-            Vector2 push = norm( sub( p, o ) );
-            c.m_pos = add( c.m_pos, mul( push, -d ) );
-            Vector2 vc = add( c.m_vel, mul( perp( rc ), c.m_yaw ) );
-            float   vn = dot( vc, push );
-            if ( vn >= 0 ) continue;
-            float invM = 1.0f / c.m_mass, invI = 1.0f / c.m_inertia, rn = cross( rc, push );
-            float j = -1.2f * vn / ( invM + rn * rn * invI );
-            c.m_vel = add( c.m_vel, mul( push, j * invM ) );
-            c.m_yaw += rn * j * invI;
-            if ( -vn > 7.0f && !c.m_wrecked )
+            // Its centre inside the box: out across the nearest side.
+            float ex = hw - std::fabs( q.x ), ey = hl - std::fabs( q.y );
+            if ( ex < ey )
             {
-                m_source = 3;
-                damage( i, ( -vn - 7.0f ) * 0.8f, -1, p );
-                event( EvE::WALL, i, p, -vn );
+                k = { q.x > 0 ? hw : -hw, q.y };
+                out = { q.x > 0 ? -1.0f : 1.0f, 0 };
+                d = -( ex + rad );
+            }
+            else
+            {
+                k = { q.x, q.y > 0 ? hl : -hl };
+                out = { 0, q.y > 0 ? -1.0f : 1.0f };
+                d = -( ey + rad );
             }
         }
-        return hit;
+        else
+        {
+            Vector2 dk = sub( k, q );
+            float   dl = len( dk );
+            d = dl - rad;
+            if ( d >= 0 ) return false;
+            out = mul( dk, 1.0f / std::max( dl, 1e-4f ) );
+        }
+        Vector2 rc = add( mul( r, k.x ), mul( f, k.y ) );
+        Vector2 push = add( mul( r, out.x ), mul( f, out.y ) );
+        c.m_pos = add( c.m_pos, mul( push, -d ) );
+        Vector2 p = add( c.m_pos, rc );
+        Vector2 vc = add( c.m_vel, mul( perp( rc ), c.m_yaw ) );
+        float   vn = dot( vc, push );
+        if ( vn >= 0 ) return true;
+        float invM = 1.0f / c.m_mass, invI = 1.0f / c.m_inertia, rn = cross( rc, push );
+        float j = -1.2f * vn / ( invM + rn * rn * invI );
+        c.m_vel = add( c.m_vel, mul( push, j * invM ) );
+        c.m_yaw += rn * j * invI;
+        if ( -vn > 7.0f && !c.m_wrecked )
+        {
+            m_source = 3;
+            damage( i, ( -vn - 7.0f ) * 0.8f, -1, p );
+            event( EvE::WALL, i, p, -vn );
+        }
+        return true;
     };
     for ( const ObstacleSpot &o : m_track->m_obstacles ) resolve( o.m_pos, o.m_r );
     for ( const Rock &rock : m_rocks )
@@ -666,7 +721,7 @@ void World::looseThings()
 void World::collide( int ia, int ib )
 {
     Car &A = m_cars[ia], &B = m_cars[ib];
-    if ( dist2( A.m_pos, B.m_pos ) > 64.0f ) return;
+    if ( dist2( A.m_pos, B.m_pos ) > 64.0f || m_time < A.m_ghostUntil || m_time < B.m_ghostUntil ) return;
     Vector2 fa = A.fwd(), ra = A.right(), fb = B.fwd(), rb = B.right();
     Vector2 d = sub( B.m_pos, A.m_pos );
     float   ha = A.m_len * 0.5f, wa = A.m_wid * 0.5f, hb = B.m_len * 0.5f, wb = B.m_wid * 0.5f;
@@ -1300,6 +1355,89 @@ void World::wreck( int i, int by )
     if ( by >= 0 && by != i ) ++m_cars[by].m_wrecks;
     event( EvE::WRECK, i, c.m_pos, 1, 0, by );
     explode( c.m_pos, 5.0f, 8.0f, by );
+}
+
+bool World::resetCar( int i )
+{
+    // Back on the track (docs/DESIGN.md "Seeing the road"): for a car stuck against a wall, turned round or lost.
+    // Its price is the way back and the standstill; the wait between two keeps it from being a brake or a weapon.
+    if ( i < 0 || i >= (int)m_cars.size() || m_phase != PhaseE::RACE ) return false;
+    Car &c = m_cars[i];
+    if ( c.m_wrecked || c.m_finished || m_time - c.m_resetAt < ResetWait ) return false;
+    const Track &T = *m_track;
+    // The room at a spot: metres to the nearest thing it would stand in (a car or a wreck, an obstacle, a rock, a
+    // barrel, something dropped), none near a wall.
+    auto room = [&]( Vector2 p, float most ) {
+        Vector2 push;
+        if ( T.outside( p, push ) > -2.5f ) return 0.0f;
+        float r = most;
+        for ( size_t k = 0; k < m_cars.size(); ++k )
+            if ( (int)k != i ) r = std::min( r, len( sub( m_cars[k].m_pos, p ) ) - 2.5f );
+        for ( const ObstacleSpot &o : T.m_obstacles ) r = std::min( r, len( sub( o.m_pos, p ) ) - o.m_r );
+        for ( const Rock &k : m_rocks ) r = std::min( r, len( sub( k.m_pos, p ) ) - k.m_r );
+        for ( const Barrel &b : m_barrels )
+            if ( !b.m_gone ) r = std::min( r, len( sub( b.m_pos, p ) ) - 0.6f );
+        for ( const Hazard &h : m_hazards )
+            if ( !h.m_gone ) r = std::min( r, len( sub( h.m_pos, p ) ) - h.m_r );
+        return std::max( 0.0f, r );
+    };
+    float bestRoom = -1.0f, bestS = T.wrap( c.m_s - 8.0f ), bestLat = 0.0f;
+    if ( m_mode == ModeE::DERBY || T.m_arena )
+    {
+        // An arena has no behind: the spot farthest from the others.
+        for ( size_t k = 0; k < T.m_s.size(); k += 3 )
+            for ( float lat : { T.m_s[k].m_line, 0.0f } )
+            {
+                float r = room( T.pointAt( T.m_s[k].m_s, lat ), 500.0f );
+                if ( r > bestRoom )
+                {
+                    bestRoom = r;
+                    bestS = T.m_s[k].m_s;
+                    bestLat = lat;
+                }
+            }
+    }
+    else
+    {
+        // On the racing line 8 m behind; when something stands there, beside it or further back. Never on a level
+        // crossing or a drawbridge.
+        for ( float back = 8.0f; back <= 62.0f && bestRoom < 4.0f; back += 6.0f )
+        {
+            float s = T.wrap( c.m_s - back );
+            bool  mover = false;
+            for ( const MoverSpot &m : T.m_movers )
+                if ( m.m_kind != "rockfall" && std::fabs( T.delta( m.m_s, s ) ) < m.m_len * 0.5f + 8.0f ) mover = true;
+            if ( mover ) continue;
+            const TrackSample &t = T.sampleAt( s );
+            for ( float lat : { t.m_line, t.m_line * 0.5f, t.m_line - 3.5f, t.m_line + 3.5f } )
+            {
+                lat = clampf( lat, -t.m_half + 2.0f, t.m_half - 2.0f );
+                float r = room( T.pointAt( s, lat ), 30.0f );
+                if ( r > bestRoom + 0.5f )
+                {
+                    bestRoom = r;
+                    bestS = s;
+                    bestLat = lat;
+                }
+            }
+        }
+    }
+    Vector2  p = T.pointAt( bestS, bestLat );
+    TrackPos tp = T.locate( p, T.indexAt( bestS ) );
+    if ( m_mode != ModeE::DERBY ) c.m_dist += T.delta( c.m_s, tp.m_s );   // the way back is raced again
+    c.m_hint = tp.m_i;
+    c.m_s = tp.m_s;
+    c.m_pos = p;
+    c.m_vel = { 0, 0 };
+    c.m_yaw = 0;
+    c.m_head = headingOf( T.sampleAt( bestS ).m_dir );
+    c.m_steerVis = c.m_skid = c.m_lean = c.m_pitch = 0;
+    c.m_oilSlip = 0;
+    c.m_wrongWay = 0;
+    c.m_ai.m_stuck = c.m_ai.m_reverse = 0;
+    c.m_resetAt = m_time;
+    c.m_ghostUntil = m_time + ResetGhost;
+    return true;
 }
 
 }   // namespace grave

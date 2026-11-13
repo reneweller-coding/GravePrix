@@ -34,6 +34,7 @@ struct ModelDef
     std::string       m_name;
     float             m_scale = 1.0f;   ///< all of it larger or smaller
     bool              m_lamp = false;   ///< its light parts shine at night
+    float             m_sway = 0.0f;    ///< > 0: all of it bends with the wind, the top most (how pliant, 0..1)
     std::vector<Line> m_parts;          ///< "part <kind> key=value ..."
     std::string       m_where;          ///< file:line
 };

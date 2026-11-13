@@ -8,6 +8,7 @@ venue junkyard
   sun dir=220 height=40 color=#e0d8c8 power=0.7
   ambient #7a7a78 power=0.75
   fog #8a8478 density=0.005
+  grade shadows=#9aa8a8 highlights=#ffe6cc amount=0.8 sat=0.92 contrast=1.08 vignette=0.75
   ground dirt color=#4e3e2c color2=#3c3226
   road dirt color=#7e705c line=#c0b090
   shoulder gravel color=#5e564a
@@ -25,6 +26,7 @@ venue cemetery
   sun dir=40 height=40 color=#8a9ad0 power=0.45
   ambient #34405a power=0.95
   fog #222a3a density=0.011
+  grade shadows=#8aa0c0 highlights=#e6f0ff amount=0.8 sat=0.85 contrast=1.03 vignette=0.8
   ground grass color=#2e4026 color2=#3a3424
   road asphalt color=#4c4c54 line=#c8c8b0
   shoulder gravel color=#5a5448
@@ -42,6 +44,7 @@ venue docks
   sun dir=260 height=12 color=#ff8a50 power=0.6
   ambient #3a4a60 power=0.95
   fog #34404c density=0.007
+  grade shadows=#88a8b8 highlights=#ffd8b8 amount=0.85 sat=1.05 contrast=1.04 vignette=0.75
   ground concrete color=#5a5c60 color2=#4a4c52
   road asphalt color=#2e3036 line=#e0c040
   shoulder concrete color=#6a6a6c
@@ -59,6 +62,7 @@ venue desert
   sun dir=160 height=70 color=#fff0d0 power=0.9
   ambient #9a8a6c power=0.5
   fog #d8c8a0 density=0.003
+  grade shadows=#b8a090 highlights=#fff4dc amount=0.7 sat=1.08 contrast=1.1 vignette=0.6
   ground sand color=#c09a60 color2=#a88048
   road asphalt color=#4e4a46 line=#f0f0e0
   shoulder sand color=#b08e58
@@ -76,6 +80,7 @@ venue refinery
   sun dir=90 height=30 color=#6070a0 power=0.3
   ambient #4a3024 power=0.9
   fog #2a1a12 density=0.006
+  grade shadows=#88a0b0 highlights=#ffd0a0 amount=0.85 sat=1.1 contrast=1.05 vignette=0.8
   ground concrete color=#3e3a34 color2=#2c2824
   road concrete color=#5e5a54 line=#f0c020
   shoulder gravel color=#48423a
@@ -93,6 +98,7 @@ venue swamp
   sun dir=100 height=12 color=#ffb080 power=0.7
   ambient #4a5a48 power=0.85
   fog #607060 density=0.01
+  grade shadows=#98a888 highlights=#ffe0c4 amount=0.8 sat=0.9 contrast=1.03 vignette=0.75
   ground mud color=#3a3a24 color2=#2a3020
   road dirt color=#6a5a40 line=#a09070
   shoulder mud color=#4a4430
@@ -110,6 +116,7 @@ venue downtown
   sun dir=0 height=40 color=#6070b0 power=0.3
   ambient #2e2c4c power=1.05
   fog #1e1a32 density=0.006
+  grade shadows=#a090c0 highlights=#d4f0ff amount=0.85 sat=1.15 contrast=1.04 vignette=0.8
   ground concrete color=#3a3a44 color2=#2e2e36
   road asphalt color=#46464e line=#f0f0f0
   shoulder concrete color=#4a4a54
@@ -127,6 +134,7 @@ venue pass
   sun dir=200 height=25 color=#f0f4ff power=0.75
   ambient #8a98b8 power=0.75
   fog #b0b8c8 density=0.006
+  grade shadows=#90a8d0 highlights=#fffaf2 amount=0.75 sat=0.95 contrast=1.05 vignette=0.6
   ground snow color=#e8ecf4 color2=#c8d0e0
   road snow color=#727c8c line=#3a4252
   shoulder gravel color=#7c7870
@@ -144,6 +152,7 @@ venue fairground
   sun dir=280 height=8 color=#ff7040 power=0.55
   ambient #4a3860 power=0.9
   fog #302838 density=0.005
+  grade shadows=#a888c0 highlights=#ffe0a8 amount=0.85 sat=1.2 contrast=1.04 vignette=0.75
   ground grass color=#34442a color2=#44402e
   road asphalt color=#5a5258 line=#f0e0a0
   shoulder dirt color=#6a5a48
@@ -161,6 +170,7 @@ venue proving
   sun dir=130 height=55 color=#fff0d0 power=1.0
   ambient #8a8270 power=0.6
   fog #b0a080 density=0.004
+  grade shadows=#a0a488 highlights=#f8ecd0 amount=0.75 sat=0.85 contrast=1.1 vignette=0.7
   ground dirt color=#9a8660 color2=#7a6a48
   road concrete color=#55534f line=#e0e0d0
   shoulder gravel color=#7a7060
@@ -178,6 +188,7 @@ venue estate
   sun dir=300 height=30 color=#a0b0ff power=0.35
   ambient #34385a power=1.25
   fog #16182a density=0.006
+  grade shadows=#9090c8 highlights=#dcf0e8 amount=0.85 sat=0.82 contrast=1.06 vignette=0.9
   ground grass color=#24301e color2=#2e2c22
   road cobble color=#4e4a48 line=#b0a080
   shoulder gravel color=#423e3a

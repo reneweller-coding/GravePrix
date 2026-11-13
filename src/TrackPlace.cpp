@@ -34,6 +34,8 @@ float reachOf( const Catalog &cat, const std::string &name )
             MemFree( mesh->vertices );
             MemFree( mesh->normals );
             MemFree( mesh->colors );
+            MemFree( mesh->texcoords );
+            MemFree( mesh->texcoords2 );
         }
     }
     return cache[name] = r;

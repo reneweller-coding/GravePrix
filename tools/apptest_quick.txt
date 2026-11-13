@@ -5,14 +5,20 @@ expect quick
 pad wait 10 shot quick
 up accept wait 5
 expect race
+# A computer driver at the wheel at the race's pace (the camera leads, the corner arrows show), then the
+# car put back on the track.
+drive wait 300 shot quick_drive
+reset wait 4 shot quick_reset
 race wait 5
 expect results
+wait 90 shot results
 accept wait 2
 expect quick
 down right up accept wait 5
 expect race
 race wait 5
 expect results
+wait 90 shot results_derby
 accept wait 2
 expect quick
 back

@@ -77,6 +77,7 @@ void Input::reset()
     set( ActE::CYCLE, KEY_TAB, KEY_R, GAMEPAD_BUTTON_LEFT_TRIGGER_1, 0 );
     set( ActE::HORN, KEY_H, 0, GAMEPAD_BUTTON_LEFT_THUMB, 0 );
     set( ActE::PAUSE, KEY_ESCAPE, KEY_P, GAMEPAD_BUTTON_MIDDLE_RIGHT, 0 );
+    set( ActE::RESET, KEY_BACKSPACE, KEY_T, GAMEPAD_BUTTON_MIDDLE_LEFT, 0 );
 }
 
 bool Input::padButtonDown( int pad, int b ) const
@@ -148,7 +149,7 @@ void Input::update()
         int  mask = 0;
         bool keys = false;
         route( i, mask, keys );
-        for ( ActE a : { ActE::DROP, ActE::ROCKET, ActE::NITRO, ActE::CYCLE, ActE::HORN } )
+        for ( ActE a : { ActE::DROP, ActE::ROCKET, ActE::NITRO, ActE::CYCLE, ActE::HORN, ActE::RESET } )
             if ( pressedAct( a, mask, keys ) ) m_latch[i][(int)a] = true;
     }
 }
@@ -194,7 +195,7 @@ bool Input::pressedAct( ActE a, int mask, bool keys ) const
     return false;
 }
 
-CarInput Input::car( int i, int players )
+CarInput Input::car( int i, int players, const Car *aim )
 {
     m_players = players;
     CarInput in;
@@ -206,11 +207,23 @@ CarInput Input::car( int i, int players )
     if ( held( ActE::RIGHT, mask, keys ) ) steer += 1;
     if ( held( ActE::ACCEL, mask, keys ) ) thr = 1;
     if ( held( ActE::BRAKE, mask, keys ) ) brk = 1;
+    float want = 0, wantMag = 0;   // the way the stick points (when it points the way), on the pad pushed furthest
     for ( int p = 0; p < MaxPads; ++p )
     {
         if ( !( ( mask >> p ) & 1 ) || !padReady( p ) ) continue;
         float ax = GetGamepadAxisMovement( p, GAMEPAD_AXIS_LEFT_X );
-        if ( std::fabs( ax ) > 0.12f )
+        if ( aim )
+        {
+            // The stick's way on the screen: x to the right, y down the screen, as the ground lies under the camera
+            // (north up, never turning). A round dead zone: a stick near the middle points nowhere.
+            float ay = GetGamepadAxisMovement( p, GAMEPAD_AXIS_LEFT_Y ), m = std::sqrt( ax * ax + ay * ay );
+            if ( m > 0.3f && m > wantMag )
+            {
+                want = std::atan2( ax, -ay );
+                wantMag = m;
+            }
+        }
+        else if ( std::fabs( ax ) > 0.12f )
         {
             // A dead zone, then a curve that is gentle around the middle.
             float k = ( std::fabs( ax ) - 0.12f ) / 0.88f;
@@ -220,6 +233,7 @@ CarInput Input::car( int i, int players )
         if ( m_binds[(int)ActE::ACCEL].m_pad == GAMEPAD_BUTTON_RIGHT_TRIGGER_2 ) thr = std::max( thr, trigger( p, GAMEPAD_AXIS_RIGHT_TRIGGER ) );
         if ( m_binds[(int)ActE::BRAKE].m_pad == GAMEPAD_BUTTON_LEFT_TRIGGER_2 ) brk = std::max( brk, trigger( p, GAMEPAD_AXIS_LEFT_TRIGGER ) );
     }
+    if ( aim && wantMag > 0 ) steer += aimSteer( want, *aim, m_aimSide[i & 1] );
     in.m_steer = clampf( steer, -1, 1 );
     in.m_throttle = clampf( thr, 0, 1 );
     in.m_brake = clampf( brk, 0, 1 );
@@ -231,6 +245,22 @@ CarInput Input::car( int i, int players )
     in.m_cycle = m_latch[i][(int)ActE::CYCLE];
     in.m_horn = held( ActE::HORN, mask, keys );
     return in;
+}
+
+float Input::aimSteer( float want, const Car &car, int &side )
+{
+    // The nose's error to the wanted way (> 0: the way lies clockwise, to the right).
+    float e = wrapRad( want - car.m_head );
+    // Held straight back the error jumps between +180 and -180 degrees with every tremble of the thumb: the turn goes
+    // on the way it began instead of flipping from lock to lock.
+    if ( std::fabs( e ) > 2.6f && side != 0 && ( e > 0 ) != ( side > 0 ) ) e += e > 0 ? -2.0f * Pi : 2.0f * Pi;
+    if ( std::fabs( e ) > 0.05f ) side = e > 0 ? 1 : -1;
+    // Full lock from about 25 degrees off; the damping takes the lock off while the car still turns fast, so the nose
+    // comes round to the way without swinging past it (--aim measures it). Backing up, the wheels turn the nose the
+    // other way (World::physics): the steering is mirrored, so the nose still comes round to the stick.
+    constexpr float Gain = 3.6f, Damp = 0.32f;
+    float           back = car.speed() < -0.3f ? -1.0f : 1.0f;
+    return clampf( back * ( Gain * e - Damp * car.m_yaw ), -1, 1 );
 }
 
 void Input::consumed()
@@ -290,7 +320,8 @@ int Input::capturedPad() const
 
 const char *Input::name( ActE a )
 {
-    static const char *n[] = { "accel", "brake", "left", "right", "handbrake", "fire", "drop", "rocket", "nitro", "cycle", "horn", "pause" };
+    static const char *n[] = { "accel", "brake", "left", "right", "handbrake", "fire", "drop",
+                               "rocket", "nitro", "cycle", "horn", "pause", "reset" };
     return n[(int)a];
 }
 

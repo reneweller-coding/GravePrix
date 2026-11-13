@@ -19,7 +19,7 @@ Controls (rebind them under Options > Controls)
                     Keyboard            Pad / Steam Deck
 Accelerate          Up / W              RT (right trigger, analogue)
 Brake / reverse     Down / S            LT (left trigger, analogue; held at a standstill: back up)
-Steer               Left/Right, A/D     left stick
+Steer               Left/Right, A/D     left stick (turns the wheels; or points the way, see Options)
 Handbrake           Ctrl / B            B
 Front gun           Space / J           A
 Drop rear gear      E / K               X
@@ -28,6 +28,7 @@ Nitro               Shift / I           RB
 Next rear gear      Tab / R             LB
 Horn                H                   L3
 Pause               Esc / P             Start
+Back on track       Backspace / T       Select (View on the Deck)
 Fullscreen          F11 (or Alt+Enter)
 Screenshot          F12
 
@@ -50,14 +51,32 @@ damage you take and deal, prize money, prices, repairs, how often wrecked rivals
 
 Options for everyone
 --------------------
-Driving assist (on by default): the car turns as sharply as its tyres can hold and stays planted until you really
-push it; hold full lock and the front tyres scrub the speed off until the turn fits. The handbrake still lets you
-drift. Turn it off in the options for the slippery handling of the old top-down racers.
+Steering: every car turns its nose quickly at any speed; the tyres decide how fast the car follows. Turn harder
+than they grip and the car slides and scrubs speed off in the bend instead of flying straight on, so a tight bend
+taken too fast costs time, not the wall. The handbrake lets the rear swing out for a drift.
+Driving assist, three levels (Options):
+  on (default)            grippy tyres: a slide settles as soon as you let go of the key.
+  on, with brake help     the same, and the car lifts the throttle and brakes by itself when it is too fast for
+                          the bends ahead. It only ever takes speed away; your own brake works as always.
+  off                     for experts: the same tyres as the computer drivers, the car drifts more and longer.
+                          A career race won this way earns an epitaph.
 Text size, race display size, colour vision (red-green or blue-yellow: other colours for good and bad), names
 above the cars, frame rate (30, 40, 60 or unlimited; 40 saves battery on the Deck), vibration, camera height,
 screen shake, the announcer's lines. With a pad the hints and the controls screen show its buttons. With a colour
 vision setting the rivals race in colours that stay apart for red-green and blue-yellow eyes. On the Steam Deck the
 game starts in the fast graphics setting (smaller shadow map, lighter bloom, 67 % resolution); 40 frames save battery.
+Corner arrows (on by default): the next bend at the top of the screen, its shape seen from above, how far it is and
+how sharp (one to four marks, green to red), and the bend right after it. While you drive down the screen they move
+to the bottom, so they never cover your car. The camera looks ahead the way you drive.
+Steering with a pad: "stick turns" (the default) turns the wheels left and right like the keys; "stick points the way"
+makes the car head where the left stick points on the screen (up is up), whichever way the car faces. Hold the brake
+at a standstill and the car backs round towards the stick.
+Back on track: stuck against a wall or facing the wrong way? Backspace, T or Select puts the car back on the racing
+line a few metres back, standing and facing the right way. It blinks and passes through the other cars for a moment;
+the next one waits five seconds.
+Miniature look (on by default): the top and the bottom of the picture blur a little, as in a photograph of a model
+railway, and a sharp band follows your car. Turn it off in the options for a picture sharp to the edges (on the
+Steam Deck the blur is lighter).
 
 Graves' jobs
 ------------

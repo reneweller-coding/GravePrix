@@ -154,6 +154,35 @@ private:
     bool                m_spiritSeen = false;
     void                spirits();
 
+    // The race camera (AppRace.cpp): it leads the car the way it goes, never turning.
+    Vector2 m_camCar = { 0, 0 };      ///< the car's place in the last frame
+    Vector2 m_camAnchor = { 0, 0 };   ///< the point the camera keeps with the car (it glides after a jump)
+    Vector2 m_camLead = { 0, 0 };     ///< metres it looks ahead of the car (damped)
+    void    raceCamera( float dt );
+
+    // Pace notes (AppRace.cpp): the bends of the racing line ahead, as arrows in the display.
+    struct Bend
+    {
+        float m_s0 = 0.0f, m_s1 = 0.0f;   ///< where it begins and ends along the lap
+        float m_turn = 0.0f;              ///< how far it turns (radians, > 0 to the right)
+        float m_radius = 0.0f;            ///< the racing line's tightest radius in it (metres)
+        float m_head = 0.0f;              ///< the way of travel where it begins (radians, 0 up the screen)
+        int   m_grade = 1;                ///< 1 fast .. 4 a hairpin
+    };
+    std::vector<Bend> m_bends;
+    void              findBends();
+    /**
+     * @brief Draws the pace notes in the middle of the display.
+     * @param[in] y      their top (low: their bottom)
+     * @param[in] low    at the bottom of the screen, growing upwards
+     * @param[in] alpha  0..1
+     * @return the height they took (0: no bend ahead)
+     */
+    float paceNotes( float y, bool low, float alpha );
+    bool  m_hudLow = false;     ///< the messages in the middle sit at the bottom (the car drives high on the screen)
+    float m_hudFade = 1.0f;     ///< their fade while they change sides
+    float m_stuckTime = 0.0f;   ///< seconds the player stood still trying to drive, or drove the wrong way (the hint)
+
     // Drawing helpers.
     void header( const std::string &title, const std::string &sub = "" );
     void hints( const std::string &text );
@@ -179,6 +208,7 @@ private:
     Input    m_in;
     Audio    m_audio;
     Renderer m_view, m_show;
+    Renderer m_podium;   ///< the results screen's podium
     bool     m_deck = false;
     bool     m_quit = false;
     float    m_time = 0.0f;

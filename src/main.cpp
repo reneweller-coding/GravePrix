@@ -63,6 +63,8 @@ int main( int argc, char **argv )
     if ( opt.has( "--trackshots" ) ) return toolTrackshots( opt );
     if ( opt.has( "--sim" ) || opt.has( "--simall" ) ) return toolSim( opt );
     if ( opt.has( "--handling" ) ) return toolHandling( opt );
+    if ( opt.has( "--aim" ) ) return toolAim( opt );
+    if ( opt.has( "--resets" ) ) return toolResets( opt );
     if ( opt.has( "--careersim" ) ) return toolCareerSim( opt );
     if ( opt.has( "--gallery" ) ) return toolGallery( opt );
     if ( opt.has( "--shot" ) ) return toolShot( opt );

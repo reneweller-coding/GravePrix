@@ -156,7 +156,7 @@ model hedge_block
   part sphere r=0.75 y=3.15 color=#22422a seg=8
 
 # a 15 m dead oak, crows on its branches
-model tree_dead_big
+model tree_dead_big sway=0.12
   part gun r=0.595 r2=0.85 len=6.756 x=-0.023 y=3.375 z=0.142 pitch=87.56 rot=-170.83 seg=7 color=#2e2a28
   part gun r=0.06 r2=0.468 len=2.322 x=1.362 y=0.175 z=-0.787 pitch=-8.67 rot=59.98 seg=5 color=#2e2a28
   part gun r=0.06 r2=0.468 len=2.322 x=0.787 y=0.175 z=1.362 pitch=-8.67 rot=149.98 seg=5 color=#2e2a28

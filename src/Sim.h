@@ -57,7 +57,7 @@ struct CarSetup
     Paint       m_paint;
     bool        m_human = false;
     bool        m_player = false;   ///< the player's car: the difficulty's factors apply, even when a computer drives it
-    bool        m_assist = false;   ///< the driving assist: tyres hold until pushed, full lock ploughs
+    int         m_assist = 0;       ///< the driving assist: 0 off, 1 on (grippy tyres), 2 also the brake help
     int         m_pad = 0;             ///< which player (0 or 1) for humans
     int         m_engine = 0, m_tires = 0, m_armor = 0, m_gunLv = 0;   ///< upgrade levels
     std::string m_gun;                 ///< "" the car's own
@@ -70,6 +70,7 @@ struct CarSetup
     int         m_grudge = 0;      ///< 0..3: how much this rival wants the player dead (a feud)
     float       m_novice = 0.0f;   ///< 0..1: a beginner's late, wide steering and misjudged corners (tests)
     float       m_hands = 0.0f;    ///< 0..1: a person at a keyboard (0.3 practised, 1 a beginner): late hands, all-or-nothing keys (tests)
+    bool        m_flatOut = false; ///< a driver who never lifts for a bend, only steers (the brake help's test)
     float       m_pace = 1.0f;     ///< a computer driver's engine: its league's share (LeagueDef::m_pace)
     bool        m_escort = false;  ///< Graves' hearse in an escort job: the rivals go for it
     std::string m_likes = "mine";
@@ -124,6 +125,8 @@ struct Car
     int   m_place = 0;            ///< 1 = leading
     float m_lapStart = 0.0f, m_lastLap = 0.0f, m_bestLap = 0.0f;
     float m_wrongWay = 0.0f;
+    float m_ghostUntil = -1.0f;   ///< put back on the track (World::resetCar): it passes through cars until then
+    float m_resetAt = -100.0f;    ///< the race time it was last put back
     // Guns and gear.
     float m_ammo = 0.0f, m_maxAmmo = 0.0f, m_heat = 0.0f;
     float m_fireTimer = 0.0f;
@@ -137,6 +140,7 @@ struct Car
     // How it feels (sound and pictures).
     float    m_rpm = 0.0f, m_load = 0.0f, m_skid = 0.0f, m_scrape = 0.0f, m_steerVis = 0.0f, m_wheelTurn = 0.0f;
     float    m_lean = 0.0f, m_pitch = 0.0f, m_hitFlash = 0.0f;
+    float    m_lock = 0.0f;     ///< the steering held, smoothed over a quarter of a second (0..1): what scrubs
     float    m_throttle = 0.0f, m_brakeLight = 0.0f, m_reverseLight = 0.0f;
     int      m_gear = 1;
     SurfaceE m_surface = SurfaceE::ASPHALT;
@@ -309,6 +313,18 @@ public:
      */
     void drive( int i, const CarInput &in );
 
+    static constexpr float ResetWait = 5.0f;    ///< seconds between two resets of a car
+    static constexpr float ResetGhost = 2.5f;   ///< seconds a reset car passes through the others
+
+    /**
+     * @brief Puts a car back on the track (the player's key when stuck or lost): on the racing line a few metres
+     *        behind where it is along the lap, facing the way of travel, standing; in an arena on the freest spot.
+     *        For ResetGhost seconds it passes through the other cars; the next reset waits ResetWait seconds.
+     * @param[in] i  the car
+     * @return false when not now (the countdown, wrecked, finished, too soon after the last one)
+     */
+    bool resetCar( int i );
+
     const Track          *m_track = nullptr;
     ModeE                 m_mode = ModeE::RACE;
     int                   m_difficulty = 2;
@@ -363,6 +379,24 @@ private:
                 const std::string &text = "" );
     CarInput ai( int i );
     CarInput hands( int i, const CarInput &want );
+    /**
+     * @brief The speed the bends ahead allow a car: the racing line's curvature against its tyres' side grip on the
+     *        ground there, with room to brake (the computer drivers' plan, and the brake help's).
+     * @param[in]  i       the car
+     * @param[in]  tp      where it is on the track
+     * @param[in]  corner  the share of the side grip it dares to use
+     * @param[out] decel   the braking it can count on where it is (m/s²)
+     * @return the speed (m/s)
+     */
+    float cornerSpeed( int i, const TrackPos &tp, float corner, float &decel ) const;
+    /**
+     * @brief The brake help (assist level 2): lifts the throttle and brakes when the car is faster than the bends
+     *        ahead allow. It only ever takes away; the driver's own brake works as before.
+     * @param[in] i    the car
+     * @param[in] own  what the driver does
+     * @return what the car does
+     */
+    CarInput brakeHelp( int i, const CarInput &own );
 };
 
 /** @brief The race's derived numbers for a car (its class, upgrades and gear): what the garage shows too. */
@@ -375,5 +409,11 @@ struct CarStats
 
 /** @return a setup's numbers */
 CarStats carStats( const CarSetup &s );
+
+/** @return the most a car's tyres hold sideways on ground of grip 1 (m/s², its assist level's tyres) */
+float sideGrip( const Car &c );
+
+/** @return the turn (radians a second) a car's full lock asks of the nose at a speed */
+float fullLock( const Car &c, float speed );
 
 }   // namespace grave

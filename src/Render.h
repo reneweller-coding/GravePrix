@@ -107,7 +107,7 @@ public:
     /** @brief A sound the pictures ask for (a flock taking off, a dog barking): the race plays them and clears the list. */
     struct Cue
     {
-        int     m_kind = 0;   ///< 0 birds, 1 a bark
+        int     m_kind = 0;   ///< 0 birds, 1 a bark, 2 thunder close by, 3 thunder far away
         Vector2 m_pos = { 0, 0 };
     };
     std::vector<Cue> m_cues;
@@ -130,11 +130,43 @@ public:
     /** @brief The sponsor's sticker on a car's roof (text "" none). */
     void setSticker( const std::string &text, Color back, Color ink, int car );
 
+    /** @brief Graves & Sons' slogan for the banners on the stands (the sponsor's name comes with the sticker). */
+    void setSlogan( const std::string &text );
+
+    /** @brief A car on the podium. */
+    struct PodiumCar
+    {
+        std::string m_model;
+        Paint       m_paint;
+        bool        m_wreck = false;   ///< drawn as a smoking wreck (a derby's runners-up)
+    };
+
+    /**
+     * @brief The podium after a race: the first three cars on stacked coffins, the crowd cheering behind, Graves and
+     *        Ricky Rattle beside them, confetti and fireworks (the results screen; this renderer's own picture).
+     * @param[in] cars  first, second, third (fewer: empty steps)
+     * @param[in] dt    seconds since the last picture
+     */
+    void podium( const std::vector<PodiumCar> &cars, float dt );
+
     int   m_w = 0, m_h = 0;
     float m_hurt = 0.0f;    ///< a red edge (the player was hit)
     float m_fade = 0.0f;    ///< 0 .. 1 black
     float m_time = 0.0f;
     Camera3D m_cam = {};
+
+    // The look (RenderLook.cpp, docs/DESIGN.md "The miniature look, the sky and contact shadows").
+    bool m_miniature = true;   ///< the tilt-shift blur at the top and bottom of the picture (the option)
+    /** @brief What flies over the track, for the race's sound: loudness 0..1 of each and the Doppler pitch. */
+    struct Hum
+    {
+        float m_rotor = 0.0f, m_airship = 0.0f, m_pitch = 1.0f;
+    } m_hum;
+    /**
+     * @brief Sends something over the track at once (the pictures' tests).
+     * @param[in] kind  0 the airship, 1 the helicopter, 2 a lightning strike in view
+     */
+    void skyTest( int kind );
 
     /** @return the shared Forge (models built once for every renderer) */
     static Forge &forge();
@@ -144,6 +176,7 @@ private:
     {
         Mesh      m_mesh = {};
         Rectangle m_box = { 0, 0, 0, 0 };
+        bool      m_anim = false;   ///< its vertices carry marks (crowds, trees, flags: they move in the shader)
     };
     struct StaticLight
     {
@@ -243,10 +276,91 @@ private:
         Color   m_tint = WHITE;
     };
     std::vector<Dog> m_dogs;
+    // The stands (docs/DESIGN.md "Life on the stands, wind"): the crowd moves in the shader; here only what the CPU
+    // must do: camera flashes at night, confetti and fireworks at a finish, the banners, the wind.
+    struct Stand
+    {
+        Vector2              m_at = { 0, 0 };
+        float                m_r = 10.0f;
+        std::vector<Vector3> m_heads;   ///< the lively fans' heads
+    };
+    std::vector<Stand>      m_stands;
+    std::vector<BannerSpot> m_banners;            ///< in the world
+    RenderTexture2D         m_bannerTex = {};     ///< two rows: the sponsor (or Graves & Sons), the slogan
+    bool                    m_bannerDirty = true;
+    std::string             m_slogan;
+    struct Shell
+    {
+        Vector3 m_pos = { 0, 0, 0 }, m_vel = { 0, 0, 0 };
+        float   m_wait = 0.0f, m_fuse = 1.2f;   ///< seconds to the launch, then to the burst
+        Color   m_color = WHITE;
+    };
+    std::vector<Shell> m_shells;                  ///< fireworks in the air
+    float              m_joy = 0.0f;              ///< 1 after a finish, fading: every fan cheers
+    float              m_windBase = 0.3f;         ///< the venue's wind (0 calm .. 1 storm)
+    float              m_podiumTime = 0.0f;
+    void setAnimUniforms( const World *w, float joy );
+    void setAnimOn( bool shadow, bool on );
+    void crowdLife( const World &w, float dt );
+    void celebrate();
+    void ageShells( float dt );
+    void buildBanners();
+    void drawBanners();
     float                   m_flash = 0.0f;      ///< lightning
     float                   m_flashTimer = 8.0f;
     View                    m_view;
     Rng                     m_rng;
+
+    // The look (RenderLook.cpp): the venue's grade and the miniature's blur in the post pass, things flying over the
+    // track (their shadows only: they fly above the camera), lightning, baked contact shadows.
+    void lookInit();
+    void lookShutdown();
+    void lookTrack();
+    void lookFrame( const World &w );
+    void miniaturePasses( bool tilt );
+    void setPostUniforms( Shader &f, bool tilt );
+    void sky( const World &w, float dt );
+    void strike( bool inView );
+    void spawnFlyer( const World &w, int kind, float at );
+    void skyLights( const World &w );
+    void drawFlyer( bool shadow );
+    void drawBolt();
+    void bakeContact();
+    void setContactUniforms( Shader &s, float up );
+    struct Grade
+    {
+        Vector3 m_lo = { 0.92f, 0.96f, 1.08f }, m_hi = { 1.06f, 1.0f, 0.92f };   ///< tints of the darks and the lights
+        float   m_amount = 0.6f, m_sat = 1.0f, m_contrast = 1.0f, m_vignette = 0.7f;
+    } m_grade;
+    RenderTexture2D m_blur[2] = {};          ///< the picture at a half and a quarter of its size (tilt-shift)
+    float           m_tiltCentre = 0.45f;    ///< where the sharp band lies (texture v), following the player's car
+    bool            m_tiltNow = false;       ///< this picture gets the blur (not the showroom)
+    struct Flyer
+    {
+        int     m_kind = -1;                 ///< -1 none, 0 the airship, 1 the helicopter
+        float   m_t = 0.0f, m_life = 0.0f;   ///< seconds since it came, how long it stays
+        Vector2 m_ground = { 0, 0 };         ///< where its shadow falls
+        Vector2 m_from = { 0, 0 }, m_to = { 0, 0 };   ///< the airship's straight way (its shadow's)
+        Vector2 m_vel = { 0, 0 };
+        float   m_head = 0.0f, m_rotor = 0.0f;
+        int     m_car = -1;                  ///< the car the helicopter films
+        float   m_side = 1.0f;               ///< which way it crosses
+    } m_flyer;
+    float m_flyerTimer = 18.0f;              ///< seconds until the next one
+    int   m_skyTest = -1;                    ///< skyTest's wish, served by the next picture
+    struct Bolt
+    {
+        float                m_t = -1.0f;    ///< seconds since it struck (< 0 none)
+        Vector2              m_at = { 0, 0 };
+        std::vector<Vector3> m_pts;          ///< the channel and its branches as segments (pairs)
+        std::vector<float>   m_width;        ///< per segment
+    } m_bolt;
+    float m_flashT = -1.0f;                  ///< seconds into the flash sequence (< 0 none)
+    float m_flashPeak = 1.0f;
+    float m_thunderIn = -1.0f;               ///< seconds until the thunder (< 0 none)
+    bool  m_thunderNear = false;
+    RenderTexture2D m_contact = {};          ///< the baked contact shadows (r beside things, g under tall ones)
+    Vector4         m_contactRect = { 0, 0, 0, 0 };   ///< x0, z0, 1 / size, on
 };
 
 }   // namespace grave

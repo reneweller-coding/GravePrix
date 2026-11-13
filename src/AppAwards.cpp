@@ -137,7 +137,7 @@ void App::awardsRace()
     if ( m_mode == ModeE::RACE && m_world.m_finishOrder.size() >= 2 &&
          m_world.m_cars[m_world.m_finishOrder[1]].m_finishTime - me.m_finishTime < 0.3f )
         award( "photo_finish" );
-    if ( m_inCareer && !m_set.m_assist ) award( "old_school" );
+    if ( m_inCareer && m_set.m_assist == 0 ) award( "old_school" );
 }
 
 void App::awardsCareer()

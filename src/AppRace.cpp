@@ -41,6 +41,68 @@ std::string announcerLine( const std::string &event, const std::string &name, ui
     return s;
 }
 
+/** @return a colour with its alpha times a */
+Color faded( Color c, float a ) { return { c.r, c.g, c.b, (unsigned char)( c.a * clampf( a, 0, 1 ) ) }; }
+
+/**
+ * @brief Draws a bend as an arrow seen from above, north up like the picture: a stem the way the road comes in, an arc
+ *        through the bend's turn, a head the way it goes out; fitted into a box.
+ * @param[in] box    where
+ * @param[in] head   the way in (radians, 0 up the screen, clockwise)
+ * @param[in] turn   how far it turns (radians, > 0 clockwise)
+ * @param[in] c      its colour
+ * @param[in] thick  the line's width (pixels)
+ */
+void drawBend( Rectangle box, float head, float turn, Color c, float thick )
+{
+    turn = clampf( turn, -3.5f, 3.5f );
+    std::vector<Vector2> pts = { { 0, 0 } };
+    Vector2              p = headingDir( head );
+    pts.push_back( p );
+    int n = std::max( 3, (int)( std::fabs( turn ) / 0.15f ) );
+    for ( int i = 0; i < n; ++i )
+    {
+        p = add( p, mul( headingDir( head + turn * ( i + 0.5f ) / n ), std::fabs( turn ) * 0.7f / n ) );
+        pts.push_back( p );
+    }
+    float   out = head + turn;
+    Vector2 f = headingDir( out ), r = headingRight( out );
+    p = add( p, mul( f, 0.45f ) );
+    pts.push_back( p );
+    Vector2 tip = add( p, mul( f, 0.55f ) ), wing1 = add( p, mul( r, 0.42f ) ), wing2 = sub( p, mul( r, 0.42f ) );
+    // Fitted into the box, the same scale both ways.
+    Vector2 lo = tip, hi = tip;
+    for ( Vector2 q : pts )
+        for ( Vector2 e : { q, wing1, wing2 } )
+        {
+            lo = { std::min( lo.x, e.x ), std::min( lo.y, e.y ) };
+            hi = { std::max( hi.x, e.x ), std::max( hi.y, e.y ) };
+        }
+    float   sc = std::min( ( box.width - thick * 2 ) / std::max( 0.5f, hi.x - lo.x ),
+                           ( box.height - thick * 2 ) / std::max( 0.5f, hi.y - lo.y ) );
+    Vector2 mid = { box.x + box.width * 0.5f, box.y + box.height * 0.5f }, c0 = mul( add( lo, hi ), 0.5f );
+    auto    P = [&]( Vector2 q ) { return add( mid, mul( sub( q, c0 ), sc ) ); };
+    auto    tri = [&]( Vector2 a, Vector2 b, Vector2 d, Color col ) {
+        // raylib wants the corners counter-clockwise on the screen.
+        if ( cross( sub( b, a ), sub( d, a ) ) > 0 ) std::swap( b, d );
+        DrawTriangle( a, b, d, col );
+    };
+    // A dark edge first, so it reads on any ground; then the colour.
+    for ( int pass = 0; pass < 2; ++pass )
+    {
+        float w = pass == 0 ? thick + 4.0f : thick;
+        Color col = pass == 0 ? Color{ 8, 6, 8, c.a } : c;
+        for ( size_t i = 0; i + 1 < pts.size(); ++i )
+        {
+            DrawLineEx( P( pts[i] ), P( pts[i + 1] ), w, col );
+            DrawCircleV( P( pts[i + 1] ), w * 0.5f, col );
+        }
+        Vector2 grow = pass == 0 ? mul( f, 2.5f / sc ) : Vector2{ 0, 0 };
+        Vector2 side = pass == 0 ? mul( r, 2.5f / sc ) : Vector2{ 0, 0 };
+        tri( P( add( tip, grow ) ), P( add( wing1, side ) ), P( sub( wing2, side ) ), col );
+    }
+}
+
 }   // namespace
 
 // ---------------------------------------------------------------------------------------------------- start
@@ -100,6 +162,7 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
         static const Color inks[] = { { 20, 20, 20, 255 }, { 20, 20, 20, 255 }, { 220, 180, 80, 255 }, { 245, 240, 230, 255 }, { 240, 236, 226, 255 } };
         size_t h = sp ? std::hash<std::string>()( sp->m_key ) % 5 : 0;
         m_view.setSticker( sp ? sp->m_title.get() : "", backs[h], inks[h], player );
+        m_view.setSlogan( T( "Graves & Sons – Ihr letzter Boxenstopp" ) );   // the stands' banners
     }
     // The dead rivals haunt the cemetery's tracks and the final: the last two to die, along the racing line.
     m_spiritList.clear();
@@ -166,8 +229,13 @@ void App::startRace( const std::string &track, bool reverse, const std::vector<C
     m_view.m_ghost.m_on = false;
     if ( mode == ModeE::TRIAL && !m_tutorialOn ) loadGhost();
     const Car &me = m_world.m_cars[player];
-    m_cam.m_focus = me.m_pos;
+    m_cam.m_focus = m_camCar = m_camAnchor = me.m_pos;
+    m_camLead = { 0, 0 };
     m_cam.m_height = 64.0f * m_set.m_zoom;
+    findBends();
+    m_hudLow = false;
+    m_hudFade = 1.0f;
+    m_stuckTime = 0.0f;
     const VenueDef *v = m_track.m_venue;
     m_audio.music( v ? v->m_music : "race" );
     go( ScreenE::RACE );
@@ -273,6 +341,13 @@ void App::race( float dt )
         m_view.update( m_world, dt );
         for ( const Renderer::Cue &c : m_view.m_cues )
         {
+            if ( c.m_kind >= 2 )   // thunder: heard however far away
+            {
+                float pan = clampf( ( c.m_pos.x - m_cam.m_focus.x ) / 60.0f, -0.6f, 0.6f );
+                m_audio.play( c.m_kind == 2 ? SfxE::THUNDER_NEAR : SfxE::THUNDER_FAR, pan, c.m_kind == 2 ? 0.9f : 0.6f,
+                              0.92f + GetRandomValue( 0, 16 ) / 100.0f );
+                continue;
+            }
             float d = len( sub( c.m_pos, m_cam.m_focus ) );
             if ( d > 70.0f ) continue;
             float pan = clampf( ( c.m_pos.x - m_cam.m_focus.x ) / 45.0f, -1, 1 );
@@ -281,11 +356,7 @@ void App::race( float dt )
         }
         m_view.m_cues.clear();
         const Car &me = m_world.m_cars[m_player];
-        float      speed = len( me.m_vel );
-        Vector2    goal = me.m_wrecked ? me.m_pos : add( me.m_pos, mul( me.m_vel, 0.5f ) );
-        m_cam.m_focus = add( m_cam.m_focus, mul( sub( goal, m_cam.m_focus ), std::min( 1.0f, dt * 4.0f ) ) );
-        float h = ( 58.0f + speed * 0.55f ) * m_set.m_zoom;
-        m_cam.m_height += ( h - m_cam.m_height ) * std::min( 1.0f, dt * 1.5f );
+        raceCamera( dt );
         m_shake = std::max( 0.0f, m_shake - dt * 2.5f );
         m_cam.m_shake = std::min( 1.0f, m_shake ) * m_set.m_shake;
         m_view.m_hurt = std::max( m_view.m_hurt - dt * 1.5f, me.m_hitFlash * 0.4f + ( me.m_hp < me.m_maxHp * 0.25f && !me.m_wrecked ? 0.25f + 0.1f * std::sin( m_time * 6 ) : 0.0f ) );
@@ -317,10 +388,52 @@ void App::race( float dt )
     if ( m_paused ) racePause();
 }
 
+void App::raceCamera( float dt )
+{
+    // The camera leads the car the way it goes, so a bend shows in time (docs/DESIGN.md "Seeing the road"). It never
+    // turns (turning makes people sick). The picture is tilted: from the focus it sees 0.65 of its height up the
+    // screen and 0.36 down, so it leads further down the screen than up, and driving down shows as much road ahead
+    // as driving up: 61 m at 108 km/h either way (56 m up and 34 m down before), across the screen 84 m (66 m).
+    // The lead follows the velocity, damped: a spin or a crash glides instead of jerking.
+    constexpr float LeadUp = 0.18f, LeadDown = 0.465f, LeadSide = 0.35f;   // shares of the height
+    const Car &me = m_world.m_cars[m_player];
+    float      speed = len( me.m_vel );
+    float      h = ( 58.0f + speed * 0.55f ) * m_set.m_zoom;
+    m_cam.m_height += ( h - m_cam.m_height ) * std::min( 1.0f, dt * 1.5f );
+    // The anchor goes with the car without trailing it; a jump (back on the track) glides.
+    Vector2 moved = sub( me.m_pos, m_camCar );
+    m_camCar = me.m_pos;
+    if ( len( moved ) < 3.0f + speed * 0.1f ) m_camAnchor = add( m_camAnchor, moved );
+    m_camAnchor = add( m_camAnchor, mul( sub( me.m_pos, m_camAnchor ), std::min( 1.0f, dt * 6.0f ) ) );
+    Vector2 want = { 0, 0 };
+    if ( !me.m_wrecked && speed > 0.5f )
+    {
+        // The whole lead from 54 km/h, less while crawling (the start, a car stuck).
+        Vector2 d = mul( me.m_vel, 1.0f / speed );
+        float   k = clampf( ( speed - 3.0f ) / 12.0f, 0, 1 ) * m_cam.m_height;
+        want = { d.x * LeadSide * k, d.y * ( d.y > 0 ? LeadDown : LeadUp ) * k };
+    }
+    m_camLead = add( m_camLead, mul( sub( want, m_camLead ), std::min( 1.0f, dt * 1.6f ) ) );
+    m_cam.m_focus = add( m_camAnchor, m_camLead );
+}
+
 void App::raceStep()
 {
     std::vector<CarInput> inputs( m_world.m_cars.size() );
-    inputs[m_player] = m_in.car( 0, 1 );
+    inputs[m_player] = m_in.car( 0, 1, m_set.m_stickAims ? &m_world.m_cars[m_player] : nullptr );
+    // Back on the track: the key asks, the race decides (not in the countdown, not wrecked, not too soon again).
+    if ( m_in.latched( ActE::RESET, 0 ) )
+    {
+        const Car &c = m_world.m_cars[m_player];
+        if ( m_world.resetCar( m_player ) )
+        {
+            m_audio.play( SfxE::PICK_MYSTERY, 0, 0.7f, 0.6f );
+            m_camCar = c.m_pos;   // the camera glides after it
+            m_stuckTime = 0.0f;
+        }
+        else if ( m_world.m_phase == World::PhaseE::RACE && c.racing() )
+            m_audio.play( SfxE::UI_DENY, 0, 0.5f );
+    }
     int before = m_world.m_cars[m_player].m_place;
     int leader = m_world.m_leader;
     int lapBefore = m_world.m_cars[m_player].m_lap;
@@ -355,6 +468,18 @@ void App::raceStep()
         }
     }
     m_in.consumed();
+    {
+        // The reset's hint: the player stands still trying to drive (against a wall, in a wreck), or drives the
+        // wrong way.
+        const Car &c = m_world.m_cars[m_player];
+        float      sp = len( c.m_vel );
+        bool       trying = c.m_in.m_throttle > 0.3f || c.m_in.m_brake > 0.3f;
+        bool       race = m_world.m_phase == World::PhaseE::RACE && c.racing();
+        if ( race && ( ( sp < 1.5f && trying ) || c.m_wrongWay > 2.0f ) )
+            m_stuckTime += Dt;
+        else if ( sp > 4.0f || !c.racing() )
+            m_stuckTime = 0.0f;
+    }
     m_view.events( m_world );
     raceEvents();
     awardsEvents();
@@ -841,6 +966,9 @@ void App::raceSound( float dt )
         if ( v->m_weather == "snow" || v->m_weather == "dust" || v->m_weather == "storm" ) m_audio.loop( LoopE::WIND, 0.35f );
         m_audio.loop( Audio::ambienceOf( v->m_name ), 0.45f );
     }
+    // What flies over the track (the renderer moves it): the helicopter's rotor, the airship's engines.
+    m_audio.loop( LoopE::ROTOR, m_view.m_hum.m_rotor * 0.75f, m_view.m_hum.m_pitch );
+    m_audio.loop( LoopE::AIRSHIP, m_view.m_hum.m_airship * 0.6f, m_view.m_hum.m_pitch );
     (void)dt;
 }
 
@@ -986,18 +1114,49 @@ void App::raceHudPanels()
         float a = std::min( 1.0f, m_centerTime * 2.0f );
         ui::text( m_center, W * 0.5f, H * 0.3f, 110, { 240, 60, 40, (unsigned char)( 255 * a ) }, ui::AlignE::CENTER );
     }
+    // The messages in the middle (the pace notes, the shouts) keep out of the car's way: under the panels at the top,
+    // or at the bottom while the car drives high on the screen (heading down the screen, the camera leads it up there).
+    // They fade out and in when they change sides.
+    {
+        Vector2 cp = m_view.project( { me.m_pos.x, 0.0f, me.m_pos.y } );
+        float   cy = cp.y / std::max( 1, m_view.m_h );
+        bool    low = m_hudLow ? cy < 0.5f : cy < 0.36f;
+        if ( low != m_hudLow )
+        {
+            m_hudFade -= GetFrameTime() * 6.0f;
+            if ( m_hudFade <= 0.0f ) m_hudLow = low;
+        }
+        else
+            m_hudFade = std::min( 1.0f, m_hudFade + GetFrameTime() * 6.0f );
+    }
+    float fade = clampf( m_hudFade, 0, 1 );
+    float panels = m_tutorialOn ? 162 * k : m_inCareer && m_offer.m_job != JobE::NONE ? 112 * k : 20 * k;
+    float bottom = H - 212 * k;   // above the panels at the bottom (the armour reaches up to H - 200)
+    float notes = paceNotes( m_hudLow ? bottom : panels, m_hudLow, fade );
     // Shouts.
-    float by = 190 * k;
+    float by = m_hudLow ? bottom - ( notes > 0 ? notes + 12 * k : 0.0f ) - 80 * k
+                        : std::max( 190 * k, panels + notes + 12 * k );
     for ( const Bubble &b : m_bubbles )
     {
-        float     a = std::min( 1.0f, b.m_time * 2.0f );
+        float     a = std::min( 1.0f, b.m_time * 2.0f ) * fade;
         float     w = std::max( ui::width( b.m_text, 28 ), ui::width( b.m_who, 22 ) ) + 40 * k;
         Rectangle r = { W * 0.5f - w * 0.5f, by, w, 80 * k };
         DrawRectangleRec( r, { 10, 6, 8, (unsigned char)( 190 * a ) } );
-        DrawRectangle( (int)r.x, (int)r.y, (int)( 6 * k ), (int)r.height, b.m_color );
+        DrawRectangleRec( { r.x, r.y, 6 * k, r.height }, faded( b.m_color, a ) );
         ui::text( b.m_who, r.x + 20 * k, r.y + 6 * k, 22, { ui::Gold.r, ui::Gold.g, ui::Gold.b, (unsigned char)( 255 * a ) } );
         ui::text( quote( b.m_text ), r.x + 20 * k, r.y + 36 * k, 28, { 240, 236, 226, (unsigned char)( 255 * a ) } );
-        by += 92 * k;
+        by += ( m_hudLow ? -92.0f : 92.0f ) * k;
+    }
+    // Stuck against a wall, or the wrong way round: the key that puts the car back on the track.
+    if ( m_stuckTime > 2.5f && me.racing() && m_world.m_phase == World::PhaseE::RACE )
+    {
+        std::string key = m_in.label( ActE::RESET, m_in.padUsed() );
+        std::string s = tf( "Festgefahren? %s: zurück auf die Strecke", key.c_str() );
+        float       w = ui::width( s, 30 ) + 50 * k, a = clampf( ( m_stuckTime - 2.5f ) * 3.0f, 0, 1 );
+        Rectangle   r = { W * 0.5f - w * 0.5f, H * 0.68f, w, 54 * k };
+        DrawRectangleRec( r, { 10, 6, 8, (unsigned char)( 200 * a ) } );
+        DrawRectangleRec( { r.x, r.y, 6 * k, r.height }, faded( ui::Gold, a ) );
+        ui::text( s, W * 0.5f, r.y + 10 * k, 30, faded( ui::Ink, a ), ui::AlignE::CENTER );
     }
     // The announcer.
     if ( m_announceTime > 0 && !m_announce.empty() )
@@ -1007,6 +1166,120 @@ void App::raceHudPanels()
         DrawRectangle( (int)( W * 0.5f - w * 0.5f ), (int)( H - 90 * k ), (int)w, (int)( 50 * k ), { 0, 0, 0, (unsigned char)( 150 * a ) } );
         ui::text( m_announce, W * 0.5f, H - 82 * k, 28, { ui::Gold.r, ui::Gold.g, ui::Gold.b, (unsigned char)( 255 * a ) }, ui::AlignE::CENTER );
     }
+}
+
+void App::findBends()
+{
+    // The bends for the pace notes (docs/DESIGN.md "Pace notes"): where the centre line bends one way, its turn, and
+    // the racing line's tightest radius in it (the speed it allows). None in an arena.
+    m_bends.clear();
+    const std::vector<TrackSample> &S = m_track.m_s;
+    int                             n = (int)S.size();
+    if ( m_mode == ModeE::DERBY || m_track.m_arena || n < 20 ) return;
+    // Which way it bends where it bends at all (a radius under 250 m), the curvature smoothed over 14 m.
+    std::vector<int> side( (size_t)n, 0 );
+    for ( int i = 0; i < n; ++i )
+    {
+        float k = 0;
+        for ( int j = -3; j <= 3; ++j ) k += S[( i + j + n ) % n].m_curv;
+        k /= 7.0f;
+        side[i] = k > 1.0f / 250.0f ? 1 : k < -1.0f / 250.0f ? -1 : 0;
+    }
+    // A short straight between two arcs the same way (a bend that tightens again) belongs to the bend.
+    for ( int i = 0; i < n; ++i )
+    {
+        if ( side[i] == 0 || side[( i + 1 ) % n] != 0 ) continue;
+        int j = 1;
+        while ( j <= 7 && side[( i + j ) % n] == 0 ) ++j;
+        if ( j <= 7 && side[( i + j ) % n] == side[i] )
+            for ( int g = 1; g < j; ++g ) side[( i + g ) % n] = side[i];
+    }
+    // The bends, read from a straight so that none is cut in two at the start line.
+    int first = 0;
+    while ( first < n && side[first] != 0 ) ++first;
+    if ( first == n ) return;   // one endless bend: nothing to announce
+    for ( int m = 0; m < n; )
+    {
+        int i0 = ( first + m ) % n;
+        if ( side[i0] == 0 )
+        {
+            ++m;
+            continue;
+        }
+        int count = 0;
+        while ( m + count < n && side[( i0 + count ) % n] == side[i0] ) ++count;
+        m += count;
+        float turn = 0, curv = 0;
+        for ( int j = 0; j < count; ++j ) turn += S[( i0 + j ) % n].m_curv * m_track.m_step;
+        for ( int j = -6; j < count + 6; ++j ) curv = std::max( curv, S[( ( i0 + j ) % n + n ) % n].m_lineCurv );
+        if ( std::fabs( turn ) < 15.0f * Deg && curv < 1.0f / 40.0f ) continue;   // a kink
+        Bend b;
+        b.m_s0 = S[i0].m_s;
+        b.m_s1 = S[( i0 + count - 1 ) % n].m_s;
+        b.m_turn = turn;
+        b.m_radius = curv > 1e-4f ? 1.0f / curv : 1e4f;
+        b.m_head = headingOf( S[i0].m_dir );
+        b.m_grade = b.m_radius < 22.0f ? 4 : b.m_radius < 40.0f ? 3 : b.m_radius < 75.0f ? 2 : 1;
+        m_bends.push_back( b );
+    }
+}
+
+float App::paceNotes( float y, bool low, float alpha )
+{
+    // The next bend and the one after it, when it follows close, as arrows: their shape seen from above (north up,
+    // like the picture), how sharp (the colour and one to four marks) and how far.
+    if ( !m_set.m_paceNotes || m_bends.empty() || m_world.m_phase == World::PhaseE::DONE ) return 0.0f;
+    const Car &me = m_world.m_cars[m_player];
+    if ( !me.racing() || me.m_wrongWay > 0.0f ) return 0.0f;
+    float look = std::max( 140.0f, len( me.m_vel ) * 4.5f );
+    const Bend *next[2] = { nullptr, nullptr };
+    float       dist[2] = { 1e9f, 1e9f };
+    for ( const Bend &b : m_bends )
+    {
+        // Bends this car takes flat out are left out (its tyres' side grip on asphalt).
+        if ( std::sqrt( sideGrip( me ) * b.m_radius ) >= me.m_top * 0.97f ) continue;
+        float d = m_track.wrap( b.m_s0 - me.m_s );
+        if ( d < dist[0] )
+        {
+            next[1] = next[0];
+            dist[1] = dist[0];
+            next[0] = &b;
+            dist[0] = d;
+        }
+        else if ( d < dist[1] )
+        {
+            next[1] = &b;
+            dist[1] = d;
+        }
+    }
+    if ( !next[0] || dist[0] > look ) return 0.0f;
+    // The second only when it comes right after the first (rally notes: "into").
+    float into = dist[1] - m_track.wrap( next[0]->m_s1 - me.m_s );
+    int   shown = next[1] && into < 60.0f && dist[1] < look + 60.0f ? 2 : 1;
+    float k = ui::k(), pad = 10 * k, gap = 16 * k;
+    float icon[2] = { 86 * k, 64 * k }, col[2] = { 92 * k, 80 * k };
+    float w = pad * 2 + icon[0] + col[0] + ( shown > 1 ? gap + icon[1] + col[1] : 0.0f ), h = icon[0] + pad * 2;
+    Rectangle r = { GetScreenWidth() * 0.5f - w * 0.5f, low ? y - h : y, w, h };
+    // Fading in as it comes into view.
+    float a = alpha * clampf( ( look - dist[0] ) / 25.0f + 0.35f, 0, 1 );
+    DrawRectangleRec( r, { 10, 6, 8, (unsigned char)( 200 * a ) } );
+    float x = r.x + pad;
+    for ( int i = 0; i < shown; ++i )
+    {
+        const Bend &b = *next[i];
+        Color       c = b.m_grade <= 1 ? ui::Good : b.m_grade == 2 ? ui::Gold
+                      : b.m_grade == 3 ? mixColor( ui::Gold, ui::Warn, 0.55f ) : ui::Warn;
+        float       f = a * ( i == 0 ? 1.0f : 0.8f );
+        Color       off = { 70, 64, 60, (unsigned char)( 200 * f ) };
+        float       s = icon[i], top = r.y + ( h - s ) * 0.5f, mid = top + s * 0.5f;
+        drawBend( { x, top, s, s }, b.m_head, b.m_turn, faded( c, f ), ( i == 0 ? 7.0f : 5.5f ) * k );
+        x += s + 8 * k;
+        int m = std::max( 10, (int)std::lround( dist[i] / 10.0f ) * 10 );
+        ui::text( TextFormat( "%d m", m ), x, mid - ( i == 0 ? 30 : 24 ) * k, i == 0 ? 32 : 26, faded( ui::Ink, f ) );
+        ui::pips( x, mid + 8 * k, b.m_grade, 4, i == 0 ? 10 : 8, faded( c, f ), off );
+        x += col[i] - 8 * k + gap;
+    }
+    return h;
 }
 
 void App::racePause()
@@ -1022,7 +1295,11 @@ void App::racePause()
     int pick = menu( items, m_pauseSel, { r.x + 50 * k, r.y + 120 * k, r.width - 80 * k, 320 * k }, 40 );
     // The key that paused is still down in this frame: it must not unpause at once.
     if ( m_time - m_pausedAt > 0.05f && ( m_in.back() || m_in.pause() ) ) pick = 0;
-    if ( pick == 0 ) m_paused = false;
+    if ( pick == 0 )
+    {
+        m_paused = false;
+        m_in.consumed();   // the presses of the pause (Backspace went back) are not the race's
+    }
     else if ( pick == 1 )
     {
         if ( m_tutorialOn )
@@ -1175,6 +1452,33 @@ void App::results()
         ui::text( l.m_wrecked ? T( "Wrack" ) : clock( l.m_time ), r.x + 760 * k, y, 28, c );
         if ( m_inCareer && !m_tutorialOn ) ui::text( formatMoney( l.m_prize ) + ( l.m_points ? tf( "  ·  %d P", l.m_points ) : "" ), r.x + r.width - 20 * k, y, 28, c, ui::AlignE::RIGHT );
         y += 48 * k;
+    }
+    // The podium in the table's free lower part: the first three on Graves & Sons' coffins, a derby's runners-up as
+    // the wrecks they are. Not after the test drive or a time trial (one car).
+    {
+        Rectangle box = { r.x + 20 * k, y + 8 * k, r.width - 40 * k, r.y + r.height - 16 * k - ( y + 8 * k ) };
+        if ( !m_tutorialOn && m_world.m_cars.size() >= 2 && box.height > 110 * k )
+        {
+            std::vector<Renderer::PodiumCar> top;
+            for ( int i : m_world.order() )
+            {
+                const Car &c = m_world.m_cars[i];
+                if ( !c.m_def || top.size() >= 3 ) continue;
+                top.push_back( { c.m_def->m_model, c.m_setup.m_paint, c.m_wrecked } );
+            }
+            m_podium.podium( top, GetFrameTime() );
+            // The picture cut to the box's shape round its middle.
+            const Texture2D &t = m_podium.texture();
+            float sw = (float)t.width, sh = sw * box.height / box.width;
+            if ( sh > t.height )
+            {
+                sh = (float)t.height;
+                sw = sh * box.width / box.height;
+            }
+            Rectangle src = { ( t.width - sw ) * 0.5f, ( t.height - sh ) * 0.5f, sw, -sh };
+            DrawTexturePro( t, src, box, { 0, 0 }, 0, WHITE );
+            DrawRectangleLinesEx( box, std::max( 1.0f, 2 * k ), { 60, 54, 48, 255 } );
+        }
     }
     // Last words of the departed.
     float lw = r.y + r.height + 16 * k;

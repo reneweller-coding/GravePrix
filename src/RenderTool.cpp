@@ -99,6 +99,7 @@ int toolDeckCheck( const Options &opt )
             Renderer r;
             r.init( (int)( 1280 * scale[q] ), (int)( 800 * scale[q] ), q );
             r.setTrack( t );
+            r.m_miniature = opt.num( "--miniature", 1 ) != 0;
             World                 world;
             std::vector<CarSetup> field = testField( "" );
             world.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, 2, 11 );
@@ -161,6 +162,8 @@ int toolShot( const Options &opt )
     Renderer r;
     r.init( w, h, (int)opt.num( "--quality", 2 ) );
     r.setTrack( t );
+    r.m_miniature = opt.num( "--miniature", 1 ) != 0;
+    if ( opt.has( "--sky" ) ) r.skyTest( (int)opt.num( "--sky", 0 ) );   // 0 the airship, 1 the helicopter, 2 lightning
     World                 world;
     std::vector<CarSetup> field = testField( opt.value( "--car" ) );
     world.init( t, field, t.m_arena ? ModeE::DERBY : ModeE::RACE, 2, 11 );

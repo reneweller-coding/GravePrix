@@ -1,7 +1,7 @@
 # Swamp props (docs/DESIGN.md "Prop catalogue"). Written by work/props/v_ref_swamp.py.
 
 # a 10 m bald cypress with buttresses, knees and hanging moss
-model tree_swamp
+model tree_swamp sway=0.25
   part disc r=1.4 r2=0.45 h=1.6 y=0.8 seg=8 color=#4a3e30
   part cone r=0.2 len=0.709 x=1.127 y=0.35 z=-1.953 pitch=81.07 rot=30 seg=5 color=#4a3e30
   part cone r=0.2 len=0.709 x=1.953 y=0.35 z=1.127 pitch=81.07 rot=120 seg=5 color=#4a3e30
@@ -95,7 +95,7 @@ model boat_wreck
   part gun r=0.07 r2=0.1 len=3.156 x=0.9 y=2 z=-1 pitch=62.53 rot=74.05 seg=5 color=#4a3a28   # the mast stub
 
 # a clump of reeds and cattails in a puddle
-model reeds
+model reeds sway=1
   part plate pts="0,-1.5;1.061,-1.061;1.5,0;1.061,1.061;0,1.5;-1.061,1.061;-1.5,0;-1.061,-1.061" thick=0.02 y=0.012 color=#1e2a20
   part box w=0.06 h=0.03 d=1.655 x=0.044 y=0.818 z=-0.11 pitch=81.18 rot=-38.52 color=#6a7a3a
   part gun r=0.06 len=0.4 x=-0.033 y=1.486 z=-0.209 pitch=89.55 rot=-90 seg=5 color=#5a3a20

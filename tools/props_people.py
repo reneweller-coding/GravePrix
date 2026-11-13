@@ -130,6 +130,31 @@ def main():
     m.figure(-0.7, -0.3, math.radians(70), coat="#3a3a2a", legs="#2a2a22", skin=SKIN[3], hat="cap", extra="#4a2a1a")
     out.append(m.text())
 
+    # The podium after a race (Renderer::podium): Graves and Ricky Rattle beside it, a cheering crowd behind it.
+    m = Model("fig_graves", "Mortimer Graves: tall, pale, black frock coat and top hat, a cane, a red carnation")
+    m.figure(0, 0, 0, coat="#121214", legs="#121214", skin="#e8d8c8", hat="top", h=1.08)
+    m.part("sphere", 0.12, 1.42, -0.15, 0, r="0.045", color="#c01818")
+    m.part("box", 0.36, 0.47, -0.05, 0, w="0.035", h="0.94", d="0.035", color="#1a1a1c")
+    m.part("sphere", 0.36, 0.96, -0.05, 0, r="0.045", color="#d8b040", emit="0.2")
+    out.append(m.text())
+    m = Model("fig_ricky", "Ricky Rattle, the announcer: a loud red jacket, gold lapels, the microphone held up")
+    m.figure(0, 0, 0, coat="#c02a20", legs="#202024", skin=SKIN[0], hat="hair", arms="one", extra="#141210")
+    m.part("box", 0, 1.3, -0.15, 0, w="0.14", h="0.3", d="0.02", color="#d8b040")
+    m.part("sphere", 0.34, 2.03, 0, 0, r="0.055", color="#202020")
+    out.append(m.text())
+    out.append("\n".join([
+        "",
+        "# the crowd behind the podium: four rows on risers, all standing, facing the podium (+z); part crowd",
+        "model podium_crowd",
+        "  part box w=26 h=0.5 d=1.3 y=0.25 z=-6.4 color=#2a2624",
+        "  part box w=26 h=1 d=1.3 y=0.5 z=-7.7 color=#2a2624",
+        "  part box w=26 h=1.5 d=1.3 y=0.75 z=-9 color=#2a2624",
+        "  part crowd n=36 w=24 d=0.3 z=-5.2 rot=180 seated=0 fill=0.9 mourners=0.25 flags=0.2 umbrella=0.05 seed=41",
+        "  part crowd n=36 w=24 d=0.3 y=0.5 z=-6.4 rot=180 seated=0 fill=0.9 mourners=0.25 flags=0.15 seed=42",
+        "  part crowd n=36 w=24 d=0.3 y=1 z=-7.7 rot=180 seated=0 fill=0.9 mourners=0.3 flags=0.15 seed=43",
+        "  part crowd n=36 w=24 d=0.3 y=1.5 z=-9 rot=180 seated=0 fill=0.85 mourners=0.3 seed=44",
+        ""]))
+
     path = os.path.join(ROOT, "data", "models", "props_people.txt")
     open(path, "w", encoding="utf-8", newline="\n").write("\n".join(out))
     print(path)

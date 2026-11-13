@@ -459,6 +459,7 @@ bool Catalog::load( const std::string &dir )
             m.m_name = b.m_name;
             m.m_scale = b.m_head.num( "scale", 1.0f );
             m.m_lamp = b.m_head.integer( "lamp", 0 ) != 0;
+            m.m_sway = clampf( b.m_head.num( "sway", 0.0f ), 0.0f, 1.0f );
             m.m_where = b.m_head.where();
             for ( const Line &l : b.m_lines )
             {

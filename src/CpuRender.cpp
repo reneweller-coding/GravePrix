@@ -58,6 +58,8 @@ void freeCpu( Mesh &m )
     MemFree( m.vertices );
     MemFree( m.normals );
     MemFree( m.colors );
+    MemFree( m.texcoords );   // the marks of crowds and swaying models
+    MemFree( m.texcoords2 );
     m = {};
 }
 
