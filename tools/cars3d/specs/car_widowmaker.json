@@ -60,6 +60,8 @@
       { "kind": "tube", "mat": "chrome", "pts": [[0.96, 0.30, -0.70], [0.97, 0.30, 0.80]], "r": 0.06, "sides": 10, "mirror": true },
       { "kind": "cyl", "mat": "exhaust", "color": "#141414", "at": [0.97, 0.30, 0.801], "r": 0.045, "h": 0.004, "axis": "z", "mirror": true },
       { "kind": "box", "mat": "paint0", "at": [0, 0.905, 2.26], "size": [1.50, 0.03, 0.20], "pitch": -12, "bevel": 0.012 },
+      { "kind": "box", "mat": "gloss", "color": "#0c0c0e", "at": [0.42, 0.78, 2.33], "size": [0.84, 0.11, 0.16], "yaw": -6, "bevel": 0.012, "mirror": true },
+      { "kind": "box", "mat": "light_tail", "color": "#ff2414", "at": [0.42, 0.78, 2.335], "size": [0.80, 0.04, 0.17], "yaw": -6, "bevel": 0.008, "mirror": true },
       { "kind": "box", "mat": "plate", "color": "#d8d4c4", "at": [0, 0.56, 2.42], "size": [0.48, 0.11, 0.015] },
       { "kind": "box", "mat": "plate", "color": "#d8d4c4", "at": [0, 0.34, -2.44], "size": [0.48, 0.11, 0.015] },
       { "kind": "box", "mat": "trim", "color": "#18181c", "at": [-0.24, 0.84, -0.47], "size": [0.44, 0.015, 0.025], "yaw": 5 },
