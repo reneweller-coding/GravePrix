@@ -1,21 +1,17 @@
 # Changelog
 
-## [Unreleased]
+## [1.1.0] – 2026-11-13
+
+New steering, a living crowd, every car modelled anew and people in real clothes.
 
 - **All cars modelled anew in Blender** (tools/cars3d): 16 bodies for the 21 cars in a current design language,
-  smooth surfaces, flush glass with clean edges, LED lamps; each car keeps its role and its oddities.
+  smooth surfaces, flush glass with clean edges, LED lamps, integrated bumpers, flared arches; each car keeps its
+  role and its oddities (the Rustbucket's primer bonnet, rust and roof rack with spare tyre, the Tin Can's rolled
+  canvas roof and wind-up key, Brain Freeze's candy awning and cone).
 - **Animated people in real clothes** at the podium, beside wrecks and by the road: MakeHuman bodies (MPFB, CC0)
   in suits, overalls with reflective tape, jackets over jeans, a blouse and a skirt, T-shirts in the team colours,
   with hair, faces, shoes and gloves; Quaternius' CC0 animations. They stand upright with straight legs, the arms
-  hanging loosely and open hands (the animations' fighter's stance corrected). The stands' spectators are real little
-  bodies seated and standing instead of boxes, and their cheering arms are raised arms, not thorns.
-
-- **Modelled cars:** the Rustbucket, the Tin Can and Brain Freeze are modelled properly now (Blender, by script)
-  in today's design language: one smooth body that flows into the greenhouse, raked flush glass, slim LED lamps,
-  integrated bumpers, flared arches and a little bigger wheels. The Rustbucket is a beaten-up modern compact with
-  its primer bonnet and bumper, rust, rotten sills, odd door, taped tail light, roof rack with spare tyre and rope,
-  one mirror and the coat-hanger aerial; the Tin Can a two-tone city car with its belt line, rolled canvas roof and
-  wind-up key; Brain Freeze an ice-cream van on a current van with its hatch, candy awning, sign, speaker and cone.
+  hanging loosely and open hands (the animations' fighter's stance corrected).
 - **New steering for every car:** the nose turns quickly at any speed and the tyres decide how fast the car follows.
   Turn harder than they grip and the car slides and scrubs speed off in the bend instead of running wide into the
   wall: a U-turn at full throttle from 108 km/h is 22 m wide instead of 39 m, held full lock circles on two car
@@ -48,9 +44,9 @@
   its searchlight is on you. Both can be heard overhead.
 - **Lightning over the estate:** the storm's flashes light the whole scene and throw the shadows for a moment;
   sometimes a bolt strikes beside the road and scorches it, and the thunder comes a moment later.
-- **Real spectators on the stands:** seated and standing fans in team colours, scarves, caps and little flags, next to
-  mourners in black with top hats and umbrellas, instead of coloured blocks. The stand's roof now covers only the back
-  rows.
+- **Real spectators on the stands:** little bodies, seated and standing, fans in team colours, scarves, caps and
+  little flags, next to mourners in black with top hats and umbrellas, instead of coloured blocks. The stand's roof
+  now covers only the back rows.
 - **The crowd comes alive:** fans jump up and raise their arms when cars race past, a wave runs along the stands now
   and then, camera flashes go off at night, flags flutter.
 - **Confetti and fireworks** at the line when the winner and when you finish.
