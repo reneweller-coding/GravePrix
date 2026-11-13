@@ -166,6 +166,10 @@ public:
 
     /** @return a bone's name */
     const std::string &name( int i ) const { return m_names[(size_t)i]; }
+    /** @return a bone's parent (-1 for a root) */
+    int parent( int i ) const { return m_parent[(size_t)i]; }
+    /** @return a bone in the T-pose the clips are measured from (model space) */
+    const Transform &ref( int i ) const { return m_ref[(size_t)i]; }
     /** @return the head bone's index */
     int head() const { return m_head; }
     /** @return how many bones */

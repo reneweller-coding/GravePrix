@@ -4,8 +4,11 @@
 
 - **All cars modelled anew in Blender** (tools/cars3d): 16 bodies for the 21 cars in a current design language,
   smooth surfaces, flush glass with clean edges, LED lamps; each car keeps its role and its oddities.
-- **Animated people** at the podium, beside wrecks and by the road (Quaternius' CC0 bodies and animations, clothed
-  and with faces); the stands' spectators are real little bodies seated and standing instead of boxes.
+- **Animated people in real clothes** at the podium, beside wrecks and by the road: MakeHuman bodies (MPFB, CC0)
+  in suits, overalls with reflective tape, jackets over jeans, a blouse and a skirt, T-shirts in the team colours,
+  with hair, faces, shoes and gloves; Quaternius' CC0 animations. They stand upright with straight legs, the arms
+  hanging loosely and open hands (the animations' fighter's stance corrected). The stands' spectators are real little
+  bodies seated and standing instead of boxes, and their cheering arms are raised arms, not thorns.
 
 - **Modelled cars:** the Rustbucket, the Tin Can and Brain Freeze are modelled properly now (Blender, by script)
   in today's design language: one smooth body that flows into the greenhouse, raked flush glass, slim LED lamps,

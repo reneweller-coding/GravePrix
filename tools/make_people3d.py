@@ -1,17 +1,15 @@
-"""Builds GRAVE PRIX's skinned people from Quaternius' CC0 base characters and animation libraries (the same ones
-DARK CONCORDANCE uses): the bodies decimated in Blender (tools/people3d_decimate.py) to a light and a fuller version,
-the skin weights carried over from the nearest vertex of the full body, written as GLB files with the original rig;
-and the two animation libraries cut down to the clips the game plays.
+"""Cuts Quaternius' CC0 animation libraries (the same ones DARK CONCORDANCE uses) down to the clips GRAVE PRIX plays.
+The bodies they move are MakeHuman people in real clothes (tools/make_people_mpfb.py); the Quaternius base bodies
+this script once decimated for them are gone.
 
-    python tools/make_people3d.py --dc G:/Tools/Games/DarkConcordance --blender "C:/.../blender.exe"
+    python tools/make_people3d.py --dc G:/Tools/Games/DarkConcordance
 
-Writes assets/models/people3d/{male,female}_{lo,hi}.glb and anims1.glb, anims2.glb.
+Writes assets/models/people3d/anims1.glb and anims2.glb.
 """
 import argparse
 import json
 import os
 import struct
-import subprocess
 
 import numpy as np
 
@@ -93,60 +91,6 @@ def save(path, j, blob):
     open(path, "wb").write(out)
 
 
-def body(src, npz, out):
-    j, bins = load(src)
-    # The body: the mesh with the most triangles.
-    best = max(range(len(j["meshes"])),
-               key=lambda m: j["accessors"][j["meshes"][m]["primitives"][0]["indices"]]["count"])
-    prim = j["meshes"][best]["primitives"][0]
-    P = read(j, bins, prim["attributes"]["POSITION"]).astype(np.float32)
-    J = read(j, bins, prim["attributes"]["JOINTS_0"]).astype(np.uint16)
-    W = read(j, bins, prim["attributes"]["WEIGHTS_0"]).astype(np.float32)
-    d = np.load(npz)
-    V, T = d["verts"].astype(np.float32), d["tris"].astype(np.uint16)
-    # Blender's import may move or scale the body: fit the boxes.
-    lo, hi, vlo, vhi = P.min(0), P.max(0), V.min(0), V.max(0)
-    V = ((V - vlo) / np.maximum(vhi - vlo, 1e-6) * (hi - lo) + lo).astype(np.float32)
-    nn = np.empty(len(V), np.int64)
-    for s in range(0, len(V), 256):
-        dd = ((V[s:s + 256, None, :] - P[None, :, :]) ** 2).sum(-1)
-        nn[s:s + 256] = dd.argmin(1)
-    Jn, Wn = J[nn], W[nn]
-    Wn = Wn / np.maximum(Wn.sum(1, keepdims=True), 1e-6)
-    N = np.zeros_like(V)
-    f = np.cross(V[T[:, 1]] - V[T[:, 0]], V[T[:, 2]] - V[T[:, 0]])
-    for k in range(3):
-        np.add.at(N, T[:, k], f)
-    N /= np.maximum(np.linalg.norm(N, axis=1, keepdims=True), 1e-9)
-    w = Writer()
-    attrs = {"POSITION": w.add(V, 5126, "VEC3", 34962, True),
-             "NORMAL": w.add(N.astype(np.float32), 5126, "VEC3", 34962),
-             "JOINTS_0": w.add(Jn, 5123, "VEC4", 34962), "WEIGHTS_0": w.add(Wn.astype(np.float32), 5126, "VEC4", 34962)}
-    idx = w.add(T.reshape(-1, 1), 5123, "SCALAR", 34963)
-    skins = []
-    for sk in j["skins"]:
-        ib = read(j, bins, sk["inverseBindMatrices"]).astype(np.float32)
-        s2 = dict(sk)
-        s2["inverseBindMatrices"] = w.add(ib, 5126, "MAT4")
-        skins.append(s2)
-    nodes = []
-    for n in j["nodes"]:
-        n2 = dict(n)
-        if "mesh" in n2:
-            if n2["mesh"] == best:
-                n2["mesh"] = 0
-            else:
-                del n2["mesh"]
-                n2.pop("skin", None)
-        nodes.append(n2)
-    out_j = {"asset": {"version": "2.0", "generator": "GRAVE PRIX make_people3d.py"}, "scene": 0,
-             "scenes": j["scenes"], "nodes": nodes, "skins": skins,
-             "meshes": [{"name": "Body", "primitives": [{"attributes": attrs, "indices": idx}]}],
-             "accessors": w.accs, "bufferViews": w.views}
-    save(out, out_j, w.blob)
-    print(out, len(V), "verts", len(T), "tris", os.path.getsize(out) // 1024, "KB", "box", lo, hi, vlo, vhi)
-
-
 def anims(src, keep, out):
     j, bins = load(src)
     keep_a = [a for a in j["animations"] if a["name"] in keep]
@@ -200,22 +144,11 @@ def anims(src, keep, out):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dc", default="G:/Tools/Games/DarkConcordance")
-    ap.add_argument("--blender", default="C:/Program Files/Blender Foundation/Blender 5.2/blender.exe")
-    ap.add_argument("--work", default="work/people3d")
     a = ap.parse_args()
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     q = os.path.join(a.dc, "assets/models/quaternius")
     out = os.path.join(here, "assets/models/people3d")
     os.makedirs(out, exist_ok=True)
-    os.makedirs(a.work, exist_ok=True)
-    for sex in ("Male", "Female"):
-        src = os.path.join(q, f"Superhero_{sex}_FullBody.gltf")
-        pre = os.path.join(a.work, sex)
-        if not os.path.exists(pre + "_0.20.npz"):
-            subprocess.run([a.blender, "--background", "--factory-startup", "--python",
-                            os.path.join(here, "tools/people3d_decimate.py"), "--", src, pre, "0.20,0.62"], check=True)
-        body(src, pre + "_0.20.npz", os.path.join(out, f"{sex.lower()}_lo.glb"))
-        body(src, pre + "_0.62.npz", os.path.join(out, f"{sex.lower()}_hi.glb"))
     anims(os.path.join(q, "anim_library.glb"), CLIPS1, os.path.join(out, "anims1.glb"))
     anims(os.path.join(q, "anim_library2.glb"), CLIPS2, os.path.join(out, "anims2.glb"))
 

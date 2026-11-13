@@ -36,8 +36,20 @@ enum MarkE : int
     MARK_CALM = 4,        ///< a mourner (or anyone under an umbrella): only sways; share as MARK_SEATED
     MARK_FLAG = 5,        ///< cloth that flutters: share = how loose, uv.y = its length from the pole
     MARK_STANDING = 6,    ///< a standing fan's body: hops
-    MARK_STANDING_ARM = 7 ///< a standing fan's arm (as MARK_SEATED_ARM)
+    MARK_STANDING_ARM = 7, ///< a standing fan's arm (as MARK_SEATED_ARM)
+    MARK_SEATED_ARM_DOWN = 8,   ///< a seated body's hanging arm: share = metres below the shoulder; drawn into the
+                                ///< chest as its raised copy comes out
+    MARK_STANDING_ARM_DOWN = 9, ///< the same, standing
+    MARK_SEATED_ARM_UP = 10,    ///< the raised copy of a seated body's arm: share = metres above the shoulder; drawn
+                                ///< out of the chest as the fan cheers
+    MARK_STANDING_ARM_UP = 11   ///< the same, standing
 };
+
+/** @return whether a mark's share is a length (scaled with the model) */
+inline bool markIsArm( int kind )
+{
+    return kind == MARK_SEATED_ARM || kind == MARK_STANDING_ARM || ( kind >= MARK_SEATED_ARM_DOWN && kind <= MARK_STANDING_ARM_UP );
+}
 
 /** @brief Gathers flat-shaded triangles into a mesh (the Forge's parts, walls, batched props). */
 struct MeshBuilder

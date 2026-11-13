@@ -1,9 +1,10 @@
 /**
  * @file People.h
- * @brief The skinned people (Quaternius' CC0 base bodies and animations, see tools/make_people3d.py): a light body for
- *        the roadside and the marshals, a fuller one for the podium, dressed by vertex colours bone by bone; what they
- *        do (idle, cheer, clap, wave, a flag, a microphone, a dive aside) comes from the animation library's clips with
- *        the arms set by IK on top. Skinned on the CPU into a mesh per figure, so the lit and the shadow shaders, the
+ * @brief The skinned people: MakeHuman bodies in real clothes (MPFB, CC0; tools/make_people_mpfb.py), a few
+ *        looks (a suit, overalls, a jacket over jeans, a blouse and a skirt, T-shirts) whose textures were baked into
+ *        their vertex colours; an outfit tints a look's top, legs, hair and skin. What they do (idle, cheer, clap,
+ *        wave, a flag, a microphone, a dive aside) comes from Quaternius' CC0 animation libraries with the arms set by
+ *        IK on top. Skinned on the CPU into a mesh per figure, so the lit and the shadow shaders, the
  *        contact shadows and the fog treat them like every other model.
  * @author Rene Weller
  */
@@ -32,18 +33,19 @@ enum class PersonAct
     DIVE,    ///< thrown aside and down, then up again (the time from the start)
 };
 
-/** @brief What a figure wears: colours by body part, a hat, something in the right hand. */
+/** @brief What a figure wears: a look (a body in its clothes), the colours it gives the look, a hat, something in the
+ *         right hand. */
 struct Outfit
 {
     std::string m_name;
-    bool        m_female = false, m_hi = false;   ///< the body; the fuller one (podium)
-    Color       m_skin = { 224, 184, 154, 255 }, m_hair = { 40, 30, 24, 255 }, m_top = { 80, 80, 90, 255 },
-          m_legs = { 40, 40, 46, 255 }, m_shoes = { 20, 18, 18, 255 }, m_hands = { 224, 184, 154, 255 },
-          m_trim = { 230, 230, 224, 255 };
-    int         m_trimKind = 0;      ///< 0 none, 1 a shirt collar and a tie in the trim's colour, 2 reflective stripes
-    bool        m_coat = false;      ///< the top reaches the knees
-    bool        m_dress = false;     ///< the top reaches the shins (a skirt)
-    bool        m_longHair = false;  ///< the hair down to the neck
+    std::string m_body;              ///< the look (assets/models/people3d/look_<body>.glb)
+    std::string m_other;             ///< the look's counterpart of the other sex ("" none)
+    bool        m_female = false;
+    Color       m_top = { 80, 80, 90, 255 }, m_legs = { 40, 40, 46, 255 }, m_hair = { 40, 30, 24, 255 },
+          m_skin = { 224, 184, 154, 255 };
+    bool        m_tintTop = false, m_tintLegs = false, m_tintSkin = false;   ///< which colours it gives the look
+    bool        m_tintHair = true;
+    bool        m_stripes = false;   ///< the look's reflective tape lit (else it is cloth like the legs)
     std::string m_hat;               ///< a model on the head ("" none)
     std::string m_hand;              ///< a model in the right hand ("" none)
     PersonAct   m_excited = PersonAct::CHEER;   ///< what it does when a car passes
@@ -66,11 +68,12 @@ public:
     /** @return an outfit's index by its name, or -1 */
     int outfit( const std::string &name ) const;
     /**
-     * @brief An outfit like another in other colours (made on the first call, kept).
+     * @brief An outfit like another in other colours (made on the first call, kept); its skin one of four tones,
+     *        picked by the colours.
      * @param[in] base    the outfit it is made from
      * @param[in] top     the coat's or the shirt's colour
      * @param[in] legs    the trousers' colour
-     * @param[in] female    the female body
+     * @param[in] female    the female look (the base's counterpart)
      * @param[in] umbrella  an umbrella in the hand (else nothing)
      * @return its index, or -1
      */
@@ -105,11 +108,16 @@ private:
         std::vector<unsigned char> m_ids;                 ///< 4 per vertex
         std::vector<unsigned short> m_idx;
         std::vector<int>           m_dominant;            ///< the bone each vertex follows most
+        std::vector<unsigned char> m_col;                 ///< the texture's colour, 4 per vertex
+        std::vector<unsigned char> m_role;                ///< 0 kept, 1 top, 2 legs, 3 hair, 4 skin, 5 tape
+        float                      m_lum[6] = {};         ///< each role's mean brightness (the tints keep the folds)
         float                      m_headTop = 1.8f;
         Vector3                    m_headAt = { 0, 1.65f, 0 };
         int m_idle = -1, m_idle2 = -1, m_talk = -1, m_fall = -1, m_rise = -1;
         int m_head = -1, m_chest = -1, m_upperL = -1, m_upperR = -1, m_lowerL = -1, m_lowerR = -1, m_handL = -1,
             m_handR = -1;
+        int m_thigh[2] = { -1, -1 }, m_calf[2] = { -1, -1 }, m_foot[2] = { -1, -1 };   ///< left, right
+        std::vector<int> m_fingers;   ///< the finger bones, each after its parent
     };
     struct Slot
     {
@@ -121,12 +129,16 @@ private:
     };
 
     bool loadBody( Body &b, const std::string &file, const std::string &dir );
+    Body &body( const Outfit &o ) { return m_body[o.m_body]; }
     void colour( const Body &b, const Outfit &o, unsigned char *out ) const;
     void posed( Body &b, PersonAct act, float t, float seed, std::vector<Transform> &pose, PersonPose &out,
                 const Outfit &of ) const;
+    void stand( const Body &b, std::vector<Transform> &pose ) const;
+    void relaxArm( const Body &b, std::vector<Transform> &pose, bool right ) const;
+    void relaxHands( const Body &b, std::vector<Transform> &pose ) const;
 
     int                  m_state = 0;   ///< 0 not tried, 1 loaded, -1 missing
-    Body                 m_body[4];     ///< male lo, male hi, female lo, female hi
+    std::map<std::string, Body> m_body;   ///< the looks by name
     std::vector<Outfit>  m_outfits;
     std::map<int, Slot>  m_slots;
 };

@@ -102,7 +102,7 @@ void MeshBuilder::append( const Mesh &m, Matrix xf, Color tint )
         {
             float   share = m.texcoords[i * 2] - kind, len = m.texcoords[i * 2 + 1] * scale;
             Vector3 at = Vector3Transform( { m.texcoords2[i * 2], 0, m.texcoords2[i * 2 + 1] }, xf );
-            if ( kind == MARK_SEATED_ARM || kind == MARK_STANDING_ARM ) share = std::min( 0.99f, share * scale );
+            if ( markIsArm( kind ) ) share = std::min( 0.99f, share * scale );
             if ( kind != MARK_WIND && kind != MARK_FLAG ) len += m_markShift;
             uv = { kind + share, len };
             uv2 = { at.x, at.z };
@@ -212,6 +212,7 @@ struct CrowdBody
     std::vector<int>     m_tris;
     float m_shoulder = 1.41f;      ///< the top of the upper arms
     float m_headY = 1.56f, m_headZ = 0.0f, m_headTop = 1.75f, m_headR = 0.12f;
+    Vector3 m_joint[2] = { { 0.2f, 1.35f, 0 }, { -0.2f, 1.35f, 0 } };   ///< the shoulder joints (x > 0, x < 0)
 };
 
 /** @return the bodies: male and female, standing and seated (male stand, male sit, female stand, female sit); empty
@@ -279,6 +280,20 @@ const std::vector<CrowdBody> &crowdBodies()
         }
         if ( nh ) head = Vector3Scale( head, 1.0f / nh );
         b.m_shoulder = shoulder;
+        // The shoulder joints: the middle of each upper arm's top, a little below it (the raised arms turn there).
+        for ( int k = 0; k < 2; ++k )
+        {
+            Vector3 sum = { 0, 0, 0 };
+            int     cnt = 0;
+            for ( size_t i = 0; i < b.m_pos.size(); ++i )
+                if ( b.m_part[i] == 2 && b.m_pos[i].y > shoulder - 0.1f && ( k == 0 ) == ( b.m_pos[i].x > 0 ) )
+                {
+                    sum = Vector3Add( sum, b.m_pos[i] );
+                    ++cnt;
+                }
+            if ( cnt ) b.m_joint[k] = Vector3Scale( sum, 1.0f / cnt );
+            b.m_joint[k].y = shoulder - 0.06f;
+        }
         b.m_headTop = top;
         b.m_headY = top - 0.12f;
         b.m_headZ = head.z;
@@ -483,11 +498,58 @@ void buildCrowd( MeshB &mb, const Line &p, const Xf &xf, ModelMesh &out )
             for ( int i = v0; i < armsStart; ++i )
                 if ( seated && mb.m_pos[i * 3 + 1] - floorY < 0.56f * s )
                     mb.m_uv[i * 2] = kind + clampf( ( mb.m_pos[i * 3 + 1] - floorY ) / ( 0.56f * s ), 0.0f, 0.99f );
-            int armKind = calm ? MARK_CALM : seated ? MARK_SEATED_ARM : MARK_STANDING_ARM;
+            int armKind = calm ? MARK_CALM : seated ? MARK_SEATED_ARM_DOWN : MARK_STANDING_ARM_DOWN;
             for ( int i = armsStart; i < mb.count(); ++i )
             {
                 float d = calm ? 0.99f : clampf( shoulder + floorY - mb.m_pos[i * 3 + 1], 0.0f, 0.99f );
                 mb.m_uv[i * 2] = armKind + d;
+            }
+            // The raised arms, built: the standing body's straight arms turned up and a little out about the shoulder
+            // joints (a V). The shader draws the hanging arm into the chest and this one out of it as the fan cheers;
+            // mirroring the hanging arm above the shoulder made thorns of them.
+            if ( !calm )
+            {
+                const CrowdBody &sb = bodies[(size_t)( &b - &bodies[0] ) & ~(size_t)1];   // the same body standing
+                int   upStart = mb.count(), upKind = seated ? MARK_SEATED_ARM_UP : MARK_STANDING_ARM_UP;
+                float th = r.range( 2.35f, 2.75f );
+                // Each arm's axis (shoulder joint to hand): the raised arms a third thicker about it, to read from afar.
+                Vector3 axis[2] = { { 0, -1, 0 }, { 0, -1, 0 } };
+                for ( int k = 0; k < 2; ++k )
+                {
+                    Vector3 hand = { 0, 0, 0 };
+                    int     nh = 0;
+                    for ( size_t i = 0; i < sb.m_pos.size(); ++i )
+                        if ( sb.m_part[i] == 4 && ( k == 0 ) == ( sb.m_pos[i].x > 0 ) )
+                        {
+                            hand = Vector3Add( hand, sb.m_pos[i] );
+                            ++nh;
+                        }
+                    if ( nh ) axis[k] = Vector3Normalize( Vector3Subtract( Vector3Scale( hand, 1.0f / nh ), sb.m_joint[k] ) );
+                }
+                for ( size_t t = 0; t + 2 < sb.m_tris.size(); t += 3 )
+                {
+                    int p0 = sb.m_part[(size_t)sb.m_tris[t]];
+                    if ( p0 < 2 || p0 > 4 ) continue;
+                    int side = sb.m_pos[(size_t)sb.m_tris[t]].x > 0 ? 0 : 1;
+                    if ( flag && side == 0 ) continue;   // the flag arm is up already
+                    float a = side == 0 ? th : -th, ca = std::cos( a ), sa = std::sin( a );
+                    for ( int c = 0; c < 3; ++c )
+                    {
+                        int     i = sb.m_tris[t + c];
+                        Vector3 rel = Vector3Subtract( sb.m_pos[(size_t)i], sb.m_joint[side] ), nq = sb.m_nrm[(size_t)i];
+                        float   ax = Vector3DotProduct( rel, axis[side] );
+                        rel = Vector3Add( Vector3Scale( axis[side], ax ),
+                                          Vector3Scale( Vector3Subtract( rel, Vector3Scale( axis[side], ax ) ), 1.35f ) );
+                        Vector3 q = Vector3Add( b.m_joint[side], { rel.x * ca - rel.y * sa, rel.x * sa + rel.y * ca, rel.z } );
+                        nq = { nq.x * ca - nq.y * sa, nq.x * sa + nq.y * ca, nq.z };
+                        Vector3 l = { q.x * sc * wide, q.y * sc, q.z * sc * ( 1.0f + ( wide - 1.0f ) * 0.6f ) };
+                        Vector3 wp = P( l ), wn = Vector3Normalize( Vector3Subtract( P( Vector3Add( l, nq ) ), wp ) );
+                        mb.vert( wp, wn, sb.m_part[(size_t)i] == 4 ? skinS : coat );
+                    }
+                }
+                markFrom( mb, upStart, upKind, 0.0f, along, at );
+                for ( int i = upStart; i < mb.count(); ++i )
+                    mb.m_uv[i * 2] = upKind + clampf( mb.m_pos[i * 3 + 1] - ( shoulder + floorY ), 0.0f, 0.99f );
             }
             // Hats on the head (a cap's peak, a sun hat, a top hat), the umbrella, the flag: as the boxes' figures.
             Vector3 hc = { 0, headMid, headZ };
@@ -1113,7 +1175,7 @@ ModelMesh Forge::build( const ModelDef &def, bool upload, const Paint &paint )
                 {
                     int kind = (int)std::floor( mb.m_uv[i * 2] + 1e-4f );
                     if ( kind == MARK_NONE ) continue;
-                    if ( kind == MARK_SEATED_ARM || kind == MARK_STANDING_ARM )
+                    if ( markIsArm( kind ) )
                         mb.m_uv[i * 2] = kind + std::min( 0.99f, ( mb.m_uv[i * 2] - kind ) * def.m_scale );
                     mb.m_uv[i * 2 + 1] *= def.m_scale;
                     mb.m_uv2[i * 2] *= def.m_scale;

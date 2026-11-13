@@ -1,6 +1,9 @@
-﻿Characters, hairstyles and animations by Quaternius (quaternius.com), CC0 1.0 Universal (public domain).
-Universal Animation Library (Standard), Universal Animation Library 2 (Standard), Universal Base Characters (Standard).
-anim_library.glb = AnimationLibrary_Godot_Standard.glb, anim_library2.glb = UAL2_Standard.glb.
+look_*.glb: bodies, skins, eyes, eyebrows, hair and clothes from MakeHuman through MPFB (makehumancommunity.org),
+CC0 1.0 Universal (public domain); built by tools/make_people_mpfb.py (joined, decimated, textures baked into the
+vertex colours).
 
-In GRAVE PRIX: male_lo/hi.glb and female_lo/hi.glb are the Superhero base bodies decimated (tools/make_people3d.py);
-anims1.glb and anims2.glb are the two animation libraries cut down to the clips the game plays.
+anims1.glb, anims2.glb and the stands' bodies (crowd_*.txt): Quaternius (quaternius.com), CC0 1.0 Universal (public
+domain). Universal Animation Library (Standard), Universal Animation Library 2 (Standard), Universal Base Characters
+(Standard). anim_library.glb = AnimationLibrary_Godot_Standard.glb, anim_library2.glb = UAL2_Standard.glb; anims1.glb
+and anims2.glb are the two libraries cut down to the clips the game plays (tools/make_people3d.py); crowd_*.txt are the
+Superhero base bodies posed and decimated (tools/crowd_templates.py).

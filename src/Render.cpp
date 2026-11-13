@@ -49,7 +49,7 @@ void animate( inout vec3 p, inout vec3 n )
 {
     if ( anim < 0.5 ) return;
     float kind = floor( vertexTexCoord.x + 0.0001 );
-    if ( kind < 0.5 || kind > 7.5 ) return;
+    if ( kind < 0.5 || kind > 11.5 ) return;
     float share = vertexTexCoord.x - kind;
     vec2  at = vertexTexCoord2;
     float r = animHash( at * 3.7 + 0.31 );
@@ -85,8 +85,9 @@ void animate( inout vec3 p, inout vec3 n )
     float cycle = floor( tw / period ), front = -32.0 + ( tw - cycle * period ) * 11.0;
     float ola = step( 0.45, animHash( vec2( stand, cycle ) ) ) * exp( -( along - front ) * ( along - front ) * 0.12 );
     bool  calm = kind > 3.5 && kind < 4.5;
-    bool  arm = kind > 2.5 && kind < 3.5 || kind > 6.5;
-    bool  seated = kind < 4.5;
+    bool  arm = kind > 2.5 && kind < 3.5 || kind > 6.5 && kind < 7.5;   // the boxes' arms (mirrored)
+    bool  armDown = kind > 7.5 && kind < 9.5, armUp = kind > 9.5;       // the bodies' hanging and raised arms
+    bool  seated = kind < 4.5 || kind > 7.5 && kind < 8.5 || kind > 9.5 && kind < 10.5;
     float cheer = calm ? 0.0 : clamp( ex * ( 1.5 - 0.9 * r ), 0.0, 1.0 );
     if ( calm ) ola = 0.0;
     float hop = abs( sin( animTime * ( 6.0 + 4.0 * r ) + r * 50.0 ) );
@@ -96,10 +97,13 @@ void animate( inout vec3 p, inout vec3 n )
     float idle = sin( animTime * ( 0.8 + 0.6 * r ) + r * 30.0 );
     p.x += idle * ( calm ? 0.05 : 0.03 ) * w;
     p.y += lift + w * 0.012 * sin( animTime * 1.7 + r * 12.0 );
+    // Arms up (some keep them down): a body's hanging arm is drawn into its chest and its raised copy out of it.
+    float up = max( cheer * step( 0.25, r + ex * 0.3 ), ola ) * ( 0.85 + 0.15 * hop );
+    if ( armDown ) p = mix( p, vec3( at.x, p.y + share, at.y ), up );
+    if ( armUp ) p = mix( vec3( at.x, p.y - share, at.y ), p, up );
     if ( arm )
     {
-        // Arms up: the arm mirrors above the shoulder and opens a little (a V); some keep them down.
-        float up = max( cheer * step( 0.25, r + ex * 0.3 ), ola ) * ( 0.85 + 0.15 * hop );
+        // The boxes' arms mirror above the shoulder and open a little (a V).
         float d = share;
         vec2  side = p.xz - at;
         float sl = length( side );

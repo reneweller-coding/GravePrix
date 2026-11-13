@@ -26,97 +26,80 @@ Color rgb( int r, int g, int b ) { return { (unsigned char)r, (unsigned char)g, 
 std::vector<Outfit> outfits()
 {
     std::vector<Outfit> v;
-    auto                add = [&]( const char *name, bool female, bool hi ) -> Outfit & {
+    auto                add = [&]( const char *name, const char *body, bool female ) -> Outfit & {
         Outfit o;
         o.m_name = name;
+        o.m_body = body;
         o.m_female = female;
-        o.m_hi = hi;
         v.push_back( o );
         return v.back();
     };
     {
-        Outfit &o = add( "graves", false, true );
-        o.m_skin = rgb( 226, 206, 192 );
+        // Mortimer Graves: the black suit, white shirt and tie, black gloves of the look; grey hair under the top hat.
+        Outfit &o = add( "graves", "graves", false );
         o.m_hair = rgb( 150, 148, 146 );
-        o.m_top = o.m_legs = rgb( 20, 20, 23 );
-        o.m_shoes = rgb( 10, 10, 10 );
-        o.m_hands = rgb( 34, 32, 34 );   // gloves
-        o.m_trim = rgb( 140, 18, 22 );
-        o.m_trimKind = 1;
-        o.m_coat = true;
         o.m_hat = "_p3_tophat";
         o.m_excited = PersonAct::CLAP;
     }
     {
-        Outfit &o = add( "ricky", false, true );
-        o.m_skin = o.m_hands = rgb( 222, 172, 136 );
-        o.m_hair = rgb( 38, 24, 14 );
+        // Ricky: a loud red jacket over his shirt and jeans, the microphone.
+        Outfit &o = add( "ricky", "ricky", false );
         o.m_top = rgb( 204, 38, 28 );
-        o.m_legs = rgb( 30, 30, 36 );
-        o.m_shoes = rgb( 120, 68, 30 );
-        o.m_trim = rgb( 222, 180, 60 );
-        o.m_trimKind = 1;
+        o.m_tintTop = true;
+        o.m_hair = rgb( 38, 24, 14 );
         o.m_hand = "_p3_mic";
         o.m_excited = PersonAct::WAVE;
     }
     {
-        Outfit &o = add( "marshal", false, false );
-        o.m_top = rgb( 230, 104, 14 );
-        o.m_legs = rgb( 34, 34, 38 );
-        o.m_trim = rgb( 236, 236, 226 );
-        o.m_trimKind = 2;
-        o.m_coat = true;
+        Outfit &o = add( "marshal", "overalls", false );
+        o.m_legs = rgb( 236, 106, 14 );
+        o.m_tintLegs = true;
+        o.m_stripes = true;
         o.m_hat = "_p3_cap";
         o.m_hand = "flag_yellow";
         o.m_excited = PersonAct::FLAG;
     }
     {
-        Outfit &o = add( "mechanic", false, false );
-        o.m_skin = o.m_hands = rgb( 200, 144, 112 );
-        o.m_top = o.m_legs = rgb( 42, 76, 142 );
-        o.m_shoes = rgb( 30, 26, 22 );
+        Outfit &o = add( "mechanic", "overalls", false );
+        o.m_legs = rgb( 42, 76, 142 );
+        o.m_tintLegs = true;
+        o.m_skin = rgb( 200, 144, 112 );
+        o.m_tintSkin = true;
         o.m_hat = "_p3_cap_red";
         o.m_excited = PersonAct::CHEER;
     }
     {
-        Outfit &o = add( "worker", false, false );
-        o.m_skin = o.m_hands = rgb( 154, 106, 74 );
-        o.m_top = rgb( 226, 194, 18 );
-        o.m_legs = rgb( 58, 58, 66 );
-        o.m_trim = rgb( 236, 236, 226 );
-        o.m_trimKind = 2;
+        Outfit &o = add( "worker", "overalls", false );
+        o.m_legs = rgb( 232, 200, 20 );
+        o.m_tintLegs = true;
+        o.m_stripes = true;
+        o.m_skin = rgb( 154, 106, 74 );
+        o.m_tintSkin = true;
         o.m_hat = "_p3_hardhat";
         o.m_excited = PersonAct::CHEER;
     }
     {
-        Outfit &o = add( "undertaker", false, false );
-        o.m_skin = o.m_hands = rgb( 236, 206, 180 );
-        o.m_top = o.m_legs = rgb( 20, 20, 23 );
-        o.m_trim = rgb( 20, 20, 23 );
-        o.m_trimKind = 1;
-        o.m_coat = true;
+        Outfit &o = add( "undertaker", "suit", false );
+        o.m_other = "widow";
+        o.m_hair = rgb( 70, 60, 54 );
         o.m_hat = "_p3_tophat";
         o.m_excited = PersonAct::IDLE;
     }
     {
-        Outfit &o = add( "tramp", false, false );
-        o.m_skin = o.m_hands = rgb( 196, 142, 110 );
-        o.m_hair = rgb( 110, 100, 90 );
+        Outfit &o = add( "tramp", "tramp", false );
         o.m_top = rgb( 92, 74, 50 );
         o.m_legs = rgb( 58, 50, 38 );
-        o.m_shoes = rgb( 50, 40, 30 );
-        o.m_coat = true;
+        o.m_tintTop = o.m_tintLegs = true;
+        o.m_hair = rgb( 110, 100, 90 );
         o.m_hat = "_p3_beanie";
         o.m_excited = PersonAct::WAVE;
     }
     {
-        Outfit &o = add( "widow", true, false );
-        o.m_skin = o.m_hands = rgb( 238, 210, 190 );
-        o.m_hair = rgb( 16, 14, 14 );
+        Outfit &o = add( "widow", "widow", true );
+        o.m_other = "suit";
         o.m_top = o.m_legs = rgb( 24, 22, 27 );
-        o.m_shoes = rgb( 12, 12, 12 );
-        o.m_dress = true;
-        o.m_longHair = true;
+        o.m_tintTop = o.m_tintLegs = true;
+        o.m_hair = rgb( 16, 14, 14 );
         o.m_hat = "_p3_widowhat";
         o.m_hand = "_p3_umbrella";
         o.m_excited = PersonAct::IDLE;
@@ -125,114 +108,24 @@ std::vector<Outfit> outfits()
     const char *names[] = { "fan_red", "fan_blue", "fan_green", "fan_gold" };
     for ( int i = 0; i < 4; ++i )
     {
-        Outfit &o = add( names[i], i % 2 == 1, false );
+        bool    female = i % 2 == 1;
+        Outfit &o = add( names[i], female ? "fan_female" : "fan_male", female );
+        o.m_other = female ? "fan_male" : "fan_female";
         o.m_top = teams[i];
-        o.m_legs = rgb( 48, 58, 92 );
-        o.m_skin = o.m_hands = i == 2 ? rgb( 150, 100, 70 ) : rgb( 226, 186, 156 );
+        o.m_tintTop = true;
+        if ( i == 2 )
+        {
+            o.m_skin = rgb( 150, 100, 70 );
+            o.m_tintSkin = true;
+        }
         o.m_hair = i == 3 ? rgb( 180, 140, 70 ) : rgb( 40, 28, 20 );
-        o.m_longHair = i % 2 == 1;
         o.m_excited = PersonAct::CHEER;
     }
     return v;
 }
 
-/** @brief A body part from a bone's name: 0 head, 1 hands, 2 torso and arms, 3 legs, 4 feet, 5 pelvis, 6 neck. */
-int part( const std::string &n )
-{
-    if ( n == "Head" || n.rfind( "eye", 0 ) == 0 || n.rfind( "jaw", 0 ) == 0 ) return 0;
-    if ( n.rfind( "neck", 0 ) == 0 ) return 6;
-    if ( n.rfind( "hand", 0 ) == 0 || n.rfind( "index", 0 ) == 0 || n.rfind( "middle", 0 ) == 0 || n.rfind( "ring", 0 ) == 0 ||
-         n.rfind( "pinky", 0 ) == 0 || n.rfind( "thumb", 0 ) == 0 )
-        return 1;
-    if ( n.rfind( "thigh", 0 ) == 0 || n.rfind( "calf", 0 ) == 0 ) return 3;
-    if ( n.rfind( "foot", 0 ) == 0 || n.rfind( "ball", 0 ) == 0 ) return 4;
-    if ( n == "pelvis" || n == "root" ) return 5;
-    return 2;
-}
-
-/**
- * @brief Clothes over the body: the base body is a superhero's (bare, every muscle drawn), so the trunk, the arms and
- *        the legs are smoothed (the muscles go) and puffed out along their normals (a jacket 2.2 cm, trousers 1.6 cm,
- *        shoes 1.2 cm); the head and the hands stay. The seams' twin vertices move together; the normals are made
- *        again from the faces.
- */
-void clothe( std::vector<float> &pos, std::vector<float> &nrm, const std::vector<unsigned short> &idx,
-             const std::vector<int> &partOf, float k )
-{
-    int n = (int)pos.size() / 3;
-    // One id per place (the seams' vertices are doubled).
-    std::map<std::tuple<int, int, int>, int> ids;
-    std::vector<int> at( (size_t)n );
-    for ( int i = 0; i < n; ++i )
-    {
-        auto key = std::make_tuple( (int)std::lround( pos[i * 3] * 2000 ), (int)std::lround( pos[i * 3 + 1] * 2000 ),
-                                    (int)std::lround( pos[i * 3 + 2] * 2000 ) );
-        auto it = ids.emplace( key, (int)ids.size() ).first;
-        at[(size_t)i] = it->second;
-    }
-    int                  u = (int)ids.size();
-    std::vector<Vector3> p( (size_t)u ), q( (size_t)u ), nn( (size_t)u );
-    std::vector<int>     pt( (size_t)u, 0 );
-    for ( int i = 0; i < n; ++i )
-    {
-        p[(size_t)at[i]] = { pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2] };
-        pt[(size_t)at[i]] = partOf[(size_t)i];
-    }
-    std::vector<std::vector<int>> nb( (size_t)u );
-    for ( size_t t = 0; t + 2 < idx.size(); t += 3 )
-        for ( int a = 0; a < 3; ++a )
-        {
-            int x = at[idx[t + a]], y = at[idx[t + ( a + 1 ) % 3]];
-            nb[(size_t)x].push_back( y );
-            nb[(size_t)y].push_back( x );
-        }
-    auto clothed = []( int part ) { return part == 2 || part == 3 || part == 4 || part == 5; };
-    for ( int round = 0; round < 3; ++round )
-    {
-        for ( int v = 0; v < u; ++v )
-        {
-            q[(size_t)v] = p[(size_t)v];
-            if ( !clothed( pt[(size_t)v] ) || nb[(size_t)v].empty() ) continue;
-            Vector3 m = { 0, 0, 0 };
-            for ( int w : nb[(size_t)v] ) m = Vector3Add( m, p[(size_t)w] );
-            m = Vector3Scale( m, 1.0f / nb[(size_t)v].size() );
-            q[(size_t)v] = Vector3Lerp( p[(size_t)v], m, 0.45f );
-        }
-        p.swap( q );
-    }
-    auto normals = [&]() {
-        for ( Vector3 &v : nn ) v = { 0, 0, 0 };
-        for ( size_t t = 0; t + 2 < idx.size(); t += 3 )
-        {
-            int     a = at[idx[t]], b = at[idx[t + 1]], c = at[idx[t + 2]];
-            Vector3 f = Vector3CrossProduct( Vector3Subtract( p[(size_t)b], p[(size_t)a] ), Vector3Subtract( p[(size_t)c], p[(size_t)a] ) );
-            for ( int v : { a, b, c } ) nn[(size_t)v] = Vector3Add( nn[(size_t)v], f );
-        }
-        for ( Vector3 &v : nn ) v = Vector3Normalize( v );
-    };
-    normals();
-    // Which way the faces point: outwards on average (the mesh's winding may be either).
-    Vector3 mid = { 0, 0, 0 };
-    for ( const Vector3 &v : p ) mid = Vector3Add( mid, v );
-    mid = Vector3Scale( mid, 1.0f / std::max( 1, u ) );
-    float out = 0;
-    for ( int v = 0; v < u; ++v ) out += Vector3DotProduct( nn[(size_t)v], Vector3Subtract( p[(size_t)v], mid ) );
-    float sgn = out >= 0 ? 1.0f : -1.0f;
-    for ( int v = 0; v < u; ++v )
-    {
-        float puff = pt[(size_t)v] == 2 ? 0.022f : pt[(size_t)v] == 3 || pt[(size_t)v] == 5 ? 0.016f : pt[(size_t)v] == 4 ? 0.012f : 0.0f;
-        p[(size_t)v] = Vector3Add( p[(size_t)v], Vector3Scale( nn[(size_t)v], puff * k * sgn ) );
-    }
-    normals();
-    for ( int i = 0; i < n; ++i )
-    {
-        const Vector3 &v = p[(size_t)at[i]], &w = nn[(size_t)at[i]];
-        pos[i * 3] = v.x, pos[i * 3 + 1] = v.y, pos[i * 3 + 2] = v.z;
-        // The normals as the mesh had them turned (its winding), now smooth over the seams.
-        float s = Vector3DotProduct( { nrm[i * 3], nrm[i * 3 + 1], nrm[i * 3 + 2] }, w ) >= 0 ? 1.0f : -1.0f;
-        nrm[i * 3] = w.x * s, nrm[i * 3 + 1] = w.y * s, nrm[i * 3 + 2] = w.z * s;
-    }
-}
+/** @return a colour's brightness */
+float lum( float r, float g, float b ) { return 0.3f * r + 0.59f * g + 0.11f * b; }
 
 /** @brief A model's place: its +y along a direction, at a point (the Quaternius body's space). */
 Matrix along( Vector3 at, Vector3 dir, Vector3 side )
@@ -261,7 +154,7 @@ People &people()
 bool People::loadBody( Body &b, const std::string &file, const std::string &dir )
 {
     if ( !FileExists( file.c_str() ) ) return false;
-    if ( !b.m_skin.load( file, dir + "/anims1.glb" ) ) return false;
+    if ( !b.m_skin.load( file, file ) ) return false;   // the look carries its own A_TPose
     b.m_skin.addClips( dir + "/anims1.glb", { "Idle_Loop", "Idle_Talking_Loop", "Death01" } );
     b.m_skin.addClips( dir + "/anims2.glb", { "Idle_FoldArms_Loop", "LayToIdle" } );
     b.m_idle = b.m_skin.clip( "Idle_Loop" );
@@ -278,14 +171,49 @@ bool People::loadBody( Body &b, const std::string &file, const std::string &dir 
     b.m_lowerR = b.m_skin.bone( "lowerarm_r" );
     b.m_handL = b.m_skin.bone( "hand_l" );
     b.m_handR = b.m_skin.bone( "hand_r" );
+    const char *legs[3][2] = { { "thigh_l", "thigh_r" }, { "calf_l", "calf_r" }, { "foot_l", "foot_r" } };
+    for ( int k = 0; k < 2; ++k )
+    {
+        b.m_thigh[k] = b.m_skin.bone( legs[0][k] );
+        b.m_calf[k] = b.m_skin.bone( legs[1][k] );
+        b.m_foot[k] = b.m_skin.bone( legs[2][k] );
+    }
+    // The fingers, parents first (by their depth in the rig).
+    std::vector<std::pair<int, int>> fingers;
+    for ( int i = 0; i < b.m_skin.bones(); ++i )
+    {
+        const std::string &nm = b.m_skin.name( i );
+        bool finger = false;
+        for ( const char *f : { "index", "middle", "ring", "pinky", "thumb" } )
+            finger = finger || nm.rfind( f, 0 ) == 0;
+        if ( !finger || nm.find( "leaf" ) != std::string::npos ) continue;
+        int depth = 0;
+        for ( int p = b.m_skin.parent( i ); p >= 0; p = b.m_skin.parent( p ) ) ++depth;
+        fingers.push_back( { depth, i } );
+    }
+    std::sort( fingers.begin(), fingers.end() );
+    for ( const auto &f : fingers ) b.m_fingers.push_back( f.second );
     const Mesh &m = b.m_skin.m_body.meshes[0];
-    if ( !m.boneIds || !m.boneWeights || !m.indices ) return false;
+    if ( !m.boneIds || !m.boneWeights || !m.indices || !m.colors ) return false;
     int n = m.vertexCount;
     b.m_pos.assign( m.vertices, m.vertices + n * 3 );
     b.m_nrm.assign( m.normals, m.normals + n * 3 );
     b.m_ids.assign( m.boneIds, m.boneIds + n * 4 );
     b.m_wts.assign( m.boneWeights, m.boneWeights + n * 4 );
     b.m_idx.assign( m.indices, m.indices + m.triangleCount * 3 );
+    // The colours and, in their alpha, the roles (255 kept, 200 top, 170 tape, 140 legs, 100 hair, 50 skin).
+    b.m_col.assign( m.colors, m.colors + n * 4 );
+    b.m_role.resize( (size_t)n );
+    float rsum[6] = {}, rcnt[6] = {};
+    for ( int i = 0; i < n; ++i )
+    {
+        int a = m.colors[i * 4 + 3];
+        int r = a >= 228 ? 0 : a >= 185 ? 1 : a >= 155 ? 5 : a >= 120 ? 2 : a >= 75 ? 3 : 4;
+        b.m_role[(size_t)i] = (unsigned char)r;
+        rsum[r] += lum( m.colors[i * 4], m.colors[i * 4 + 1], m.colors[i * 4 + 2] );
+        rcnt[r] += 1;
+    }
+    for ( int r = 0; r < 6; ++r ) b.m_lum[r] = rcnt[r] > 0 ? std::max( 8.0f, rsum[r] / rcnt[r] ) : 128.0f;
     b.m_dominant.resize( n );
     b.m_headTop = 0.0f;
     for ( int i = 0; i < n; ++i )
@@ -295,11 +223,6 @@ bool People::loadBody( Body &b, const std::string &file, const std::string &dir 
             if ( b.m_wts[i * 4 + k] > b.m_wts[i * 4 + best] ) best = k;
         b.m_dominant[i] = b.m_ids[i * 4 + best];
         b.m_headTop = std::max( b.m_headTop, b.m_pos[i * 3 + 1] );
-    }
-    {
-        std::vector<int> partOf( (size_t)n );
-        for ( int i = 0; i < n; ++i ) partOf[(size_t)i] = part( b.m_skin.name( b.m_dominant[i] ) );
-        clothe( b.m_pos, b.m_nrm, b.m_idx, partOf, b.m_headTop / 1.81f );
     }
     // The head's middle in the rest pose (the mesh's vertices are in that pose): where hats sit and the hair starts.
     b.m_headAt = { 0, b.m_headTop - 0.12f, 0 };
@@ -319,12 +242,16 @@ bool People::ready()
     m_state = -1;
     std::string dir = std::string( GetApplicationDirectory() ) + "assets/models/people3d";
 #ifdef GRAVE_ROOT
-    if ( !FileExists( ( dir + "/male_lo.glb" ).c_str() ) ) dir = std::string( GRAVE_ROOT ) + "/assets/models/people3d";
+    if ( !FileExists( ( dir + "/look_graves.glb" ).c_str() ) ) dir = std::string( GRAVE_ROOT ) + "/assets/models/people3d";
 #endif
-    const char *files[4] = { "male_lo", "male_hi", "female_lo", "female_hi" };
-    for ( int i = 0; i < 4; ++i )
-        if ( !loadBody( m_body[i], dir + "/" + files[i] + ".glb", dir ) ) return false;
     m_outfits = outfits();
+    for ( const Outfit &o : m_outfits )
+        for ( const std::string &name : { o.m_body, o.m_other } )
+            if ( !name.empty() && !m_body.count( name ) && !loadBody( m_body[name], dir + "/look_" + name + ".glb", dir ) )
+            {
+                m_body.clear();
+                return false;
+            }
     m_state = 1;
     return true;
 }
@@ -348,12 +275,21 @@ int People::outfitLike( int base, Color top, Color legs, bool female, bool umbre
     n.m_name = key;
     n.m_top = top;
     n.m_legs = legs;
-    if ( n.m_female != female )
+    n.m_tintTop = n.m_tintLegs = true;
+    if ( n.m_female != female && !n.m_other.empty() )
     {
         n.m_female = female;
-        n.m_longHair = female;
+        std::swap( n.m_body, n.m_other );
         if ( !female && n.m_hat == "_p3_widowhat" ) n.m_hat = "_p3_tophat";
+        if ( female && n.m_hat == "_p3_tophat" ) n.m_hat = "_p3_widowhat";
     }
+    // A crowd of one face otherwise: the skin and the hair by the colours.
+    const Color skins[4] = { rgb( 232, 196, 170 ), rgb( 214, 168, 130 ), rgb( 160, 110, 78 ), rgb( 104, 70, 50 ) };
+    const Color hairs[4] = { rgb( 40, 28, 20 ), rgb( 96, 64, 36 ), rgb( 20, 18, 18 ), rgb( 170, 132, 72 ) };
+    unsigned h = top.r * 7u + top.g * 3u + legs.b * 13u + legs.r * 5u;
+    n.m_skin = skins[h % 4];
+    n.m_tintSkin = h % 4 != 0;
+    n.m_hair = hairs[( h / 4 ) % 4];
     if ( umbrella ) n.m_hand = "_p3_umbrella";
     else if ( n.m_hand == "_p3_umbrella" ) n.m_hand.clear();
     m_outfits.push_back( n );
@@ -362,66 +298,100 @@ int People::outfitLike( int base, Color top, Color legs, bool female, bool umbre
 
 void People::colour( const Body &b, const Outfit &o, unsigned char *out ) const
 {
-    const float H = b.m_headTop, k = H / 1.81f;
-    const Vector3 hc = b.m_headAt;
-    int n = (int)b.m_dominant.size();
+    int n = (int)b.m_role.size();
+    // A tint keeps the texture's folds and seams: the colour times the vertex's brightness against its role's mean.
+    auto tint = [&]( int i, Color t, float mean ) {
+        float l = lum( b.m_col[i * 4], b.m_col[i * 4 + 1], b.m_col[i * 4 + 2] ) / mean;
+        l = std::min( 1.45f, std::max( 0.5f, l ) );
+        return Color{ (unsigned char)std::min( 255.0f, t.r * l ), (unsigned char)std::min( 255.0f, t.g * l ),
+                      (unsigned char)std::min( 255.0f, t.b * l ), 255 };
+    };
     for ( int i = 0; i < n; ++i )
     {
-        float x = b.m_pos[i * 3], y = b.m_pos[i * 3 + 1], z = b.m_pos[i * 3 + 2], nz = b.m_nrm[i * 3 + 2];
-        int   pt = part( b.m_skin.name( b.m_dominant[i] ) );
-        Color c = o.m_top;
+        int           r = b.m_role[(size_t)i];
+        Color         c = { b.m_col[i * 4], b.m_col[i * 4 + 1], b.m_col[i * 4 + 2], 255 };
         unsigned char glow = 0;
-        switch ( pt )
+        if ( r == 5 && o.m_stripes )
         {
-        case 0:
-        case 6:
-        {
-            c = o.m_skin;
-            bool top = y > H - 0.075f * k;
-            bool back = z < hc.z - 0.035f * k && y > hc.y - 0.03f * k;
-            bool longBack = o.m_longHair && z < hc.z - 0.01f * k && y > hc.y - 0.16f * k;
-            if ( pt == 0 && ( top || back || longBack ) ) c = o.m_hair;
-            if ( pt == 6 && longBack ) c = o.m_hair;
-            // The face (the front of the head): two dark eyes, the brows in the hair's colour, a mouth.
-            float eyeY = H - 0.118f * k, ax = std::fabs( x );
-            if ( pt == 0 && nz > 0.45f && z > hc.z + 0.03f * k )
-            {
-                if ( std::fabs( y - eyeY ) < 0.011f * k && std::fabs( ax - 0.034f * k ) < 0.013f * k ) c = rgb( 34, 26, 22 );
-                else if ( std::fabs( y - eyeY - 0.024f * k ) < 0.006f * k && std::fabs( ax - 0.036f * k ) < 0.018f * k ) c = o.m_hair;
-                else if ( std::fabs( y - eyeY + 0.062f * k ) < 0.005f * k && ax < 0.022f * k ) c = rgb( 150, 80, 70 );
-            }
-            break;
-        }
-        case 1: c = o.m_hands; break;
-        case 4: c = o.m_shoes; break;
-        default:
-        {
-            // The trunk and the legs: the waist by height (the bones' weights made a ragged edge at the hips).
-            bool arm = std::fabs( x ) > 0.24f * k && y > 1.2f * k;
-            float hem = o.m_dress ? 0.36f * k : o.m_coat ? 0.56f * k : 0.97f * k;
-            c = ( arm || y > hem ) ? o.m_top : o.m_legs;
-            if ( pt == 3 && !o.m_coat && !o.m_dress ) c = o.m_legs;
-            break;
-        }
-        }
-        if ( pt == 2 || pt == 6 )
-        {
-            if ( o.m_trimKind == 1 && nz > 0.35f && y > 1.24f * k && y < 1.52f * k && std::fabs( x ) < ( y - 1.24f * k ) * 0.55f )
-                c = rgb( 236, 234, 228 );   // the shirt in the jacket's V
-            if ( o.m_trimKind == 1 && nz > 0.35f && y > 1.08f * k && y < 1.47f * k && std::fabs( x ) < 0.024f * k ) c = o.m_trim;
-            if ( o.m_trimKind == 2 && pt == 2 &&
-                 ( ( y > 1.22f * k && y < 1.28f * k && std::fabs( x ) < 0.25f * k ) || ( std::fabs( x ) > 0.52f * k && std::fabs( x ) < 0.57f * k ) ) )
-            {
-                c = o.m_trim;
-                glow = 50;
-            }
-        }
-        if ( pt == 3 && o.m_trimKind == 2 && o.m_coat && y > 0.62f * k && y < 0.67f * k )
-        {
-            c = o.m_trim;
+            c = rgb( 236, 236, 226 );   // the reflective tape lights up in the headlights
             glow = 50;
         }
+        else if ( r == 5 ) r = 2;      // else it is the legs' cloth
+        if ( r == 1 && o.m_tintTop ) c = tint( i, o.m_top, b.m_lum[1] );
+        else if ( r == 2 && o.m_tintLegs ) c = tint( i, o.m_legs, b.m_lum[2] );
+        else if ( r == 3 && o.m_tintHair ) c = tint( i, o.m_hair, b.m_lum[3] );
+        else if ( r == 4 && o.m_tintSkin ) c = tint( i, o.m_skin, b.m_lum[4] );
         out[i * 4] = c.r, out[i * 4 + 1] = c.g, out[i * 4 + 2] = c.b, out[i * 4 + 3] = glow;
+    }
+}
+
+void People::stand( const Body &b, std::vector<Transform> &pose ) const
+{
+    for ( int k = 0; k < 2; ++k )
+        if ( b.m_thigh[k] < 0 || b.m_calf[k] < 0 || b.m_foot[k] < 0 ) return;
+    const SkinModel &sk = b.m_skin;
+    Vector3 hipL = pose[b.m_thigh[0]].translation, hipR = pose[b.m_thigh[1]].translation;
+    float   hipW = Vector3Distance( hipL, hipR );
+    Vector3 side = Vector3Normalize( { hipL.x - hipR.x, 0.0f, hipL.z - hipR.z } );   // towards the left leg
+    Vector3 fwd = Vector3CrossProduct( side, { 0, 1, 0 } );
+    Vector3 mid = Vector3Lerp( hipL, hipR, 0.5f );
+    Vector3 target[2];
+    Quaternion flat[2];
+    float   rise = 1e9f;
+    for ( int k = 0; k < 2; ++k )
+    {
+        Vector3 a = pose[b.m_thigh[k]].translation, kn = pose[b.m_calf[k]].translation, an = pose[b.m_foot[k]].translation;
+        float   len = Vector3Distance( a, kn ) + Vector3Distance( kn, an );
+        flat[k] = pose[b.m_foot[k]].rotation;
+        // The ankle drawn in: 0.62 hip-widths out from the middle, most of its step forward or back kept, on the
+        // ground where it was.
+        Vector3 rel = Vector3Subtract( an, mid );
+        float   ahead = Vector3DotProduct( rel, fwd ), out = ( k == 0 ? 1.0f : -1.0f ) * 0.62f * hipW;
+        Vector3 t = Vector3Add( mid, Vector3Add( Vector3Scale( side, out ), Vector3Scale( fwd, ahead * 0.7f ) ) );
+        t.y = an.y;
+        target[k] = t;
+        // How far the hips may rise before this leg is nearly straight (the knee at about 170 degrees).
+        float h = Vector3Length( { a.x - t.x, 0.0f, a.z - t.z } ), l = 0.996f * len;
+        rise = std::min( rise, std::sqrt( std::max( 0.0f, l * l - h * h ) ) - ( a.y - t.y ) );
+    }
+    rise = std::min( 0.12f, std::max( 0.0f, rise ) );
+    for ( Transform &tr : pose ) tr.translation.y += rise;
+    for ( int k = 0; k < 2; ++k )
+    {
+        // The knee forward and a little out; the foot as flat as the clip had it.
+        sk.reach( pose, b.m_thigh[k], b.m_calf[k], b.m_foot[k], target[k],
+                  Vector3Add( fwd, Vector3Scale( side, k == 0 ? 0.15f : -0.15f ) ) );
+        int f = b.m_foot[k];
+        sk.turn( pose, f, QuaternionMultiply( flat[k], QuaternionInvert( pose[f].rotation ) ), pose[f].translation );
+    }
+}
+
+void People::relaxArm( const Body &b, std::vector<Transform> &pose, bool right ) const
+{
+    int up = right ? b.m_upperR : b.m_upperL, lo = right ? b.m_lowerR : b.m_lowerL, hand = right ? b.m_handR : b.m_handL;
+    if ( up < 0 || lo < 0 || hand < 0 || b.m_upperL < 0 || b.m_upperR < 0 ) return;
+    Vector3 l = pose[b.m_upperL].translation, r = pose[b.m_upperR].translation;
+    Vector3 side = Vector3Normalize( { l.x - r.x, 0.0f, l.z - r.z } ), fwd = Vector3CrossProduct( side, { 0, 1, 0 } );
+    Vector3 out = right ? Vector3Negate( side ) : side;
+    Vector3 sh = pose[up].translation, el = pose[lo].translation, ha = pose[hand].translation;
+    float   len = Vector3Distance( sh, el ) + Vector3Distance( el, ha );
+    // Hanging beside the thigh, the elbow a little back; some of the clip's own swing kept.
+    Vector3 rest = Vector3Add( sh, Vector3Add( { 0, -0.95f * len, 0 }, Vector3Add( Vector3Scale( out, 0.08f * len ), Vector3Scale( fwd, 0.05f * len ) ) ) );
+    b.m_skin.reach( pose, up, lo, hand, Vector3Lerp( ha, rest, 0.75f ), Vector3Add( Vector3Negate( fwd ), Vector3Scale( out, 0.4f ) ) );
+}
+
+void People::relaxHands( const Body &b, std::vector<Transform> &pose ) const
+{
+    // The library's hands are fists: each finger joint half way back to the T-pose's straight one.
+    const SkinModel &sk = b.m_skin;
+    for ( int i : b.m_fingers )
+    {
+        int p = sk.parent( i );
+        if ( p < 0 ) continue;
+        Quaternion have = QuaternionMultiply( QuaternionInvert( pose[p].rotation ), pose[i].rotation );
+        Quaternion ref = QuaternionMultiply( QuaternionInvert( sk.ref( p ).rotation ), sk.ref( i ).rotation );
+        Quaternion want = QuaternionMultiply( pose[p].rotation, QuaternionSlerp( have, ref, 0.55f ) );
+        sk.turn( pose, i, QuaternionMultiply( want, QuaternionInvert( pose[i].rotation ) ), pose[i].translation );
     }
 }
 
@@ -454,6 +424,17 @@ void People::posed( Body &b, PersonAct act, float t, float seed, std::vector<Tra
     }
     sk.posed( s, pose );
     if ( b.m_upperR < 0 || b.m_handR < 0 || b.m_chest < 0 || b.m_head < 0 ) return;
+    // The library's idles stand like a fighter (the feet three hip-widths apart, the knees bent, the elbows out,
+    // fists): the feet drawn in under the hips with the body raised until the knees are nearly straight, the free
+    // arms hanging, the fingers half open. Folded arms stay folded.
+    if ( act != PersonAct::DIVE )
+    {
+        stand( b, pose );
+        bool folded = s.m_clip >= 0 && s.m_clip == b.m_idle2;
+        if ( !folded && ( act == PersonAct::IDLE || act == PersonAct::WAVE || act == PersonAct::FLAG ) ) relaxArm( b, pose, false );
+        if ( !folded && act == PersonAct::IDLE ) relaxArm( b, pose, true );
+    }
+    relaxHands( b, pose );
     Vector3 chest = pose[b.m_chest].translation, head = pose[b.m_head].translation;
     Vector3 shR = pose[b.m_upperR].translation, shL = pose[b.m_upperL].translation;
     float   outR = shR.x > shL.x ? 1.0f : -1.0f, outL = -outR;
@@ -512,7 +493,7 @@ const Mesh *People::pose( int slot, int o, PersonAct act, float t, float seed, P
 {
     if ( !ready() || o < 0 || o >= (int)m_outfits.size() ) return nullptr;
     const Outfit &of = m_outfits[(size_t)o];
-    Body         &b = m_body[( of.m_female ? 2 : 0 ) + ( of.m_hi ? 1 : 0 )];
+    Body         &b = body( of );
     Slot         &s = m_slots[slot];
     int           n = (int)b.m_dominant.size();
     if ( s.m_outfit != o )
