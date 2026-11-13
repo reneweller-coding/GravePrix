@@ -376,8 +376,8 @@ model car_sarcophagus
   part box w=2.1 h=0.18 d=0.2 y=0.5 z=2.75 color=#2a2a2a
   part engine r=0.06 len=0.25 x=-0.8 y=0.4 z=2.72 color=#3a3a3a mirror=0
   part box w=0.06 h=0.25 d=0.12 x=1.1 y=1.55 z=-2.0 color=#222222 mirror=1
-  part wheel r=0.42 w=0.32 x=0.92 z=-1.6 front=1 hub=#3a3a3a
-  part wheel r=0.42 w=0.32 x=0.92 z=1.75 hub=#3a3a3a
+  part wheel r=0.44 w=0.32 x=0.92 z=-1.6 front=1 hub=#3a3a3a
+  part wheel r=0.44 w=0.32 x=0.92 z=1.75 hub=#3a3a3a
 
 # Obituary: a low sports coupé – pop-up headlights, an offset stripe, louvres over the rear window, a ducktail.
 model car_obituary
@@ -402,8 +402,8 @@ model car_obituary
   part engine r=0.045 len=0.18 x=0.62 y=0.27 z=2.24 color=#c8ccd4
   part box w=1.2 h=0.08 d=0.12 y=0.25 z=2.2 color=#111111
   part box w=0.12 h=0.06 d=0.1 x=0.86 y=0.82 z=-0.45 color=paint mirror=1
-  part wheel r=0.32 w=0.25 x=0.8 z=-1.42 front=1 hub=#d0d0d0
-  part wheel r=0.32 w=0.25 x=0.8 z=1.4 hub=#d0d0d0
+  part wheel r=0.34 w=0.25 x=0.8 z=-1.42 front=1 hub=#d0d0d0
+  part wheel r=0.34 w=0.25 x=0.8 z=1.4 hub=#d0d0d0
 
 # ---------------------------------------------------------------------------------------------------------------
 # Class 5 – elite
@@ -435,8 +435,8 @@ model car_requiem
   part box w=1.7 h=0.05 d=0.04 y=0.35 z=2.29 color=#ff2414 emit=0.9
   part box w=1.4 h=0.12 d=0.25 y=0.24 z=2.2 color=#111111                                # diffuser
   part box w=0.1 h=0.06 d=0.1 x=0.82 y=0.75 z=-0.75 color=paint mirror=1
-  part wheel r=0.33 w=0.27 x=0.88 z=-1.38 front=1 hub=paint3
-  part wheel r=0.35 w=0.33 x=0.88 z=1.42 hub=paint3
+  part wheel r=0.34 w=0.27 x=0.88 z=-1.38 front=1 hub=paint3
+  part wheel r=0.36 w=0.33 x=0.88 z=1.42 hub=paint3
 
 # Reaper: an electric endurance prototype – wheel pods, a bubble canopy, a scythe-blade fin and a swept silver wing.
 model car_reaper
@@ -455,8 +455,8 @@ model car_reaper
   part box w=1.2 h=0.12 d=0.3 y=0.24 z=2.42 color=#111111
   part engine r=0.05 len=0.15 x=0.14 y=0.6 z=1.92 color=#222222 glow=#a080ff             # soul vents
   part box w=0.12 h=0.05 d=0.08 x=0.55 y=0.8 z=-0.6 color=paint mirror=1
-  part wheel r=0.34 w=0.3 x=0.8 z=-1.6 front=1 hub=#1a1a1a
-  part wheel r=0.36 w=0.34 x=0.8 z=1.5 hub=#1a1a1a
+  part wheel r=0.35 w=0.3 x=0.8 z=-1.6 front=1 hub=#1a1a1a
+  part wheel r=0.37 w=0.34 x=0.8 z=1.5 hub=#1a1a1a
 
 # Mausoleum: an armoured six-wheel limousine – the rear is a marble tomb with columns, frieze and a gabled roof;
 # flags on the wings, a towering grille, riveted plates.
@@ -501,9 +501,9 @@ model car_mausoleum
   part box w=0.14 h=0.2 d=0.04 x=0.9 y=0.62 z=2.89 color=#ff2414 emit=0.9 mirror=1
   part engine r=0.06 len=0.22 x=0.6 y=0.32 z=2.92 color=#c8ccd4
   part box w=0.1 h=0.08 d=0.12 x=1.0 y=1.0 z=-1.45 color=paint2 mirror=1
-  part wheel r=0.38 w=0.27 x=0.96 z=-1.85 front=1 hub=#d0b060
-  part wheel r=0.38 w=0.27 x=0.96 z=1.3 hub=#d0b060
-  part wheel r=0.38 w=0.27 x=0.96 z=2.25 hub=#d0b060
+  part wheel r=0.4 w=0.27 x=0.96 z=-1.85 front=1 hub=#d0b060
+  part wheel r=0.4 w=0.27 x=0.96 z=1.3 hub=#d0b060
+  part wheel r=0.4 w=0.27 x=0.96 z=2.25 hub=#d0b060
 
 # ---------------------------------------------------------------------------------------------------------------
 # Class 6 – the boss
@@ -566,8 +566,8 @@ model car_undertaker
   part box w=2.16 h=0.14 d=0.16 y=0.38 z=3.02 color=#d8dce4
   part engine r=0.07 len=0.3 x=0.75 y=0.3 z=3.0 color=#d8dce4 glow=#80ff60
   part box w=0.1 h=0.08 d=0.12 x=1.04 y=1.0 z=-1.45 color=paint mirror=1
-  part wheel r=0.4 w=0.28 x=0.98 z=-2.0 front=1 hub=#b8962e
-  part wheel r=0.4 w=0.28 x=0.98 z=1.95 hub=#b8962e
+  part wheel r=0.42 w=0.28 x=0.98 z=-2.0 front=1 hub=#b8962e
+  part wheel r=0.42 w=0.28 x=0.98 z=1.95 hub=#b8962e
 
 # ---------------------------------------------------------------------------------------------------------------
 # The league bosses' showdown cars
