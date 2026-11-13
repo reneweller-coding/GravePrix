@@ -273,8 +273,8 @@ model car_lastcall
   part box w=2.04 h=0.16 d=0.14 y=0.4 z=-2.72 color=#2a2a2a
   part box w=0.06 h=0.28 d=0.12 x=1.06 y=1.4 z=-1.3 color=#18181c mirror=1
   part engine r=0.05 len=0.22 x=-0.7 y=0.33 z=2.7 color=#3a3a3a mirror=0
-  part wheel r=0.38 w=0.26 x=0.9 z=-1.65 front=1 hub=#d8d8d8
-  part wheel r=0.38 w=0.26 x=0.9 z=1.75 hub=#d8d8d8
+  part wheel r=0.40 w=0.26 x=0.9 z=-1.65 front=1 hub=#d8d8d8
+  part wheel r=0.40 w=0.26 x=0.9 z=1.75 hub=#d8d8d8
 
 # Coroner: a pursuit sedan – two-tone doors and roof, push bar, light bar, spotlight, a shield on the doors.
 model car_coroner
