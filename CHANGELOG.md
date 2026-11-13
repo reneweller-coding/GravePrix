@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- **All cars modelled anew in Blender** (tools/cars3d): 16 bodies for the 21 cars in a current design language,
+  smooth surfaces, flush glass with clean edges, LED lamps; each car keeps its role and its oddities.
+- **Animated people** at the podium, beside wrecks and by the road (Quaternius' CC0 bodies and animations, clothed
+  and with faces); the stands' spectators are real little bodies seated and standing instead of boxes.
+
 - **Modelled cars:** the Rustbucket, the Tin Can and Brain Freeze are modelled properly now (Blender, by script)
   in today's design language: one smooth body that flows into the greenhouse, raked flush glass, slim LED lamps,
   integrated bumpers, flared arches and a little bigger wheels. The Rustbucket is a beaten-up modern compact with

@@ -8,6 +8,8 @@
 #include <raymath.h>
 
 #include <algorithm>
+#include <map>
+#include <tuple>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -148,6 +150,90 @@ int part( const std::string &n )
     return 2;
 }
 
+/**
+ * @brief Clothes over the body: the base body is a superhero's (bare, every muscle drawn), so the trunk, the arms and
+ *        the legs are smoothed (the muscles go) and puffed out along their normals (a jacket 2.2 cm, trousers 1.6 cm,
+ *        shoes 1.2 cm); the head and the hands stay. The seams' twin vertices move together; the normals are made
+ *        again from the faces.
+ */
+void clothe( std::vector<float> &pos, std::vector<float> &nrm, const std::vector<unsigned short> &idx,
+             const std::vector<int> &partOf, float k )
+{
+    int n = (int)pos.size() / 3;
+    // One id per place (the seams' vertices are doubled).
+    std::map<std::tuple<int, int, int>, int> ids;
+    std::vector<int> at( (size_t)n );
+    for ( int i = 0; i < n; ++i )
+    {
+        auto key = std::make_tuple( (int)std::lround( pos[i * 3] * 2000 ), (int)std::lround( pos[i * 3 + 1] * 2000 ),
+                                    (int)std::lround( pos[i * 3 + 2] * 2000 ) );
+        auto it = ids.emplace( key, (int)ids.size() ).first;
+        at[(size_t)i] = it->second;
+    }
+    int                  u = (int)ids.size();
+    std::vector<Vector3> p( (size_t)u ), q( (size_t)u ), nn( (size_t)u );
+    std::vector<int>     pt( (size_t)u, 0 );
+    for ( int i = 0; i < n; ++i )
+    {
+        p[(size_t)at[i]] = { pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2] };
+        pt[(size_t)at[i]] = partOf[(size_t)i];
+    }
+    std::vector<std::vector<int>> nb( (size_t)u );
+    for ( size_t t = 0; t + 2 < idx.size(); t += 3 )
+        for ( int a = 0; a < 3; ++a )
+        {
+            int x = at[idx[t + a]], y = at[idx[t + ( a + 1 ) % 3]];
+            nb[(size_t)x].push_back( y );
+            nb[(size_t)y].push_back( x );
+        }
+    auto clothed = []( int part ) { return part == 2 || part == 3 || part == 4 || part == 5; };
+    for ( int round = 0; round < 3; ++round )
+    {
+        for ( int v = 0; v < u; ++v )
+        {
+            q[(size_t)v] = p[(size_t)v];
+            if ( !clothed( pt[(size_t)v] ) || nb[(size_t)v].empty() ) continue;
+            Vector3 m = { 0, 0, 0 };
+            for ( int w : nb[(size_t)v] ) m = Vector3Add( m, p[(size_t)w] );
+            m = Vector3Scale( m, 1.0f / nb[(size_t)v].size() );
+            q[(size_t)v] = Vector3Lerp( p[(size_t)v], m, 0.45f );
+        }
+        p.swap( q );
+    }
+    auto normals = [&]() {
+        for ( Vector3 &v : nn ) v = { 0, 0, 0 };
+        for ( size_t t = 0; t + 2 < idx.size(); t += 3 )
+        {
+            int     a = at[idx[t]], b = at[idx[t + 1]], c = at[idx[t + 2]];
+            Vector3 f = Vector3CrossProduct( Vector3Subtract( p[(size_t)b], p[(size_t)a] ), Vector3Subtract( p[(size_t)c], p[(size_t)a] ) );
+            for ( int v : { a, b, c } ) nn[(size_t)v] = Vector3Add( nn[(size_t)v], f );
+        }
+        for ( Vector3 &v : nn ) v = Vector3Normalize( v );
+    };
+    normals();
+    // Which way the faces point: outwards on average (the mesh's winding may be either).
+    Vector3 mid = { 0, 0, 0 };
+    for ( const Vector3 &v : p ) mid = Vector3Add( mid, v );
+    mid = Vector3Scale( mid, 1.0f / std::max( 1, u ) );
+    float out = 0;
+    for ( int v = 0; v < u; ++v ) out += Vector3DotProduct( nn[(size_t)v], Vector3Subtract( p[(size_t)v], mid ) );
+    float sgn = out >= 0 ? 1.0f : -1.0f;
+    for ( int v = 0; v < u; ++v )
+    {
+        float puff = pt[(size_t)v] == 2 ? 0.022f : pt[(size_t)v] == 3 || pt[(size_t)v] == 5 ? 0.016f : pt[(size_t)v] == 4 ? 0.012f : 0.0f;
+        p[(size_t)v] = Vector3Add( p[(size_t)v], Vector3Scale( nn[(size_t)v], puff * k * sgn ) );
+    }
+    normals();
+    for ( int i = 0; i < n; ++i )
+    {
+        const Vector3 &v = p[(size_t)at[i]], &w = nn[(size_t)at[i]];
+        pos[i * 3] = v.x, pos[i * 3 + 1] = v.y, pos[i * 3 + 2] = v.z;
+        // The normals as the mesh had them turned (its winding), now smooth over the seams.
+        float s = Vector3DotProduct( { nrm[i * 3], nrm[i * 3 + 1], nrm[i * 3 + 2] }, w ) >= 0 ? 1.0f : -1.0f;
+        nrm[i * 3] = w.x * s, nrm[i * 3 + 1] = w.y * s, nrm[i * 3 + 2] = w.z * s;
+    }
+}
+
 /** @brief A model's place: its +y along a direction, at a point (the Quaternius body's space). */
 Matrix along( Vector3 at, Vector3 dir, Vector3 side )
 {
@@ -209,6 +295,11 @@ bool People::loadBody( Body &b, const std::string &file, const std::string &dir 
             if ( b.m_wts[i * 4 + k] > b.m_wts[i * 4 + best] ) best = k;
         b.m_dominant[i] = b.m_ids[i * 4 + best];
         b.m_headTop = std::max( b.m_headTop, b.m_pos[i * 3 + 1] );
+    }
+    {
+        std::vector<int> partOf( (size_t)n );
+        for ( int i = 0; i < n; ++i ) partOf[(size_t)i] = part( b.m_skin.name( b.m_dominant[i] ) );
+        clothe( b.m_pos, b.m_nrm, b.m_idx, partOf, b.m_headTop / 1.81f );
     }
     // The head's middle in the rest pose (the mesh's vertices are in that pose): where hats sit and the hair starts.
     b.m_headAt = { 0, b.m_headTop - 0.12f, 0 };
@@ -291,6 +382,14 @@ void People::colour( const Body &b, const Outfit &o, unsigned char *out ) const
             bool longBack = o.m_longHair && z < hc.z - 0.01f * k && y > hc.y - 0.16f * k;
             if ( pt == 0 && ( top || back || longBack ) ) c = o.m_hair;
             if ( pt == 6 && longBack ) c = o.m_hair;
+            // The face (the front of the head): two dark eyes, the brows in the hair's colour, a mouth.
+            float eyeY = H - 0.118f * k, ax = std::fabs( x );
+            if ( pt == 0 && nz > 0.45f && z > hc.z + 0.03f * k )
+            {
+                if ( std::fabs( y - eyeY ) < 0.011f * k && std::fabs( ax - 0.034f * k ) < 0.013f * k ) c = rgb( 34, 26, 22 );
+                else if ( std::fabs( y - eyeY - 0.024f * k ) < 0.006f * k && std::fabs( ax - 0.036f * k ) < 0.018f * k ) c = o.m_hair;
+                else if ( std::fabs( y - eyeY + 0.062f * k ) < 0.005f * k && ax < 0.022f * k ) c = rgb( 150, 80, 70 );
+            }
             break;
         }
         case 1: c = o.m_hands; break;

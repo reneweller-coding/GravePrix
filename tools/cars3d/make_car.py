@@ -343,6 +343,29 @@ def paint_glass(spec, body, ob, mats):
                 p.material_index = roof
 
 
+def refine_glass(spec, body, ob, mats, rounds=2):
+    """The glass's edges finer: the faces along a border between the glass (or the B pillar) and the rest are cut into
+    four and painted again by their middles, twice, so the steps of the per-face glazing are a ninth as big."""
+    me = ob.data
+    names = [m.name for m in me.materials]
+    special = {names.index(n) for n in ("glass", "trim") if n in names}
+    if not special:
+        return
+    for _ in range(rounds):
+        bm = bmesh.new()
+        bm.from_mesh(me)
+        border = [e for e in bm.edges if len(e.link_faces) == 2
+                  and e.link_faces[0].material_index != e.link_faces[1].material_index
+                  and {e.link_faces[0].material_index, e.link_faces[1].material_index} & special]
+        faces = {f for e in border for f in e.link_faces}
+        cut = list({e for f in faces for e in f.edges})
+        if cut:
+            bmesh.ops.subdivide_edges(bm, edges=cut, cuts=1, use_grid_fill=True)
+        bm.to_mesh(me)
+        bm.free()
+        paint_glass(spec, body, ob, mats)
+
+
 def build_strips(spec, target, mats):
     """Lamps and grilles as strips on the body's skin: two edge polylines resampled, shrink-wrapped a few
     millimetres proud (slim LED lamps that follow the surface)."""
@@ -953,6 +976,7 @@ def main():
     apply_boolean(body_ob, cutters(spec, mats))
     if modern:
         paint_glass(spec, body, body_ob, mats)
+        refine_glass(spec, body, body_ob, mats)
     paint_regions(spec, body_ob, mats, rng)
     smooth(body_ob.data, spec["body"].get("smooth", 38))
 

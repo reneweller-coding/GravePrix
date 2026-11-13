@@ -201,6 +201,93 @@ Vector2 superellipse( float a, float round )
     return { ( c < 0 ? -1.0f : 1.0f ) * std::pow( std::fabs( c ), e ), ( s < 0 ? -1.0f : 1.0f ) * std::pow( std::fabs( s ), e ) };
 }
 
+std::string g_peopleDir;   ///< where the stands' bodies are (Forge::setPeopleDir; empty: the old boxes)
+
+/** @brief A spectator's body (tools/crowd_templates.py, Quaternius' CC0 base bodies): positions and smooth normals in
+ *         the figure's frame (metres, y up, facing -z, the feet at y = 0), each vertex's body part, triangles. */
+struct CrowdBody
+{
+    std::vector<Vector3> m_pos, m_nrm;
+    std::vector<int>     m_part;   ///< 0 head, 1 torso, 2 upper arm, 3 forearm, 4 hand, 5 hips, 6 thigh, 7 shin, 8 foot
+    std::vector<int>     m_tris;
+    float m_shoulder = 1.41f;      ///< the top of the upper arms
+    float m_headY = 1.56f, m_headZ = 0.0f, m_headTop = 1.75f, m_headR = 0.12f;
+};
+
+/** @return the bodies: male and female, standing and seated (male stand, male sit, female stand, female sit); empty
+ *          when they are missing */
+const std::vector<CrowdBody> &crowdBodies()
+{
+    static std::vector<CrowdBody> bodies;
+    static bool                   tried = false;
+    if ( tried || g_peopleDir.empty() ) return bodies;
+    tried = true;
+    for ( const char *name : { "crowd_male_stand", "crowd_male_sit", "crowd_female_stand", "crowd_female_sit" } )
+    {
+        FILE *f = fopen( ( g_peopleDir + "/" + name + ".txt" ).c_str(), "r" );
+        if ( !f )
+        {
+            bodies.clear();
+            return bodies;
+        }
+        CrowdBody b;
+        char      line[256];
+        while ( fgets( line, sizeof( line ), f ) )
+        {
+            Vector3 p, n;
+            int     part = 1, a, c, d;
+            if ( sscanf( line, "v %f %f %f %f %f %f %d", &p.x, &p.y, &p.z, &n.x, &n.y, &n.z, &part ) == 7 )
+            {
+                b.m_pos.push_back( p );
+                b.m_nrm.push_back( n );
+                b.m_part.push_back( part );
+            }
+            else if ( sscanf( line, "t %d %d %d", &a, &c, &d ) == 3 )
+                b.m_tris.insert( b.m_tris.end(), { a, c, d } );
+        }
+        fclose( f );
+        // The hands as fists: the decimated fingers were spikes (raised, they read as thorns), so each hand's vertices
+        // are drawn most of the way to its middle.
+        for ( int side = -1; side <= 1; side += 2 )
+        {
+            Vector3 mid = { 0, 0, 0 };
+            int     nm = 0;
+            for ( size_t i = 0; i < b.m_pos.size(); ++i )
+                if ( b.m_part[i] == 4 && b.m_pos[i].x * side > 0 )
+                {
+                    mid = Vector3Add( mid, b.m_pos[i] );
+                    ++nm;
+                }
+            if ( !nm ) continue;
+            mid = Vector3Scale( mid, 1.0f / nm );
+            for ( size_t i = 0; i < b.m_pos.size(); ++i )
+                if ( b.m_part[i] == 4 && b.m_pos[i].x * side > 0 ) b.m_pos[i] = Vector3Lerp( b.m_pos[i], mid, 0.6f );
+        }
+        // Where the shoulders and the head are (the shader raises the arms above the shoulders; hats sit on the head).
+        float   shoulder = 0, top = 0;
+        Vector3 head = { 0, 0, 0 };
+        int     nh = 0;
+        for ( size_t i = 0; i < b.m_pos.size(); ++i )
+        {
+            if ( b.m_part[i] == 2 ) shoulder = std::max( shoulder, b.m_pos[i].y );
+            if ( b.m_part[i] == 0 )
+            {
+                head = Vector3Add( head, b.m_pos[i] );
+                top = std::max( top, b.m_pos[i].y );
+                ++nh;
+            }
+        }
+        if ( nh ) head = Vector3Scale( head, 1.0f / nh );
+        b.m_shoulder = shoulder;
+        b.m_headTop = top;
+        b.m_headY = top - 0.12f;
+        b.m_headZ = head.z;
+        b.m_headR = 0.12f;
+        bodies.push_back( b );
+    }
+    return bodies;
+}
+
 /** @brief Gives the vertices from 'from' on a mark (MarkE): uv.x = kind + share, uv.y, the anchor at. */
 void markFrom( MeshB &mb, int from, int kind, float share, float len, Vector2 at )
 {
@@ -338,6 +425,114 @@ void buildCrowd( MeshB &mb, const Line &p, const Xf &xf, ModelMesh &out )
         int   v0 = mb.count(), legsEnd = v0;
         int   kind = calm ? MARK_CALM : seated ? MARK_SEATED : MARK_STANDING;
         float shoulder, headY, headZ, along = at.x;
+        const std::vector<CrowdBody> &bodies = crowdBodies();
+        if ( !bodies.empty() && mb.m_withUv )
+        {
+            // A real body (two hundred and sixty triangles, smooth): coloured by its parts, its arms marked by how far
+            // below the shoulder they hang (raised, they mirror above it), its legs by their height when seated. A
+            // flag's holder lifts the flag arm built below instead of the body's right arm.
+            const CrowdBody &b = bodies[( r.chance( 0.5f ) ? 0 : 2 ) + ( seated ? 1 : 0 )];
+            float  sc = s * r.range( 0.97f, 1.03f ), wide = r.range( 1.18f, 1.36f );   // a little stouter: from afar the bodies read thin
+            Color  shoes = scaleColor( legs, 0.55f ), skinS = skin;
+            float  topY = b.m_headTop * sc, headMid = b.m_headY * sc;
+            shoulder = b.m_shoulder * sc;
+            headY = headMid;
+            headZ = b.m_headZ * sc;
+            auto paint = [&]( int i ) {
+                Vector3 q = b.m_pos[(size_t)i];
+                switch ( b.m_part[(size_t)i] )
+                {
+                case 0:
+                {
+                    // The face skin, the back and the crown hair (or the hat's colour, a hood, a veil).
+                    bool back = q.z * sc > headZ + 0.02f, crown = q.y * sc > topY - 0.07f;
+                    if ( hat == 8 ) return skinS;
+                    if ( hat == 9 || hat == 11 ) return back || crown ? hatColor : skinS;
+                    return back || crown ? hair : skinS;
+                }
+                case 1: return q.y * sc > shoulder - 0.06f * sc ? scarf : coat;
+                case 2:
+                case 3: return coat;
+                case 4: return skinS;
+                case 8: return shoes;
+                default: return legs;
+                }
+            };
+            int armsStart = -1;
+            for ( int pass = 0; pass < 2; ++pass )   // the body first, then its arms (marked apart)
+            {
+                if ( pass == 1 ) armsStart = mb.count();
+                for ( size_t t = 0; t + 2 < b.m_tris.size(); t += 3 )
+                {
+                    int  p0 = b.m_part[(size_t)b.m_tris[t]];
+                    bool arm = p0 >= 2 && p0 <= 4;
+                    if ( arm != ( pass == 1 ) ) continue;
+                    if ( arm && flag && b.m_pos[(size_t)b.m_tris[t]].x > 0 ) continue;   // the flag arm replaces it
+                    for ( int c = 0; c < 3; ++c )
+                    {
+                        int     i = b.m_tris[t + c];
+                        Vector3 q = b.m_pos[(size_t)i], nq = b.m_nrm[(size_t)i];
+                        Vector3 l = { q.x * sc * wide, q.y * sc, q.z * sc * ( 1.0f + ( wide - 1.0f ) * 0.6f ) };
+                        Vector3 wp = P( l ), wn = Vector3Normalize( Vector3Subtract( P( Vector3Add( l, nq ) ), wp ) );
+                        mb.vert( wp, wn, paint( i ) );
+                    }
+                }
+            }
+            // The marks: the body takes the hop (a seated one's legs their share by height), the arms their own.
+            markFrom( mb, v0, kind, 0.99f, along, at );
+            for ( int i = v0; i < armsStart; ++i )
+                if ( seated && mb.m_pos[i * 3 + 1] - floorY < 0.56f * s )
+                    mb.m_uv[i * 2] = kind + clampf( ( mb.m_pos[i * 3 + 1] - floorY ) / ( 0.56f * s ), 0.0f, 0.99f );
+            int armKind = calm ? MARK_CALM : seated ? MARK_SEATED_ARM : MARK_STANDING_ARM;
+            for ( int i = armsStart; i < mb.count(); ++i )
+            {
+                float d = calm ? 0.99f : clampf( shoulder + floorY - mb.m_pos[i * 3 + 1], 0.0f, 0.99f );
+                mb.m_uv[i * 2] = armKind + d;
+            }
+            // Hats on the head (a cap's peak, a sun hat, a top hat), the umbrella, the flag: as the boxes' figures.
+            Vector3 hc = { 0, headMid, headZ };
+            float   hr = b.m_headR * sc;
+            int     extras = mb.count();
+            if ( hat == 4 || hat == 5 )
+                box( { hc.x, topY - hr * 0.35f, hc.z - hr * 0.9f }, { hr * 0.75f, 0.012f, hr * 0.55f }, hatColor, hatColor, pick, 0 );
+            if ( hat >= 4 && hat <= 7 && hat != 8 )
+                box( { hc.x, topY - hr * 0.35f, hc.z }, { hr * 1.05f, hr * 0.38f, hr * 1.1f }, hatColor, hatColor, pick, 0.25f );
+            if ( hat == 7 ) box( { hc.x, topY - hr * 0.45f, hc.z }, { hr * 1.8f, 0.012f, hr * 1.8f }, hatColor, hatColor, pick, 0 );
+            if ( hat == 10 )
+            {
+                box( { hc.x, topY - hr * 0.2f, hc.z }, { hr * 1.4f, 0.012f, hr * 1.4f }, black, black, pick, 0 );
+                box( { hc.x, topY + hr * 0.75f, hc.z }, { hr * 0.85f, hr * 0.95f, hr * 0.85f }, black, scaleColor( black, 1.3f ), pick, 0.06f );
+            }
+            if ( umbrella )
+            {
+                Vector3 tip = P( { 0.1f, topY + 0.4f * s, headZ - 0.05f } );
+                for ( int j = 0; j < 8; ++j )
+                {
+                    float a0 = j * Pi / 4, a1 = ( j + 1 ) * Pi / 4;
+                    mb.tri( tip, P( { 0.1f + std::cos( a0 ) * 0.56f, topY + 0.15f * s, headZ - 0.05f + std::sin( a0 ) * 0.56f } ),
+                            P( { 0.1f + std::cos( a1 ) * 0.56f, topY + 0.15f * s, headZ - 0.05f + std::sin( a1 ) * 0.56f } ),
+                            j % 2 ? brolly : scaleColor( brolly, 0.85f ), P( { 0.1f, headMid, headZ } ) );
+                }
+            }
+            markFrom( mb, extras, kind, 0.99f, along, at );
+            if ( flag )
+            {
+                float armZ = headZ - 0.02f, side = 1.0f;
+                int   arms = mb.count();
+                box( { side * 0.27f * s, shoulder + 0.27f * s, armZ }, { 0.05f * s, 0.27f * s, 0.055f * s }, coat, skin, pick, 0 );
+                const Color stick = { 60, 50, 40, 255 };
+                box( { side * 0.28f * s, shoulder + 0.75f * s, armZ }, { 0.012f, 0.32f * s, 0.012f }, stick, stick, pick, 0 );
+                Color   fc = team[r.below( (int)team.size() )];
+                float   fx0 = side * 0.28f * s, fy0 = shoulder + 0.8f * s, fy1 = shoulder + 1.05f * s;
+                Vector3 a = P( { fx0, fy1, armZ } ), bb = P( { fx0 + 0.42f, fy1, armZ } );
+                Vector3 c = P( { fx0 + 0.42f, fy0, armZ } ), d = P( { fx0, fy0, armZ } );
+                mb.quad( a, bb, c, d, fc, P( { side * 0.3f * s + 0.2f, shoulder + 0.9f * s, armZ + 0.3f } ) );
+                markFrom( mb, arms, kind, 0.99f, along, at );
+            }
+            if ( !calm ) out.m_crowd.push_back( P( { 0, headMid, headZ } ) );
+            for ( int i = v0; i < mb.count(); ++i ) mb.m_col[i * 4 + 3] = 0;   // nobody glows
+            continue;
+        }
         if ( seated )
         {
             // On a bench behind its feet: shins down to the floor, thighs forward, the body upright.
@@ -988,6 +1183,8 @@ unsigned char linearToSrgb( float c )
 }   // namespace
 
 void Forge::setAssetDir( const std::string &dir ) { g_assetDir = dir; }
+
+void Forge::setPeopleDir( const std::string &dir ) { g_peopleDir = dir; }
 
 bool Forge::readGlb( const std::string &file, Glb &out )
 {

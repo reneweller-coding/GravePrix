@@ -161,6 +161,13 @@ public:
      */
     static void setAssetDir( const std::string &dir );
 
+    /**
+     * @brief Where the stands' spectators' bodies are (assets/models/people3d/crowd_*.txt, tools/crowd_templates.py):
+     *        the part crowd builds real bodies from them; without them (or "") its people are boxes.
+     * @param[in] dir  the folder
+     */
+    static void setPeopleDir( const std::string &dir );
+
     /** @brief A modelled car's triangles as read (smooth normals as exported), coloured per material. */
     struct Glb
     {
