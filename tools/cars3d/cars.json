@@ -97,7 +97,7 @@
       { "kind": "box", "mat": "chrome", "at": [0, 0.47, -1.83], "size": [0.6, 0.06, 0.04] },
       { "kind": "tube", "mat": "chrome", "pts": [[-0.82, 0.36, -1.80], [-0.72, 0.36, -1.92], [0.72, 0.36, -1.92], [0.82, 0.36, -1.80]], "r": 0.04, "sides": 8 },
       { "kind": "tube", "mat": "chrome", "pts": [[-0.82, 0.38, 1.80], [-0.72, 0.38, 1.92], [0.72, 0.38, 1.92], [0.82, 0.38, 1.80]], "r": 0.04, "sides": 8 },
-      { "kind": "lamp", "mat": "light_tail", "color": "#ff2414", "at": [0.55, 0.62, 1.80], "r": 0.075, "depth": 0.05, "mirror": true },
+      { "kind": "lamp", "mat": "light_tail", "color": "#ff2414", "at": [0.55, 0.62, 1.855], "r": 0.075, "depth": 0.05, "mirror": true },
       { "kind": "box", "mat": "plate", "color": "#d8d4c4", "at": [0, 0.52, 1.835], "size": [0.4, 0.1, 0.015] },
       { "kind": "tube", "mat": "canvas", "color": "#c8c0a8", "pts": [[-0.52, 1.62, 0.98], [0.52, 1.62, 0.98]], "r": 0.08, "sides": 10 },
       { "kind": "box", "mat": "canvas2", "color": "#a89c80", "at": [0.3, 1.62, 0.98], "size": [0.03, 0.17, 0.17], "mirror": true },
