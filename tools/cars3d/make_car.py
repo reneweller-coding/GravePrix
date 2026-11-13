@@ -251,6 +251,150 @@ class Body:
         bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
 
 
+class ModernBody(Body):
+    """A current car: body and greenhouse one continuous loft (no box on a box). Each ring is a lower half (side,
+    tuck, underside) up to the belt line and an upper half from the belt line to the top centre line (bonnet,
+    windscreen, roof, rear window, boot), drawn in by the greenhouse's tumblehome where the cabin is."""
+
+    def section(self, z, n=None):
+        b = self.b
+        n = n or b["sections"]
+        w = self.half_width(z)
+        yb, belt = catmull(b["bottom"], z), catmull(b["belt"], z)
+        top = max(catmull(b["top"], z), belt + 0.02)
+        tg = max(0.0, catmull(b["green"], z))
+        pts = []
+        for k in range(n):
+            a = -math.pi / 2 + 2 * math.pi * k / n
+            c, s = math.cos(a), math.sin(a)
+            nn = b["n_low"] if s < 0 else b["n_up"]
+            qx = math.copysign(abs(c) ** (2.0 / nn), c)
+            qy = math.copysign(abs(s) ** (2.0 / nn), s)
+            if s < 0:
+                y = belt + qy * (belt - yb)
+                x = qx * w * (1 - b["tuck"] * (-qy) ** 3)
+            else:
+                y = belt + qy * (top - belt)
+                x = qx * w * (1 - tg * qy ** 0.75)
+            pts.append((x, y))
+        return pts
+
+
+def subdivide(ob, levels):
+    mod = ob.modifiers.new("smooth", "SUBSURF")
+    mod.levels = levels
+    mod.render_levels = levels
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg), preserve_all_data_layers=True, depsgraph=dg)
+    old = ob.data
+    ob.modifiers.clear()
+    ob.data = me
+    bpy.data.meshes.remove(old)
+
+
+def paint_glass(spec, body, ob, mats):
+    """Flush glazing on the one-piece body: faces above the belt line in the cabin are glass, the roof and the
+    pillars stay paint, the B pillar is black."""
+    g = spec["glass"]
+    me = ob.data
+    names = [m.name for m in me.materials]
+
+    def slot(name, color=None):
+        mat = mats.get(name, color)
+        if mat.name not in names:
+            me.materials.append(mat)
+            names.append(mat.name)
+        return names.index(mat.name)
+
+    glass, trim = slot("glass", g.get("color")), slot("trim", g.get("pillar_b", "#141416"))
+    roof = slot(spec["paint"]["roof"])
+    well = names.index("well") if "well" in names else -1
+    zA, zC = g["from"], g["to"]
+    b = body.b
+    for p in me.polygons:
+        if p.material_index == well:
+            continue
+        c = p.center
+        if not (zA < c.z < zC):
+            continue
+        belt = catmull(b["belt"], c.z)
+        top = max(catmull(b["top"], c.z), belt + 0.02)
+        qy = (c.y - belt) / (top - belt)
+        if qy < g.get("sill", 0.06):
+            continue
+        # Where round the section the face sits: 0 deg the side, 90 deg the top centre line.
+        tg = max(0.0, catmull(b["green"], c.z))
+        wq = body.half_width(c.z) * (1 - tg * max(0.0, min(1.0, qy)) ** 0.75)
+        phi = math.degrees(math.atan2(max(0.0, min(1.0, qy)), min(1.0, abs(c.x) / max(0.05, wq))))
+        r0, r1 = g["roof"]
+        if r0 <= c.z <= r1:
+            if phi < g.get("side", 52):
+                p.material_index = trim if abs(c.z - g["b"]) < g.get("bwidth", 0.05) else glass
+            else:
+                p.material_index = roof
+        else:
+            # Windscreen (before the roof) or rear window (after it): the pane in the middle, the pillars beside,
+            # the quarter lights below the pillars.
+            if phi > g.get("pillar_hi", 50):
+                p.material_index = glass
+            elif phi < g.get("pillar_lo", 38) and zA + g.get("frame", 0.06) < c.z < zC - g.get("frame", 0.06):
+                p.material_index = glass
+            else:
+                p.material_index = roof
+
+
+def build_strips(spec, target, mats):
+    """Lamps and grilles as strips on the body's skin: two edge polylines resampled, shrink-wrapped a few
+    millimetres proud (slim LED lamps that follow the surface)."""
+    obs = []
+    for i, d in enumerate(spec.get("strips", [])):
+        for mirror in ((False, True) if d.get("mirror") else (False,)):
+            B = Builder(mats)
+            mi = B.slot(d["mat"], d.get("color"))
+            sx = -1 if mirror else 1
+
+            def resample(pts, m):
+                pts = [Vector((sx * q[0], q[1], q[2])) for q in pts]
+                seg = [(pts[j + 1] - pts[j]).length for j in range(len(pts) - 1)]
+                tot = sum(seg) or 1.0
+                out = []
+                for k in range(m + 1):
+                    t = tot * k / m
+                    j = 0
+                    while j < len(seg) - 1 and t > seg[j]:
+                        t -= seg[j]
+                        j += 1
+                    out.append(pts[j].lerp(pts[j + 1], min(1.0, t / (seg[j] or 1.0))))
+                return out
+            m = d.get("steps", 10)
+            top, bot = resample(d["top"], m), resample(d["bot"], m)
+            rows = [top, [a.lerp(b, 0.5) for a, b in zip(top, bot)], bot]
+            vs = [[B.bm.verts.new(q) for q in row] for row in rows]
+            out = Vector(d.get("n", (0, 0, -1)))
+            out.x *= sx
+            for r in range(len(vs) - 1):
+                for k in range(m):
+                    f = B.bm.faces.new((vs[r][k], vs[r][k + 1], vs[r + 1][k + 1], vs[r + 1][k]))
+                    f.material_index = mi
+                    f.normal_update()
+                    if f.normal.dot(out) < 0:
+                        f.normal_flip()
+            ob = B.object("strip%d" % i)
+            mod = ob.modifiers.new("wrap", "SHRINKWRAP")
+            mod.target = target
+            mod.wrap_method = "NEAREST_SURFACEPOINT"
+            mod.offset = d.get("offset", 0.006)
+            dg = bpy.context.evaluated_depsgraph_get()
+            me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg), depsgraph=dg)
+            old = ob.data
+            ob.modifiers.clear()
+            ob.data = me
+            bpy.data.meshes.remove(old)
+            smooth(me, 80)
+            obs.append(ob)
+    return obs
+
+
 def cutters(spec, mats):
     """The wheel arches: a cylinder per wheel and side (from the floor pan outwards), material 'well'."""
     wh = spec["wheels"]
@@ -273,7 +417,7 @@ def cutters(spec, mats):
 
 def arch_lips(spec, body, B):
     wh = spec["wheels"]
-    mi = B.slot(spec["paint"]["body"])
+    mi = B.slot(spec["paint"].get("lips", spec["paint"]["body"]), spec["paint"].get("lips_color"))
     R = wh["r"] + wh["gap"]
     for z0 in wh["z"]:
         for sx in (-1, 1):
@@ -791,7 +935,8 @@ def main():
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     mats = Materials()
-    body = Body(spec)
+    modern = spec["body"].get("style") == "modern"
+    body = ModernBody(spec) if modern else Body(spec)
 
     # The body: loft, arches cut, regions painted.
     wh = spec["wheels"]
@@ -803,34 +948,41 @@ def main():
     B = Builder(mats)
     body.build(B, extra)
     body_ob = B.object("body")
+    if spec["body"].get("subsurf", 0):
+        subdivide(body_ob, spec["body"]["subsurf"])
     apply_boolean(body_ob, cutters(spec, mats))
+    if modern:
+        paint_glass(spec, body, body_ob, mats)
     paint_regions(spec, body_ob, mats, rng)
-    smooth(body_ob.data, 38)
+    smooth(body_ob.data, spec["body"].get("smooth", 38))
 
     L = Builder(mats)
     arch_lips(spec, body, L)
     lips = L.object("lips", 50)
 
-    C = Builder(mats)
-    build_cabin(spec, body, C)
-    cabin = C.object("cabin")
-    bm = bmesh.new()
-    bm.from_mesh(cabin.data)
-    bevel_all(bm, 0.018, 2, angle=25)
-    bm.to_mesh(cabin.data)
-    bm.free()
-    smooth(cabin.data, 32)
+    cabin = None
+    if "cabin" in spec:
+        C = Builder(mats)
+        build_cabin(spec, body, C)
+        cabin = C.object("cabin")
+        bm = bmesh.new()
+        bm.from_mesh(cabin.data)
+        bevel_all(bm, 0.018, 2, angle=25)
+        bm.to_mesh(cabin.data)
+        bm.free()
+        smooth(cabin.data, 32)
 
     P = Builder(mats)
     build_parts(spec, body, P)
     parts = P.object("parts", 40)
 
-    decals = build_decals(spec, {"body": body_ob, "cabin": cabin}, mats, rng)
+    decals = build_decals(spec, {"body": body_ob, "cabin": cabin or body_ob}, mats, rng)
+    decals += build_strips(spec, body_ob, mats)
 
     # Into Blender's z-up frame (game (x, y, z) -> Blender (x, -z, y)), triangulated.
     turn = Matrix.Rotation(math.pi / 2, 4, "X")
     tris = 0
-    for ob in [body_ob, lips, cabin, parts] + decals:
+    for ob in [o for o in (body_ob, lips, cabin, parts) if o] + decals:
         ob.data.transform(turn)
         bm = bmesh.new()
         bm.from_mesh(ob.data)

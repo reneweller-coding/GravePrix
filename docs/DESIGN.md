@@ -138,12 +138,14 @@ when that file exists the Forge takes the car's body from it (smooth normals as 
 keeps the wheels, exhausts and lights of the model's parts, and the car's mount points stay where `data/cars` puts
 them, so guns, pods, the coffin, the sticker, the mine rack, debris, dents and the wreck look work unchanged. The
 description repeats the wheel spots of the model's `part wheel` lines (the arches are cut there); the body is a loft
-of rounded sections (side profile `top`/`bottom`, plan corners, tumblehome, tuck), arches cut by a boolean and
+of rounded sections (side profile `top`/`bottom`, plan corners, tumblehome, tuck); `"style": "modern"` makes body
+and greenhouse one loft (`belt` line, `green` tumblehome along z, subdivided, flush `glass` by place, `strips` for
+slim lamps and grilles), arches cut by a boolean and
 flared, the greenhouse a grid over its side profile with inset panes, then `parts` (box, bar, lamp, tube, cyl,
 tyre, sphere, cone, poly), `regions` (faces recoloured by place: a primer bonnet, rotten sills, an odd door),
 `shutlines` and shrink-wrapped `decals` (rust). Materials by name: `paint0`..`paint2` the driver's colours (paint,
 paint2, paint3), `light*` glows (`light_dim*` less), `glass`, `chrome*`, `rubber` and anything else keep the colour
-they are given. Keep a car at 3,000–6,000 triangles (the game draws them unindexed).
+they are given. Keep a car at about 8,000–12,000 triangles (the game draws them unindexed).
 
     "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --python-exit-code 1 -P tools/cars3d/make_car.py -- car_rustbucket
 

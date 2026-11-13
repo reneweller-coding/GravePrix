@@ -2,12 +2,12 @@
 
 ## [Unreleased]
 
-- **Modelled cars:** the Rustbucket, the Tin Can and Brain Freeze are modelled properly now (Blender, by script),
-  the first of the field: rounded bodies with smooth paint, cut and flared wheel arches, a real greenhouse with
-  pillars and inset windows, chrome bumpers, round lamps. The Rustbucket keeps its primer bonnet, rust, rotten
-  sills, odd door, taped tail light, roof rack with spare tyre and rope, its one mirror and the coat-hanger aerial;
-  the Tin Can its frog eyes, belt line, rolled canvas roof and wind-up key; Brain Freeze its hatch, candy awning,
-  sign, speaker and the giant cone.
+- **Modelled cars:** the Rustbucket, the Tin Can and Brain Freeze are modelled properly now (Blender, by script)
+  in today's design language: one smooth body that flows into the greenhouse, raked flush glass, slim LED lamps,
+  integrated bumpers, flared arches and a little bigger wheels. The Rustbucket is a beaten-up modern compact with
+  its primer bonnet and bumper, rust, rotten sills, odd door, taped tail light, roof rack with spare tyre and rope,
+  one mirror and the coat-hanger aerial; the Tin Can a two-tone city car with its belt line, rolled canvas roof and
+  wind-up key; Brain Freeze an ice-cream van on a current van with its hatch, candy awning, sign, speaker and cone.
 - **New steering for every car:** the nose turns quickly at any speed and the tyres decide how fast the car follows.
   Turn harder than they grip and the car slides and scrubs speed off in the bend instead of running wide into the
   wall: a U-turn at full throttle from 108 km/h is 22 m wide instead of 39 m, held full lock circles on two car
