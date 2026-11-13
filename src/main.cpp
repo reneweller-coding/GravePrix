@@ -68,6 +68,7 @@ int main( int argc, char **argv )
     if ( opt.has( "--careersim" ) ) return toolCareerSim( opt );
     if ( opt.has( "--gallery" ) ) return toolGallery( opt );
     if ( opt.has( "--shot" ) ) return toolShot( opt );
+    if ( opt.has( "--podium" ) ) return toolPodium( opt );
     if ( opt.has( "--deckcheck" ) ) return toolDeckCheck( opt );
     return runGame( opt );
 }

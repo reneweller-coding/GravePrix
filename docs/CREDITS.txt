@@ -7,6 +7,9 @@ firms are invented; any likeness to real persons or businesses is a coincidence.
 Built with
 - raylib 5.5 (zlib/libpng licence), https://www.raylib.com
 - Barlow typeface by Jeremy Tribby (SIL Open Font License 1.1, see assets/fonts/Barlow-OFL.txt)
+- The people (podium, marshals, the roadside): Quaternius' Universal Base Characters and Universal Animation
+  Library 1 and 2 (quaternius.com, CC0 1.0 Universal, public domain), the same ones DARK CONCORDANCE uses; the bodies
+  lightened and dressed by tools/make_people3d.py (see assets/models/people3d/LICENSE.txt)
 
 The music was generated locally with ACE-Step 1.5. Every sound effect and engine is synthesised by the game; when a
 rival dies the band plays the opening bars of Frédéric Chopin's Funeral March (Piano Sonata No. 2, 1839, public

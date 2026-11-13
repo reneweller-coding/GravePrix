@@ -470,6 +470,21 @@ baked: a fast car close by and one throws themself flat (crowds step back and ho
 it is quiet; a dog at each kennel (and a black one at the estate's gates) runs along with the field as far as its
 chain lets it, barking. `Renderer::m_cues` asks the race for the sounds (`SfxE::BIRDS_UP`, `SfxE::DOG_BARK`).
 
+The people themselves are skinned figures (`src/People.cpp`, `src/Skin.cpp` from DARK CONCORDANCE): Quaternius' CC0
+base bodies, decimated by `tools/make_people3d.py` (Blender for the decimation, the rig and the weights kept) to about
+2,500 triangles for the roadside, the marshals and the fans and 7,800 for the podium, with the animation libraries cut
+to the clips played (`assets/models/people3d`). Outfits are vertex colours bone by bone (coat, trousers, shoes, hands,
+hair, a shirt and tie, reflective stripes), hats and held things are Forge models on the head bone and in the fist
+(top hats, caps, a hard hat, the yellow flag, Ricky's microphone, the widow's umbrella). The acts are the library's
+clips with the arms set by IK on top: idle (some fold their arms), cheer, clap, wave, the flag swung overhead, a
+microphone at the mouth, and the dive aside (Death01, then LayToIdle). Skinned on the CPU into a mesh per figure (once
+a frame, the shadow pass reuses it), so the lit and the depth shaders, the contact shadows and the fog need nothing
+new. `fig_*` become an outfit each; the `crowd_*` groups are read for their people (head, torso and legs: where, which
+colours) and drawn as fans or mourners within 50 m of the view, at most 24 skinned figures a picture (the rest stay the
+Forge's); their clock ticks 30 times a second, each figure on its own beat, so each is skinned every other picture. The podium has Graves clapping, Ricky waving with the microphone and talking into it, and six fans; the
+marshals beside a wreck swing the yellow flag. `--oldpeople` draws the Forge's figures instead (for comparisons),
+`--podium FILE` pictures the podium, `--shot ... --near MODEL [N]` looks at a prop by the road.
+
 ## The walls, and how they give
 
 The showdown asks the league's points (40) in the first season, six fewer in every further season spent in the
