@@ -169,8 +169,8 @@ model car_pallbearer
   part box w=0.1 h=0.3 d=0.04 x=0.82 y=0.62 z=2.79 color=#ff2414 emit=0.9 mirror=1
   part box w=0.1 h=0.07 d=0.12 x=0.9 y=0.95 z=-1.25 color=#c8ccd4 mirror=1
   part engine r=0.05 len=0.25 x=0.6 y=0.28 z=2.82 color=#3a3a3a mirror=0
-  part wheel r=0.34 w=0.22 x=0.86 z=-1.85 front=1
-  part wheel r=0.34 w=0.22 x=0.86 z=1.8
+  part wheel r=0.36 w=0.22 x=0.86 z=-1.85 front=1
+  part wheel r=0.36 w=0.22 x=0.86 z=1.8
 
 # Shovelhead: a pickup with a dozer blade – bed full of junk and a shovel, roll bar with work lights, amber beacon.
 model car_shovelhead
