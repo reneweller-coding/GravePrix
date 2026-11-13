@@ -90,11 +90,9 @@
       "frame": 0.05, "glass": "#203040"
     },
     "paint": { "body": "paint0", "roof": "paint1" },
-    "regions": [
-      { "mat": "paint2", "z": [-1.85, 1.85], "side": 0.3, "y": [0.745, 0.815] }
-    ],
     "shutlines": { "z": [-0.70, 0.62], "y": [0.36, 0.86], "color": "#141416" },
     "parts": [
+      { "kind": "band", "mat": "paint2", "y": 0.78, "h": 0.06, "z": [-1.12, 1.38], "mirror": true },
       { "kind": "lamp", "mat": "light_head", "color": "#fff4d0", "at": [0.48, 0.74, -1.70], "r": 0.12, "depth": 0.14, "mirror": true },
       { "kind": "box", "mat": "chrome", "at": [0, 0.47, -1.83], "size": [0.6, 0.06, 0.04] },
       { "kind": "tube", "mat": "chrome", "pts": [[-0.82, 0.36, -1.80], [-0.72, 0.36, -1.92], [0.72, 0.36, -1.92], [0.82, 0.36, -1.80]], "r": 0.04, "sides": 8 },

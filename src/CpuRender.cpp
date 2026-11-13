@@ -222,6 +222,18 @@ int toolGallery( const Options &opt )
     for ( size_t i = 0; i < names.size(); ++i )
     {
         ModelMesh        m = Forge::build( g_data.m_models.at( names[i] ), false, paintOf( (int)i ) );
+        // A modelled car (assets/cars/<model>.glb): its body from there, as in the game (not with --forge-cars).
+        std::string glb = opt.m_root + "/assets/cars/" + names[i] + ".glb";
+        Forge::Glb  g;
+        std::error_code gec;
+        if ( !opt.has( "--forge-cars" ) && fs::exists( glb, gec ) && Forge::readGlb( glb, g ) )
+        {
+            for ( Mesh *mesh : { &m.m_base, &m.m_head, &m.m_spin } )
+                if ( mesh->vertices ) freeCpu( *mesh );
+            m.m_base = Forge::glbMesh( g, paintOf( (int)i ), false );
+            m.m_radius = std::max( m.m_radius, g.m_radius );
+            m.m_height = g.m_height;
+        }
         std::vector<Tri> tris;
         for ( Mesh *mesh : { &m.m_base, &m.m_head, &m.m_spin } ) gather( *mesh, MatrixIdentity(), WHITE, false, tris );
         for ( const WheelSpot &ws : m.m_wheels )

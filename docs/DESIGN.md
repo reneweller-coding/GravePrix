@@ -148,7 +148,8 @@ they are given. Keep a car at 3,000–6,000 triangles (the game draws them unind
     "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --python-exit-code 1 -P tools/cars3d/make_car.py -- car_rustbucket
 
 `GravePrix --showroom rustbucket work/show.png [--yaws 240,60]` draws a car on the garage turntable (one view per
-yaw side by side); `--forge-cars` ignores the modelled cars (for before/after pictures).
+yaw side by side); `--gallery` (no graphics card needed) shows the modelled cars too; `--forge-cars` ignores them
+(for before/after pictures).
 
 ## Cars (`data/cars/*.txt`)
 

@@ -278,7 +278,11 @@ def arch_lips(spec, body, B):
     for z0 in wh["z"]:
         for sx in (-1, 1):
             steps = 14
-            a0, a1 = -0.22, math.pi + 0.22
+            # From the body's underside on one side of the arch over the top to the other.
+            def end(zz):
+                yb = catmull(body.b["bottom"], zz) + 0.03
+                return math.asin(max(-0.6, min(0.6, (yb - wh["r"]) / R)))
+            a0, a1 = end(z0 - R), math.pi - end(z0 + R)
             rings = []
             for i in range(steps + 1):
                 a = a0 + (a1 - a0) * i / steps
@@ -554,6 +558,26 @@ def part_poly(p):
     return bm
 
 
+def part_band(p, body):
+    """A painted band along the body's side at height y (h tall) from z0 to z1, a few millimetres proud (right side;
+    mirror it for the left)."""
+    bm = bmesh.new()
+    y, h = p["y"], p["h"] * 0.5
+    z0, z1 = p["z"]
+    n = p.get("steps", 24)
+    lo, hi = [], []
+    for i in range(n + 1):
+        z = z0 + (z1 - z0) * i / n
+        lo.append(bm.verts.new((body.side_x(y - h, z) + 0.005, y - h, z)))
+        hi.append(bm.verts.new((body.side_x(y + h, z) + 0.005, y + h, z)))
+    for i in range(n):
+        f = bm.faces.new((lo[i], lo[i + 1], hi[i + 1], hi[i]))
+        f.normal_update()
+        if f.normal.x < 0:
+            f.normal_flip()
+    return bm
+
+
 def part_tyre(p):
     """A tyre lying flat: a torus with a squarish section."""
     bm = bmesh.new()
@@ -654,6 +678,8 @@ def build_parts(spec, body, B):
                 bm = part_tube(p)
             elif kind == "bar":
                 bm = part_bar(p)
+            elif kind == "band":
+                bm = part_band(p, body)
             elif kind == "sphere":
                 bm = part_sphere(p)
             elif kind == "cone":
@@ -665,7 +691,7 @@ def build_parts(spec, body, B):
             at = Vector(p.get("at", (0, p.get("y", 0), 0)))
             if kind == "bar":
                 at = Vector((0, p["y"], 0))
-            if kind in ("tube",):
+            if kind in ("tube", "band"):
                 at = Vector((0, 0, 0))
             if p.get("sidebody"):
                 at.x = body.side_x(at.y, at.z) + p["size"][0] * 0.2

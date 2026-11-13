@@ -2,10 +2,12 @@
 
 ## [Unreleased]
 
-- **Modelled cars:** the Rustbucket is modelled properly now (Blender, by script), the first of the field:
-  a rounded body with smooth paint, cut and flared wheel arches, a real greenhouse with pillars and inset windows,
-  chrome bumpers, round lamps; the Rustbucket keeps its primer bonnet, rust, rotten sills, odd door, taped tail
-  light, roof rack with spare tyre and rope, its one mirror and the coat-hanger aerial.
+- **Modelled cars:** the Rustbucket, the Tin Can and Brain Freeze are modelled properly now (Blender, by script),
+  the first of the field: rounded bodies with smooth paint, cut and flared wheel arches, a real greenhouse with
+  pillars and inset windows, chrome bumpers, round lamps. The Rustbucket keeps its primer bonnet, rust, rotten
+  sills, odd door, taped tail light, roof rack with spare tyre and rope, its one mirror and the coat-hanger aerial;
+  the Tin Can its frog eyes, belt line, rolled canvas roof and wind-up key; Brain Freeze its hatch, candy awning,
+  sign, speaker and the giant cone.
 - **New steering for every car:** the nose turns quickly at any speed and the tyres decide how fast the car follows.
   Turn harder than they grip and the car slides and scrubs speed off in the bend instead of running wide into the
   wall: a U-turn at full throttle from 108 km/h is 22 m wide instead of 39 m, held full lock circles on two car
