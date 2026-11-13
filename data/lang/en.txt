@@ -444,6 +444,7 @@ Ricky Rattle: Qwen3-TTS, eine erfundene Stimme = Ricky Rattle: Qwen3-TTS, an inv
 FLUX.2 [dev], erfundene Menschen = FLUX.2 [dev], invented people
 Jeder Motor und jeder Knall: im Spiel erzeugt = Every engine and every bang: made by the game
 Schrift: Barlow von Jeremy Tribby (SIL OFL 1.1) = Typeface: Barlow by Jeremy Tribby (SIL OFL 1.1)
+Menschen: Quaternius' Grundfiguren und Animationen (CC0) = People: Quaternius' base characters and animations (CC0)
 Programmiert mit Claude (Anthropic) = Programmed with Claude (Anthropic)
 Alle Figuren, Fahrer, Firmen und Orte sind erfunden. = All characters, drivers, firms and places are invented.
 Ähnlichkeiten mit lebenden Personen wären Zufall. = Any likeness to persons living would be a coincidence.

@@ -47,6 +47,8 @@ int toolShot( const Options &opt );
  * @return the exit code
  */
 int toolShowroom( const Options &opt );
+/** @brief --podium FILE: a picture of the podium after a race (--time seconds into it). */
+int toolPodium( const Options &opt );
 /** @brief --deckcheck: frame times at the Steam Deck's resolution and settings (hidden window, muted). */
 int toolDeckCheck( const Options &opt );
 /** @brief --sim TRACK / --simall: computer races. */
