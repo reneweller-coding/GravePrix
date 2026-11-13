@@ -39,6 +39,14 @@ int toolTrackshots( const Options &opt );
 int toolGallery( const Options &opt );
 /** @brief --shot TRACK FILE: a picture of a race. */
 int toolShot( const Options &opt );
+
+/**
+ * @brief --showroom MODEL FILE.png: a car on the garage's turntable from the front and the back (--yaws a,b in
+ *        degrees, --dist, --w, --h, --paint k); MODEL a car or a model name. Like --shot it waits for no one.
+ * @param[in] opt  the command line
+ * @return the exit code
+ */
+int toolShowroom( const Options &opt );
 /** @brief --deckcheck: frame times at the Steam Deck's resolution and settings (hidden window, muted). */
 int toolDeckCheck( const Options &opt );
 /** @brief --sim TRACK / --simall: computer races. */

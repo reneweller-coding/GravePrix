@@ -154,8 +154,46 @@ public:
     /** @return a new wheel mesh (as wheel(); the caller owns it) */
     static Mesh buildWheel( bool upload );
 
+    /**
+     * @brief Where the modelled cars are (assets/cars/<model>.glb, made by tools/cars3d/make_car.py): a model with
+     *        such a file takes its body from there; its wheels, exhausts and lights stay those of its parts.
+     * @param[in] dir  the assets folder ("" = the Forge's parts only)
+     */
+    static void setAssetDir( const std::string &dir );
+
+    /** @brief A modelled car's triangles as read (smooth normals as exported), coloured per material. */
+    struct Glb
+    {
+        bool                     m_ok = false;
+        std::vector<float>       m_pos, m_nrm;
+        std::vector<signed char> m_slot;   ///< 0..2 a paint slot, -1 its own colour
+        std::vector<Color>       m_col;    ///< its own colour, alpha = glow
+        float                    m_radius = 0.0f, m_height = 0.0f;
+    };
+
+    /**
+     * @brief Reads a modelled car (GLB: materials paint0..2, light*, anything else its base colour).
+     * @param[in]  file  the .glb
+     * @param[out] out   the triangles
+     * @return whether it could be read
+     */
+    static bool readGlb( const std::string &file, Glb &out );
+
+    /**
+     * @brief A modelled car's mesh in a driver's colours.
+     * @param[in] g       the car as read
+     * @param[in] paint   the colours for paint0..2
+     * @param[in] upload  send to the graphics card
+     * @return the mesh (triangles, no indices)
+     */
+    static Mesh glbMesh( const Glb &g, const Paint &paint, bool upload );
+
 private:
+    /** @return the modelled car of that model, or nullptr */
+    const Glb *glb( const std::string &name );
+
     std::map<std::string, ModelMesh> m_cache;
+    std::map<std::string, Glb>       m_glb;
     Mesh                             m_wheel = {};
     bool                             m_hasWheel = false;
 };

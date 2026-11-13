@@ -210,4 +210,45 @@ int toolShot( const Options &opt )
     return 0;
 }
 
+int toolShowroom( const Options &opt )
+{
+    if ( gpuBusy( opt ) ) return 2;
+    std::string name = opt.value( "--showroom" ), file = opt.value2( "--showroom", "work/showroom.png" );
+    if ( const CarDef *cd = g_data.car( name ) ) name = cd->m_model;
+    if ( !g_data.model( name ) )
+    {
+        printf( "error: no model \"%s\"\n", name.c_str() );
+        return 1;
+    }
+    int                w = (int)opt.num( "--w", 800 ), h = (int)opt.num( "--h", 600 );
+    std::vector<float> yaws;
+    std::string        list = opt.value( "--yaws", "240,60" );
+    for ( size_t at = 0; at < list.size(); )
+    {
+        size_t comma = list.find( ',', at );
+        yaws.push_back( (float)atof( list.substr( at, comma - at ).c_str() ) * Deg );
+        at = comma == std::string::npos ? list.size() : comma + 1;
+    }
+    hiddenWindow( 320, 240 );
+    Renderer r;
+    r.init( w, h, 2 );
+    Image all = GenImageColor( w * (int)yaws.size(), h, BLACK );
+    for ( size_t k = 0; k < yaws.size(); ++k )
+    {
+        r.showroom( name, paintOf( (int)opt.num( "--paint", 0 ) ), yaws[k], opt.num( "--dist", 7.5f ) );
+        Image img = LoadImageFromTexture( r.texture() );
+        ImageFlipVertical( &img );
+        ImageDraw( &all, img, { 0, 0, (float)w, (float)h }, { (float)( w * k ), 0, (float)w, (float)h }, WHITE );
+        UnloadImage( img );
+    }
+    std::error_code ec;
+    fs::create_directories( fs::path( file ).parent_path(), ec );
+    ExportImage( all, file.c_str() );
+    UnloadImage( all );
+    r.shutdown();
+    CloseWindow();
+    printf( "%s -> %s\n", name.c_str(), file.c_str() );
+    return 0;
+}
+
 }   // namespace grave

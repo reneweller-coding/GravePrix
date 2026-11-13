@@ -130,6 +130,26 @@ at night when the prop has `lamp=1` in its model head line (`model lamp_old lamp
 `GravePrix --gallery work/gallery.png [prefix]` draws every model (or those whose name starts with prefix) on a
 sheet.
 
+### Modelled cars (`assets/cars/<model>.glb`, `tools/cars3d/`)
+
+A car model can be modelled properly instead of built from parts: `tools/cars3d/make_car.py` builds it in Blender
+(background mode, plain bpy) from its description in `tools/cars3d/cars.json` and exports `assets/cars/<model>.glb`;
+when that file exists the Forge takes the car's body from it (smooth normals as exported, no brightness noise) and
+keeps the wheels, exhausts and lights of the model's parts, and the car's mount points stay where `data/cars` puts
+them, so guns, pods, the coffin, the sticker, the mine rack, debris, dents and the wreck look work unchanged. The
+description repeats the wheel spots of the model's `part wheel` lines (the arches are cut there); the body is a loft
+of rounded sections (side profile `top`/`bottom`, plan corners, tumblehome, tuck), arches cut by a boolean and
+flared, the greenhouse a grid over its side profile with inset panes, then `parts` (box, bar, lamp, tube, cyl,
+tyre, sphere, cone, poly), `regions` (faces recoloured by place: a primer bonnet, rotten sills, an odd door),
+`shutlines` and shrink-wrapped `decals` (rust). Materials by name: `paint0`..`paint2` the driver's colours (paint,
+paint2, paint3), `light*` glows (`light_dim*` less), `glass`, `chrome*`, `rubber` and anything else keep the colour
+they are given. Keep a car at 3,000–6,000 triangles (the game draws them unindexed).
+
+    "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --python-exit-code 1 -P tools/cars3d/make_car.py -- car_rustbucket
+
+`GravePrix --showroom rustbucket work/show.png [--yaws 240,60]` draws a car on the garage turntable (one view per
+yaw side by side); `--forge-cars` ignores the modelled cars (for before/after pictures).
+
 ## Cars (`data/cars/*.txt`)
 
 ```
