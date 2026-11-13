@@ -336,8 +336,8 @@ model car_banshee
   part box w=0.3 h=0.1 d=0.04 x=0.62 y=0.66 z=2.13 color=#ff2414 emit=0.9 mirror=1
   part engine r=0.075 len=0.25 x=0.55 y=0.35 z=2.15 color=#c8ccd4 mirror=0
   part box w=0.1 h=0.07 d=0.12 x=0.86 y=1.0 z=-0.55 color=paint2 mirror=1
-  part wheel r=0.34 w=0.25 x=0.82 z=-1.33 front=1 hub=#ececec
-  part wheel r=0.34 w=0.25 x=0.82 z=1.33 hub=#ececec
+  part wheel r=0.36 w=0.25 x=0.82 z=-1.33 front=1 hub=#ececec
+  part wheel r=0.36 w=0.25 x=0.82 z=1.33 hub=#ececec
 
 # Sarcophagus: an armoured cash van – shuttered windscreen, riveted plates, a cow catcher, spare wheels on the doors,
 # and a pharaoh's golden mummy case on the roof.
