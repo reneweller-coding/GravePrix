@@ -302,8 +302,8 @@ model car_coroner
   part box w=1.88 h=0.14 d=0.12 y=0.38 z=-2.5 color=#18181c
   part engine r=0.055 len=0.2 x=0.55 y=0.3 z=2.5 color=#c8ccd4
   part box w=0.1 h=0.08 d=0.12 x=0.92 y=0.95 z=-0.75 color=paint mirror=1
-  part wheel r=0.34 w=0.24 x=0.84 z=-1.55 front=1 hub=#3a3a3a
-  part wheel r=0.34 w=0.24 x=0.84 z=1.52 hub=#3a3a3a
+  part wheel r=0.36 w=0.24 x=0.84 z=-1.55 front=1 hub=#3a3a3a
+  part wheel r=0.36 w=0.24 x=0.84 z=1.52 hub=#3a3a3a
 
 # ---------------------------------------------------------------------------------------------------------------
 # Class 4 – pro
